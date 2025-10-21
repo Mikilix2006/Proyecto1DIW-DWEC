@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Iniciar sesión - Nova Bank</title>
+  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" href="assets/css/facilities.css">
+</head>
+<body>
+  <header class="header">
+    <div class="container">
+      <div class="logo">
+        <img src="assets/img/logo.png" alt="Nova Bank">
+        <h1>Nova Bank</h1>
+      </div>
+      <nav class="nav">
+        <a href="#">Sobre nosotros</a>
+      </nav>
+      <div class="buttons">
+        <button class="btn-solid">Registrarse</button>
+        <div class="menu-container">
+          <button class="menu-toggle" id="menuBtn">&#9776;</button>
+          <ul class="dropdown-menu" id="dropdownMenu">
+            <li><a href="#">Inicio</a></li>
+            <li><a href="#">Ayuda y soporte</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </header>
+  <section class="form-section">
+    <div class="form-content">
+      <h2>Iniciar sesión</h2>
+      <p>Para iniciar sesión por favor ingrese sus credenciales:</p>
+      <form class="formulario" method="GET" action="http://localhost:8080/CRUDBankServerSide/webresources/customer/sigin/{email}/{password}">
+        <div class="form-group">
+          <input type="email" id="email" name="email" placeholder="Correo electrónico">
+          <!--<span class="error-msg">La dirección de correo electrónico no es válida. (Ej. javi@javi.com)</span>-->
+        </div>
+        <div class="form-group password">
+          <input type="password" id="password" name="password" placeholder="Contraseña">
+          <!--<span class="error-msg">La contraseña no es válida.</span>-->
+        </div>
+        <button onclick="validarLongitud(event);"  class="btn-aceptar">Ingresar</button>
+        <!--<span class="error-msg">Por favor complete todos los campos.</span>-->
+        <p id="register-text">¿Aún no tienes una cuenta? <a href="#">Regístrate</a></p>
+      </form>
+    </div>
+  </section>
+  <footer class="footer">
+        <div class="logo_footer">
+            <img src="assets/img/logo.png" alt="Nova Bank">
+            <p>Nova Bank</p>
+        </div>
+    <p>© Copyright 2025 Nova Bank. All Rights Reserved.</p>
+  </footer>
+  <script src="js/facilities.js"></script>
+</body>
+</html>
