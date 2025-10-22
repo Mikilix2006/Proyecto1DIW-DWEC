@@ -33,15 +33,17 @@
     <div class="form-content">
       <h2>Iniciar sesión</h2>
       <p>Para iniciar sesión por favor ingrese sus credenciales:</p>
-      <form class="formulario">
+      <form class="formulario" id="formulario" method="GET" action="http://localhost:8080/CRUDBankServerSide/webresources/customer/sigin/">
         <div class="form-group">
-          <input type="email" id="email" name="email" placeholder="Correo electrónico" required>
+          <input type="email" id="tfEmail" name="tfEmail" placeholder="Correo electrónico">
           <!--<span class="error-msg">La dirección de correo electrónico no es válida. (Ej. javi@javi.com)</span>-->
         </div>
         <div class="form-group password">
-          <input type="password" id="password" name="password" placeholder="Contraseña" required>
+          <input type="password" id="tfPassword" name="tfPassword" placeholder="Contraseña">
+          <!--<span class="error-msg">La contraseña no es válida.</span>-->
         </div>
-        <button type="submit" class="btn-aceptar">Ingresar</button>
+          <button class="btn-aceptar" onclick="validarSignIn(event);">Ingresar</button>
+        <!--<span class="error-msg">Por favor complete todos los campos.</span>-->
         <p id="register-text">¿Aún no tienes una cuenta? <a href="#">Regístrate</a></p>
       </form>
     </div>
@@ -54,5 +56,41 @@
     <p>© Copyright 2025 Nova Bank. All Rights Reserved.</p>
   </footer>
   <script src="js/facilities.js"></script>
+  <script>
+      function validarSignIn(event) {
+        const tfEmail=document.getElementById("tfEmail");
+        const tfPassword=document.getElementById("tfPassword");
+        const signForm=document.getElementById("formulario");
+        const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+        event.preventDefault();  
+        event.stopPropagation();
+        /*puedes usar const emailRegExp = newExp("expresión sin barra")*/
+            if(tfEmail.value.trim()===""|| tfPassword.value.trim()===""){
+                window.alert('Completar campos');
+                event.stopPropagation();
+                return;
+            }
+                
+            if (tfEmail.value.length>30) {
+                    alert('Solo puede tener 255 caractéres.');
+                    return;
+            }
+            
+            if (tfPassword.value.length>30){
+                    alert('Solo puede tener 255 caractéres.');
+                    return;
+            }
+                /*Revisar esto con .exec*/
+            if(!regex.test(tfEmail.value.trim())){
+                    alert("El correo no es válido.");
+                    return;
+            }
+        
+        }  
+        const valueTfEmail=tfEmail.value.trim();
+        const valueTfPAssword=tfPassword.value.trim();
+        signForm.action=signForm.action +`${encodeURIComponent(valueTfEmail)}/${encodeURIComponent(valueTfPAssword)}`;
+        signForm.submit();
+  </script>
 </body>
 </html>
