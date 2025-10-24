@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="es">
+    
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Registrarse - Nova Bank</title>
+  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" href="assets/css/facilities.css">
+</head>
+
+<body>
+  <header class="header">
+    <div class="container">
+      <div class="logo">
+        <img src="assets/img/logo.png" alt="Nova Bank">
+        <h1>Nova Bank</h1>
+      </div>
+      <nav class="nav">
+        <a href="#">Sobre nosotros</a>
+      </nav>
+      <div class="buttons">
+        <button class="btn-solid">Iniciar Sesión</button>
+        <div class="menu-container">
+          <button class="menu-toggle" id="menuBtn">&#9776;</button>
+          <ul class="dropdown-menu" id="dropdownMenu">
+            <li><a href="#">Inicio</a></li>
+            <li><a href="#">Ayuda y soporte</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </header>
+    
+  <section class="form-section">
+    <div class="form-content">
+      <h2>¡Regístrate!</h2>
+      <p>
+          Por favor completar y revisar todos los campos antes de registrarse.
+                <br>
+          Todos los campos son obligatorios.
+      </p>
+      <form class="formulario">
+        
+        <div class="form-group ">
+          <input type="text" id="name" name="name" placeholder="Nombre" required/>
+        </div>
+        <div class="form-group ">
+          <input type="text" id="surname" name="surname" placeholder="Apellido" required/>
+        </div>
+        <div class="form-group ">
+          <input type="text" id="initial" name="initial" placeholder="Inicial segundo nombre"/>
+        </div>
+        <div class="form-group ">
+          <input type="text" id="street" name="street" placeholder="Calle" required/>
+        </div>
+        <div class="form-group ">
+          <input type="text" id="city" name="city" placeholder="Ciudad" required/>
+        </div>
+        <div class="form-group ">
+          <input type="text" id="state" name="state" placeholder="Estado" required/>
+        </div>
+        <div class="form-group ">
+          <input type="number" id="zip" name="zip" placeholder="Código postal" required/>
+        </div>
+        <div class="form-group ">
+          <input type="number" id="telf" name="telf" placeholder="Teléfono" required/>
+        </div>
+        <div class="form-group ">
+          <input type="email" id="mail" name="mail" placeholder="Correo electrónico" required/>
+        </div>
+        <div class="form-group ">
+          <input type="password" id="pass" name="pass" placeholder="Contraseña" required/>
+        </div>
+        <button type="submit" class="btn-aceptar">Registrarse</button>
+        <p id="register-text">
+            ¿Ya tienes una cuenta? <a href="http://localhost:8080/NovaBank/signIn.html">Iniciar sesión</a>
+        </p>
+        
+      </form>
+    </div>
+  </section>
+    
+  <footer class="footer">
+        <div class="logo_footer">
+            <img src="assets/img/logo.png" alt="Nova Bank">
+            <p>Nova Bank</p>
+        </div>
+    <p>© Copyright 2025 Nova Bank. All Rights Reserved.</p>
+  </footer>
+    
+  <script src="js/facilities.js"></script>
+</body>
+</html>
