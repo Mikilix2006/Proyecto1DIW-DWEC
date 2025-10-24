@@ -4,6 +4,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Nova Bank</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="assets/css/style.css">
   <link rel="stylesheet" href="assets/css/facilities.css">
 </head>
@@ -11,15 +14,15 @@
   <header class="header">
     <div class="container">
       <div class="logo">
-        <img src="assets/img/logo.png" alt="Nova Bank">
-        <h1>Nova Bank</h1>
+        <a href="index.html"><img src="assets/img/logo.png" alt="Nova Bank"></a>
+        <a href="index.html"> <h1>Nova Bank</h1></a>
       </div>
       <nav class="nav">
-        <a href="#">Sobre nosotros</a>
+        <a href="#aboutUs">Sobre nosotros</a>
       </nav>
       <div class="buttons">
-          <button class="btn-outline"><a href="http://localhost:8080/WEB-INF/signIn.html">Iniciar sesión</a></button>
-        <button class="btn-solid">Registrarse</button>
+          <a href="signIn.html"><button class="btn-outline">Iniciar sesión</button></a>
+          <a href="signUp.html"><button class="btn-solid">Registrarse</button></a>
       </div>
     </div>
   </header>
@@ -30,7 +33,7 @@
       <p>Hazte miembro de Nova Bank y goza de las múltiples facilidades que te ofrece.</p>
     </div>
   </section>
-  <section class="about">
+    <section class="about" id="aboutUs">
     <h2>Sobre nosotros</h2>
     <p class="intro">
       En Nova Bank, no solo manejamos tu dinero; construimos contigo el camino hacia tus sueños.

@@ -4,6 +4,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Iniciar sesión - Nova Bank</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="assets/css/style.css">
   <link rel="stylesheet" href="assets/css/facilities.css">
 </head>
@@ -11,19 +14,19 @@
   <header class="header">
     <div class="container">
       <div class="logo">
-        <img src="assets/img/logo.png" alt="Nova Bank">
-        <h1>Nova Bank</h1>
+        <a href="index.html"><img src="assets/img/logo.png" alt="Nova Bank"></a>
+        <a href="index.html"> <h1>Nova Bank</h1></a>
       </div>
       <nav class="nav">
-        <a href="#">Sobre nosotros</a>
+        <a href="index.html#aboutUs">Sobre nosotros</a>
       </nav>
       <div class="buttons">
         <button class="btn-solid">Registrarse</button>
         <div class="menu-container">
           <button class="menu-toggle" id="menuBtn">&#9776;</button>
           <ul class="dropdown-menu" id="dropdownMenu">
-            <li><a href="#">Inicio</a></li>
-            <li><a href="#">Ayuda y soporte</a></li>
+            <li><a href="index.html">Inicio</a></li>
+            <li><a href="help.html">Ayuda y soporte</a></li>
           </ul>
         </div>
       </div>
@@ -32,65 +35,70 @@
   <section class="form-section">
     <div class="form-content">
       <h2>Iniciar sesión</h2>
-      <p>Para iniciar sesión por favor ingrese sus credenciales:</p>
+      <p>Para iniciar sesión, por favor ingrese sus credenciales:</p>
       <form class="formulario" id="formulario" method="GET" action="http://localhost:8080/CRUDBankServerSide/webresources/customer/sigin/">
         <div class="form-group">
           <input type="email" id="tfEmail" name="tfEmail" placeholder="Correo electrónico">
-          <!--<span class="error-msg">La dirección de correo electrónico no es válida. (Ej. javi@javi.com)</span>-->
         </div>
         <div class="form-group password">
           <input type="password" id="tfPassword" name="tfPassword" placeholder="Contraseña">
-          <!--<span class="error-msg">La contraseña no es válida.</span>-->
         </div>
-          <button class="btn-aceptar" onclick="validarSignIn(event);">Ingresar</button>
-        <!--<span class="error-msg">Por favor complete todos los campos.</span>-->
-        <p id="register-text">¿Aún no tienes una cuenta? <a href="#">Regístrate</a></p>
+        <button type="button" class="btn-aceptar" onclick="validarSignIn(event);">Ingresar</button>
+        <p id="register-text">¿Aún no tienes una cuenta? <a href="signUp.html">Regístrate</a></p>
       </form>
     </div>
   </section>
   <footer class="footer">
-        <div class="logo_footer">
-            <img src="assets/img/logo.png" alt="Nova Bank">
-            <p>Nova Bank</p>
-        </div>
+    <div class="logo_footer">
+      <img src="assets/img/logo.png" alt="Nova Bank">
+      <p>Nova Bank</p>
+    </div>
     <p>© Copyright 2025 Nova Bank. All Rights Reserved.</p>
   </footer>
   <script src="js/facilities.js"></script>
   <script>
-      function validarSignIn(event) {
-        const tfEmail=document.getElementById("tfEmail");
-        const tfPassword=document.getElementById("tfPassword");
-        const signForm=document.getElementById("formulario");
-        const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-        event.preventDefault();  
-        event.stopPropagation();
-        /*puedes usar const emailRegExp = newExp("expresión sin barra")*/
-            if(tfEmail.value.trim()===""|| tfPassword.value.trim()===""){
-                window.alert('Completar campos');
-                event.stopPropagation();
-                return;
-            }
-                
-            if (tfEmail.value.length>30) {
-                    alert('Solo puede tener 255 caractéres.');
-                    return;
-            }
-            
-            if (tfPassword.value.length>30){
-                    alert('Solo puede tener 255 caractéres.');
-                    return;
-            }
-                /*Revisar esto con .exec*/
-            if(!regex.test(tfEmail.value.trim())){
-                    alert("El correo no es válido.");
-                    return;
-            }
-        
-        }  
-        const valueTfEmail=tfEmail.value.trim();
-        const valueTfPAssword=tfPassword.value.trim();
-        signForm.action=signForm.action +`${encodeURIComponent(valueTfEmail)}/${encodeURIComponent(valueTfPAssword)}`;
-        signForm.submit();
+    function validarSignIn(event) {
+      const tfEmail = document.getElementById("tfEmail");
+      const tfPassword = document.getElementById("tfPassword");
+      const signForm = document.getElementById("formulario");
+      const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
+      event.preventDefault();
+      event.stopPropagation();
+
+      if (tfEmail.value.trim() === "" || tfPassword.value.trim() === "") {
+        alert('Por favor, complete todos los campos.');
+        return;
+      }
+
+      if (tfEmail.value.length > 255) {
+        alert('El correo electrónico no puede superar los 255 caracteres.');
+        return;
+      }
+
+      if (tfPassword.value.length > 255) {
+        alert('La contraseña no puede superar los 255 caracteres.');
+        return;
+      }
+
+      if (!regex.test(tfEmail.value.trim())) {
+        alert("El correo electrónico no es válido.");
+        return;
+      }
+
+      const valueTfEmail = tfEmail.value.trim();
+      const valueTfPassword = tfPassword.value.trim();
+
+      // Construir URL y enviar formulario
+      //preparación de los datos
+      signForm.action = signForm.action + 
+        `${encodeURIComponent(valueTfEmail)}/${encodeURIComponent(valueTfPassword)}`;
+        //envío de datos
+      signForm.submit();
+      
+      //hacerlo con try y catch
+      //colocar los errores principales y el general !responde.ok
+    }
   </script>
 </body>
 </html>
