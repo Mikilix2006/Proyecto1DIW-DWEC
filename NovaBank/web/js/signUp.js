@@ -13,7 +13,8 @@ var isCityValid = false;
 var isStateValid = false;
 var isZipValid = false;
 var isTelfValid = false;
-var isMailAndPassValid = false;
+var isMailValid = false;
+var isPassValid = false;
 
 // Inicialización de variable para desbloquear el botón de REGISTRARSE
 var isRegisterButtonUnlocked = false;
@@ -28,7 +29,8 @@ if (
         isStateValid &&
         isZipValid &&
         isTelfValid &&
-        isMailAndPassValid
+        isMailValid &&
+        isPassValid
     ) 
     {
     isRegisterButtonUnlocked = true;
@@ -37,8 +39,11 @@ if (
 // Declaración de expresiones regulares globales
 const lettersOnlyRegExp = new RegExp("^[a-zA-ZÁáÉéÍíÓóÚúÑñ]+$");
 const letterOnlyRegExp = new RegExp("^[a-zA-ZÁáÉéÍíÓóÚúÑñ]$");
-const hasToContainLettersRegExp = new RegExp("[a-zA-ZÁáÉéÍíÓóÚúÑñ]+");
 const numbersOnlyRegExp = new RegExp("^[0-9]+$");
+const hasToContainLettersRegExp = new RegExp("[a-zA-ZÁáÉéÍíÓóÚúÑñ]+");
+const hasToContainMinusLetterRegExp = new RegExp("[a-zñáéíóú]");
+const hasToContainSpecialCharRegExp = new RegExp("[!#$%&]");
+const emailRegExp = new RegExp("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$");
 
 function handleNameValidations() {
     // Recuperación de los elementos del formulario
@@ -290,7 +295,7 @@ function handleZipValidations() {
         }
         // Comprobar que lo introducido este permitido
         if (numbersOnlyRegExp.exec(zip.value.trim())===null) {
-            throw new Error("El estado solo puede contener números");
+            throw new Error("El código postal solo puede contener números");
         } else { // Oculta el div en caso de no haber error en la expresion
             msgBox.style.display = 'none';
         }       
@@ -310,11 +315,138 @@ function handleZipValidations() {
 }
 
 function handleTelfValidations() {
-    
+    // Recuperación de los elementos del formulario
+    const msgBox = document.getElementById("responseMsgTelf");
+    const telf = document.getElementById("telf");
+    try {        
+        // VALIDACIONES CAMPO TELÉFONO
+        // Comprobar si esta informado
+        if (telf.value.trim()==="") {
+            throw new Error("El teléfono debe ser rellenado o no son solo números");
+        } else { // Oculta el div en caso de no haber error al estar informado
+            msgBox.style.display = 'none';
+        }
+        // Comprobar que no exceda la longitud permitida
+        if (telf.value.trim().length>=255) {
+            throw new Error("El teléfono debe tener menos de 255 caracteres");
+        } else { // Oculta el div en caso de no haber error en la longitud
+            msgBox.style.display = 'none';
+        }
+        // Comprobar que lo introducido este permitido
+        if (numbersOnlyRegExp.exec(telf.value.trim())===null) {
+            throw new Error("El teléfono solo puede contener números");
+        } else { // Oculta el div en caso de no haber error en la expresion
+            msgBox.style.display = 'none';
+        }       
+        
+        // Activar variable para conocer que el teléfono es válido
+        // Si el código llega hasta aqui, quiere decir que no ha saltado ningún error
+        isTelfValid = true;
+        
+    } catch(e) {
+        // TRATAMIENTO DE ERRORES
+        isTelfValid = false;
+        msgBox.style.color = "red";
+        msgBox.style.marginTop = "5px";
+        msgBox.textContent = e.message;
+        msgBox.style.display = 'block';
+    }
+}
+
+function handleMailValidations() {
+    // Recuperación de los elementos del formulario
+    const msgBoxMail = document.getElementById("responseMsgMail");
+    const mail = document.getElementById("mail");
+    try {
+        // VALIDACIONES CAMPO CORREO ELECTRÓNICO
+        // Comprobar si esta informado
+        if (mail.value.trim()==="") {
+            throw new Error("El correo electrónico debe ser rellenado");
+        } else { // Oculta el div en caso de no haber error al estar informado
+            msgBoxMail.style.display = 'none';
+        }
+        // Comprobar que no exceda la longitud permitida
+        if (mail.value.trim().length>=255) {
+            throw new Error("El correo electrónico debe tener menos de 255 caracteres");
+        } else { // Oculta el div en caso de no haber error en la longitud
+            msgBoxMail.style.display = 'none';
+        }
+        // Comprobar que lo introducido este permitido
+        if (emailRegExp.exec(mail.value.trim())===null) {
+            throw new Error("El formato del correo electrónico es inválido. Ejemplo: nova@bank.com");
+        } else { // Oculta el div en caso de no haber error en la expresion
+            msgBoxMail.style.display = 'none';
+        }       
+        
+        // Activar variable para conocer que el correo electrónico es válido
+        // Si el código llega hasta aqui, quiere decir que no ha saltado ningún error
+        isMailValid = true;
+        
+    } catch(e) {
+        // TRATAMIENTO DE ERRORES
+        isMailValid = false;
+        msgBoxMail.style.color = "red";
+        msgBoxMail.style.marginTop = "5px";
+        msgBoxMail.textContent = e.message;
+        msgBoxMail.style.display = 'block';
+    }
 }
 
 
-   
+// Recuperación de los elementos del formulario
+const msgBoxPass = document.getElementById("responseMsgPass");
+const pass = document.getElementById("pass");
+
+// Hacer validaciones de la contraseña mientras se cambia el contenido del input
+pass.addEventListener('input', function() {
+    try {
+        // VALIDACIONES CAMPO CONTRASEÑA
+        // Comprobar si esta informada
+        if (pass.value.trim()==="") {
+            throw new Error("La contraseña debe ser rellenada");
+        } else { // Oculta el div en caso de no haber error al estar informado
+            msgBoxPass.style.display = 'none';
+        }
+        // Comprobar que tenga un mínimo de 12 caracteres
+        if (pass.value.trim().length<12) {
+            throw new Error("La contraseña debe tener como mínimo 12 caracteres");
+        } else { // Oculta el div en caso de no haber error en la longitud
+            msgBoxPass.style.display = 'none';
+        }
+        // Comprobar que tenga un máximo de 50 caracteres
+        if (pass.value.trim().length>50) {
+            throw new Error("La contraseña debe tener como máximo 50 caracteres");
+        } else { // Oculta el div en caso de no haber error en la longitud
+            msgBoxPass.style.display = 'none';
+        }
+        // Comprobar que mínimo una de sus letras sea minúscula
+        if (hasToContainMinusLetterRegExp.exec(pass.value.trim())===null) {
+            throw new Error("La contraseña debe tener como mínimo una minúscula");
+        } else { // Oculta el div en caso de contener una minúscula
+            msgBoxPass.style.display = 'none';
+        }
+        // Comprobar que contenga como mínimo uno de estos caracteres (! # $ % &)
+        if (hasToContainSpecialCharRegExp.exec(pass.value.trim())===null) {
+            throw new Error("La contraseña debe tener como mínimo uno de estos caracteres: ! # $ % &");
+        } else { // Oculta el div en caso de contener un caracter especial especificado
+            msgBoxPass.style.display = 'none';
+        }
+        
+        // Activar variable para conocer que la contraseña es válida
+        // Si el código llega hasta aqui, quiere decir que no ha saltado ningún error
+        isPassValid = true;
+        
+    } catch(e) {
+        // TRATAMIENTO DE ERRORES
+        isPassValid = false;
+        msgBoxPass.style.color = "red";
+        msgBoxPass.style.marginTop = "5px";
+        msgBoxPass.textContent = e.message;
+        msgBoxPass.style.display = 'block';
+    }
+});
+
+
 function handleSignUpOnClick(event) {
 
     // Comienzo del bloque de validaciones
@@ -337,7 +469,6 @@ function handleSignUpOnClick(event) {
 
         // Declaración de Expresiones Regulares para validar los datos introducidos
         const lettersOnlyRegExp = new RegExp("");
-        const emailRegExp = new RegExp("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$");
         const passRegExp = new RegExp("");
 
         // Detención del burbujeo
