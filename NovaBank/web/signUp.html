@@ -80,7 +80,11 @@
         </div>
         <div class="form-group ">
           <input type="password" id="pass" name="pass" placeholder="Contraseña"/>
-          <div id="responseMsgPass"></div>
+          <div id="responseMsgPass" style="font-size: 12px" hidden>
+              <div id="caracteres">Mínimo 12 caracteres de longitud y máximo 50 caracteres</div>
+              <div id="letras">Mínimo una letra minúscula</div>
+              <div id="caracterEspecial">Mínimo uno de estos caracteres especiales: ! # $ % &</div>
+          </div>
         </div>
           <button type="submit" class="btn-aceptar" id="btSignUp" onclick="handleSignUpOnClick(event)">Registrarse</button>
         <p id="register-text">

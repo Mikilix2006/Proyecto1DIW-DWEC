@@ -7,7 +7,7 @@
 // Inicialización de variables para control de submit
 var isNameValid = false;
 var isSurnameValid = false;
-var isInitialValid = false;
+var isInitialValid = true;
 var isStreetValid = false;
 var isCityValid = false;
 var isStateValid = false;
@@ -16,24 +16,22 @@ var isTelfValid = false;
 var isMailValid = false;
 var isPassValid = false;
 
-// Inicialización de variable para desbloquear el botón de REGISTRARSE
-var isRegisterButtonUnlocked = false;
-
-// Si todas las variables indican que son válidas, desbloquea el botón de REGISTRARSE
-if (
-        isNameValid &&
-        isSurnameValid &&
-        isInitialValid &&
-        isStreetValid &&
-        isCityValid &&
-        isStateValid &&
-        isZipValid &&
-        isTelfValid &&
-        isMailValid &&
-        isPassValid
-    ) 
-    {
-    isRegisterButtonUnlocked = true;
+function checkControlVariablesStatus() {
+    // Si todas las variables indican que son válidas, devolverá true
+    if (
+            handleNameValidations() &&
+            handleSurnameValidations() &&
+            handleInitialValidations() &&
+            handleStreetValidations() &&
+            handleCityValidations() &&
+            handleStateValidations() &&
+            handleZipValidations() &&
+            handleTelfValidations() &&
+            handleMailValidations() &&
+            handlePassValidations()
+        ) return true;
+    // No todas las variables son válidas
+    return false;
 }
 
 // Declaración de expresiones regulares globales
@@ -73,14 +71,16 @@ function handleNameValidations() {
         // Activar variable para conocer que el nombre es válido
         // Si el código llega hasta aqui, quiere decir que no ha saltado ningún error
         isNameValid = true;
+        return true;
         
     } catch(e) {
         // TRATAMIENTO DE ERRORES
         isNameValid = false;
-        msgBox.style.color = "red";
+        msgBox.style.color = "#ff0000";
         msgBox.style.marginTop = "5px";
         msgBox.textContent = e.message;
         msgBox.style.display = 'block';
+        return false;
     }
 }
 
@@ -112,14 +112,16 @@ function handleSurnameValidations() {
         // Activar variable para conocer que el apellido es válido
         // Si el código llega hasta aqui, quiere decir que no ha saltado ningún error
         isSurnameValid = true;
+        return true;
         
     } catch(e) {
         // TRATAMIENTO DE ERRORES
         isSurnameValid = false;
-        msgBox.style.color = "red";
+        msgBox.style.color = "#ff0000";
         msgBox.style.marginTop = "5px";
         msgBox.textContent = e.message;
         msgBox.style.display = 'block';
+        return false;
     }
 }
 
@@ -148,13 +150,15 @@ function handleInitialValidations() {
         // Activar variable para conocer que la inicial es válida
         // Si el código llega hasta aqui, quiere decir que no ha saltado ningún error
         isInitialValid = true;
+        return true;
     } catch(e) {
         // TRATAMIENTO DE ERRORES
         isInitialValid = false;
-        msgBox.style.color = "red";
+        msgBox.style.color = "#ff0000";
         msgBox.style.marginTop = "5px";
         msgBox.textContent = e.message;
         msgBox.style.display = 'block';
+        return false;
     }
 }
 
@@ -186,14 +190,16 @@ function handleStreetValidations() {
         // Activar variable para conocer que la calle es válida
         // Si el código llega hasta aqui, quiere decir que no ha saltado ningún error
         isStreetValid = true;
+        return true;
         
     } catch(e) {
         // TRATAMIENTO DE ERRORES
         isStreetValid = false;
-        msgBox.style.color = "red";
+        msgBox.style.color = "#ff0000";
         msgBox.style.marginTop = "5px";
         msgBox.textContent = e.message;
         msgBox.style.display = 'block';
+        return false;
     }
 }
 
@@ -225,14 +231,16 @@ function handleCityValidations() {
         // Activar variable para conocer que la calle es válida
         // Si el código llega hasta aqui, quiere decir que no ha saltado ningún error
         isCityValid = true;
+        return true;
         
     } catch(e) {
         // TRATAMIENTO DE ERRORES
         isCityValid = false;
-        msgBox.style.color = "red";
+        msgBox.style.color = "#ff0000";
         msgBox.style.marginTop = "5px";
         msgBox.textContent = e.message;
         msgBox.style.display = 'block';
+        return false;
     }
 }
 
@@ -264,14 +272,16 @@ function handleStateValidations() {
         // Activar variable para conocer que el estado es válido
         // Si el código llega hasta aqui, quiere decir que no ha saltado ningún error
         isStateValid = true;
+        return true;
         
     } catch(e) {
         // TRATAMIENTO DE ERRORES
         isStateValid = false;
-        msgBox.style.color = "red";
+        msgBox.style.color = "#ff0000";
         msgBox.style.marginTop = "5px";
         msgBox.textContent = e.message;
         msgBox.style.display = 'block';
+        return false;
     }
 }
 
@@ -303,14 +313,16 @@ function handleZipValidations() {
         // Activar variable para conocer que el código postal es válido
         // Si el código llega hasta aqui, quiere decir que no ha saltado ningún error
         isZipValid = true;
+        return true;
         
     } catch(e) {
         // TRATAMIENTO DE ERRORES
         isZipValid = false;
-        msgBox.style.color = "red";
+        msgBox.style.color = "#ff0000";
         msgBox.style.marginTop = "5px";
         msgBox.textContent = e.message;
         msgBox.style.display = 'block';
+        return false;
     }
 }
 
@@ -342,14 +354,16 @@ function handleTelfValidations() {
         // Activar variable para conocer que el teléfono es válido
         // Si el código llega hasta aqui, quiere decir que no ha saltado ningún error
         isTelfValid = true;
+        return true;
         
     } catch(e) {
         // TRATAMIENTO DE ERRORES
         isTelfValid = false;
-        msgBox.style.color = "red";
+        msgBox.style.color = "#ff0000";
         msgBox.style.marginTop = "5px";
         msgBox.textContent = e.message;
         msgBox.style.display = 'block';
+        return false;
     }
 }
 
@@ -381,217 +395,88 @@ function handleMailValidations() {
         // Activar variable para conocer que el correo electrónico es válido
         // Si el código llega hasta aqui, quiere decir que no ha saltado ningún error
         isMailValid = true;
+        return true;
         
     } catch(e) {
         // TRATAMIENTO DE ERRORES
         isMailValid = false;
-        msgBoxMail.style.color = "red";
+        msgBoxMail.style.color = "#ff0000";
         msgBoxMail.style.marginTop = "5px";
         msgBoxMail.textContent = e.message;
         msgBoxMail.style.display = 'block';
+        return false;
     }
 }
 
 
 // Recuperación de los elementos del formulario
 const msgBoxPass = document.getElementById("responseMsgPass");
+const msgBoxLength = document.getElementById("caracteres");
+const msgBoxLetters = document.getElementById("letras");
+const msgBoxChar = document.getElementById("caracterEspecial");
 const pass = document.getElementById("pass");
+
+// Variables de contorl para mensaje debajo del campo contraseña
+var isLengthValid = false;
+var areLettersValid = false;
+var hasOneSpecialCharMin = false;
 
 // Hacer validaciones de la contraseña mientras se cambia el contenido del input
 pass.addEventListener('input', function() {
-    try {
-        // VALIDACIONES CAMPO CONTRASEÑA
-        // Comprobar si esta informada
-        if (pass.value.trim()==="") {
-            throw new Error("La contraseña debe ser rellenada");
-        } else { // Oculta el div en caso de no haber error al estar informado
-            msgBoxPass.style.display = 'none';
-        }
-        // Comprobar que tenga un mínimo de 12 caracteres
-        if (pass.value.trim().length<12) {
-            throw new Error("La contraseña debe tener como mínimo 12 caracteres");
-        } else { // Oculta el div en caso de no haber error en la longitud
-            msgBoxPass.style.display = 'none';
-        }
-        // Comprobar que tenga un máximo de 50 caracteres
-        if (pass.value.trim().length>50) {
-            throw new Error("La contraseña debe tener como máximo 50 caracteres");
-        } else { // Oculta el div en caso de no haber error en la longitud
-            msgBoxPass.style.display = 'none';
-        }
-        // Comprobar que mínimo una de sus letras sea minúscula
-        if (hasToContainMinusLetterRegExp.exec(pass.value.trim())===null) {
-            throw new Error("La contraseña debe tener como mínimo una minúscula");
-        } else { // Oculta el div en caso de contener una minúscula
-            msgBoxPass.style.display = 'none';
-        }
-        // Comprobar que contenga como mínimo uno de estos caracteres (! # $ % &)
-        if (hasToContainSpecialCharRegExp.exec(pass.value.trim())===null) {
-            throw new Error("La contraseña debe tener como mínimo uno de estos caracteres: ! # $ % &");
-        } else { // Oculta el div en caso de contener un caracter especial especificado
-            msgBoxPass.style.display = 'none';
-        }
-        
-        // Activar variable para conocer que la contraseña es válida
-        // Si el código llega hasta aqui, quiere decir que no ha saltado ningún error
+    // Mostramos los patornes de validación
+    msgBoxPass.hidden = false;
+    // VALIDACIONES CAMPO CONTRASEÑA
+    // Comprobar que tenga un mínimo de 12 caracteres y maximo 50
+    if (pass.value.trim().length<12 || pass.value.trim().length>50) {
+        isLengthValid = false;
+        msgBoxLength.style.color = "#ff0000";
+    } else { // Marca como verdadera la condición de longitud
+        isLengthValid = true;
+        msgBoxLength.style.color = "#5620ad";
+    }
+    // Comprobar que mínimo una de sus letras sea minúscula
+    if (hasToContainMinusLetterRegExp.exec(pass.value.trim())===null) {
+        areLettersValid = false;
+        msgBoxLetters.style.color = "#ff0000";
+    } else { // Marca como verdadera la condición de letra minúscula
+        areLettersValid = true;
+        msgBoxLetters.style.color = "#5620ad";
+    }
+    // Comprobar que contenga como mínimo uno de estos caracteres (! # $ % &)
+    if (hasToContainSpecialCharRegExp.exec(pass.value.trim())===null) {
+        hasOneSpecialCharMin = false;
+        msgBoxChar.style.color = "#ff0000";
+    } else { // Marca como verdadera la condición de caracter especial
+        hasOneSpecialCharMin = true;
+        msgBoxChar.style.color = "#5620ad";
+    }
+
+    // Activar variable para conocer que la contraseña es válida
+    if (isLengthValid && areLettersValid && hasOneSpecialCharMin) {
+        // Activamos variable de contraseña correcta
         isPassValid = true;
-        
-    } catch(e) {
-        // TRATAMIENTO DE ERRORES
-        isPassValid = false;
-        msgBoxPass.style.color = "red";
-        msgBoxPass.style.marginTop = "5px";
-        msgBoxPass.textContent = e.message;
-        msgBoxPass.style.display = 'block';
+        // Ocultamos los patornes de validación
+        msgBoxPass.hidden = true;
     }
 });
 
 
 function handleSignUpOnClick(event) {
-
-    // Comienzo del bloque de validaciones
-    try {
-        
-        // Recuperación del formulario
-        const formulario = document.getElementById("formul");
-
-        // Recuperación de los elementos del formulario
-        const name = document.getElementById("name");
-        const surname = document.getElementById("surname");
-        const initial = document.getElementById("initial");
-        const street = document.getElementById("street");
-        const city = document.getElementById("city");
-        const state = document.getElementById("state");
-        const zip = document.getElementById("zip");
-        const telf = document.getElementById("telf");
-        const mail = document.getElementById("mail");
-        const pass = document.getElementById("pass");
-
-        // Declaración de Expresiones Regulares para validar los datos introducidos
-        const lettersOnlyRegExp = new RegExp("");
-        const passRegExp = new RegExp("");
-
-        // Detención del burbujeo
-        event.preventDefault();
-        event.stopPropagation();
-        
-        // VALIDACIONES CAMPO NOMBRE
-        // Comprobar si esta informado
-        if (name.value.trim()==="") {
-            throw new Error("El nombre debe ser rellenado");
+    // Detención del burbujeo
+    event.preventDefault();
+    event.stopPropagation();
+    
+    // Si todas las variables son verdaderas, devolverá true
+    if (checkControlVariablesStatus()) {
+        // Comienzo del bloque de validaciones
+        try {
+            // Recuperación del formulario
+            const formulario = document.getElementById("formul");
+        } catch (e) {
+            // TRATAMIENTO DE ERRORES
         }
-        // Comprobar que no exceda la longitud permitida
-        if (name.value.length>=255) {
-            window.alert("Nombre debe tener menos de 255 caracteres");
-            return;
-            // LANZAR UN ERROR Y ATRAPARLO EN SECCIÓN DE CÓDIGO 'CATCH'
-        }
-        // Comprobar que lo introducido este permitido
-        if (lettersOnlyRegExp.exec(name.value.trim())===null) {
-            window.alert("Nombre solo puede contener letras");
-            return;
-            // LANZAR UN ERROR Y ATRAPARLO EN SECCIÓN DE CÓDIGO 'CATCH'
-        }
-        
-        // VALIDACIONES CAMPO APELLIDO
-        // Comprobar si esta informado
-        if (surname.value.trim()==="") {
-            window.alert("Apellido debe ser rellenado");
-            return;
-            // LANZAR UN ERROR Y ATRAPARLO EN SECCIÓN DE CÓDIGO 'CATCH'
-        }
-        // Comprobar que no exceda la longitud permitida
-        if (surname.value.length>=255) {
-            window.alert("Apellido debe tener menos de 255 caracteres");
-            return;
-            // LANZAR UN ERROR Y ATRAPARLO EN SECCIÓN DE CÓDIGO 'CATCH'
-        }
-        // Comprobar que lo introducido este permitido
-        if (lettersOnlyRegExp.exec(name.value.trim())===null) {
-            window.alert("Nombre solo puede contener letras");
-            return;
-            // LANZAR UN ERROR Y ATRAPARLO EN SECCIÓN DE CÓDIGO 'CATCH'
-        }
-
-        // VALIDACIONES CAMPO INICIAL
-        // Comprobar si esta informado
-        // Comprobar que no exceda la longitud permitida
-        // Comprobar que lo introducido este permitido
-
-        // VALIDACIONES CAMPO CALLE
-        // Comprobar si esta informado
-        // Comprobar que no exceda la longitud permitida
-        // Comprobar que lo introducido este permitido
-
-        // VALIDACIONES CAMPO CIUDAD
-        // Comprobar si esta informado
-        // Comprobar que no exceda la longitud permitida
-        // Comprobar que lo introducido este permitido
-
-        // VALIDACIONES CAMPO ESTADO
-        // Comprobar si esta informado
-        // Comprobar que no exceda la longitud permitida
-        // Comprobar que lo introducido este permitido
-
-        // VALIDACIONES CAMPO CODIGO POSTAL
-        // Comprobar si esta informado
-        // Comprobar que no exceda la longitud permitida
-        // Comprobar que lo introducido este permitido
-
-        // VALIDACIONES CAMPO TELEFONO
-        // Comprobar si esta informado
-        // Comprobar que no exceda la longitud permitida
-        // Comprobar que lo introducido este permitido
-
-        // VALIDACIONES COMUNES DE EMAIL Y CONTRASEÑA
-        // Comprobar si estan informados
-        if (mail.trim()===""||pass.trim()==="") {
-            window.alert("Email y contraseña deben ser rellenados");
-            return;
-                // LANZAR UN ERROR Y ATRAPARLO EN SECCIÓN DE CÓDIGO 'CATCH'
-        }
-
-        // Validaciones Campo Email
-        // Comprobar que no exceda la longitud permitida
-        if (mail.value.length>255) {
-            window.alert("Email no debe superar 255 caracteres");
-            return;
-            // LANZAR UN ERROR Y ATRAPARLO EN SECCIÓN DE CÓDIGO 'CATCH'
-        }
-        // Comprobar que lo introducido este permitido
-        if (emailRegExp.exec(mail.value.trim())===null) {
-            window.alert("El email no tiene un formato correcto");
-            return;
-            // LANZAR UN ERROR Y ATRAPARLO EN SECCIÓN DE CÓDIGO 'CATCH'
-        }
-
-        // Validaciones Campo Constraseña
-        // Comprobar que no exceda la longitud permitida
-        if (pass.value.length>255) {
-            window.alert("Conrtaseña no debe superar 255 caracteres");
-            return;
-            // LANZAR UN ERROR Y ATRAPARLO EN SECCIÓN DE CÓDIGO 'CATCH'
-        }
-        // Comprobar que lo introducido este permitido
-        
-        
-        
-        
-    } catch (e) {
-        // TRATAMIENTO DE ERRORES
-        const msgBox = document.getElementById("responseMsg");
-        msgBox.className = 'error';
-        msgBox.style.color = "red";
-        msgBox.style.marginTop = "5px";
-        msgBox.textContent = 'Error: ' + e.message;
-        msgBox.style.display = 'block';
+    } else {
+        window.alert("La información del formulario no es válida, revísela y modifíquela.")
     }
     
-    
-    /*
-    const valueTfEmail = mail.value.trim();
-    const valueTfPassword = pass.value.trim();
-    formulario.action = formulario.action+`${encodeURIComponent(valueTfEmail)}/${encodeURIComponent(valueTfPassword)}`;
-    formulario.submit();
-    */
 }
