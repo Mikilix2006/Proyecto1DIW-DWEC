@@ -51,22 +51,28 @@
           <div id="responseMsgSurname"></div>
         </div>
         <div class="form-group ">
-          <input type="text" id="initial" name="initial" placeholder="Inicial segundo nombre"/>
+          <input type="text" id="initial" name="initial" placeholder="Inicial segundo nombre" onblur="handleInitialValidations()"/>
+          <div id="responseMsgInitial"></div>
         </div>
         <div class="form-group ">
-          <input type="text" id="street" name="street" placeholder="Calle"/>
+          <input type="text" id="street" name="street" placeholder="Calle" onblur="handleStreetValidations()"/>
+          <div id="responseMsgStreet"></div>
         </div>
         <div class="form-group ">
-          <input type="text" id="city" name="city" placeholder="Ciudad"/>
+          <input type="text" id="city" name="city" placeholder="Ciudad" onblur="handleCityValidations()"/>
+          <div id="responseMsgCity"></div>
         </div>
         <div class="form-group ">
-          <input type="text" id="state" name="state" placeholder="Estado"/>
+          <input type="text" id="state" name="state" placeholder="Estado" onblur="handleStateValidations()"/>
+          <div id="responseMsgState"></div>
         </div>
         <div class="form-group ">
-          <input type="number" id="zip" name="zip" placeholder="Código postal"/>
+          <input type="number" id="zip" name="zip" placeholder="Código postal" onblur="handleZipValidations()"/>
+          <div id="responseMsgZip"></div>
         </div>
         <div class="form-group ">
-          <input type="number" id="telf" name="telf" placeholder="Teléfono"/>
+          <input type="number" id="telf" name="telf" placeholder="Teléfono" onblur="handleTelfValidations()"/>
+          <div id="responseMsgTelf"></div>
         </div>
         <div class="form-group ">
           <input type="email" id="mail" name="mail" placeholder="Correo electrónico"/>

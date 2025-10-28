@@ -5,18 +5,18 @@
  */
 
 // Inicialización de variables para control de submit
-const isNameValid = false;
-const isSurnameValid = false;
-const isInitialValid = false;
-const isStreetValid = false;
-const isCityValid = false;
-const isStateValid = false;
-const isZipValid = false;
-const isTelfValid = false;
-const isMailAndPassValid = false;
+var isNameValid = false;
+var isSurnameValid = false;
+var isInitialValid = false;
+var isStreetValid = false;
+var isCityValid = false;
+var isStateValid = false;
+var isZipValid = false;
+var isTelfValid = false;
+var isMailAndPassValid = false;
 
 // Inicialización de variable para desbloquear el botón de REGISTRARSE
-const isRegisterButtonUnlocked = false;
+var isRegisterButtonUnlocked = false;
 
 // Si todas las variables indican que son válidas, desbloquea el botón de REGISTRARSE
 if (
@@ -34,14 +34,17 @@ if (
     isRegisterButtonUnlocked = true;
 }
 
+// Declaración de expresiones regulares globales
+const lettersOnlyRegExp = new RegExp("^[a-zA-ZÁáÉéÍíÓóÚúÑñ]+$");
+const letterOnlyRegExp = new RegExp("^[a-zA-ZÁáÉéÍíÓóÚúÑñ]$");
+const hasToContainLettersRegExp = new RegExp("[a-zA-ZÁáÉéÍíÓóÚúÑñ]+");
+const numbersOnlyRegExp = new RegExp("^[0-9]+$");
+
 function handleNameValidations() {
     // Recuperación de los elementos del formulario
     const msgBox = document.getElementById("responseMsgName");
     const name = document.getElementById("name");
-    try {
-        // Declaración de Expresion Regular para validar el campo
-        const lettersOnlyRegExp = new RegExp("^[a-zA-Z]+$");
-        
+    try {        
         // VALIDACIONES CAMPO NOMBRE
         // Comprobar si esta informado
         if (name.value.trim()==="") {
@@ -50,7 +53,7 @@ function handleNameValidations() {
             msgBox.style.display = 'none';
         }
         // Comprobar que no exceda la longitud permitida
-        if (name.value.length>=255) {
+        if (name.value.trim().length>=255) {
             throw new Error("El nombre debe tener menos de 255 caracteres");
         } else { // Oculta el div en caso de no haber error en la longitud
             msgBox.style.display = 'none';
@@ -80,10 +83,7 @@ function handleSurnameValidations() {
     // Recuperación de los elementos del formulario
     const msgBox = document.getElementById("responseMsgSurname");
     const surname = document.getElementById("surname");
-    try {
-        // Declaración de Expresion Regular para validar el campo
-        const lettersOnlyRegExp = new RegExp("^[a-zA-Z]+$");
-        
+    try {        
         // VALIDACIONES CAMPO APELLIDO
         // Comprobar si esta informado
         if (surname.value.trim()==="") {
@@ -92,7 +92,7 @@ function handleSurnameValidations() {
             msgBox.style.display = 'none';
         }
         // Comprobar que no exceda la longitud permitida
-        if (surname.value.length>=255) {
+        if (surname.value.trim().length>=255) {
             throw new Error("El apellido debe tener menos de 255 caracteres");
         } else { // Oculta el div en caso de no haber error en la longitud
             msgBox.style.display = 'none';
@@ -117,6 +117,202 @@ function handleSurnameValidations() {
         msgBox.style.display = 'block';
     }
 }
+
+function handleInitialValidations() {
+    // Recuperación de los elementos del formulario
+    const msgBox = document.getElementById("responseMsgInitial");
+    const initial = document.getElementById("initial");
+    try {        
+        // VALIDACIONES CAMPO INICIAL
+        // Comprobar que no exceda la longitud permitida
+        if (initial.value.trim().length>1) {
+            throw new Error("La inicial debe tener solo una letra");
+        } else { // Oculta el div en caso de no haber error en la longitud
+            msgBox.style.display = 'none';
+        }
+        // Comprobar que lo introducido este permitido
+        // Si la inicial está vacía, no pasa nada y sale del if
+        if (initial.value.trim()!=="") {
+            if (letterOnlyRegExp.exec(initial.value.trim())===null) {
+                throw new Error("La inicial solo puede contener letras");
+            } else { // Oculta el div en caso de no haber error en la expresion
+                msgBox.style.display = 'none';
+            }
+        }
+        
+        // Activar variable para conocer que la inicial es válida
+        // Si el código llega hasta aqui, quiere decir que no ha saltado ningún error
+        isInitialValid = true;
+    } catch(e) {
+        // TRATAMIENTO DE ERRORES
+        isInitialValid = false;
+        msgBox.style.color = "red";
+        msgBox.style.marginTop = "5px";
+        msgBox.textContent = e.message;
+        msgBox.style.display = 'block';
+    }
+}
+
+function handleStreetValidations() {
+    // Recuperación de los elementos del formulario
+    const msgBox = document.getElementById("responseMsgStreet");
+    const street = document.getElementById("street");
+    try {        
+        // VALIDACIONES CAMPO CALLE
+        // Comprobar si esta informado
+        if (street.value.trim()==="") {
+            throw new Error("La calle debe ser rellenada");
+        } else { // Oculta el div en caso de no haber error al estar informado
+            msgBox.style.display = 'none';
+        }
+        // Comprobar que no exceda la longitud permitida
+        if (street.value.length>=255) {
+            throw new Error("La calle debe tener menos de 255 caracteres");
+        } else { // Oculta el div en caso de no haber error en la longitud
+            msgBox.style.display = 'none';
+        }
+        // Comprobar que lo introducido este permitido
+        if (hasToContainLettersRegExp.exec(street.value.trim())===null) {
+            throw new Error("La calle debe contener letras");
+        } else { // Oculta el div en caso de no haber error en la expresion
+            msgBox.style.display = 'none';
+        }
+        
+        // Activar variable para conocer que la calle es válida
+        // Si el código llega hasta aqui, quiere decir que no ha saltado ningún error
+        isStreetValid = true;
+        
+    } catch(e) {
+        // TRATAMIENTO DE ERRORES
+        isStreetValid = false;
+        msgBox.style.color = "red";
+        msgBox.style.marginTop = "5px";
+        msgBox.textContent = e.message;
+        msgBox.style.display = 'block';
+    }
+}
+
+function handleCityValidations() {
+    // Recuperación de los elementos del formulario
+    const msgBox = document.getElementById("responseMsgCity");
+    const city = document.getElementById("city");
+    try {        
+        // VALIDACIONES CAMPO CIUDAD
+        // Comprobar si esta informado
+        if (city.value.trim()==="") {
+            throw new Error("La ciudad debe ser rellenada");
+        } else { // Oculta el div en caso de no haber error al estar informado
+            msgBox.style.display = 'none';
+        }
+        // Comprobar que no exceda la longitud permitida
+        if (city.value.length>=255) {
+            throw new Error("La ciudad debe tener menos de 255 caracteres");
+        } else { // Oculta el div en caso de no haber error en la longitud
+            msgBox.style.display = 'none';
+        }
+        // Comprobar que lo introducido este permitido
+        if (lettersOnlyRegExp.exec(city.value.trim())===null) {
+            throw new Error("La ciudad debe contener solo letras");
+        } else { // Oculta el div en caso de no haber error en la expresion
+            msgBox.style.display = 'none';
+        }
+        
+        // Activar variable para conocer que la calle es válida
+        // Si el código llega hasta aqui, quiere decir que no ha saltado ningún error
+        isCityValid = true;
+        
+    } catch(e) {
+        // TRATAMIENTO DE ERRORES
+        isCityValid = false;
+        msgBox.style.color = "red";
+        msgBox.style.marginTop = "5px";
+        msgBox.textContent = e.message;
+        msgBox.style.display = 'block';
+    }
+}
+
+function handleStateValidations() {
+    // Recuperación de los elementos del formulario
+    const msgBox = document.getElementById("responseMsgState");
+    const state = document.getElementById("state");
+    try {        
+        // VALIDACIONES CAMPO ESTADO
+        // Comprobar si esta informado
+        if (state.value.trim()==="") {
+            throw new Error("El estado debe ser rellenado");
+        } else { // Oculta el div en caso de no haber error al estar informado
+            msgBox.style.display = 'none';
+        }
+        // Comprobar que no exceda la longitud permitida
+        if (state.value.trim().length>=255) {
+            throw new Error("El estado debe tener menos de 255 caracteres");
+        } else { // Oculta el div en caso de no haber error en la longitud
+            msgBox.style.display = 'none';
+        }
+        // Comprobar que lo introducido este permitido
+        if (lettersOnlyRegExp.exec(state.value.trim())===null) {
+            throw new Error("El estado solo puede contener letras");
+        } else { // Oculta el div en caso de no haber error en la expresion
+            msgBox.style.display = 'none';
+        }
+        
+        // Activar variable para conocer que el estado es válido
+        // Si el código llega hasta aqui, quiere decir que no ha saltado ningún error
+        isStateValid = true;
+        
+    } catch(e) {
+        // TRATAMIENTO DE ERRORES
+        isStateValid = false;
+        msgBox.style.color = "red";
+        msgBox.style.marginTop = "5px";
+        msgBox.textContent = e.message;
+        msgBox.style.display = 'block';
+    }
+}
+
+function handleZipValidations() {
+    // Recuperación de los elementos del formulario
+    const msgBox = document.getElementById("responseMsgZip");
+    const zip = document.getElementById("zip");
+    try {        
+        // VALIDACIONES CAMPO CODIGO POSTAL
+        // Comprobar si esta informado
+        if (zip.value.trim()==="") {
+            throw new Error("El código postal debe ser rellenado o no son solo números");
+        } else { // Oculta el div en caso de no haber error al estar informado
+            msgBox.style.display = 'none';
+        }
+        // Comprobar que no exceda la longitud permitida
+        if (zip.value.trim().length>=255) {
+            throw new Error("El código postal debe tener menos de 255 caracteres");
+        } else { // Oculta el div en caso de no haber error en la longitud
+            msgBox.style.display = 'none';
+        }
+        // Comprobar que lo introducido este permitido
+        if (numbersOnlyRegExp.exec(zip.value.trim())===null) {
+            throw new Error("El estado solo puede contener números");
+        } else { // Oculta el div en caso de no haber error en la expresion
+            msgBox.style.display = 'none';
+        }       
+        
+        // Activar variable para conocer que el código postal es válido
+        // Si el código llega hasta aqui, quiere decir que no ha saltado ningún error
+        isZipValid = true;
+        
+    } catch(e) {
+        // TRATAMIENTO DE ERRORES
+        isZipValid = false;
+        msgBox.style.color = "red";
+        msgBox.style.marginTop = "5px";
+        msgBox.textContent = e.message;
+        msgBox.style.display = 'block';
+    }
+}
+
+function handleTelfValidations() {
+    
+}
+
 
    
 function handleSignUpOnClick(event) {
