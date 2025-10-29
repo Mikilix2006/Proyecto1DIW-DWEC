@@ -115,7 +115,7 @@ body {
 .banner .overlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(90deg, rgba(56, 11, 76, 0.845), rgba(255, 255, 255, 0));
+  background: linear-gradient(90deg, rgba(11, 00, 115, 0.89), rgba(255, 255, 255, 0));
 }
 .banner-content {
   position: relative;
@@ -134,7 +134,7 @@ body {
 .about {
   text-align: center;
   padding: 4rem 2rem;
-  background-color: #fff;
+  background-color: var(--color-fondo);
 }
 .about h2 {
   font-size: 2rem;
@@ -197,7 +197,7 @@ body {
 /*formularios*/
 .form-section {
   min-height: 100vh;
-  background: linear-gradient(to bottom, rgb(52, 9, 70), rgba(255, 255, 255, 0));
+  background: linear-gradient(to bottom, rgb(0,0,0), rgba(255, 255, 255, 0));
   display: flex;
   align-items: center;
   justify-content: center;
