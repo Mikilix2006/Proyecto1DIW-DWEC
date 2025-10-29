@@ -30,7 +30,7 @@ function validarSignIn(event) {
             const signForm = document.getElementById("formulario");
             //Las expresiones regulares para poder validar email y password
             const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-            //const regexPassword = /^[a-zA-Z0-9!#$%&]*$/;
+            const regexPassword = /^[a-zA-Z0-9!#$%&*]*$/;
             //Para visualizar errores
             const errorEmail = document.getElementById("errorEmail");
             const errorPassword = document.getElementById("errorPassword");
@@ -49,14 +49,14 @@ function validarSignIn(event) {
                 errorEmail.textContent = "La dirección de correo electrónico no es válida. (Ej. javi@javi.com)";
                 errores=true;
             }
-            /*validación de contraseña
+            //validación de contraseña
             if (tfPassword.value.length > 255){
                 errorPassword.textContent="La contraseña no puede superar los 255 caracteres.";
                 errores=true;
             }else if (!regexPassword.test(tfPassword.value.trim())){
                 errorPassword.textContent="Valores no permitidos.";
                 errores=true;  
-            }*/
+            }
             if(errores) return;
          
             sendRequestAndProcessResponse();
@@ -87,7 +87,7 @@ function sendRequestAndProcessResponse(){
                         //Process HTTP 401 error
                         if (response.status===401){
                           return response.text().then(text => {
-                            throw new Error('¡Ups! Parece que la dirección de correo o la contraseña no coinciden con un usuario existente. Por favor introduzca las credenciales correctas.');
+                            throw new Error('¡Ups! Parece que la dirección de correo o la contraseña no coinciden con un usuario existente.');
                           });
                         }
                         //Process HTTP 500 error
@@ -151,10 +151,11 @@ function storeResponseXMLData (xmlString){
                 sessionStorage.setItem("customer.email", customer.email);
                 sessionStorage.setItem("customer.password", customer.password);
 }
-//PREPARAR DATOS
-//ENVIAR DATOS
-//ASOCIAR LA NUEVA VISTA
-//GUARDAR INFORMACIÓN
-//INTERACTUAR
-
-
+function limpiarDatos(){
+    const spanEmail = document.getElementById("errorEmail");
+    const spanPassword = document.getElementById("errorPassword");
+    const boxError = document.getElementById("responseMsg");
+    spanEmail.textContent="";
+    spanPassword.textContent="";
+    boxError.textContent="";
+}

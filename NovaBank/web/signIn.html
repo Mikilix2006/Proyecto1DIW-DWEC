@@ -38,11 +38,11 @@
       <p>Para iniciar sesión, por favor ingrese sus credenciales:</p>
       <form class="formulario" id="formulario" method="GET" action="http://localhost:8080/CRUDBankServerSide/webresources/customer/sigin/">
         <div class="form-group">
-          <input type="email" id="tfEmail" name="tfEmail" placeholder="Correo electrónico">
+            <input oninput="limpiarDatos();" type="email" id="tfEmail" name="tfEmail" placeholder="Correo electrónico">
           <span class="error-msg" id="errorEmail"></span>
         </div>
         <div class="form-group password">
-          <input type="password" id="tfPassword" name="tfPassword" placeholder="Contraseña">
+          <input oninput="limpiarDatos();" type="password" id="tfPassword" name="tfPassword" placeholder="Contraseña">
           <span class="error-msg" id="errorPassword"></span>
         </div>
         <button type="button" class="btn-aceptar" onclick="validarSignIn(event);">Ingresar</button>
