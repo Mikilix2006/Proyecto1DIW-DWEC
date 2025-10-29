@@ -269,6 +269,12 @@ body {
   margin-top: 4px;
   display: block;
 }
+#responseMsg{
+  color: #e63946;    
+  font-size: 0.9em;
+  margin-top: 4px;
+  display: block;
+}
 
 /* footer*/
 .footer {

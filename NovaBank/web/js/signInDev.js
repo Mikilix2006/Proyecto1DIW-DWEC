@@ -1,3 +1,4 @@
+//CONSTRUCTOR DE CUSTOMER 
 function Customer(  id, 
                     firstName, 
                     lastName, 
@@ -21,6 +22,7 @@ function Customer(  id,
     this.email = email;
     this.password = password;
 }
+//FUNCIÓN PARA VALIDAR SIGN IN - MANEJO DE ERRORES INPUT
 function validarSignIn(event) {
         try{
             const tfEmail = document.getElementById("tfEmail");
@@ -102,13 +104,17 @@ function sendRequestAndProcessResponse(){
                         }
                         return response.text();
                     }).then(data => {
+                        //GUARDA LOS DATOS 
                         storeResponseXMLData(data);
-                        //get customer object from storage
+                        //RECUPERA DATOS DE CUSTOMER
                         const customerName=sessionStorage.getItem("customer.firstName");
-                        msgBox.textContent = msgBox.textContent+'Hi '+customerName+'!';
+                        const customerPassword=sessionStorage.getItem("customer.password");
+                        const customerCity=sessionStorage.getItem("customer.city");
+                        window.location.href = "main.html"
+                        //msgBox.textContent = msgBox.textContent+'Hi '+customerName+customerPassword+customerCity+'!';
                     }).catch(e => {
                             msgBox.className = 'error';
-                            msgBox.textContent = 'Error: ' + e.message;
+                            msgBox.textContent = e.message;
                             msgBox.style.display = 'block';
                     }
                 );

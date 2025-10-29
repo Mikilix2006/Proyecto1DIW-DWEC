@@ -1,0 +1,131 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : 29-oct-2025, 9:36:59
+    Author     : habib
+*/
+.main-container {
+  margin-top: 100px;
+  padding: 2rem 10%;
+  background-color: var(--color-fondo);
+}
+.welcome-section h2 {
+  color: var(--texto-titulo);
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+}
+
+.welcome-section p {
+  color: var(--texto-parrafo);
+  margin-bottom: 2rem;
+}
+
+/* --- Tarjeta principal --- */
+.card-balance {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #fff;
+  border-radius: 20px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  padding: 2rem;
+  flex-wrap: wrap;
+}
+
+.image-placeholder img {
+  max-width: 220px;
+  height: auto;
+}
+
+.card-content {
+  flex: 1;
+  min-width: 250px;
+  margin-left: 2rem;
+}
+
+.card-content h3 {
+  color: var(--texto-titulo);
+  margin-bottom: 0.5rem;
+}
+
+.card-content p {
+  color: var(--texto-parrafo);
+  margin-bottom: 1.5rem;
+}
+
+.stats {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.percentage {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--texto-titulo);
+}
+
+.small {
+  padding: 0.4rem 1rem;
+  font-size: 0.9rem;
+}
+
+/* --- Sección Gestiona --- */
+.gestiona-section {
+  text-align: center;
+  margin-top: 4rem;
+}
+
+.gestiona-section h2 {
+  color: var(--texto-titulo);
+  font-size: 1.8rem;
+  margin-bottom: 2rem;
+}
+
+.gestiona-grid {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 2rem;
+}
+
+.gestiona-card {
+  background: #fff;
+  border-radius: 30px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  width: 180px;
+  padding: 1.5rem;
+  text-align: center;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.gestiona-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 15px rgba(0,0,0,0.15);
+}
+
+.gestiona-card img {
+  width: 40px;
+  margin-bottom: 1rem;
+}
+
+.gestiona-card p {
+  color: var(--texto-parrafo);
+  font-weight: 500;
+}
+
+/* --- Responsividad --- */
+@media (max-width: 768px) {
+  .card-balance {
+    flex-direction: column;
+    text-align: center;
+  }
+  .card-content {
+    margin-left: 0;
+    margin-top: 1rem;
+  }
+}
+
