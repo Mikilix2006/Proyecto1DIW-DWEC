@@ -2,7 +2,6 @@
   const themeBtn = document.getElementById('themeToggle');
   const themeLink = document.getElementById('theme-link');
   const darkMode = localStorage.getItem('darkMode') === 'true';
-
   if (darkMode) {
     themeLink.disabled = false; // activa oscuro.css
     document.body.classList.add('dark-mode');
@@ -10,7 +9,6 @@
     themeLink.disabled = true; // usa claro.css
     document.body.classList.remove('dark-mode');
   }
-
   // Evento del botón de alternancia
   if (themeBtn) {
     themeBtn.addEventListener('click', () => {
@@ -31,7 +29,6 @@
 //desplegable
 const menuBtn = document.getElementById('menuBtn');
 const dropdown = document.getElementById('dropdownMenu');
-
 menuBtn.addEventListener('click', () => {
     dropdown.classList.toggle('show');
 });
