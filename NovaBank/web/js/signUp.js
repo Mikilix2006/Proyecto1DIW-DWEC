@@ -4,17 +4,21 @@
  * and open the template in the editor.
  */
 
-// Inicialización de variables para control de submit
-var isNameValid = false;
-var isSurnameValid = false;
-var isInitialValid = true;
-var isStreetValid = false;
-var isCityValid = false;
-var isStateValid = false;
-var isZipValid = false;
-var isTelfValid = false;
-var isMailValid = false;
+// Inicialización de variable password para que se vaya actualizando
+// conforme el texto del input vaya cambiando
 var isPassValid = false;
+
+// Recuperación de datos del formulario
+const name = document.getElementById("name");
+const surname = document.getElementById("surname");
+const initial = document.getElementById("initial");
+const street = document.getElementById("street");
+const city = document.getElementById("city");
+const state = document.getElementById("state");
+const zip = document.getElementById("zip");
+const telf = document.getElementById("telf");
+const mail = document.getElementById("mail");
+const pass = document.getElementById("pass");
 
 function checkControlVariablesStatus() {
     // Si todas las variables indican que son válidas, devolverá true
@@ -28,7 +32,7 @@ function checkControlVariablesStatus() {
             handleZipValidations() &&
             handleTelfValidations() &&
             handleMailValidations() &&
-            handlePassValidations()
+            isPassValid
         ) return true;
     // No todas las variables son válidas
     return false;
@@ -38,6 +42,7 @@ function checkControlVariablesStatus() {
 const lettersOnlyRegExp = new RegExp("^[a-zA-ZÁáÉéÍíÓóÚúÑñ]+$");
 const letterOnlyRegExp = new RegExp("^[a-zA-ZÁáÉéÍíÓóÚúÑñ]$");
 const numbersOnlyRegExp = new RegExp("^[0-9]+$");
+const telephonesOnlyRegExp = new RegExp("^[\+]{0,1}[0-9]+$");
 const hasToContainLettersRegExp = new RegExp("[a-zA-ZÁáÉéÍíÓóÚúÑñ]+");
 const hasToContainMinusLetterRegExp = new RegExp("[a-zñáéíóú]");
 const hasToContainSpecialCharRegExp = new RegExp("[!#$%&]");
@@ -46,7 +51,6 @@ const emailRegExp = new RegExp("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$
 function handleNameValidations() {
     // Recuperación de los elementos del formulario
     const msgBox = document.getElementById("responseMsgName");
-    const name = document.getElementById("name");
     try {        
         // VALIDACIONES CAMPO NOMBRE
         // Comprobar si esta informado
@@ -70,16 +74,16 @@ function handleNameValidations() {
         
         // Activar variable para conocer que el nombre es válido
         // Si el código llega hasta aqui, quiere decir que no ha saltado ningún error
-        isNameValid = true;
+        //name.autofocus = false;
         return true;
         
     } catch(e) {
         // TRATAMIENTO DE ERRORES
-        isNameValid = false;
         msgBox.style.color = "#ff0000";
         msgBox.style.marginTop = "5px";
         msgBox.textContent = e.message;
         msgBox.style.display = 'block';
+        //name.autofocus = true;
         return false;
     }
 }
@@ -87,7 +91,6 @@ function handleNameValidations() {
 function handleSurnameValidations() {
     // Recuperación de los elementos del formulario
     const msgBox = document.getElementById("responseMsgSurname");
-    const surname = document.getElementById("surname");
     try {        
         // VALIDACIONES CAMPO APELLIDO
         // Comprobar si esta informado
@@ -111,16 +114,16 @@ function handleSurnameValidations() {
         
         // Activar variable para conocer que el apellido es válido
         // Si el código llega hasta aqui, quiere decir que no ha saltado ningún error
-        isSurnameValid = true;
+        //surname.autofocus = false;
         return true;
         
     } catch(e) {
         // TRATAMIENTO DE ERRORES
-        isSurnameValid = false;
         msgBox.style.color = "#ff0000";
         msgBox.style.marginTop = "5px";
         msgBox.textContent = e.message;
         msgBox.style.display = 'block';
+        //surname.autofocus = true;
         return false;
     }
 }
@@ -128,7 +131,6 @@ function handleSurnameValidations() {
 function handleInitialValidations() {
     // Recuperación de los elementos del formulario
     const msgBox = document.getElementById("responseMsgInitial");
-    const initial = document.getElementById("initial");
     try {        
         // VALIDACIONES CAMPO INICIAL
         // Comprobar que no exceda la longitud permitida
@@ -149,15 +151,16 @@ function handleInitialValidations() {
         
         // Activar variable para conocer que la inicial es válida
         // Si el código llega hasta aqui, quiere decir que no ha saltado ningún error
-        isInitialValid = true;
+        //initial.autofocus = true;
         return true;
+        
     } catch(e) {
         // TRATAMIENTO DE ERRORES
-        isInitialValid = false;
         msgBox.style.color = "#ff0000";
         msgBox.style.marginTop = "5px";
         msgBox.textContent = e.message;
         msgBox.style.display = 'block';
+        //initial.autofocus = true;
         return false;
     }
 }
@@ -165,7 +168,6 @@ function handleInitialValidations() {
 function handleStreetValidations() {
     // Recuperación de los elementos del formulario
     const msgBox = document.getElementById("responseMsgStreet");
-    const street = document.getElementById("street");
     try {        
         // VALIDACIONES CAMPO CALLE
         // Comprobar si esta informado
@@ -189,16 +191,16 @@ function handleStreetValidations() {
         
         // Activar variable para conocer que la calle es válida
         // Si el código llega hasta aqui, quiere decir que no ha saltado ningún error
-        isStreetValid = true;
+        //street.autofocus = false;
         return true;
         
     } catch(e) {
         // TRATAMIENTO DE ERRORES
-        isStreetValid = false;
         msgBox.style.color = "#ff0000";
         msgBox.style.marginTop = "5px";
         msgBox.textContent = e.message;
         msgBox.style.display = 'block';
+        //street.autofocus = true;
         return false;
     }
 }
@@ -206,7 +208,6 @@ function handleStreetValidations() {
 function handleCityValidations() {
     // Recuperación de los elementos del formulario
     const msgBox = document.getElementById("responseMsgCity");
-    const city = document.getElementById("city");
     try {        
         // VALIDACIONES CAMPO CIUDAD
         // Comprobar si esta informado
@@ -230,16 +231,16 @@ function handleCityValidations() {
         
         // Activar variable para conocer que la calle es válida
         // Si el código llega hasta aqui, quiere decir que no ha saltado ningún error
-        isCityValid = true;
+        //city.autofocus = false;
         return true;
         
     } catch(e) {
         // TRATAMIENTO DE ERRORES
-        isCityValid = false;
         msgBox.style.color = "#ff0000";
         msgBox.style.marginTop = "5px";
         msgBox.textContent = e.message;
         msgBox.style.display = 'block';
+        //city.autofocus = true;
         return false;
     }
 }
@@ -247,7 +248,6 @@ function handleCityValidations() {
 function handleStateValidations() {
     // Recuperación de los elementos del formulario
     const msgBox = document.getElementById("responseMsgState");
-    const state = document.getElementById("state");
     try {        
         // VALIDACIONES CAMPO ESTADO
         // Comprobar si esta informado
@@ -271,16 +271,16 @@ function handleStateValidations() {
         
         // Activar variable para conocer que el estado es válido
         // Si el código llega hasta aqui, quiere decir que no ha saltado ningún error
-        isStateValid = true;
+        //state.autofocus = false;
         return true;
         
     } catch(e) {
         // TRATAMIENTO DE ERRORES
-        isStateValid = false;
         msgBox.style.color = "#ff0000";
         msgBox.style.marginTop = "5px";
         msgBox.textContent = e.message;
         msgBox.style.display = 'block';
+        //state.autofocus = true;
         return false;
     }
 }
@@ -288,7 +288,6 @@ function handleStateValidations() {
 function handleZipValidations() {
     // Recuperación de los elementos del formulario
     const msgBox = document.getElementById("responseMsgZip");
-    const zip = document.getElementById("zip");
     try {        
         // VALIDACIONES CAMPO CODIGO POSTAL
         // Comprobar si esta informado
@@ -312,16 +311,16 @@ function handleZipValidations() {
         
         // Activar variable para conocer que el código postal es válido
         // Si el código llega hasta aqui, quiere decir que no ha saltado ningún error
-        isZipValid = true;
+        //zip.autofocus = false;
         return true;
         
     } catch(e) {
         // TRATAMIENTO DE ERRORES
-        isZipValid = false;
         msgBox.style.color = "#ff0000";
         msgBox.style.marginTop = "5px";
         msgBox.textContent = e.message;
         msgBox.style.display = 'block';
+        //zip.autofocus = true;
         return false;
     }
 }
@@ -329,7 +328,6 @@ function handleZipValidations() {
 function handleTelfValidations() {
     // Recuperación de los elementos del formulario
     const msgBox = document.getElementById("responseMsgTelf");
-    const telf = document.getElementById("telf");
     try {        
         // VALIDACIONES CAMPO TELÉFONO
         // Comprobar si esta informado
@@ -345,24 +343,24 @@ function handleTelfValidations() {
             msgBox.style.display = 'none';
         }
         // Comprobar que lo introducido este permitido
-        if (numbersOnlyRegExp.exec(telf.value.trim())===null) {
-            throw new Error("El teléfono solo puede contener números");
+        if (telephonesOnlyRegExp.exec(telf.value.trim())===null) {
+            throw new Error("El teléfono solo puede contener númerosy el '+', sin espacios");
         } else { // Oculta el div en caso de no haber error en la expresion
             msgBox.style.display = 'none';
         }       
         
         // Activar variable para conocer que el teléfono es válido
         // Si el código llega hasta aqui, quiere decir que no ha saltado ningún error
-        isTelfValid = true;
+        //telf.autofocus = false;
         return true;
         
     } catch(e) {
         // TRATAMIENTO DE ERRORES
-        isTelfValid = false;
         msgBox.style.color = "#ff0000";
         msgBox.style.marginTop = "5px";
         msgBox.textContent = e.message;
         msgBox.style.display = 'block';
+        //telf.autofocus = true;
         return false;
     }
 }
@@ -370,7 +368,6 @@ function handleTelfValidations() {
 function handleMailValidations() {
     // Recuperación de los elementos del formulario
     const msgBoxMail = document.getElementById("responseMsgMail");
-    const mail = document.getElementById("mail");
     try {
         // VALIDACIONES CAMPO CORREO ELECTRÓNICO
         // Comprobar si esta informado
@@ -394,16 +391,16 @@ function handleMailValidations() {
         
         // Activar variable para conocer que el correo electrónico es válido
         // Si el código llega hasta aqui, quiere decir que no ha saltado ningún error
-        isMailValid = true;
+        //mail.autofocus = false;
         return true;
         
     } catch(e) {
         // TRATAMIENTO DE ERRORES
-        isMailValid = false;
         msgBoxMail.style.color = "#ff0000";
         msgBoxMail.style.marginTop = "5px";
         msgBoxMail.textContent = e.message;
         msgBoxMail.style.display = 'block';
+        //mail.autofocus = true;
         return false;
     }
 }
@@ -414,7 +411,6 @@ const msgBoxPass = document.getElementById("responseMsgPass");
 const msgBoxLength = document.getElementById("caracteres");
 const msgBoxLetters = document.getElementById("letras");
 const msgBoxChar = document.getElementById("caracterEspecial");
-const pass = document.getElementById("pass");
 
 // Variables de contorl para mensaje debajo del campo contraseña
 var isLengthValid = false;
@@ -429,6 +425,7 @@ pass.addEventListener('input', function() {
     // Comprobar que tenga un mínimo de 12 caracteres y maximo 50
     if (pass.value.trim().length<12 || pass.value.trim().length>50) {
         isLengthValid = false;
+        isPassValid = false;
         msgBoxLength.style.color = "#ff0000";
     } else { // Marca como verdadera la condición de longitud
         isLengthValid = true;
@@ -437,6 +434,7 @@ pass.addEventListener('input', function() {
     // Comprobar que mínimo una de sus letras sea minúscula
     if (hasToContainMinusLetterRegExp.exec(pass.value.trim())===null) {
         areLettersValid = false;
+        isPassValid = false;
         msgBoxLetters.style.color = "#ff0000";
     } else { // Marca como verdadera la condición de letra minúscula
         areLettersValid = true;
@@ -445,6 +443,7 @@ pass.addEventListener('input', function() {
     // Comprobar que contenga como mínimo uno de estos caracteres (! # $ % &)
     if (hasToContainSpecialCharRegExp.exec(pass.value.trim())===null) {
         hasOneSpecialCharMin = false;
+        isPassValid = false;
         msgBoxChar.style.color = "#ff0000";
     } else { // Marca como verdadera la condición de caracter especial
         hasOneSpecialCharMin = true;
@@ -468,15 +467,73 @@ function handleSignUpOnClick(event) {
     
     // Si todas las variables son verdaderas, devolverá true
     if (checkControlVariablesStatus()) {
-        // Comienzo del bloque de validaciones
-        try {
-            // Recuperación del formulario
-            const formulario = document.getElementById("formul");
-        } catch (e) {
-            // TRATAMIENTO DE ERRORES
-        }
+        // Recuperación del formulario
+        //window.alert("La información del formulario es válida.");
+        const formularioSignUp = document.getElementById("signUpForm");
+        const msgBoxSignUp = document.getElementById("responseMsgSignUp");
+
+        // CREAR OBJETO CUSTOMER
+        const customer = new Customer(
+                        name.value.trim(),
+                        surname.value.trim(),
+                        initial.value.trim(),
+                        street.value.trim(),
+                        city.value.trim(),
+                        state.value.trim(),
+                        zip.value.trim(),
+                        telf.value.trim(),
+                        mail.value.trim(),
+                        pass.value.trim()
+                );
+        // PREPARAR DATOS PARA EL ENVIO
+        // ENVIO DE DATOS
+        // CREAR POST REQUEST Y PROCESAR RESPUESTAS HTTP
+        fetch(formularioSignUp,
+            {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/xml'
+                }
+            }).then(response => {
+                // PROCESADO DE RESPUESTA 403
+                // Correo existente en la base de datos
+                if (response.status===403) {
+                    return response.text().then(text => {
+                        throw new Error("Ese correo electrónico ya está en uso");
+                    }); // Fin del return
+                } // Fin del if
+                // PROCESADO DE RESPUESTA 500
+                // Ha habido un error en la conexión
+                else if (response.status===500) {
+                    return response.text().then(text => {
+                        throw new Error("No ha sido posible conectar con el servidor, intentalo mas tarde");
+                    }); // Fin del return
+                } // Fin del if
+                // PROCESADO DE RESPUESTA DESCONOCIDA
+                // Ha habido un error inesperado
+                else if (!response.ok) {
+                    return response.text().then(text => {
+                        throw new Error(text || "Ha ocurrido un error inesperado");
+                    }); // Fin del return
+                } // Fin del if
+                // Si llega hasta aqui, no ha habido ningún error
+                // Código 200
+                return response;
+            })
+            // PROCESAR RESPUESTA OK
+                .then(data => {
+                    msgBoxSignUp.style.color = "#5620ad";
+                    msgBoxSignUp.textContent = "Se ha registrado al usuario correctamente";
+                    msgBoxSignUp.style.display = 'block';
+            })
+            // MOSTRAR ERRORES
+                .catch(e => {
+                    msgBoxSignUp.style.color = "#ff0000";
+                    msgBoxSignUp.textContent = "Error: " + e.message;
+                    msgBoxSignUp.style.display = 'block';
+            })
     } else {
-        window.alert("La información del formulario no es válida, revísela y modifíquela.")
+        window.alert("La información del formulario no es válida, revísela y modifíquela.");
     }
     
 }

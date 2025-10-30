@@ -40,7 +40,7 @@
                 <br>
           Todos los campos son obligatorios.
       </p>
-      <form class="formulario">
+      <form class="formulario" id="signUpForm" action="http://localhost:8080/CRUDBankServerSide/webresources/customer">
         
         <div class="form-group ">
             <input type="text" id="name" name="name" placeholder="Nombre" onblur="handleNameValidations()"/>
@@ -67,11 +67,11 @@
           <div id="responseMsgState"></div>
         </div>
         <div class="form-group ">
-          <input type="number" id="zip" name="zip" placeholder="Código postal" onblur="handleZipValidations()"/>
+          <input type="text" id="zip" name="zip" placeholder="Código postal" onblur="handleZipValidations()"/>
           <div id="responseMsgZip"></div>
         </div>
         <div class="form-group ">
-          <input type="number" id="telf" name="telf" placeholder="Teléfono" onblur="handleTelfValidations()"/>
+          <input type="text" id="telf" name="telf" placeholder="Teléfono" onblur="handleTelfValidations()"/>
           <div id="responseMsgTelf"></div>
         </div>
         <div class="form-group ">
@@ -87,6 +87,7 @@
           </div>
         </div>
           <button type="submit" class="btn-aceptar" id="btSignUp" onclick="handleSignUpOnClick(event)">Registrarse</button>
+          <div id="responseMsgSignUp" style="font-size: 12px" hidden>
         <p id="register-text">
             ¿Ya tienes una cuenta? <a href="http://localhost:8080/NovaBank/signIn.html">Iniciar sesión</a>
         </p>
