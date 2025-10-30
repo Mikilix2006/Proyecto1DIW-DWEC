@@ -8,7 +8,7 @@
   --texto-titulo: #2d1b69;
   --texto-parrafo: #555;
   --texto-parrafo-claro: #888;
-  --color-error: #ff0000;
+  --color-error: #e63946;
 }
 /*general*/
 * {
@@ -17,7 +17,6 @@
   box-sizing: border-box;
   font-family: "Poppins", Arial, sans-serif;
 }
-
 body {
   color: var(--texto-parrafo);
   background-color: var(--color-fondo);
@@ -230,10 +229,13 @@ body {
   outline: none;
   transition: border 0.3s ease;
 }
+/*ERRORES Y JERARQUÍA DE CSS*/
+.form-group input.input-error {
+  border: 2px solid #e63946;
+}
 .form-group input:focus {
   border-color: var(--btn-color-hover);
 }
-
 .btn-aceptar {
   background: var(--btn-color-solido);
   color: white;
@@ -248,7 +250,6 @@ body {
 .btn-aceptar:hover {
   background: var(--btn-color-hover);
 }
-
 #register-text {
   margin-top: 1rem;
   font-size: 0.9rem;
@@ -262,7 +263,7 @@ body {
 #register-text a:hover {
   text-decoration: underline;
 }
-
+/*DIV ERROR MENSAJES*/
 .error-msg {
   color: #e63946;    
   font-size: 0.9em;
@@ -275,7 +276,6 @@ body {
   margin-top: 4px;
   display: block;
 }
-
 /* footer*/
 .footer {
   background-color: var(--color-footer);
@@ -293,8 +293,6 @@ body {
   width: 40px;
   margin-bottom: 0.5rem;
 }
-
-
 /* responsive*/
 @media (max-width: 768px) {
   .header .container {

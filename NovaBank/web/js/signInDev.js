@@ -37,24 +37,32 @@ function validarSignIn(event) {
             //Se evita el event bubbling
             event.preventDefault();
             event.stopPropagation();
+            tfEmail.classList.remove("input-error");
+            tfPassword.classList.remove("input-error");
             
             let errores=false;
             if (tfEmail.value.trim() === "" || tfPassword.value.trim() === "")
                 throw new Error('Por favor complete todos los campos');
+                tfEmail.classList.add("input-error");
+                tfPassword.classList.add("input-error");
             //validación de correo
             if (tfEmail.value.length > 255) {
                 errorEmail.textContent = "El correo electrónico no puede superar los 255 caracteres.";
+                tfEmail.classList.add("input-error");
                 errores=true;
             }else if (!regex.test(tfEmail.value.trim())){
                 errorEmail.textContent = "La dirección de correo electrónico no es válida. (Ej. javi@javi.com)";
+                tfEmail.classList.add("input-error");
                 errores=true;
             }
             //validación de contraseña
             if (tfPassword.value.length > 255){
                 errorPassword.textContent="La contraseña no puede superar los 255 caracteres.";
+                tfPassword.classList.add("input-error");
                 errores=true;
             }else if (!regexPassword.test(tfPassword.value.trim())){
                 errorPassword.textContent="Valores no permitidos.";
+                tfPassword.classList.add("input-error");
                 errores=true;  
             }
             if(errores) return;
@@ -155,7 +163,11 @@ function limpiarDatos(){
     const spanEmail = document.getElementById("errorEmail");
     const spanPassword = document.getElementById("errorPassword");
     const boxError = document.getElementById("responseMsg");
+    const tfEmail = document.getElementById("tfEmail");
+    const tfPassword = document.getElementById("tfPassword");
     spanEmail.textContent="";
     spanPassword.textContent="";
     boxError.textContent="";
+    tfEmail.classList.remove("input-error");
+    tfPassword.classList.remove("input-error");
 }
