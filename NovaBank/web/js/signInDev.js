@@ -22,7 +22,148 @@ function Customer(  id,
     this.email = email;
     this.password = password;
 }
+/*cÓDIGO JSON*/
+// ===========================
+// VALIDACIÓN DE SIGN-IN
+// ===========================
+function validarSignIn(event) {
+  try {
+    const tfEmail = document.getElementById("tfEmail");
+    const tfPassword = document.getElementById("tfPassword");
+    const signForm = document.getElementById("formulario");
+    const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    const regexPassword = /^[a-zA-Z0-9!#$%&*]*$/;
+    const errorEmail = document.getElementById("errorEmail");
+    const errorPassword = document.getElementById("errorPassword");
+
+    event.preventDefault();
+    event.stopPropagation();
+
+    tfEmail.classList.remove("input-error");
+    tfPassword.classList.remove("input-error");
+    errorEmail.textContent = "";
+    errorPassword.textContent = "";
+
+    let errores = false;
+
+    if (tfEmail.value.trim() === "" || tfPassword.value.trim() === "") {
+      throw new Error("Por favor complete todos los campos");
+    }
+
+    if (tfEmail.value.length > 255) {
+      errorEmail.textContent = "El correo electrónico no puede superar los 255 caracteres.";
+      tfEmail.classList.add("input-error");
+      errores = true;
+    } else if (!regex.test(tfEmail.value.trim())) {
+      errorEmail.textContent = "La dirección de correo electrónico no es válida. (Ej. javi@javi.com)";
+      tfEmail.classList.add("input-error");
+      errores = true;
+    }
+
+    if (tfPassword.value.length > 255) {
+      errorPassword.textContent = "La contraseña no puede superar los 255 caracteres.";
+      tfPassword.classList.add("input-error");
+      errores = true;
+    } else if (!regexPassword.test(tfPassword.value.trim())) {
+      errorPassword.textContent = "Valores no permitidos.";
+      tfPassword.classList.add("input-error");
+      errores = true;
+    }
+
+    if (errores) return;
+
+    sendRequestAndProcessResponse();
+  } catch (e) {
+    const msgBox = document.getElementById("responseMsg");
+    msgBox.className = "error";
+    msgBox.textContent = e.message;
+    msgBox.style.display = "block";
+  }
+}
+
+// ===========================
+// PETICIÓN FETCH (GET + JSON)
+// ===========================
+function sendRequestAndProcessResponse() {
+  const signForm = document.getElementById("formulario");
+  const msgBox = document.getElementById("responseMsg");
+  const tfEmail = document.getElementById("tfEmail");
+  const tfPassword = document.getElementById("tfPassword");
+  const valueTfEmail = tfEmail.value.trim();
+  const valueTfPassword = tfPassword.value.trim();
+
+  fetch(signForm.action + `${encodeURIComponent(valueTfEmail)}/${encodeURIComponent(valueTfPassword)}`, {
+    method: "GET",
+    headers: {
+      "Accept": "application/json"
+    }
+  })
+    .then(response => {
+      if (response.status === 401) {
+        throw new Error("¡Ups! Parece que la dirección de correo o la contraseña no coinciden con un usuario existente.");
+      } else if (response.status === 500) {
+        throw new Error("Error del servidor. Por favor, inténtelo de nuevo más tarde.");
+      } else if (!response.ok) {
+        throw new Error("Error inesperado.");
+      }
+      return response.json(); // ✅ AHORA PARSEA AUTOMÁTICAMENTE EL JSON
+    })
+    .then(data => {
+      console.log("🔹 Datos JSON recibidos:", data);
+      storeJsonData(data); // ✅ PASA OBJETO JSON, NO TEXTO
+      window.location.href = "main.html";
+    })
+    .catch(e => {
+      msgBox.className = "error";
+      msgBox.textContent = e.message;
+      msgBox.style.display = "block";
+    });
+}
+
+// ===========================
+// GUARDAR DATOS EN SESSION
+// ===========================
+function storeJsonData(customer) {
+  sessionStorage.setItem("customer.id", customer.id);
+  sessionStorage.setItem("customer.firstName", customer.firstName);
+  sessionStorage.setItem("customer.lastName", customer.lastName);
+  sessionStorage.setItem("customer.middleInitial", customer.middleInitial);
+  sessionStorage.setItem("customer.street", customer.street);
+  sessionStorage.setItem("customer.city", customer.city);
+  sessionStorage.setItem("customer.state", customer.state);
+  sessionStorage.setItem("customer.zip", customer.zip);
+  sessionStorage.setItem("customer.phone", customer.phone);
+  sessionStorage.setItem("customer.email", customer.email);
+  sessionStorage.setItem("customer.password", customer.password);
+}
+
+// ===========================
+// LIMPIAR ERRORES
+// ===========================
+function limpiarDatos() {
+  const spanEmail = document.getElementById("errorEmail");
+  const spanPassword = document.getElementById("errorPassword");
+  const boxError = document.getElementById("responseMsg");
+  const tfEmail = document.getElementById("tfEmail");
+  const tfPassword = document.getElementById("tfPassword");
+
+  spanEmail.textContent = "";
+  spanPassword.textContent = "";
+  boxError.textContent = "";
+  tfEmail.classList.remove("input-error");
+  tfPassword.classList.remove("input-error");
+}
+
+
+
+
+
+
+
+/*
+ * CÓDIGO XML
 //FUNCIÓN PARA VALIDAR SIGN IN - MANEJO DE ERRORES INPUT
+//CAMBIO DE XML A FORMATO JSON 
 function validarSignIn(event) {
         try{
             const tfEmail = document.getElementById("tfEmail");
@@ -76,7 +217,7 @@ function validarSignIn(event) {
             msgBox.style.display = 'block';
         }
 }
-    
+
 function sendRequestAndProcessResponse(){
     const signForm = document.getElementById("formulario");
     const msgBox = document.getElementById("responseMsg");
@@ -110,15 +251,15 @@ function sendRequestAndProcessResponse(){
                             throw new Error(text || 'Error inesperado');
                           });
                         }
+                        //return response.text();
                         return response.text();
                     }).then(data => {
                         //GUARDA LOS DATOS 
                         storeResponseXMLData(data);
                         //RECUPERA DATOS DE CUSTOMER
-                        const customerName=sessionStorage.getItem("customer.firstName");
-                        const customerPassword=sessionStorage.getItem("customer.password");
-                        const customerCity=sessionStorage.getItem("customer.city");
-                        window.location.href = "main.html"
+                        //const customerName=sessionStorage.getItem("customer.firstName");
+                        //const customerPassword=sessionStorage.getItem("customer.password");
+                        window.location.href = "main.html";
                         //msgBox.textContent = msgBox.textContent+'Hi '+customerName+customerPassword+customerCity+'!';
                     }).catch(e => {
                             msgBox.className = 'error';
@@ -170,4 +311,4 @@ function limpiarDatos(){
     boxError.textContent="";
     tfEmail.classList.remove("input-error");
     tfPassword.classList.remove("input-error");
-}
+}*/

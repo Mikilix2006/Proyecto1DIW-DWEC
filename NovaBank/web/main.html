@@ -89,19 +89,25 @@ and open the template in the editor.
   <script src="js/facilities.js"></script>
   <script src="js/signInDev.js"></script>
   <script>
-    const customerName=sessionStorage.getItem("customer.firstName");
+    const customerName = sessionStorage.getItem("customer.firstName");
+    const h2 = document.querySelector(".welcome-section h2");
 
+    if (h2) {
+        if (customerName) {
+            h2.textContent = `¡Hola, ${customerName}!`;
+        } else {
+            h2.textContent = "¡Hola!";
+        }
+    }
+      
+      
+    /*  
+    const customerName=sessionStorage.getItem("customer.firstName");
     if (customerName) {
     document.querySelector(".welcome-section h2").textContent = `¡Hola, ${customerName}!`;
   } else {
     document.querySelector(".welcome-section h2").textContent = "¡Hola!";
-  }
-  //oninput
-  //dir email no existe
-  //dir email bine y contra mal
-  
-  
-  //500 es parar mysql y hacer la prueba
+  }*/
   </script>
 </body>
 </html>
