@@ -44,6 +44,7 @@ const letterOnlyRegExp = new RegExp("^[a-zA-ZÁáÉéÍíÓóÚúÑñ]$");
 const numbersOnlyRegExp = new RegExp("^[0-9]+$");
 const telephonesOnlyRegExp = new RegExp("^[\+]{0,1}[0-9]+$");
 const hasToContainLettersRegExp = new RegExp("[a-zA-ZÁáÉéÍíÓóÚúÑñ]+");
+const streetValidationRegExp = new RegExp("^[a-zA-ZÁáÉéÍíÓóÚúÑñ]+[,/]{0,1}[0-9]{0,}");
 const hasToContainMinusLetterRegExp = new RegExp("[a-zñáéíóú]");
 const hasToContainSpecialCharRegExp = new RegExp("[!#$%&]");
 const emailRegExp = new RegExp("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$");
@@ -183,7 +184,7 @@ function handleStreetValidations() {
             msgBox.style.display = 'none';
         }
         // Comprobar que lo introducido este permitido
-        if (hasToContainLettersRegExp.exec(street.value.trim())===null) {
+        if (streetValidationRegExp.exec(street.value.trim())===null) {
             throw new Error("La calle debe contener letras");
         } else { // Oculta el div en caso de no haber error en la expresion
             msgBox.style.display = 'none';
@@ -471,20 +472,6 @@ function handleSignUpOnClick(event) {
         //window.alert("La información del formulario es válida.");
         const formularioSignUp = document.getElementById("signUpForm");
         const msgBoxSignUp = document.getElementById("responseMsgSignUp");
-
-        // CREAR OBJETO CUSTOMER
-        const customer = new Customer(
-                        name.value.trim(),
-                        surname.value.trim(),
-                        initial.value.trim(),
-                        street.value.trim(),
-                        city.value.trim(),
-                        state.value.trim(),
-                        zip.value.trim(),
-                        telf.value.trim(),
-                        mail.value.trim(),
-                        pass.value.trim()
-                );
         // PREPARAR DATOS PARA EL ENVIO
         // ENVIO DE DATOS
         // CREAR POST REQUEST Y PROCESAR RESPUESTAS HTTP
@@ -493,7 +480,22 @@ function handleSignUpOnClick(event) {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/xml'
-                }
+                },
+                body: `
+                    <customer>
+                        <id>${id.value.trim()}</id>
+                        <firstName>${name.value.trim()}</firstName>
+                        <lastName>${surname.value.trim()}</lastName>
+                        <middleInitial>${initial.value.trim()}</middleInitial>
+                        <street>${street.value.trim()}</street>
+                        <city>${city.value.trim()}</city>
+                        <state>${state.value.trim()}</state>
+                        <zip>${zip.value.trim()}</zip>
+                        <phone>${telf.value.trim()}</phone>
+                        <email>${mail.value.trim()}</email>
+                        <password>${pass.value.trim()}</password>
+                    </customer>
+                `
             }).then(response => {
                 // PROCESADO DE RESPUESTA 403
                 // Correo existente en la base de datos
@@ -522,6 +524,9 @@ function handleSignUpOnClick(event) {
             })
             // PROCESAR RESPUESTA OK
                 .then(data => {
+                    // Guardar los datos
+                    //guardarDatosEnXML(data);
+                    
                     msgBoxSignUp.style.color = "#5620ad";
                     msgBoxSignUp.textContent = "Se ha registrado al usuario correctamente";
                     msgBoxSignUp.style.display = 'block';
@@ -531,9 +536,44 @@ function handleSignUpOnClick(event) {
                     msgBoxSignUp.style.color = "#ff0000";
                     msgBoxSignUp.textContent = "Error: " + e.message;
                     msgBoxSignUp.style.display = 'block';
-            })
+            });
     } else {
         window.alert("La información del formulario no es válida, revísela y modifíquela.");
+        // Crear funcion que haga focus al primer campo vacio para que el usuario lo rellene
     }
     
 }
+/*
+function guardarDatosEnXML(xmlString) {
+    //Create XML parser
+    const parser = new DOMParser();
+    //Parse response XML data
+    const xmlDoc=parser.parseFromString(xmlString,"application/xml");
+    //Create Customer object with data received in response
+    const customer=new Customer(
+        xmlDoc.getElementsByTagName("id")[0].textContent,
+        xmlDoc.getElementsByTagName("firstName")[0].textContent,
+        xmlDoc.getElementsByTagName("lastName")[0].textContent,
+        xmlDoc.getElementsByTagName("middleInitial")[0].textContent,
+        xmlDoc.getElementsByTagName("street")[0].textContent,
+        xmlDoc.getElementsByTagName("city")[0].textContent,
+        xmlDoc.getElementsByTagName("state")[0].textContent,
+        xmlDoc.getElementsByTagName("zip")[0].textContent,
+        xmlDoc.getElementsByTagName("phone")[0].textContent,
+        xmlDoc.getElementsByTagName("email")[0].textContent,
+        xmlDoc.getElementsByTagName("password")[0].textContent,
+    );
+    // Save data to sessionStorage
+    sessionStorage.setItem("customer.id", customer.id);
+    sessionStorage.setItem("customer.firstName", customer.firstName);
+    sessionStorage.setItem("customer.lastName", customer.lastName);
+    sessionStorage.setItem("customer.middleInitial", customer.middleInitial);
+    sessionStorage.setItem("customer.street", customer.street);
+    sessionStorage.setItem("customer.city", customer.city);
+    sessionStorage.setItem("customer.state", customer.state);
+    sessionStorage.setItem("customer.zip", customer.zip);
+    sessionStorage.setItem("customer.phone", customer.phone);
+    sessionStorage.setItem("customer.email", customer.email);
+    sessionStorage.setItem("customer.password", customer.password);
+}
+*/
