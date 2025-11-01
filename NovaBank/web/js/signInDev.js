@@ -23,9 +23,6 @@ function Customer(  id,
     this.password = password;
 }
 /*cÓDIGO JSON*/
-// ===========================
-// VALIDACIÓN DE SIGN-IN
-// ===========================
 function validarSignIn(event) {
   try {
     const tfEmail = document.getElementById("tfEmail");
@@ -80,10 +77,6 @@ function validarSignIn(event) {
     msgBox.style.display = "block";
   }
 }
-
-// ===========================
-// PETICIÓN FETCH (GET + JSON)
-// ===========================
 function sendRequestAndProcessResponse() {
   const signForm = document.getElementById("formulario");
   const msgBox = document.getElementById("responseMsg");
@@ -106,11 +99,10 @@ function sendRequestAndProcessResponse() {
       } else if (!response.ok) {
         throw new Error("Error inesperado.");
       }
-      return response.json(); // ✅ AHORA PARSEA AUTOMÁTICAMENTE EL JSON
+      return response.json();
     })
     .then(data => {
-      console.log("🔹 Datos JSON recibidos:", data);
-      storeJsonData(data); // ✅ PASA OBJETO JSON, NO TEXTO
+      storeJsonData(data);
       window.location.href = "main.html";
     })
     .catch(e => {
@@ -120,9 +112,6 @@ function sendRequestAndProcessResponse() {
     });
 }
 
-// ===========================
-// GUARDAR DATOS EN SESSION
-// ===========================
 function storeJsonData(customer) {
   sessionStorage.setItem("customer.id", customer.id);
   sessionStorage.setItem("customer.firstName", customer.firstName);
