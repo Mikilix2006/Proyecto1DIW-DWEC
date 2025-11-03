@@ -1,74 +1,49 @@
-//CONSTRUCTOR DE CUSTOMER 
-function Customer(  id, 
-                    firstName, 
-                    lastName, 
-                    middleInitial, 
-                    street, 
-                    city, 
-                    state,
-                    zip,
-                    phone,
-                    email,
-                    password) {
-    this.id = id;
-    this.firstName = firstName;
-    this.lastName = lastName;
-    this.middleInitial = middleInitial;
-    this.street = street;
-    this.city = city;
-    this.state = state;
-    this.zip = zip;
-    this.phone = phone;
-    this.email = email;
-    this.password = password;
-}
-/*cÓDIGO JSON*/
+/*
+//CÓDIGO JSON
 function validarSignIn(event) {
   try {
-    const tfEmail = document.getElementById("tfEmail");
-    const tfPassword = document.getElementById("tfPassword");
+    //CAPTURA DE LA INFORMACIÓN DEL FORMULARIO
+    const emailInput = document.getElementById("tfEmail");
+    const passwordInput = document.getElementById("tfPassword");
     const signForm = document.getElementById("formulario");
+    //EXPRESIONES REGULARES
     const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     const regexPassword = /^[a-zA-Z0-9!#$%&*]*$/;
+    //CAPTURA DE LAS ERROR BOXES DIV & SPAN
     const errorEmail = document.getElementById("errorEmail");
     const errorPassword = document.getElementById("errorPassword");
-
+    //EVITA LA PROPAGACIÓN
     event.preventDefault();
     event.stopPropagation();
-
-    tfEmail.classList.remove("input-error");
-    tfPassword.classList.remove("input-error");
-    errorEmail.textContent = "";
-    errorPassword.textContent = "";
-
+    //CHIVATO ERRORES
     let errores = false;
 
-    if (tfEmail.value.trim() === "" || tfPassword.value.trim() === "") {
+    //VALIDACIONES - INPUTS INFORMADOS
+    if (emailInput.value.trim() === "" || passwordInput.value.trim() === "") {
       throw new Error("Por favor complete todos los campos");
     }
-
-    if (tfEmail.value.length > 255) {
+    //VALIDACIÓN DEL EMAIL FORMATO Y LONGITUD
+    if (emailInput.value.length > 255) {
       errorEmail.textContent = "El correo electrónico no puede superar los 255 caracteres.";
-      tfEmail.classList.add("input-error");
+      emailInput.classList.add("input-error");
       errores = true;
-    } else if (!regex.test(tfEmail.value.trim())) {
+    } else if (!regex.test(emailInput.value.trim())) {
       errorEmail.textContent = "La dirección de correo electrónico no es válida. (Ej. javi@javi.com)";
-      tfEmail.classList.add("input-error");
+      emailInput.classList.add("input-error");
       errores = true;
     }
-
-    if (tfPassword.value.length > 255) {
-      errorPassword.textContent = "La contraseña no puede superar los 255 caracteres.";
-      tfPassword.classList.add("input-error");
+    //VALIDACIÓN DE LA CONTRASEÑA 
+    if (passwordInput.value.length > 50) {
+      errorPassword.textContent = "La contraseña no puede superar los 50 caracteres.";
+      passwordInput.classList.add("input-error");
       errores = true;
-    } else if (!regexPassword.test(tfPassword.value.trim())) {
+    } else if (!regexPassword.test(passwordInput.value.trim())) {
       errorPassword.textContent = "Valores no permitidos.";
-      tfPassword.classList.add("input-error");
+      passwordInput.classList.add("input-error");
       errores = true;
     }
-
     if (errores) return;
-
+    //FUNCIÓN PARA ENVIAR LA PETICIÓN Y CONTROLAR LA RESPUESTA
     sendRequestAndProcessResponse();
   } catch (e) {
     const msgBox = document.getElementById("responseMsg");
@@ -77,18 +52,19 @@ function validarSignIn(event) {
     msgBox.style.display = "block";
   }
 }
+
 function sendRequestAndProcessResponse() {
   const signForm = document.getElementById("formulario");
   const msgBox = document.getElementById("responseMsg");
-  const tfEmail = document.getElementById("tfEmail");
-  const tfPassword = document.getElementById("tfPassword");
-  const valueTfEmail = tfEmail.value.trim();
-  const valueTfPassword = tfPassword.value.trim();
-
-  fetch(signForm.action + `${encodeURIComponent(valueTfEmail)}/${encodeURIComponent(valueTfPassword)}`, {
+  const emailInput = document.getElementById("tfEmail");
+  const passwordInput = document.getElementById("tfPassword");
+  const emailValue = emailInput.value.trim();
+  const passwordValue= passwordInput.value.trim();
+  //URL DONDE SE ENVIA LA PETICIÓN AL SERVICIO RESTFUL
+  fetch(signForm.action + `${encodeURIComponent(emailValue)}/${encodeURIComponent(passwordValue)}`, {
     method: "GET",
     headers: {
-      "Accept": "application/json"
+      'Content-Type': "application/json"
     }
   })
     .then(response => {
@@ -99,10 +75,12 @@ function sendRequestAndProcessResponse() {
       } else if (!response.ok) {
         throw new Error("Error inesperado.");
       }
+      //SE NECESITA TENER LA RESPUESTA EN FORMATO JSON
       return response.json();
     })
     .then(data => {
       storeJsonData(data);
+      //SI ES 200 OK SE ENVÍA AL MAIN 
       window.location.href = "main.html";
     })
     .catch(e => {
@@ -112,6 +90,7 @@ function sendRequestAndProcessResponse() {
     });
 }
 
+//SE GUARDA TODA LA INFORMACIÓN DEL CLIENTE - LO USARÁ EL CHANGE PASSWORD
 function storeJsonData(customer) {
   sessionStorage.setItem("customer.id", customer.id);
   sessionStorage.setItem("customer.firstName", customer.firstName);
@@ -126,77 +105,86 @@ function storeJsonData(customer) {
   sessionStorage.setItem("customer.password", customer.password);
 }
 
-// ===========================
-// LIMPIAR ERRORES
-// ===========================
+//USADA EN EL MANEJADOR ONINPUT
 function limpiarDatos() {
   const spanEmail = document.getElementById("errorEmail");
   const spanPassword = document.getElementById("errorPassword");
   const boxError = document.getElementById("responseMsg");
   const tfEmail = document.getElementById("tfEmail");
   const tfPassword = document.getElementById("tfPassword");
-
+  
   spanEmail.textContent = "";
   spanPassword.textContent = "";
   boxError.textContent = "";
   tfEmail.classList.remove("input-error");
   tfPassword.classList.remove("input-error");
+}*/
+
+//CÓDIGO XML
+//CONSTRUCTOR DE CUSTOMER
+//INF. DEL CUSTOMER RESTFUL SERVICE
+function Customer(id, firstName, lastName, middleInitial, street, city, state, zip, phone, email, password) {
+    this.id = id;
+    this.firstName = firstName;
+    this.lastName = lastName;
+    this.middleInitial = middleInitial;
+    this.street = street;
+    this.city = city;
+    this.state = state;
+    this.zip = zip;
+    this.phone = phone;
+    this.email = email;
+    this.password = password;
 }
-
-
-
-
-
-
-
-/*
- * CÓDIGO XML
 //FUNCIÓN PARA VALIDAR SIGN IN - MANEJO DE ERRORES INPUT
-//CAMBIO DE XML A FORMATO JSON 
 function validarSignIn(event) {
         try{
-            const tfEmail = document.getElementById("tfEmail");
-            const tfPassword = document.getElementById("tfPassword");
+            //CAPTURA DE LA INFORMACIÓN FROM FORM
+            const emailInput = document.getElementById("tfEmail");
+            const passwordInput = document.getElementById("tfPassword");
             const signForm = document.getElementById("formulario");
-            //Las expresiones regulares para poder validar email y password
+            //EXPRESIONES REGULARES PARA VALIDACIÓN
             const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
             const regexPassword = /^[a-zA-Z0-9!#$%&*]*$/;
-            //Para visualizar errores
+            //CAPTURA DE ERRORES EN EL HTML
             const errorEmail = document.getElementById("errorEmail");
             const errorPassword = document.getElementById("errorPassword");
-            //Se evita el event bubbling
+            //EVITAR LA PROPAGACIÓN
             event.preventDefault();
             event.stopPropagation();
-            tfEmail.classList.remove("input-error");
-            tfPassword.classList.remove("input-error");
             
+            //CHIVATO ERRORES
             let errores=false;
-            if (tfEmail.value.trim() === "" || tfPassword.value.trim() === "")
-                throw new Error('Por favor complete todos los campos');
-                tfEmail.classList.add("input-error");
-                tfPassword.classList.add("input-error");
-            //validación de correo
-            if (tfEmail.value.length > 255) {
-                errorEmail.textContent = "El correo electrónico no puede superar los 255 caracteres.";
-                tfEmail.classList.add("input-error");
+            if (emailInput.value.trim() === "" || passwordInput.value.trim() === ""){
+                emailInput.classList.add("input-error");
+                passwordInput.classList.add("input-error");
                 errores=true;
-            }else if (!regex.test(tfEmail.value.trim())){
-                errorEmail.textContent = "La dirección de correo electrónico no es válida. (Ej. javi@javi.com)";
-                tfEmail.classList.add("input-error");
+                throw new Error('Por favor complete todos los campos');
+            }
+            //vALIDACIÓN CORREO 
+            if (emailInput.value.length > 255) {
+                errorEmail.textContent = "El correo electrónico no puede superar los 255 caracteres.";
+                emailInput.classList.add("input-error");
                 errores=true;
             }
-            //validación de contraseña
-            if (tfPassword.value.length > 255){
-                errorPassword.textContent="La contraseña no puede superar los 255 caracteres.";
-                tfPassword.classList.add("input-error");
+            if (!regex.test(emailInput.value.trim())){
+                errorEmail.textContent = "La dirección de correo electrónico no es válida. (Ej. javi@javi.com)";
+                emailInput.classList.add("input-error");
                 errores=true;
-            }else if (!regexPassword.test(tfPassword.value.trim())){
+            }
+            //VALIDACIÓN CONTRASREÑA
+            if (passwordInput.value.length > 50){
+                errorPassword.textContent="La contraseña no puede superar los 50 caracteres.";
+                passwordInput.classList.add("input-error");
+                errores=true;
+            }
+            if (!regexPassword.test(passwordInput.value.trim())){
                 errorPassword.textContent="Valores no permitidos.";
-                tfPassword.classList.add("input-error");
+                passwordInput.classList.add("input-error");
                 errores=true;  
             }
             if(errores) return;
-         
+            //ENVIAR Y POSIBLES RESPUESTAS
             sendRequestAndProcessResponse();
             
         }catch(e){
@@ -210,46 +198,42 @@ function validarSignIn(event) {
 function sendRequestAndProcessResponse(){
     const signForm = document.getElementById("formulario");
     const msgBox = document.getElementById("responseMsg");
-    const tfEmail = document.getElementById("tfEmail");
-    const tfPassword = document.getElementById("tfPassword");
-    const valueTfEmail=tfEmail.value.trim();
-    const valueTfPassword=tfPassword.value.trim();
+    const emailInput = document.getElementById("tfEmail");
+    const passwordInput = document.getElementById("tfPassword");
+    const valueEmail=emailInput.value.trim();
+    const valuePassword=passwordInput.value.trim();
     //Send Request using fetch API (window.fetch method)
-    fetch(signForm.action + `${encodeURIComponent(valueTfEmail)}/${encodeURIComponent(valueTfPassword)}`, 
+    fetch(signForm.action + `${encodeURIComponent(valueEmail)}/${encodeURIComponent(valuePassword)}`, 
                     {
                         method: 'GET',
                         headers: {
                           'Content-Type': 'application/xml'
                         }
                     }).then(response => {
-                        //Process HTTP 401 error
+                        //ERROR 401
                         if (response.status===401){
                           return response.text().then(text => {
                             throw new Error('¡Ups! Parece que la dirección de correo o la contraseña no coinciden con un usuario existente.');
                           });
                         }
-                        //Process HTTP 500 error
+                        //ERROR 500
                         else if (response.status===500){
                           return response.text().then(text => {
                             throw new Error('Se ha producido un error en el servidor. Por favor espere un momento y vuelve a intentarlo. Si el problema persiste, contacte con Ayuda y Soporte');
                           });
                         }
-                        //Process any other error
+                        //OTRO ERROR
                         else if (!response.ok) {
                           return response.text().then(text => {
-                            throw new Error(text || 'Error inesperado');
+                            throw new Error(text || 'Error inesperado. Por favor espere un momento y vuelve a intentarlo. Si el problema persiste, contacte con Ayuda y Soporte');
                           });
                         }
-                        //return response.text();
                         return response.text();
                     }).then(data => {
                         //GUARDA LOS DATOS 
                         storeResponseXMLData(data);
-                        //RECUPERA DATOS DE CUSTOMER
-                        //const customerName=sessionStorage.getItem("customer.firstName");
-                        //const customerPassword=sessionStorage.getItem("customer.password");
+                        //LO MANDA AL MAIN
                         window.location.href = "main.html";
-                        //msgBox.textContent = msgBox.textContent+'Hi '+customerName+customerPassword+customerCity+'!';
                     }).catch(e => {
                             msgBox.className = 'error';
                             msgBox.textContent = e.message;
@@ -258,12 +242,12 @@ function sendRequestAndProcessResponse(){
                 );
 }
 function storeResponseXMLData (xmlString){
-                //Create XML parser
-                const parser = new DOMParser();
-                //Parse response XML data
-                const xmlDoc=parser.parseFromString(xmlString,"application/xml");
-                //Create Customer object with data received in response
-                const customer=new Customer(
+    //SE CREA EN XML PARSER
+    const parser = new DOMParser();
+    //RESPUESTAS EN XML
+    const xmlDoc=parser.parseFromString(xmlString,"application/xml");
+    //SE CREA EL OBJETO customer DE LA CLASS CUSTOMER 
+    const customer=new Customer(
                     xmlDoc.getElementsByTagName("id")[0].textContent,
                     xmlDoc.getElementsByTagName("firstName")[0].textContent,
                     xmlDoc.getElementsByTagName("lastName")[0].textContent,
@@ -276,7 +260,7 @@ function storeResponseXMLData (xmlString){
                     xmlDoc.getElementsByTagName("email")[0].textContent,
                     xmlDoc.getElementsByTagName("password")[0].textContent,
                 );
-                // Save data to sessionStorage
+                //GUARDAR INFORMACIOŃ EN LA SESIÓN
                 sessionStorage.setItem("customer.id", customer.id);
                 sessionStorage.setItem("customer.firstName", customer.firstName);
                 sessionStorage.setItem("customer.lastName", customer.lastName);
@@ -289,15 +273,17 @@ function storeResponseXMLData (xmlString){
                 sessionStorage.setItem("customer.email", customer.email);
                 sessionStorage.setItem("customer.password", customer.password);
 }
-function limpiarDatos(){
-    const spanEmail = document.getElementById("errorEmail");
-    const spanPassword = document.getElementById("errorPassword");
-    const boxError = document.getElementById("responseMsg");
-    const tfEmail = document.getElementById("tfEmail");
-    const tfPassword = document.getElementById("tfPassword");
-    spanEmail.textContent="";
-    spanPassword.textContent="";
-    boxError.textContent="";
-    tfEmail.classList.remove("input-error");
-    tfPassword.classList.remove("input-error");
-}*/
+//USADA EN EL MANEJADOR ONINPUT
+function limpiarDatos() {
+  const spanEmail = document.getElementById("errorEmail");
+  const spanPassword = document.getElementById("errorPassword");
+  const boxError = document.getElementById("responseMsg");
+  const tfEmail = document.getElementById("tfEmail");
+  const tfPassword = document.getElementById("tfPassword");
+  
+  spanEmail.textContent = "";
+  spanPassword.textContent = "";
+  boxError.textContent = "";
+  tfEmail.classList.remove("input-error");
+  tfPassword.classList.remove("input-error");
+}
