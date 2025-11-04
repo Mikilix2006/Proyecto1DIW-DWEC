@@ -1,10 +1,4 @@
 <!DOCTYPE html>
-<!--
-To change this license header, choose License Headers in Project Properties.
-To change this template file, choose Tools | Templates
-and open the template in the editor.
--->
-<!DOCTYPE html>
 <html lang="es">
 <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -34,8 +28,6 @@ and open the template in the editor.
       </div>
     </div>
   </header>
-
-  <!-- CONTENIDO PRINCIPAL -->
   <main class="main-container">
     <section class="welcome-section">
       <h2 id="sessionNombre"></h2>
@@ -60,19 +52,14 @@ and open the template in the editor.
       <h2>Gestiona</h2>
       <div class="gestiona-grid">
         <div class="gestiona-card">
-          <!-- Aquí va el icono -->
           <img src="ruta_icono1.svg" alt="Ahorro mensual">
           <p>Ahorro mensual</p>
         </div>
-
         <div class="gestiona-card">
-          <!-- Aquí va el icono -->
           <img src="ruta_icono2.svg" alt="Ahorro mensual">
           <p>Ahorro mensual</p>
         </div>
-
         <div class="gestiona-card">
-          <!-- Aquí va el icono -->
           <img src="ruta_icono3.svg" alt="Ahorro mensual">
           <p>Ahorro mensual</p>
         </div>
@@ -90,24 +77,16 @@ and open the template in the editor.
   <script src="js/signInDev.js"></script>
   <script>
     const customerName = sessionStorage.getItem("customer.firstName");
-    const h2 = document.querySelector(".welcome-section h2");
+    const customerMidIn = sessionStorage.getItem("customer.middleInitial")
+    const h2 = document.getElementby("sessionNombre");
 
     if (h2) {
         if (customerName) {
-            h2.textContent = `¡Hola, ${customerName}!`;
+            h2.textContent = `¡Hola, ${customerName} ${customerMidIn}!`;
         } else {
             h2.textContent = "¡Hola!";
         }
     }
-      
-      
-    /*  
-    const customerName=sessionStorage.getItem("customer.firstName");
-    if (customerName) {
-    document.querySelector(".welcome-section h2").textContent = `¡Hola, ${customerName}!`;
-  } else {
-    document.querySelector(".welcome-section h2").textContent = "¡Hola!";
-  }*/
   </script>
 </body>
 </html>
