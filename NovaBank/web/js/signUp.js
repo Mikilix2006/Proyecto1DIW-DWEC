@@ -468,29 +468,30 @@ function handleSignUpOnClick(event) {
     
     // Si todas las variables son verdaderas, devolverá true
     if (checkControlVariablesStatus()) {
+        
+        window.alert("Enviando datos"); // Depuración
+        
         // Recuperación del formulario
-        //window.alert("La información del formulario es válida.");
         const formularioSignUp = document.getElementById("signUpForm");
         const msgBoxSignUp = document.getElementById("responseMsgSignUp");
         // Crear objeto customer en xml
         const xml = `
                     <customer>
-                        <id>${formularioSignUp.id.value.trim()}</id>
+                        <city>${city.value.trim()}</city>
+                        <email>${mail.value.trim()}</email>
                         <firstName>${name.value.trim()}</firstName>
                         <lastName>${surname.value.trim()}</lastName>
                         <middleInitial>${initial.value.trim()}</middleInitial>
-                        <street>${street.value.trim()}</street>
-                        <city>${city.value.trim()}</city>
-                        <state>${state.value.trim()}</state>
-                        <zip>${zip.value.trim()}</zip>
-                        <phone>${telf.value.trim()}</phone>
-                        <email>${mail.value.trim()}</email>
                         <password>${pass.value.trim()}</password>
+                        <phone>${telf.value.trim()}</phone>
+                        <state>${state.value.trim()}</state>
+                        <street>${street.value.trim()}</street>
+                        <zip>${zip.value.trim()}</zip>
                     </customer>
                 `.trim();
         // ENVIO DE DATOS
         // CREAR POST REQUEST Y PROCESAR RESPUESTAS HTTP
-        fetch(formularioSignUp.action,
+        fetch("http://localhost:8080/CRUDBankServerSide/webresources/customer",
             {
                 method: 'POST',
                 headers: {
@@ -513,10 +514,11 @@ function handleSignUpOnClick(event) {
                         throw new Error("No ha sido posible conectar con el servidor, intentalo mas tarde");
                     }); // Fin del return
                 } // Fin del if
-                // PROCESADO DE RESPUESTA 201
+                // PROCESADO DE RESPUESTA 204
                 // Se ha creado el usuario
-                else if (response.status===201) {
-                    window.location.href = '/signUp.html';
+                    else if (response.status===204) {
+                    //window.location.href = 'signUp.html';
+                    // SI EL USUARIO SE CREA, HACER XXXXXXX
                 } // Fin del if
                 // PROCESADO DE RESPUESTA DESCONOCIDA
                 // Ha habido un error inesperado
@@ -525,8 +527,6 @@ function handleSignUpOnClick(event) {
                         throw new Error(text || "Ha ocurrido un error inesperado");
                     }); // Fin del return
                 } // Fin del if
-                // Si llega hasta aqui, no ha habido ningún error
-                // Código 200
                 return response;
             })
             // PROCESAR RESPUESTA OK
@@ -544,7 +544,7 @@ function handleSignUpOnClick(event) {
                     msgBoxSignUp.textContent = "Error: " + e.message;
                     msgBoxSignUp.style.display = 'block';
             });
-    } else {
+    } else { // Hay campos que no están bien rellenados
         window.alert("La información del formulario no es válida, revísela y modifíquela.");
         // Crear funcion que haga focus al primer campo vacio para que el usuario lo rellene
     }
@@ -558,7 +558,7 @@ function guardarDatosEnXML(xmlString) {
     const xmlDoc=parser.parseFromString(xmlString,"application/xml");
     //Create Customer object with data received in response
     const customer=new Customer(
-        xmlDoc.getElementsByTagName("id")[0].textContent,
+        //xmlDoc.getElementsByTagName("id")[0].textContent,
         xmlDoc.getElementsByTagName("firstName")[0].textContent,
         xmlDoc.getElementsByTagName("lastName")[0].textContent,
         xmlDoc.getElementsByTagName("middleInitial")[0].textContent,
@@ -571,7 +571,7 @@ function guardarDatosEnXML(xmlString) {
         xmlDoc.getElementsByTagName("password")[0].textContent,
     );
     // Save data to sessionStorage
-    sessionStorage.setItem("customer.id", customer.id);
+    //sessionStorage.setItem("customer.id", customer.id);
     sessionStorage.setItem("customer.firstName", customer.firstName);
     sessionStorage.setItem("customer.lastName", customer.lastName);
     sessionStorage.setItem("customer.middleInitial", customer.middleInitial);
