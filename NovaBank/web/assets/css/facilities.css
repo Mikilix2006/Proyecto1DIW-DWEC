@@ -105,3 +105,53 @@
   transform: rotate(0deg);
 }
 /*implementar el ojito*/
+/* Contenedor visual del input + botón */
+.password-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.password-wrapper input {
+  width: 100%;
+  padding: 0.8rem 1rem;
+  border: 2px solid #ddd;
+  border-radius: 50px;
+  font-size: 1rem;
+  outline: none;
+  transition: border 0.3s ease;
+}
+
+.password-wrapper input:focus {
+  border-color: var(--btn-color-solido);
+}
+
+/* Botón del ojo */
+.toggle-password {
+  position: absolute;
+  right: 0.7rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--texto-parrafo-claro);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.2s ease;
+  padding: 0;
+}
+
+.toggle-password:hover {
+  color: var(--btn-color-solido);
+}
+
+/* Compatibilidad con modo oscuro */
+.dark-mode .password-wrapper input {
+  background-color: #2a2a2a;
+  border-color: #555;
+  color: #eee;
+}
+
+.dark-mode .toggle-password {
+  color: #aaa;
+}

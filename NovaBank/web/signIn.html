@@ -37,10 +37,16 @@
       <form class="formulario">
         <div class="form-group">
           <input type="email" id="email" name="email" placeholder="Correo electrónico" required>
-          <!--<span class="error-msg">La dirección de correo electrónico no es válida. (Ej. javi@javi.com)</span>-->
         </div>
         <div class="form-group password">
-          <input type="password" id="password" name="password" placeholder="Contraseña" required>
+            <div class="password-wrapper">
+            <input oninput="limpiarDatos();" type="password" id="tfPassword" name="tfPassword" placeholder="Contraseña">
+            <button type="button" id="togglePassword" class="toggle-password" aria-label="Mostrar contraseña">
+                <svg id="eyeIcon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M12 5c-7.633 0-11 7-11 7s3.367 7 11 7 11-7 11-7-3.367-7-11-7zm0 12a5 5 0 1 1 0-10 5 5 0 0 1 0 10z"/>
+                </svg>
+            </button>
+            </div>
         </div>
         <button type="submit" class="btn-aceptar">Ingresar</button>
         <p id="register-text">¿Aún no tienes una cuenta? <a href="#">Regístrate</a></p>
