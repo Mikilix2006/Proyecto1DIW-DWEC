@@ -1,58 +1,5 @@
-/*
-//FUNCIÓN SENDREQUESTANDPROCESS CÓDIGO JSON
-function sendRequestAndProcessResponse() {
-  const signForm = document.getElementById("formulario");
-  const msgBox = document.getElementById("responseMsg");
-  const emailInput = document.getElementById("tfEmail");
-  const passwordInput = document.getElementById("tfPassword");
-  const emailValue = emailInput.value.trim();
-  const passwordValue= passwordInput.value.trim();
-  //URL DONDE SE ENVIA LA PETICIÓN AL SERVICIO RESTFUL
-  fetch(signForm.action + `${encodeURIComponent(emailValue)}/${encodeURIComponent(passwordValue)}`, {
-    method: "GET",
-    headers: {
-      'Content-Type': "application/json"
-    }
-  })
-    .then(response => {
-      if (response.status === 401) {
-        throw new Error("¡Ups! Parece que la dirección de correo o la contraseña no coinciden con un usuario existente.");
-      } else if (response.status === 500) {
-        throw new Error("Error del servidor. Por favor, inténtelo de nuevo más tarde.");
-      } else if (!response.ok) {
-        throw new Error("Error inesperado.");
-      }
-      //SE NECESITA TENER LA RESPUESTA EN FORMATO JSON
-      return response.json();
-    })
-    .then(data => {
-      storeJsonData(data);
-      //SI ES 200 OK SE ENVÍA AL MAIN 
-      window.location.href = "main.html";
-    })
-    .catch(e => {
-      msgBox.className = "error";
-      msgBox.textContent = e.message;
-      msgBox.style.display = "block";
-    });
-}
 
-//SE GUARDA TODA LA INFORMACIÓN DEL CLIENTE - LO USARÁ EL CHANGE PASSWORD
-function storeJsonData(customer) {
-  sessionStorage.setItem("customer.id", customer.id);
-  sessionStorage.setItem("customer.firstName", customer.firstName);
-  sessionStorage.setItem("customer.lastName", customer.lastName);
-  sessionStorage.setItem("customer.middleInitial", customer.middleInitial);
-  sessionStorage.setItem("customer.street", customer.street);
-  sessionStorage.setItem("customer.city", customer.city);
-  sessionStorage.setItem("customer.state", customer.state);
-  sessionStorage.setItem("customer.zip", customer.zip);
-  sessionStorage.setItem("customer.phone", customer.phone);
-  sessionStorage.setItem("customer.email", customer.email);
-  sessionStorage.setItem("customer.password", customer.password);
-}
-*/
-
+//PRUEBAS DEL SIGN IN Y PASSWORD
 //CÓDIGO XML
 //CONSTRUCTOR DE CUSTOMER
 //INF. DEL CUSTOMER RESTFUL SERVICE
