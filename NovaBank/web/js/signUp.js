@@ -472,18 +472,10 @@ function handleSignUpOnClick(event) {
         //window.alert("La información del formulario es válida.");
         const formularioSignUp = document.getElementById("signUpForm");
         const msgBoxSignUp = document.getElementById("responseMsgSignUp");
-        // PREPARAR DATOS PARA EL ENVIO
-        // ENVIO DE DATOS
-        // CREAR POST REQUEST Y PROCESAR RESPUESTAS HTTP
-        fetch(formularioSignUp,
-            {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/xml'
-                },
-                body: `
+        // Crear objeto customer en xml
+        const xml = `
                     <customer>
-                        <id>${id.value.trim()}</id>
+                        <id>${formularioSignUp.id.value.trim()}</id>
                         <firstName>${name.value.trim()}</firstName>
                         <lastName>${surname.value.trim()}</lastName>
                         <middleInitial>${initial.value.trim()}</middleInitial>
@@ -495,7 +487,17 @@ function handleSignUpOnClick(event) {
                         <email>${mail.value.trim()}</email>
                         <password>${pass.value.trim()}</password>
                     </customer>
-                `
+                `.trim();
+        // ENVIO DE DATOS
+        // CREAR POST REQUEST Y PROCESAR RESPUESTAS HTTP
+        fetch(formularioSignUp.action,
+            {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/xml'
+                },
+                body: 
+                        xml
             }).then(response => {
                 // PROCESADO DE RESPUESTA 403
                 // Correo existente en la base de datos
@@ -510,6 +512,11 @@ function handleSignUpOnClick(event) {
                     return response.text().then(text => {
                         throw new Error("No ha sido posible conectar con el servidor, intentalo mas tarde");
                     }); // Fin del return
+                } // Fin del if
+                // PROCESADO DE RESPUESTA 201
+                // Se ha creado el usuario
+                else if (response.status===201) {
+                    window.location.href = '/signUp.html';
                 } // Fin del if
                 // PROCESADO DE RESPUESTA DESCONOCIDA
                 // Ha habido un error inesperado
