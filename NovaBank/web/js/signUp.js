@@ -4,6 +4,11 @@
  * and open the template in the editor.
  */
 
+// CREACION DEL CONSTRUCTOR CUSTOMER
+function Customer(email) {
+    this.email = email;
+}
+
 // Inicialización de variable password para que se vaya actualizando
 // conforme el texto del input vaya cambiando
 var isPassValid = false;
@@ -517,8 +522,7 @@ function handleSignUpOnClick(event) {
                 // PROCESADO DE RESPUESTA 204
                 // Se ha creado el usuario
                     else if (response.status===204) {
-                    //window.location.href = 'signUp.html';
-                    // SI EL USUARIO SE CREA, HACER XXXXXXX
+                    window.location.href = 'signIn.html';
                 } // Fin del if
                 // PROCESADO DE RESPUESTA DESCONOCIDA
                 // Ha habido un error inesperado
@@ -550,7 +554,7 @@ function handleSignUpOnClick(event) {
     }
     
 }
-/*
+
 function guardarDatosEnXML(xmlString) {
     //Create XML parser
     const parser = new DOMParser();
@@ -558,29 +562,8 @@ function guardarDatosEnXML(xmlString) {
     const xmlDoc=parser.parseFromString(xmlString,"application/xml");
     //Create Customer object with data received in response
     const customer=new Customer(
-        //xmlDoc.getElementsByTagName("id")[0].textContent,
-        xmlDoc.getElementsByTagName("firstName")[0].textContent,
-        xmlDoc.getElementsByTagName("lastName")[0].textContent,
-        xmlDoc.getElementsByTagName("middleInitial")[0].textContent,
-        xmlDoc.getElementsByTagName("street")[0].textContent,
-        xmlDoc.getElementsByTagName("city")[0].textContent,
-        xmlDoc.getElementsByTagName("state")[0].textContent,
-        xmlDoc.getElementsByTagName("zip")[0].textContent,
-        xmlDoc.getElementsByTagName("phone")[0].textContent,
         xmlDoc.getElementsByTagName("email")[0].textContent,
-        xmlDoc.getElementsByTagName("password")[0].textContent,
     );
     // Save data to sessionStorage
-    //sessionStorage.setItem("customer.id", customer.id);
-    sessionStorage.setItem("customer.firstName", customer.firstName);
-    sessionStorage.setItem("customer.lastName", customer.lastName);
-    sessionStorage.setItem("customer.middleInitial", customer.middleInitial);
-    sessionStorage.setItem("customer.street", customer.street);
-    sessionStorage.setItem("customer.city", customer.city);
-    sessionStorage.setItem("customer.state", customer.state);
-    sessionStorage.setItem("customer.zip", customer.zip);
-    sessionStorage.setItem("customer.phone", customer.phone);
     sessionStorage.setItem("customer.email", customer.email);
-    sessionStorage.setItem("customer.password", customer.password);
 }
-*/
