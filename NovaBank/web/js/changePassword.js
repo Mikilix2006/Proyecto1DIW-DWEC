@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
+//Prueba
 // === VALIDAR CONTRASEÑA ACTUAL ===
 function validar_PasswordActual() {
     const passwordActual = document.getElementById("password");
