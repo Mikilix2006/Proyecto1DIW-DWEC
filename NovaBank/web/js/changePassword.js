@@ -8,9 +8,10 @@
 function validar_PasswordActual() {
     const passwordActual = document.getElementById("password");
     const passwordGuardada = sessionStorage.getItem("customer.password");
-
+    
+    //const passwordGuardada ="abcd*12345";
     if (!passwordGuardada)
-        throw new Error("No se encontró la contraseña actual en la sesión. Inicie sesión nuevamente.");
+        throw new Error("No se encontró la contraseña actual en la sesión. Intentelo de nuevo");
 
     if (passwordActual.value.trim() === "")
         throw new Error("Debe ingresar su contraseña actual.");
@@ -45,7 +46,7 @@ function validar_NewPassword() {
 // === VALIDAR CONFIRMACIÓN DE CONTRASEÑA ===
 function validar_ConfirmarPassword() {
     const nuevaPassword = document.getElementById("nueva_password");
-    const confirmarPassword = document.getElementById("confimar_password"); 
+    const confirmarPassword = document.getElementById("confirmar_password"); 
     if (confirmarPassword.value.trim() === "")
         throw new Error("Debe confirmar su nueva contraseña.");
 
@@ -55,48 +56,63 @@ function validar_ConfirmarPassword() {
     return true;
 }
 
-// === ENVIAR SOLICITUD AL SERVIDOR ===
 function sendRequestAndProcessResponse() {
     const formulario = document.getElementById("changePasswordForm");
     const cuadroMensaje = document.getElementById("mensajeRespuesta");
-    const email = sessionStorage.getItem("customer.email");
     const nuevaContrasena = document.getElementById("nueva_password").value.trim();
+    
+    const xml = `
+    <customer> 
+        <id>${sessionStorage.getItem("customer.id")}</id>
+        <firstName>${sessionStorage.getItem("customer.firstName")}</firstName>
+        <lastName>${sessionStorage.getItem("customer.lastName")}</lastName>
+        <middleInitial>${sessionStorage.getItem("customer.middleInitial")}</middleInitial>
+        <street>${sessionStorage.getItem("customer.street")}</street>
+        <city>${sessionStorage.getItem("customer.city")}</city>
+        <state>${sessionStorage.getItem("customer.state")}</state>
+        <zip>${sessionStorage.getItem("customer.zip")}</zip>
+        <phone>${sessionStorage.getItem("customer.phone")}</phone>
+        <email>${sessionStorage.getItem("customer.email")}</email>
+        <password>${nuevaContrasena}</password>    
+    </customer>
+    `;
 
-    // Verificar que el email del usuario esté en sesión
-    if (!email)
-        throw new Error("No se encontró información del usuario en la sesión. Inicie sesión nuevamente.");
-
-    // Enviar solicitud al backend
-    // cambiar la url del put 
-    fetch(formulario.action, {
-        method: 'PUT', // PUT porque estamos cambiando un dato existente
-        headers: { 'Content-Type': 'application/xml' }
-        // agregar el body con toda la información de la sesión 
+    fetch(formulario.action, { 
+        method: 'PUT',
+        headers: { 
+            'Content-Type': 'application/xml' 
+        },
+        body: xml
     })
-        .then(response => {
-            if (response.status === 401)
-                throw new Error("No autorizado. La sesión ha expirado o las credenciales son incorrectas.");
-            else if (response.status === 500)
-                throw new Error("Error interno del servidor. Intente nuevamente más tarde.");
-            else if (!response.ok)
-                throw new Error("Error inesperado en la solicitud de cambio de contraseña.");
+    .then(response => {
+        if (response.status === 401)
+            throw new Error("No autorizado. La sesión ha expirado o las credenciales son incorrectas.");
+        else if (response.status === 500)
+            throw new Error("Error interno del servidor. Intente nuevamente más tarde.");
+        else if (!response.ok)
+            throw new Error("Error inesperado en la solicitud de cambio de contraseña.");
 
-            return response.text();
-        })
-        .then(data => {
-            cuadroMensaje.className = "success";
-            cuadroMensaje.textContent = "La contraseña fue actualizada correctamente.";
-            cuadroMensaje.style.display = "block";
+        return response.text();
+    })
+    .then(data => {
+        cuadroMensaje.className = "success";
+        cuadroMensaje.textContent = "La contraseña fue actualizada correctamente.";
+        cuadroMensaje.style.display = "block";
 
-            // Actualizar contraseña almacenada en sesión
-            sessionStorage.setItem("customer.password", nuevaContrasena);
-        })
-        .catch(error => {
-            cuadroMensaje.className = "error";
-            cuadroMensaje.textContent = "Error: " + error.message;
-            cuadroMensaje.style.display = "block";
-        });
+        // Actualizar contraseña almacenada en sesión
+        sessionStorage.setItem("customer.password", nuevaContrasena);
+
+        // Guardar respuesta XML y redirigir
+        storeResponseXMLData(data);
+        window.location.href = "main.html";
+    })
+    .catch(error => {
+        cuadroMensaje.className = "error";
+        cuadroMensaje.textContent = "Error: " + error.message;
+        cuadroMensaje.style.display = "block";
+    });
 }
+
 
 // === FUNCIÓN PRINCIPAL ===
 function validarCambioPassword(event) {
@@ -125,3 +141,4 @@ function validarCambioPassword(event) {
         return false;
     }
 }
+
