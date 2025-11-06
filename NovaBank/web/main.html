@@ -22,7 +22,8 @@
           <ul class="dropdown-menu" id="dropdownMenu">
                 <li><a href="changePassword.html">Cambiar Contraseña <span> Alt + C</span></a></li>
                 <li><a href="help.html">Ayuda y soporte <span> Alt + H</span></a></li>
-                <li><a href="index.html">Ayuda y soporte <span> Alt + F</span></a></li>
+                <button id="botonCerrarSesion" onclick="salirSession();" href="index.html"><a>Cerrar sesión</a></button>
+                <li><a id="botonCerrarSesion" onclick="salirSession();" href="index.html">Cerrar session <span> Alt + F</span></a></li>
           </ul>
         </div>
       </div>
@@ -77,8 +78,8 @@
   <script src="js/signInDev.js"></script>
   <script>
     const customerName = sessionStorage.getItem("customer.firstName");
-    const customerMidIn = sessionStorage.getItem("customer.middleInitial")
-    const h2 = document.getElementby("sessionNombre");
+    const customerMidIn = sessionStorage.getItem("customer.middleInitial");
+    const h2 = document.getElementById("sessionNombre");
 
     if (h2) {
         if (customerName) {
