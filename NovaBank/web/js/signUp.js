@@ -4,6 +4,21 @@
  * and open the template in the editor.
  */
 
+// CREACION DEL CONSTRUCTOR CUSTOMER
+function Customer(id, firstName, lastName, middleInitial, street, city, state, zip, phone, email, password) {
+    this.id = id;
+    this.firstName = firstName;
+    this.lastName = lastName;
+    this.middleInitial = middleInitial;
+    this.street = street;
+    this.city = city;
+    this.state = state;
+    this.zip = zip;
+    this.phone = phone;
+    this.email = email;
+    this.password = password;
+}
+
 // Inicialización de variable password para que se vaya actualizando
 // conforme el texto del input vaya cambiando
 var isPassValid = false;
@@ -20,6 +35,12 @@ const telf = document.getElementById("telf");
 const mail = document.getElementById("mail");
 const pass = document.getElementById("pass");
 
+/**
+ * Realiza un chequeo de los campos dando true si la informacion
+ * que contiene es válida y false en caso contrario
+ * Cuando hay algun false, la funcion devuelve false, si no, true
+ * @returns {Boolean}
+ */
 function checkControlVariablesStatus() {
     // Si todas las variables indican que son válidas, devolverá true
     if (
@@ -49,6 +70,11 @@ const hasToContainMinusLetterRegExp = new RegExp("[a-zñáéíóú]");
 const hasToContainSpecialCharRegExp = new RegExp("[!#$%&]");
 const emailRegExp = new RegExp("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$");
 
+/**
+ * Funcion creada para las validaciones del campo nombre en cada
+ * pérdida de foco
+ * @returns {Boolean}
+ */
 function handleNameValidations() {
     // Recuperación de los elementos del formulario
     const msgBox = document.getElementById("responseMsgName");
@@ -89,6 +115,11 @@ function handleNameValidations() {
     }
 }
 
+/**
+ * Funcion creada para las validaciones del campo apellido en cada
+ * pérdida de foco
+ * @returns {Boolean}
+ */
 function handleSurnameValidations() {
     // Recuperación de los elementos del formulario
     const msgBox = document.getElementById("responseMsgSurname");
@@ -129,6 +160,11 @@ function handleSurnameValidations() {
     }
 }
 
+/**
+ * Funcion creada para las validaciones del campo inicial segundo nombre en cada
+ * pérdida de foco
+ * @returns {Boolean}
+ */
 function handleInitialValidations() {
     // Recuperación de los elementos del formulario
     const msgBox = document.getElementById("responseMsgInitial");
@@ -166,6 +202,11 @@ function handleInitialValidations() {
     }
 }
 
+/**
+ * Funcion creada para las validaciones del campo calle en cada
+ * pérdida de foco
+ * @returns {Boolean}
+ */
 function handleStreetValidations() {
     // Recuperación de los elementos del formulario
     const msgBox = document.getElementById("responseMsgStreet");
@@ -206,6 +247,11 @@ function handleStreetValidations() {
     }
 }
 
+/**
+ * Funcion creada para las validaciones del campo ciudad en cada
+ * pérdida de foco
+ * @returns {Boolean}
+ */
 function handleCityValidations() {
     // Recuperación de los elementos del formulario
     const msgBox = document.getElementById("responseMsgCity");
@@ -246,6 +292,11 @@ function handleCityValidations() {
     }
 }
 
+/**
+ * Funcion creada para las validaciones del campo estado en cada
+ * pérdida de foco
+ * @returns {Boolean}
+ */
 function handleStateValidations() {
     // Recuperación de los elementos del formulario
     const msgBox = document.getElementById("responseMsgState");
@@ -286,6 +337,11 @@ function handleStateValidations() {
     }
 }
 
+/**
+ * Funcion creada para las validaciones del campo codigo postal en cada
+ * pérdida de foco
+ * @returns {Boolean}
+ */
 function handleZipValidations() {
     // Recuperación de los elementos del formulario
     const msgBox = document.getElementById("responseMsgZip");
@@ -326,6 +382,11 @@ function handleZipValidations() {
     }
 }
 
+/**
+ * Funcion creada para las validaciones del campo telefono en cada
+ * pérdida de foco
+ * @returns {Boolean}
+ */
 function handleTelfValidations() {
     // Recuperación de los elementos del formulario
     const msgBox = document.getElementById("responseMsgTelf");
@@ -366,6 +427,11 @@ function handleTelfValidations() {
     }
 }
 
+/**
+ * Funcion creada para las validaciones del campo email en cada
+ * pérdida de foco
+ * @returns {Boolean}
+ */
 function handleMailValidations() {
     // Recuperación de los elementos del formulario
     const msgBoxMail = document.getElementById("responseMsgMail");
@@ -460,17 +526,18 @@ pass.addEventListener('input', function() {
     }
 });
 
-
+/**
+ * Detiene el burbujeo y comienza con la creacion del objeto curtomer ademas de preparar los
+ * datos para su envio en caso de que todos los campos sean válidos
+ * @param {type} event
+ * @returns {undefined}
+ */
 function handleSignUpOnClick(event) {
-    // Detención del burbujeo
-    event.preventDefault();
-    event.stopPropagation();
-    
     // Si todas las variables son verdaderas, devolverá true
     if (checkControlVariablesStatus()) {
-        
-        window.alert("Enviando datos"); // Depuración
-        
+        // Detención del burbujeo
+        event.preventDefault();
+        event.stopPropagation();
         // Recuperación del formulario
         const formularioSignUp = document.getElementById("signUpForm");
         const msgBoxSignUp = document.getElementById("responseMsgSignUp");
@@ -514,12 +581,6 @@ function handleSignUpOnClick(event) {
                         throw new Error("No ha sido posible conectar con el servidor, intentalo mas tarde");
                     }); // Fin del return
                 } // Fin del if
-                // PROCESADO DE RESPUESTA 204
-                // Se ha creado el usuario
-                    else if (response.status===204) {
-                    //window.location.href = 'signUp.html';
-                    // SI EL USUARIO SE CREA, HACER XXXXXXX
-                } // Fin del if
                 // PROCESADO DE RESPUESTA DESCONOCIDA
                 // Ha habido un error inesperado
                 else if (!response.ok) {
@@ -531,12 +592,12 @@ function handleSignUpOnClick(event) {
             })
             // PROCESAR RESPUESTA OK
                 .then(data => {
-                    // Guardar los datos
-                    //guardarDatosEnXML(data);
-                    
+                    // Guardamos email en sesion
+                    guardarDatosSeison(mail.value.trim());
                     msgBoxSignUp.style.color = "#5620ad";
-                    msgBoxSignUp.textContent = "Se ha registrado al usuario correctamente";
+                    msgBoxSignUp.textContent = "Se ha registrado al usuario correctamente, redirigiendo.";
                     msgBoxSignUp.style.display = 'block';
+                    window.location.href = 'signIn.html';
             })
             // MOSTRAR ERRORES
                 .catch(e => {
@@ -546,41 +607,18 @@ function handleSignUpOnClick(event) {
             });
     } else { // Hay campos que no están bien rellenados
         window.alert("La información del formulario no es válida, revísela y modifíquela.");
-        // Crear funcion que haga focus al primer campo vacio para que el usuario lo rellene
+        // Crear funcion que haga focus al primer campo vacio para que el usuario lo rellene (USABILIDAD)
     }
     
 }
-/*
-function guardarDatosEnXML(xmlString) {
-    //Create XML parser
-    const parser = new DOMParser();
-    //Parse response XML data
-    const xmlDoc=parser.parseFromString(xmlString,"application/xml");
-    //Create Customer object with data received in response
-    const customer=new Customer(
-        //xmlDoc.getElementsByTagName("id")[0].textContent,
-        xmlDoc.getElementsByTagName("firstName")[0].textContent,
-        xmlDoc.getElementsByTagName("lastName")[0].textContent,
-        xmlDoc.getElementsByTagName("middleInitial")[0].textContent,
-        xmlDoc.getElementsByTagName("street")[0].textContent,
-        xmlDoc.getElementsByTagName("city")[0].textContent,
-        xmlDoc.getElementsByTagName("state")[0].textContent,
-        xmlDoc.getElementsByTagName("zip")[0].textContent,
-        xmlDoc.getElementsByTagName("phone")[0].textContent,
-        xmlDoc.getElementsByTagName("email")[0].textContent,
-        xmlDoc.getElementsByTagName("password")[0].textContent,
-    );
+
+/**
+ * Guarda en la sesion el email
+ * @param {type} email
+ */
+function guardarDatosSeison(email) {
     // Save data to sessionStorage
-    //sessionStorage.setItem("customer.id", customer.id);
-    sessionStorage.setItem("customer.firstName", customer.firstName);
-    sessionStorage.setItem("customer.lastName", customer.lastName);
-    sessionStorage.setItem("customer.middleInitial", customer.middleInitial);
-    sessionStorage.setItem("customer.street", customer.street);
-    sessionStorage.setItem("customer.city", customer.city);
-    sessionStorage.setItem("customer.state", customer.state);
-    sessionStorage.setItem("customer.zip", customer.zip);
-    sessionStorage.setItem("customer.phone", customer.phone);
-    sessionStorage.setItem("customer.email", customer.email);
-    sessionStorage.setItem("customer.password", customer.password);
+    sessionStorage.setItem("email", email);
+    // Mostramos correcto almacenamiento
+    console.log("Data storaged in session");
 }
-*/
