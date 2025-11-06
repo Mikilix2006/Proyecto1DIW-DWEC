@@ -8,7 +8,7 @@
   --texto-titulo: #2d1b69;
   --texto-parrafo: #555;
   --texto-parrafo-claro: #888;
-  --color-error: #ff0000;
+  --color-error: #e63946;
 }
 /*general*/
 * {
@@ -17,7 +17,6 @@
   box-sizing: border-box;
   font-family: "Poppins", Arial, sans-serif;
 }
-
 body {
   color: var(--texto-parrafo);
   background-color: var(--color-fondo);
@@ -50,6 +49,12 @@ body {
   
 }#log{
     color: #fff;
+}
+.logo a{
+  color: #fff;
+  font-weight: 500;
+  text-decoration: none;
+  margin-right: 1.5rem;
 }
 .nav a {
   color: #fff;
@@ -105,13 +110,12 @@ body {
 }
 .banner-content {
   position: relative;
-  z-index: 1;
   max-width: 600px;
   padding: 2rem;
 }
 .banner h2 {
   font-size: 3rem;
-  line-height: 1rem;
+  line-height: 3rem;
   margin-bottom: 1rem;
 }
 .banner p {
@@ -228,22 +232,13 @@ body {
   outline: none;
   transition: border 0.3s ease;
 }
+/*ERRORES Y JERARQUÍA DE CSS*/
+.form-group input.input-error {
+  border: 2px solid #e63946;
+}
 .form-group input:focus {
   border-color: var(--btn-color-hover);
 }
-
-/*.form-group input:invalid {
-  border-color: var(--color-error);
-}*/
-/*
-.error-msg {
-  color: var(--color-error);
-  font-size: 0.8rem;
-  text-align: left;
-  margin-top: 0.3rem;
-  padding-left: 1rem;
-  display: block;
-}*/
 .btn-aceptar {
   background: var(--btn-color-solido);
   color: white;
@@ -258,36 +253,6 @@ body {
 .btn-aceptar:hover {
   background: var(--btn-color-hover);
 }
-
-.btn-confirmar{
-  background:var(--btn-color-solido);
-  color: white;
-  border: none;
-  padding: 0.8rem 2rem;
-  border-radius: 50px;
-  font-size: 1rem;
-  cursor: pointer;
-  transition: background 0.3s ease;
-  width: 45%;
-}
-.btn-confirmar:hover {
-  background: var(--btn-color-hover);
-}
-.btn-cancelar{
-  background: var(--texto-parrafo-claro);
-  color: white;
-  border: none;
-  padding: 0.8rem 2rem;
-  border-radius: 50px;
-  font-size: 1rem;
-  cursor: pointer;
-  transition: background 0.3s ease;
-  width: 45%;
-}
-.btn-cancelar:hover {
-  background: var(--btn-color-hover);
-}
-
 #register-text {
   margin-top: 1rem;
   font-size: 0.9rem;
@@ -301,7 +266,19 @@ body {
 #register-text a:hover {
   text-decoration: underline;
 }
-
+/*DIV ERROR MENSAJES*/
+.error-msg {
+  color: #e63946;    
+  font-size: 0.9em;
+  margin-top: 4px;
+  display: block;
+}
+#responseMsg{
+  color: #e63946;    
+  font-size: 0.9em;
+  margin-top: 4px;
+  display: block;
+}
 /* footer*/
 .footer {
   background-color: var(--color-footer);
@@ -319,9 +296,6 @@ body {
   width: 40px;
   margin-bottom: 0.5rem;
 }
-
-
-
 /* responsive*/
 @media (max-width: 768px) {
   .header .container {

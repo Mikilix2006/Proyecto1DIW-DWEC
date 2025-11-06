@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="es">
+<meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nova Bank - Inicio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" href="assets/css/facilities.css">
+  <link rel="stylesheet" href="assets/css/main.css">
+<body>
+  <header class="header">
+    <div class="container">
+      <div class="logo">
+        <a href="main.html"><img src="assets/img/logo.png" alt="Nova Bank"></a>
+        <a href="main.html"> <h1>Nova Bank</h1></a>
+      </div>
+      <div class="buttons">
+        <div class="menu-container">
+          <button class="menu-toggle" id="menuBtn">&#9776;</button>
+          <ul class="dropdown-menu" id="dropdownMenu">
+                <li><a href="changePassword.html">Cambiar Contraseña <span> Alt + C</span></a></li>
+                <li><a href="help.html">Ayuda y soporte <span> Alt + H</span></a></li>
+                <li><a href="index.html">Ayuda y soporte <span> Alt + F</span></a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </header>
+  <main class="main-container">
+    <section class="welcome-section">
+      <h2 id="sessionNombre"></h2>
+      <p>Estamos felices de verte una vez más.</p>
+
+      <div class="card-balance">
+        <div class="image-placeholder">
+          <img src="assets/img/help.jpg" alt="Ilustración ahorro mensual">
+        </div>
+        <div class="card-content">
+          <h3>Ahorro mensual</h3>
+          <p>Porcentaje generado a partir de los ingresos y gastos del último mes.</p>
+          <div class="stats">
+            <span class="percentage">0.0%</span>
+            <button class="btn-solid small">Revisar historial</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="gestiona-section">
+      <h2>Gestiona</h2>
+      <div class="gestiona-grid">
+        <div class="gestiona-card">
+          <img src="ruta_icono1.svg" alt="Ahorro mensual">
+          <p>Ahorro mensual</p>
+        </div>
+        <div class="gestiona-card">
+          <img src="ruta_icono2.svg" alt="Ahorro mensual">
+          <p>Ahorro mensual</p>
+        </div>
+        <div class="gestiona-card">
+          <img src="ruta_icono3.svg" alt="Ahorro mensual">
+          <p>Ahorro mensual</p>
+        </div>
+      </div>
+    </section>
+  </main>
+  <footer class="footer">
+    <div class="logo_footer">
+      <img src="assets/img/logo.png" alt="Nova Bank">
+      <p>Nova Bank</p>
+    </div>
+    <p>© Copyright 2025 Nova Bank. All Rights Reserved.</p>
+  </footer>
+  <script src="js/facilities.js"></script>
+  <script src="js/signInDev.js"></script>
+  <script>
+    const customerName = sessionStorage.getItem("customer.firstName");
+    const customerMidIn = sessionStorage.getItem("customer.middleInitial")
+    const h2 = document.getElementById("sessionNombre");
+
+    if (h2) {
+        if (customerName) {
+            h2.textContent = `¡Hola, ${customerName} ${customerMidIn}!`;
+        } else {
+            h2.textContent = "¡Hola!";
+        }
+    }
+  </script>
+</body>
+</html>
