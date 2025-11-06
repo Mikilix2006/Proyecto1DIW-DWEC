@@ -41,10 +41,8 @@
         <div class="form-group password">
             <div class="password-wrapper">
             <input oninput="limpiarDatos();" type="password" id="tfPassword" name="tfPassword" placeholder="Contraseña">
-            <button type="button" id="togglePassword" class="toggle-password" aria-label="Mostrar contraseña">
-                <svg id="eyeIcon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M12 5c-7.633 0-11 7-11 7s3.367 7 11 7 11-7 11-7-3.367-7-11-7zm0 12a5 5 0 1 1 0-10 5 5 0 0 1 0 10z"/>
-                </svg>
+            <button onclick="showHidePassword();" type="button" id="togglePassword" class="toggle-password" aria-label="Mostrar contraseña">
+                <img  id="eyeIcon" width="20" height="20" src='assets/img/eye-svgrepo-com.svg'>
             </button>
             </div>
         </div>
