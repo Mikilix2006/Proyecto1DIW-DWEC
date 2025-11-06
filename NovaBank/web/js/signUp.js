@@ -607,3 +607,4 @@ function guardarDatosSeison(email) {
     // Mostramos correcto almacenamiento
     console.log("Data storaged in session");
 }
+
