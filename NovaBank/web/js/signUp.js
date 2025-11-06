@@ -5,8 +5,18 @@
  */
 
 // CREACION DEL CONSTRUCTOR CUSTOMER
-function Customer(email) {
+function Customer(id, firstName, lastName, middleInitial, street, city, state, zip, phone, email, password) {
+    this.id = id;
+    this.firstName = firstName;
+    this.lastName = lastName;
+    this.middleInitial = middleInitial;
+    this.street = street;
+    this.city = city;
+    this.state = state;
+    this.zip = zip;
+    this.phone = phone;
     this.email = email;
+    this.password = password;
 }
 
 // Inicialización de variable password para que se vaya actualizando
@@ -582,8 +592,8 @@ function handleSignUpOnClick(event) {
             })
             // PROCESAR RESPUESTA OK
                 .then(data => {
-                    // Guardamos email en XML
-                    guardarDatosEnXML(data);
+                    // Guardamos email en sesion
+                    guardarDatosSeison(mail.value.trim());
                     msgBoxSignUp.style.color = "#5620ad";
                     msgBoxSignUp.textContent = "Se ha registrado al usuario correctamente, redirigiendo.";
                     msgBoxSignUp.style.display = 'block';
@@ -603,19 +613,12 @@ function handleSignUpOnClick(event) {
 }
 
 /**
- * Guarda en un objeto Customer el email del usuario
- * @param {type} xmlString
- * @returns {undefined}
+ * Guarda en la sesion el email
+ * @param {type} email
  */
-function guardarDatosEnXML(xmlString) {
-    //Create XML parser
-    const parser = new DOMParser();
-    //Parse response XML data
-    const xmlDoc=parser.parseFromString(xmlString,"application/xml");
-    //Create Customer object with data received in response
-    const customer=new Customer(xmlDoc.getElementsByTagName("email").textContent);
+function guardarDatosSeison(email) {
     // Save data to sessionStorage
-    sessionStorage.setItem("customer.email", customer.email);
-    //
+    sessionStorage.setItem("email", email);
+    // Mostramos correcto almacenamiento
     console.log("Data storaged in session");
 }
