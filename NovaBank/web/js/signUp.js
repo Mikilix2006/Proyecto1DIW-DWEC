@@ -4,21 +4,6 @@
  * and open the template in the editor.
  */
 
-// CREACION DEL CONSTRUCTOR CUSTOMER
-function Customer(id, firstName, lastName, middleInitial, street, city, state, zip, phone, email, password) {
-    this.id = id;
-    this.firstName = firstName;
-    this.lastName = lastName;
-    this.middleInitial = middleInitial;
-    this.street = street;
-    this.city = city;
-    this.state = state;
-    this.zip = zip;
-    this.phone = phone;
-    this.email = email;
-    this.password = password;
-}
-
 // Inicialización de variable password para que se vaya actualizando
 // conforme el texto del input vaya cambiando
 var isPassValid = false;
@@ -527,7 +512,7 @@ pass.addEventListener('input', function() {
 });
 
 /**
- * Detiene el burbujeo y comienza con la creacion del objeto curtomer ademas de preparar los
+ * Detiene el burbujeo y prepara los
  * datos para su envio en caso de que todos los campos sean válidos
  * @param {type} event
  * @returns {undefined}
@@ -541,7 +526,7 @@ function handleSignUpOnClick(event) {
         // Recuperación del formulario
         const formularioSignUp = document.getElementById("signUpForm");
         const msgBoxSignUp = document.getElementById("responseMsgSignUp");
-        // Crear objeto customer en xml
+        // Crear customer en xml
         const xml = `
                     <customer>
                         <city>${city.value.trim()}</city>
