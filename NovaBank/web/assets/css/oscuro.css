@@ -1,0 +1,331 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : 28-oct-2025, 10:48:44
+    Author     : habib
+*/
+:root {
+  --color-navbar: #0d0d0f;      
+  --color-footer: #0b0b0c;      
+  --color-fondo: #121214;      
+  --btn-color-solido: #2d6cdf;  
+  --btn-color-hover: #1a4ea3;  
+  --texto-titulo: #ffffff;      
+  --texto-parrafo: #cccccc;      
+  --texto-parrafo-claro: #999999;
+  --color-error: #ff4b4b;      
+  --color-valido: #4cd964;    
+  --borde-claro: #2a2a2a;   
+  --sombra-suave: rgba(0, 0, 0, 0.6);
+}
+/*general*/
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Poppins", Arial, sans-serif;
+}
+
+body {
+  color: var(--texto-parrafo);
+  background-color: var(--color-fondo);
+}
+/*header*/
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  background-color: var(--color-navbar);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+.header .container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 1200px;
+  margin: auto;
+  padding: 1rem 2rem;
+  color: #fff;
+}
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.logo img {
+  width: 40px;
+  height: 40px;
+}
+.logo a{
+  color: #fff;
+  font-weight: 500;
+  text-decoration: none;
+  margin-right: 1.5rem;
+}
+.nav a {
+  color: #fff;
+  font-weight: 500;
+  text-decoration: none;
+  margin-right: 1.5rem;
+}
+.buttons {
+  display: flex;
+  gap: 0.8rem;
+}
+.btn-outline {
+  background: #fff;
+  border: 2px solid var(--btn-color-solido);
+  color: var(--btn-color-solido);
+  padding: 0.4rem 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+.btn-outline:hover {
+  background: var(--btn-color-hover);
+  border: 2px solid var(--btn-color-hover);
+  color: white;
+}
+.btn-solid {
+  background: var(--btn-color-solido);
+  color: white;
+  border: none;
+  padding: 0.4rem 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+.btn-solid:hover {
+  background: var(--btn-color-hover);
+}
+/*banner*/
+.banner {
+  position: relative;
+  height: 420px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  text-align: left;
+  background: url("banner.jpg") center/cover no-repeat;
+}
+.banner .overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, rgba(11, 00, 115, 0.89), rgba(255, 255, 255, 0));
+}
+.banner-content {
+  position: relative;
+  max-width: 600px;
+  padding: 2rem;
+}
+.banner h2 {
+  font-size: 3rem;
+  line-height: 3rem;
+  margin-bottom: 1rem;
+}
+.banner p {
+  font-size: 1.1rem;
+}
+/*nosotros*/
+.about {
+  text-align: center;
+  padding: 4rem 2rem;
+  background-color: var(--color-fondo);
+}
+.about h2 {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+  color: var(--texto-titulo);
+}
+.about .intro {
+  max-width: 800px;
+  margin: 0 auto 3rem auto;
+  color: var(--texto-parrafo);
+  font-size: 1rem;
+  line-height: 1.6;
+}
+.cards {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 2rem;
+}
+.card {
+  background-color: var(--color-fondo);
+  border-radius: 16px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+  padding: 2rem;
+  max-width: 300px;
+  text-align: center;
+  transition: transform 0.3s ease;
+}
+.card:hover {
+  transform: translateY(-6px);
+}
+.card img {
+  width: 250px;
+  border-radius: 16px;
+  height: auto;
+  margin-bottom: 1.2rem;
+}
+.card h3 {
+  color: var(--texto-titulo);
+  margin-bottom: 0.6rem;
+  font-size: 1.1rem;
+}
+.card p {
+  color: var(--texto-parrafo);
+  font-size: 0.95rem;
+  margin-bottom: 1rem;
+}
+.btn-card {
+  background: var(--btn-color-solido);
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+.btn-card:hover {
+  background: var(--btn-color-hover);
+}
+/*formularios*/
+.form-section {
+  min-height: 100vh;
+  background: linear-gradient(to bottom, rgb(0,0,0), rgba(255, 255, 255, 0));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  padding-top: 6rem; 
+  padding-bottom: 4rem;
+}
+.form-content {
+  text-align: center;
+  color: white;
+  margin-bottom: 2rem;
+}
+.form-content h2 {
+  font-size: 2.5rem;
+  margin-bottom: 0.5rem;
+}
+.form-content p {
+  font-size: 1rem;
+  color: #f0eaff;
+  margin-bottom: 2rem;
+}
+.formulario {
+  background: white;
+  border-radius: 20px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+  max-width: 420px;
+  width: 90%;
+  margin: 0 auto;
+  padding: 2.5rem 2rem;
+}
+.form-group {
+  position: relative;
+  margin-bottom: 1.5rem;
+}
+.form-group input {
+  width: 100%;
+  padding: 0.8rem 1rem;
+  border: 2px solid #ddd;
+  border-radius: 50px;
+  font-size: 1rem;
+  outline: none;
+  transition: border 0.3s ease;
+}
+.form-group input:focus {
+  border-color: var(--btn-color-hover);
+}
+
+.btn-aceptar {
+  background: var(--btn-color-solido);
+  color: white;
+  border: none;
+  padding: 0.8rem 2rem;
+  border-radius: 50px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.3s ease;
+  width: 100%;
+}
+.btn-aceptar:hover {
+  background: var(--btn-color-hover);
+}
+
+#register-text {
+  margin-top: 1rem;
+  font-size: 0.9rem;
+  color: var(--texto-parrafo-claro);
+}
+#register-text a {
+  color: #6c2bd9;
+  font-weight: 400;
+  text-decoration: none;
+}
+#register-text a:hover {
+  text-decoration: underline;
+}
+
+.error-msg {
+  color: #e63946;    
+  font-size: 0.9em;
+  margin-top: 4px;
+  display: block;
+}
+
+/* footer*/
+.footer {
+  background-color: var(--color-footer);
+  color: white;
+  justify-content: center;
+  text-align: center;
+  padding: 2rem 1rem;
+}
+.logo_footer{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.footer img {
+  width: 40px;
+  margin-bottom: 0.5rem;
+}
+/* responsive*/
+@media (max-width: 768px) {
+  .header .container {
+    flex-direction: column;
+    gap: 0.8rem;
+  }
+  .banner {
+    height: 300px;
+    text-align: center;
+  }
+  .banner-content {
+    padding: 1.5rem;
+  }
+  .banner h2 {
+    font-size: 2rem;
+  }
+  .cards {
+    flex-direction: column;
+    align-items: center;
+  }
+  .card {
+    max-width: 90%;
+  }
+  /* formulario*/
+  .login-content h2 {
+    font-size: 2rem;
+  }
+  .login-form {
+    padding: 2rem 1.5rem;
+  }
+}
