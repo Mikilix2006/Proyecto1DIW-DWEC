@@ -19,6 +19,7 @@ const zip = document.getElementById("zip");
 const telf = document.getElementById("telf");
 const mail = document.getElementById("mail");
 const pass = document.getElementById("pass");
+const duppedPass = document.getElementById("duppedPass");
 
 /**
  * Realiza un chequeo de los campos dando true si la informacion
@@ -38,7 +39,8 @@ function checkControlVariablesStatus() {
             handleZipValidations() &&
             handleTelfValidations() &&
             handleMailValidations() &&
-            isPassValid
+            isPassValid &&
+            isDuppedPassValid
         ) return true;
     // No todas las variables son válidas
     return false;
@@ -511,6 +513,27 @@ pass.addEventListener('input', function() {
     }
 });
 
+// Recuperación de los elementos del formulario
+const msgBoxDuppedPass = document.getElementById("responseMsgPassDupped");
+
+// Variables de contorl para mensaje debajo del campo contraseña duplicada
+var isDuppedPassValid = false;
+
+// Hacer validaciones de la contraseña duplicada mientras se cambia el contenido del input
+duppedPass.addEventListener('input', function() {
+    // Mostramos los patornes de validación
+    msgBoxDuppedPass.hidden = false;
+    msgBoxDuppedPass.style.color = "#ff0000";
+    // VALIDACIONES CAMPO CONTRASEÑA DUPLICADA
+    // Comprobar que sea igual a la introducida en el campo CONTRASEÑA
+    if (pass.value.trim()!==duppedPass.value.trim()) {
+        isDuppedPassValid = false;
+    } else { // Marca como verdadera la condición igualdad
+        isDuppedPassValid = true;
+        msgBoxDuppedPass.hidden = true;
+    }
+});
+
 /**
  * Detiene el burbujeo y prepara los
  * datos para su envio en caso de que todos los campos sean válidos
@@ -518,11 +541,11 @@ pass.addEventListener('input', function() {
  * @returns {undefined}
  */
 function handleSignUpOnClick(event) {
+    // Detención del burbujeo
+    event.preventDefault();
+    event.stopPropagation();
     // Si todas las variables son verdaderas, devolverá true
     if (checkControlVariablesStatus()) {
-        // Detención del burbujeo
-        event.preventDefault();
-        event.stopPropagation();
         // Recuperación del formulario
         const formularioSignUp = document.getElementById("signUpForm");
         const msgBoxSignUp = document.getElementById("responseMsgSignUp");
