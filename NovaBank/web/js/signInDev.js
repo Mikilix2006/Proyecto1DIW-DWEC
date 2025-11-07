@@ -1,3 +1,5 @@
+
+//PRUEBAS DEL SIGN IN Y PASSWORD
 //CÓDIGO XML
 //CONSTRUCTOR DE CUSTOMER
 //INF. DEL CUSTOMER RESTFUL SERVICE
@@ -30,7 +32,6 @@ function validarSignIn(event) {
             //EVITAR LA PROPAGACIÓN
             event.preventDefault();
             event.stopPropagation();
-            
             //CHIVATO ERRORES
             let errores=false;
             if (emailInput.value.trim() === "" || passwordInput.value.trim() === ""){
@@ -165,3 +166,15 @@ function limpiarDatos() {
   tfEmail.classList.remove("input-error");
   tfPassword.classList.remove("input-error");
 }
+//SI SE INGRESA DESDE EL SIGN UP SE MOSTRARÁ SE COMPLETARÁ EL CORREO
+function setEmail(){
+    //CAPTURAR EL CORREO PARA CAMBIAR 
+    const tfEmail = document.getElementById("tfEmail");
+    const emailExistente= sessionStorage.getItem("email");
+    if(emailExistente!==null){
+        console.log("Email captured");
+        tfEmail.value=emailExistente;
+        document.getElementById('tfPassword').focus();
+    }
+}
+setEmail();

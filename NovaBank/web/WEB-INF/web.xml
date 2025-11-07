@@ -7,5 +7,6 @@
     </session-config>
     <welcome-file-list>
         <welcome-file>index.html</welcome-file>
+        <welcome-file>signIn.html</welcome-file>
     </welcome-file-list>
 </web-app>
