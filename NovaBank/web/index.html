@@ -7,8 +7,9 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" title="ModoPredeterminado" href="assets/css/style.css">
   <link rel="stylesheet" href="assets/css/facilities.css">
+  <link rel="alternate stylesheet" title="ModoOscuro" id="theme-link" href="assets/css/oscuro.css" disabled>
 </head>
 <body>
   <header class="header">
@@ -21,6 +22,14 @@
         <a href="#aboutUs">Sobre nosotros</a>
       </nav>
       <div class="buttons">
+          <button id="themeToggle" class="btn-theme" title="Cambiar tema">
+          <svg id="icon-sun" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m8.485-8.485h1M4.515 12.515h1M17.657 6.343l.707-.707M6.343 17.657l.707-.707M17.657 17.657l.707.707M6.343 6.343l.707.707M12 8a4 4 0 100 8 4 4 0 000-8z"/>
+          </svg>
+          <svg id="icon-moon" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M21 12.79A9 9 0 1111.21 3a7 7 0 109.79 9.79z"/>
+          </svg>
+          </button>
           <a href="signIn.html"><button class="btn-outline">Iniciar sesión</button></a>
           <a href="signUp.html"><button class="btn-solid">Registrarse</button></a>
       </div>

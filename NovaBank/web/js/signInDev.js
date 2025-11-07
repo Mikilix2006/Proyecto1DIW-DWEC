@@ -73,7 +73,7 @@ function validarSignIn(event) {
             msgBox.style.display = 'block';
         }
 }
-
+//FUNCICIÓN QUE ENVIA Y ESPERA RESPUESTAS
 function sendRequestAndProcessResponse(){
     const signForm = document.getElementById("formulario");
     const msgBox = document.getElementById("responseMsg");
