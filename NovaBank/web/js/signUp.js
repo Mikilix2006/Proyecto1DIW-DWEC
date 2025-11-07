@@ -339,8 +339,8 @@ function handleZipValidations() {
             msgBox.style.display = 'none';
         }
         // Comprobar que no exceda la longitud permitida
-        if (zip.value.trim().length>=255) {
-            throw new Error("El código postal debe tener menos de 255 caracteres");
+        if (zip.value.trim().length>=10) {
+            throw new Error("El código postal debe tener menos de 10 caracteres");
         } else { // Oculta el div en caso de no haber error en la longitud
             msgBox.style.display = 'none';
         }
@@ -384,8 +384,8 @@ function handleTelfValidations() {
             msgBox.style.display = 'none';
         }
         // Comprobar que no exceda la longitud permitida
-        if (telf.value.trim().length>=255) {
-            throw new Error("El teléfono debe tener menos de 255 caracteres");
+        if (telf.value.trim().length>=19) {
+            throw new Error("El teléfono debe tener menos de 19 caracteres");
         } else { // Oculta el div en caso de no haber error en la longitud
             msgBox.style.display = 'none';
         }
