@@ -41,7 +41,8 @@
       <p>Para iniciar sesión, por favor ingrese sus credenciales:</p>
       <form class="formulario" id="formulario" method="GET" action="http://localhost:8080/CRUDBankServerSide/webresources/customer/sigin/">
         <div class="form-group">
-          <input type="email" id="tfEmail" name="email" placeholder="Correo electrónico" required>
+            <input type="email" oninput="limpiarDatos();" id="tfEmail" name="email" placeholder="Correo electrónico" required>
+            <span id="errorEmail"></span>
         </div>
         <div class="form-group password">
             <div class="password-wrapper">
@@ -49,6 +50,7 @@
             <button onclick="showHidePassword();" type="button" id="togglePassword" class="toggle-password" aria-label="Mostrar contraseña">
                 <img  id="eyeIcon" width="20" height="20" src='assets/img/eye-svgrepo-com.svg'>
             </button>
+            <span id="errorPassword"></span>
             </div>
         </div>
         <button type="button" class="btn-aceptar" onclick="validarSignIn(event);">Ingresar</button>
