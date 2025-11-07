@@ -27,9 +27,9 @@
           <button class="menu-toggle" id="menuBtn">&#9776;</button>
           <ul class="dropdown-menu" id="dropdownMenu">
               <!--TENER EN CUENTA EL ACCESSKEY DEPENDIENDO DEL NAVEGADOR FFOX: ALT+SHIFT+S-->
-            <li><a href="main.html" accesskey="S">Inicio <span> Alt + S</span></a></li>
+            <li><a href="index.html" accesskey="S">Inicio <span> Alt + S</span></a></li>
             <li><a href="help.html"accesskey="H">Ayuda y soporte<span> Alt + H</span></a></li>
-            <button id="botonCerrarSesion" href="index.html"><a>Cerrar sesión</a></button>
+            <!--<button id="botonCerrarSesion" href="index.html"><a>Cerrar sesión</a></button>-->
           </ul>
         </div>
       </div>
@@ -41,7 +41,7 @@
       <p>Para iniciar sesión, por favor ingrese sus credenciales:</p>
       <form class="formulario" id="formulario" method="GET" action="http://localhost:8080/CRUDBankServerSide/webresources/customer/sigin/">
         <div class="form-group">
-          <input type="email" id="email" name="email" placeholder="Correo electrónico" required>
+          <input type="email" id="tfEmail" name="email" placeholder="Correo electrónico" required>
         </div>
         <div class="form-group password">
             <div class="password-wrapper">

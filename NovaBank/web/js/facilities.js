@@ -56,6 +56,7 @@ function showHidePassword(){
         passworInput.type = 'password';
         tooglePasswordImg.src='assets/img/eye-svgrepo-com.svg';
     }
+}
 //ojito de contraseña
 
 //CERRR SESSION

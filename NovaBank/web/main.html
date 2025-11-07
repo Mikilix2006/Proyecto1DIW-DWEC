@@ -9,6 +9,8 @@
   <link rel="stylesheet" href="assets/css/style.css">
   <link rel="stylesheet" href="assets/css/facilities.css">
   <link rel="stylesheet" href="assets/css/main.css">
+  <link rel="alternate stylesheet" title="ModoOscuro" id="theme-link" href="assets/css/oscuro.css" disabled>
+  
 <body>
   <header class="header">
     <div class="container">
@@ -22,8 +24,8 @@
           <ul class="dropdown-menu" id="dropdownMenu">
                 <li><a href="changePassword.html">Cambiar Contraseña <span> Alt + C</span></a></li>
                 <li><a href="help.html">Ayuda y soporte <span> Alt + H</span></a></li>
-                <button id="botonCerrarSesion" onclick="salirSession();" href="index.html"><a>Cerrar sesión</a></button>
-                <li><a id="botonCerrarSesion" onclick="salirSession();" href="index.html">Cerrar session <span> Alt + F</span></a></li>
+                <button id="botonCerrarSesion" onclick="salirSession();" href="index.html"><a>Cerrar sesión</a><span> Alt + F</span></button>
+                <!--<li><a id="botonCerrarSesion" onclick="salirSession();" href="index.html">Cerrar session <span> Alt + F</span></a></li>-->
           </ul>
         </div>
       </div>
@@ -74,8 +76,6 @@
     </div>
     <p>© Copyright 2025 Nova Bank. All Rights Reserved.</p>
   </footer>
-  <script src="js/facilities.js"></script>
-  <script src="js/signInDev.js"></script>
   <script>
     const customerName = sessionStorage.getItem("customer.firstName");
     const customerMidIn = sessionStorage.getItem("customer.middleInitial");
@@ -89,5 +89,7 @@
         }
     }
   </script>
+  <script src="js/facilities.js"></script>
+  <script src="js/signInDev.js"></script>
 </body>
 </html>
