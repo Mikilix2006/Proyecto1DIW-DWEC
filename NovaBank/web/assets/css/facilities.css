@@ -10,7 +10,7 @@
   --color-error: #ff0000;
 }
 
-/*desplegable*/
+/*MENU*/
 .menu-container {
   position: relative;
   display: inline-block;
@@ -57,10 +57,15 @@
   display: block;
   transition: background 0.2s;
 }
+.dropdown-menu li a span{
+    display: block;
+    color: var(--texto-parrafo-claro);
+}
 .dropdown-menu li a:hover {
   color: var(--btn-color-hover);
+  cursor: pointer;
 }
-/*CSS alternativo*/
+/*ALTERNATIVE STYLESHEET*/
 .btn-theme {
   display: flex;
   align-items: center;
@@ -74,19 +79,15 @@
   cursor: pointer;
   transition: all 0.3s ease;
 }
-
 .btn-theme:hover {
   background: var(--btn-color-hover);
+  border: 2px solid var(--btn-color-hover);
   color: #fff;
 }
-
 .btn-theme svg {
   width: 22px;
   height: 22px;
-  transition: opacity 0.4s ease, transform 0.3s ease;
 }
-
-/* Oculta uno de los iconos según el tema */
 #icon-sun {
   opacity: 1;
 }
@@ -94,24 +95,17 @@
   opacity: 0;
   position: absolute;
 }
-
-/* Estado modo oscuro (se cambia con clase JS) */
 .dark-mode #icon-sun {
   opacity: 0;
-  transform: rotate(-90deg);
 }
 .dark-mode #icon-moon {
   opacity: 1;
-  transform: rotate(0deg);
 }
-/*implementar el ojito*/
-/* Contenedor visual del input + botón */
 .password-wrapper {
   position: relative;
   display: flex;
   align-items: center;
 }
-
 .password-wrapper input {
   width: 100%;
   padding: 0.8rem 1rem;
@@ -121,12 +115,11 @@
   outline: none;
   transition: border 0.3s ease;
 }
-
 .password-wrapper input:focus {
   border-color: var(--btn-color-solido);
 }
 
-/* Botón del ojo */
+/*HIDE/SHOW PASSWORD ICON*/
 .toggle-password {
   position: absolute;
   right: 0.7rem;
@@ -140,18 +133,9 @@
   transition: color 0.2s ease;
   padding: 0;
 }
-
 .toggle-password:hover {
   color: var(--btn-color-solido);
 }
-
-/* Compatibilidad con modo oscuro */
-.dark-mode .password-wrapper input {
-  background-color: #2a2a2a;
-  border-color: #555;
-  color: #eee;
-}
-
 .dark-mode .toggle-password {
   color: #aaa;
 }
