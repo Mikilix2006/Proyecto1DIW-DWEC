@@ -160,11 +160,11 @@ function limpiarDatos() {
   const tfEmail = document.getElementById("tfEmail");
   const tfPassword = document.getElementById("tfPassword");
   
-  spanEmail.textContent = "";
-  spanPassword.textContent = "";
-  boxError.textContent = "";
-  tfEmail.classList.remove("input-error");
-  tfPassword.classList.remove("input-error");
+    spanEmail.textContent = "";
+    spanPassword.textContent = "";
+    boxError.textContent = "";
+    tfEmail.classList.remove("input-error");
+    tfPassword.classList.remove("input-error");
 }
 //SI SE INGRESA DESDE EL SIGN UP SE MOSTRARÁ SE COMPLETARÁ EL CORREO
 function setEmail(){

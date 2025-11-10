@@ -1,12 +1,4 @@
-/*
-To change this license header, choose License Headers in Project Properties.
-To change this template file, choose Tools | Templates
-and open the template in the editor.
-*/
-/* 
-    Created on : 29-oct-2025, 9:36:59
-    Author     : habib
-*/
+/*GENERAL*/
 .main-container {
   margin-top: 100px;
   padding: 2rem 10%;
@@ -21,7 +13,6 @@ and open the template in the editor.
   color: var(--texto-parrafo);
   margin-bottom: 2rem;
 }
-
 /*TARJETAS*/
 .card-balance {
   display: flex;
@@ -101,8 +92,6 @@ and open the template in the editor.
   color: var(--texto-parrafo);
   font-weight: 500;
 }
-
-/* --- Responsividad --- */
 @media (max-width: 768px) {
   .card-balance {
     flex-direction: column;

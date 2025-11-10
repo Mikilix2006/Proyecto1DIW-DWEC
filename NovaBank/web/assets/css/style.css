@@ -68,6 +68,7 @@ body {
 }
 .btn-outline {
   background: #fff;
+  height: 40px;
   border: 2px solid var(--btn-color-solido);
   color: var(--btn-color-solido);
   padding: 0.4rem 1rem;
@@ -82,6 +83,7 @@ body {
 }
 .btn-solid {
   background: var(--btn-color-solido);
+  height: 40px;
   color: white;
   border: none;
   padding: 0.4rem 1rem;
@@ -187,7 +189,7 @@ body {
 }
 /*formularios*/
 .form-section {
-  min-height: 100vh;
+  min-height: 100vh; /*viewport height*/
   background: linear-gradient(to bottom, rgb(52, 9, 70), rgba(255, 255, 255, 0));
   display: flex;
   align-items: center;
@@ -209,6 +211,9 @@ body {
   font-size: 1rem;
   color: #f0eaff;
   margin-bottom: 2rem;
+}
+.form-content span{
+    color: var(--color-error);
 }
 .formulario {
   background: white;
@@ -236,6 +241,7 @@ body {
 .form-group input.input-error {
   border: 2px solid #e63946;
 }
+
 .form-group input:focus {
   border-color: var(--btn-color-hover);
 }
@@ -302,6 +308,15 @@ body {
     flex-direction: column;
     gap: 0.8rem;
   }
+  .logo a{
+  color: #fff;
+  font-weight: 300;
+  text-decoration: none;
+  margin-right: 1rem;
+  }
+  .nav a{
+    display:none;
+  }
   .banner {
     height: 300px;
     text-align: center;
@@ -319,6 +334,7 @@ body {
   .card {
     max-width: 90%;
   }
+  
   /* formulario*/
   .login-content h2 {
     font-size: 2rem;
