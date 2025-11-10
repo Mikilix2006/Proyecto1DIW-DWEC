@@ -26,12 +26,20 @@
         <a href="index.html">Sobre nosotros</a>
       </nav>
       <div class="buttons">
+          <button id="themeToggle" class="btn-theme" onclick="changeTheme();" title="Cambiar tema">
+          <svg id="icon-sun" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m8.485-8.485h1M4.515 12.515h1M17.657 6.343l.707-.707M6.343 17.657l.707-.707M17.657 17.657l.707.707M6.343 6.343l.707.707M12 8a4 4 0 100 8 4 4 0 000-8z"/>
+          </svg>
+          <svg id="icon-moon" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M21 12.79A9 9 0 1111.21 3a7 7 0 109.79 9.79z"/>
+          </svg>
+        </button>
           <a href="signIn.html"><button class="btn-solid">Iniciar Sesión</button></a>
         <div class="menu-container">
-          <button class="menu-toggle" id="menuBtn">&#9776;</button>
+          <button class="menu-toggle" id="menuBtn" onclick="dropDownMenu();">&#9776;</button>
           <ul class="dropdown-menu" id="dropdownMenu">
-            <li><a href="index.html">Inicio <span> Alt + S</span></a></li>
-            <li><a href="index.html">Ayuda y soporte <span> Alt + S</span></a></li>
+            <li><a href="index.html" accesskey="S">Inicio <span> Alt + S</span></a></li>
+            <li><a href="index.html" accesskey="H">Ayuda y soporte <span> Alt + H</span></a></li>
           </ul>
         </div>
       </div>
