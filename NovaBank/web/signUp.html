@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="es">
+    
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Registrarse - Nova Bank</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" href="assets/css/facilities.css">
+  <link rel="alternate stylesheet" title="ModoOscuro" id="theme-link" href="assets/css/oscuro.css" disabled>
+</head>
+
+<body>
+  <header class="header">
+    <div class="container">
+      <div class="logo">
+        <a href="index.html" style="display:flex; flex-direction:row;">
+          <img src="assets/img/logo.png" alt="Nova Bank">
+          <h1>Nova Bank</h1>
+        </a>
+      </div>
+      <nav class="nav">
+        <a href="index.html">Sobre nosotros</a>
+      </nav>
+      <div class="buttons">
+          <button id="themeToggle" class="btn-theme" onclick="changeTheme();" title="Cambiar tema">
+          <svg id="icon-sun" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m8.485-8.485h1M4.515 12.515h1M17.657 6.343l.707-.707M6.343 17.657l.707-.707M17.657 17.657l.707.707M6.343 6.343l.707.707M12 8a4 4 0 100 8 4 4 0 000-8z"/>
+          </svg>
+          <svg id="icon-moon" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M21 12.79A9 9 0 1111.21 3a7 7 0 109.79 9.79z"/>
+          </svg>
+        </button>
+          <a href="signIn.html"><button class="btn-solid">Iniciar Sesión</button></a>
+        <div class="menu-container">
+          <button class="menu-toggle" id="menuBtn" onclick="dropDownMenu();">&#9776;</button>
+          <ul class="dropdown-menu" id="dropdownMenu">
+            <li><a href="index.html" accesskey="S">Inicio <span> Alt + S</span></a></li>
+            <li><a href="index.html" accesskey="H">Ayuda y soporte <span> Alt + H</span></a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </header>
+    
+  <section class="form-section">
+    <div class="form-content">
+      <h2>¡Regístrate!</h2>
+      <p>
+          Por favor completar y revisar todos los campos antes de registrarse.
+                <br>
+          Todos los campos son obligatorios.
+      </p>
+      <form class="formulario" id="signUpForm" action="http://localhost:8080/CRUDBankServerSide/webresources/customer">
+        
+        <div class="form-group ">
+            <input type="text" id="name" name="name" placeholder="Nombre" onblur="handleNameValidations()"/>
+            <div id="responseMsgName"></div>
+        </div>
+        <div class="form-group ">
+          <input type="text" id="surname" name="surname" placeholder="Apellido" onblur="handleSurnameValidations()"/>
+          <div id="responseMsgSurname"></div>
+        </div>
+        <div class="form-group ">
+          <input type="text" id="initial" name="initial" placeholder="Inicial segundo nombre" onblur="handleInitialValidations()"/>
+          <div id="responseMsgInitial"></div>
+        </div>
+        <div class="form-group ">
+          <input type="text" id="street" name="street" placeholder="Calle" onblur="handleStreetValidations()"/>
+          <div id="responseMsgStreet"></div>
+        </div>
+        <div class="form-group ">
+          <input type="text" id="city" name="city" placeholder="Ciudad" onblur="handleCityValidations()"/>
+          <div id="responseMsgCity"></div>
+        </div>
+        <div class="form-group ">
+          <input type="text" id="state" name="state" placeholder="Estado" onblur="handleStateValidations()"/>
+          <div id="responseMsgState"></div>
+        </div>
+        <div class="form-group ">
+          <input type="text" id="zip" name="zip" placeholder="Código postal" onblur="handleZipValidations()"/>
+          <div id="responseMsgZip"></div>
+        </div>
+        <div class="form-group ">
+          <input type="text" id="telf" name="telf" placeholder="Teléfono" onblur="handleTelfValidations()"/>
+          <div id="responseMsgTelf"></div>
+        </div>
+        <div class="form-group ">
+          <input type="email" id="mail" name="mail" placeholder="Correo electrónico" onblur="handleMailValidations()"/>
+          <div id="responseMsgMail"></div>
+        </div>
+        <div class="form-group ">
+            <div class="item-center">
+            <input type="password" id="pass" name="pass" placeholder="Contraseña"/>
+            <button onclick="signUpShowHidePassword();" type="button" id="togglePassword" class="toggle-password" aria-label="Mostrar contraseña">
+              <img  id="eyeIcon" width="20" height="20" src='assets/img/eye-svgrepo-com.svg'>
+            </button>
+          </div>
+          <div id="responseMsgPass" style="font-size: 12px" hidden>
+              <div id="caracteres">Mínimo 12 caracteres de longitud y máximo 50 caracteres</div>
+              <div id="letras">Mínimo una letra minúscula</div>
+              <div id="caracterEspecial">Mínimo uno de estos caracteres especiales: ! # $ % &</div>
+          </div>
+        </div>
+        <div class="form-group ">
+          <div class="item-center">
+            <input type="password" id="duppedPass" name="passDupped" placeholder="Volver a introducir contraseña"/>
+            <button onclick="signUpShowHideDuppedPassword();" type="button" id="toggleDuppedPassword" class="toggle-password" aria-label="Mostrar contraseña">
+              <img  id="eyeIcon-dupped" width="20" height="20" src='assets/img/eye-svgrepo-com.svg'>
+            </button>
+          </div>
+          <div id="responseMsgPassDupped" style="font-size: 12px" hidden>
+              Las contraseñas deben ser iguales
+          </div>
+        </div>
+          <button type="submit" class="btn-aceptar" id="btSignUp" onclick="handleSignUpOnClick(event)">Registrarse</button>
+          <div id="responseMsgSignUp" style="font-size: 12px" hidden></div>
+        <p id="register-text">
+            ¿Ya tienes una cuenta? <a href="http://localhost:8080/NovaBank/signIn.html">Iniciar sesión</a>
+        </p>
+        
+      </form>
+      
+    </div>
+  </section>
+    
+  <footer class="footer">
+        <div class="logo_footer">
+            <img src="assets/img/logo.png" alt="Nova Bank">
+            <p>Nova Bank</p>
+        </div>
+    <p>© Copyright 2025 Nova Bank. All Rights Reserved.</p>
+  </footer>
+    
+  <script src="js/facilities.js"></script>
+  <script src="js/signUp.js"></script>
+</body>
+</html>
