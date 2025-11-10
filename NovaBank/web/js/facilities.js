@@ -57,6 +57,43 @@ function showHidePassword(){
         tooglePasswordImg.src='assets/img/eye-svgrepo-com.svg';
     }
 }
+
+// SHOW AND HIDE THE SIGNUP PASSWORD
+function signUpShowHidePassword(){
+    //CAPTURE THE BUTTON AND PASSWORD FIELD
+    const passwordInput = document.getElementById('pass');
+    const tooglePassword = document.getElementById('togglePassword');
+    //IMG VALUE
+    const tooglePasswordImg = document.getElementById('eyeIcon');
+    //JUST CHANGE THE PASSWORD INPUT'S ATRIBUTE TYPE
+    if (passwordInput.type === 'password') {
+        passwordInput.type = 'text';
+        tooglePasswordImg.src='assets/img/eye-closed-svgrepo-com.svg';
+        //tooglePassword.innerText = 'Ocultar';
+    } else {
+        passwordInput.type = 'password';
+        tooglePasswordImg.src='assets/img/eye-svgrepo-com.svg';
+    }
+}
+
+// SHOW AND HIDE THE SIGNUP DUPPLICATED PASSWORD
+function signUpShowHideDuppedPassword(){
+    //CAPTURE THE BUTTON AND PASSWORD FIELD
+    const passwordInput = document.getElementById('duppedPass');
+    const tooglePassword = document.getElementById('toggleDuppedPassword');
+    //IMG VALUE
+    const tooglePasswordImg = document.getElementById('eyeIcon-dupped');
+    //JUST CHANGE THE PASSWORD INPUT'S ATRIBUTE TYPE
+    if (passwordInput.type === 'password') {
+        passwordInput.type = 'text';
+        tooglePasswordImg.src='assets/img/eye-closed-svgrepo-com.svg';
+        //tooglePassword.innerText = 'Ocultar';
+    } else {
+        passwordInput.type = 'password';
+        tooglePasswordImg.src='assets/img/eye-svgrepo-com.svg';
+    }
+}
+
 //ojito de contraseña
 
 //CERRR SESSION

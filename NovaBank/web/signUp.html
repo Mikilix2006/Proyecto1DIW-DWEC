@@ -85,7 +85,12 @@
           <div id="responseMsgMail"></div>
         </div>
         <div class="form-group ">
-          <input type="password" id="pass" name="pass" placeholder="Contraseña"/>
+            <div class="item-center">
+            <input type="password" id="pass" name="pass" placeholder="Contraseña"/>
+            <button onclick="signUpShowHidePassword();" type="button" id="togglePassword" class="toggle-password" aria-label="Mostrar contraseña">
+              <img  id="eyeIcon" width="20" height="20" src='assets/img/eye-svgrepo-com.svg'>
+            </button>
+          </div>
           <div id="responseMsgPass" style="font-size: 12px" hidden>
               <div id="caracteres">Mínimo 12 caracteres de longitud y máximo 50 caracteres</div>
               <div id="letras">Mínimo una letra minúscula</div>
@@ -93,7 +98,12 @@
           </div>
         </div>
         <div class="form-group ">
-          <input type="password" id="duppedPass" name="passDupped" placeholder="Volver a introducir contraseña"/>
+          <div class="item-center">
+            <input type="password" id="duppedPass" name="passDupped" placeholder="Volver a introducir contraseña"/>
+            <button onclick="signUpShowHideDuppedPassword();" type="button" id="toggleDuppedPassword" class="toggle-password" aria-label="Mostrar contraseña">
+              <img  id="eyeIcon-dupped" width="20" height="20" src='assets/img/eye-svgrepo-com.svg'>
+            </button>
+          </div>
           <div id="responseMsgPassDupped" style="font-size: 12px" hidden>
               Las contraseñas deben ser iguales
           </div>
