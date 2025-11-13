@@ -566,7 +566,7 @@ function handleSignUpOnClick(event) {
                 `.trim();
         // ENVIO DE DATOS
         // CREAR POST REQUEST Y PROCESAR RESPUESTAS HTTP
-        fetch("http://localhost:8080/CRUDBankServerSide/webresources/customer",
+        fetch("/CRUDBankServerSide/webresources/customer",
             {
                 method: 'POST',
                 headers: {

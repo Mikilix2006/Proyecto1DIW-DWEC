@@ -25,7 +25,7 @@ function validarSignIn(event) {
             const signForm = document.getElementById("formulario");
             //EXPRESIONES REGULARES PARA VALIDACIÓN
             const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-            const regexPassword = /^[a-zA-Z0-9!#$%&*]*$/;
+            const regexPassword = /^[a-zA-Z0-9ñÑáéíóúÁÉÍÓÚüÜ!#$%&*]*$/;
             //CAPTURA DE ERRORES EN EL HTML
             const errorEmail = document.getElementById("errorEmail");
             const errorPassword = document.getElementById("errorPassword");
