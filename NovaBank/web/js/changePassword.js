@@ -4,14 +4,12 @@
  * and open the template in the editor.
  */
 //Prueba
-// === VALIDAR CONTRASEÑA ACTUAL ===
 function validar_PasswordActual() {
     const passwordActual = document.getElementById("password");
     const passwordGuardada = sessionStorage.getItem("customer.password");
-    
-    //const passwordGuardada ="abcd*12345";
+
     if (!passwordGuardada)
-        throw new Error("No se encontró la contraseña actual en la sesión. Intentelo de nuevo");
+        throw new Error("No se encontró la contraseña actual en la sesión. Inténtelo de nuevo.");
 
     if (passwordActual.value.trim() === "")
         throw new Error("Debe ingresar su contraseña actual.");
@@ -26,19 +24,41 @@ function validar_PasswordActual() {
 function validar_NewPassword() {
     const nuevaPassword = document.getElementById("nueva_password");
     const passwordActual = document.getElementById("password");
-    const patronPassword = /^[a-zA-Z0-9.!#$*%&]+$/;
 
-    if (nuevaPassword.value.trim() === "")
-        throw new Error("Debe ingresar una nueva contraseña.");
+    const valor = nuevaPassword.value.trim();
+    const patronPassword = /^[a-zA-Z0-9ñÑáéíóúÁÉÍÓÚüÜ!#$%&]*$/;
 
-    if (nuevaPassword.value.length > 50)
-        throw new Error("La nueva contraseña no puede tener más de 50 caracteres.");
+    const requisitos = `
+    Requisitos:
+    - Mínimo 12 caracteres y máximo 50.
+    - Al menos una letra mayúscula.
+    - Al menos una letra minúscula.
+    - Al menos uno de los siguientes símbolos: ! # $ % &.
+    `;
 
-    if (!patronPassword.test(nuevaPassword.value.trim()))
-        throw new Error("La nueva contraseña contiene caracteres no permitidos.");
+    if (valor === "")
+        throw new Error("Debe ingresar una nueva contraseña.\n" + requisitos);
 
-    if (nuevaPassword.value.trim() === passwordActual.value.trim())
-        throw new Error("La nueva contraseña no puede ser igual a la actual.");
+    if (valor.length < 12)
+        throw new Error("La nueva contraseña debe tener al menos 12 caracteres.\n" + requisitos);
+
+    if (valor.length > 50)
+        throw new Error("La nueva contraseña no puede tener más de 50 caracteres.\n" + requisitos);
+
+    if (!patronPassword.test(valor))
+        throw new Error("La nueva contraseña contiene caracteres no permitidos.\n" + requisitos);
+
+    if (!/[A-ZÁÉÍÓÚÜÑ]/.test(valor))
+        throw new Error("La nueva contraseña debe contener al menos una letra mayúscula.\n" + requisitos);
+
+    if (!/[a-záéíóúüñ]/.test(valor))
+        throw new Error("La nueva contraseña debe contener al menos una letra minúscula.\n" + requisitos);
+
+    if (!/[!#$%&]/.test(valor))
+        throw new Error("La nueva contraseña debe contener al menos uno de los siguientes símbolos: ! # $ % &.\n" + requisitos);
+
+    if (valor === passwordActual.value.trim())
+        throw new Error("La nueva contraseña no puede ser igual a la actual.\n" + requisitos);
 
     return true;
 }
@@ -47,6 +67,7 @@ function validar_NewPassword() {
 function validar_ConfirmarPassword() {
     const nuevaPassword = document.getElementById("nueva_password");
     const confirmarPassword = document.getElementById("confirmar_password"); 
+
     if (confirmarPassword.value.trim() === "")
         throw new Error("Debe confirmar su nueva contraseña.");
 
@@ -85,9 +106,9 @@ function sendRequestAndProcessResponse() {
         body: xml
     })
     .then(response => {
-        if (response.status === 401)
+        if (response.status >=400 && response.status < 500)
             throw new Error("No autorizado. La sesión ha expirado o las credenciales son incorrectas.");
-        else if (response.status === 500)
+        else if (response.status >= 500)
             throw new Error("Error interno del servidor. Intente nuevamente más tarde.");
         else if (!response.ok)
             throw new Error("Error inesperado en la solicitud de cambio de contraseña.");
@@ -95,50 +116,37 @@ function sendRequestAndProcessResponse() {
         return response.text();
     })
     .then(data => {
-        cuadroMensaje.className = "success";
-        cuadroMensaje.textContent = "La contraseña fue actualizada correctamente.";
-        cuadroMensaje.style.display = "block";
-
-        // Actualizar contraseña almacenada en sesión
         sessionStorage.setItem("customer.password", nuevaContrasena);
-
-        // Guardar respuesta XML y redirigir
-        storeResponseXMLData(data);
         window.location.href = "main.html";
     })
     .catch(error => {
-        cuadroMensaje.className = "error";
-        cuadroMensaje.textContent = "Error: " + error.message;
-        cuadroMensaje.style.display = "block";
+        mostrarError(error.message);
     });
 }
 
+// === MOSTRAR ERROR ===
+function mostrarError(mensajeError) {
+    const cuadroMensaje = document.getElementById("mensajeRespuesta");
+    cuadroMensaje.className = "error";
+    cuadroMensaje.innerHTML = "Error:<br>" + mensajeError.replace(/\n/g, "<br>");
+    cuadroMensaje.style.display = "block";
+}
 
 // === FUNCIÓN PRINCIPAL ===
 function validarCambioPassword(event) {
     event.preventDefault();
     event.stopPropagation();
 
-    const mensaje = document.getElementById("mensajeRespuesta");
-
     try {
         validar_PasswordActual();
         validar_NewPassword();
         validar_ConfirmarPassword();
 
-        mensaje.className = "success";
-        mensaje.textContent = "Validación exitosa. Actualizando contraseña...";
-        mensaje.style.display = "block";
-
-        // Llamar al servidor solo si todo fue válido
         sendRequestAndProcessResponse();
-
         return true;
+
     } catch (error) {
-        mensaje.className = "error";
-        mensaje.textContent = "Error: " + error.message;
-        mensaje.style.display = "block";
+        mostrarError(error.message);
         return false;
     }
 }
-
