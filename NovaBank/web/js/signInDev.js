@@ -1,8 +1,18 @@
+/*
+ * MODIFICACIONES EVALUACIÓN
+Realizar las siguientes modificaciones sobre el código de su aplicación. 
+Las modificaciones se realizarán sobre una rama llamada eval_NOMBRE 
+(donde NOMBRE es su propio nombre) creada a partir del último commit 
+de su rama principal:
 
-//PRUEBAS DEL SIGN IN Y PASSWORD
-//CÓDIGO XML
-//CONSTRUCTOR DE CUSTOMER
-//INF. DEL CUSTOMER RESTFUL SERVICE
+Mediante el uso del método getElementsByTagName de la interfaz Document, 
+cambiar la propiedad de estilo font-weight de todos los BUTTON  al valor 300. 
+Hacerlo en el onload del BODY.
+
+Pedir datos en JSON en el fetch.
+
+Al finalizar, generar y entregar el nuevo archivo .WAR
+*/
 function Customer(id, firstName, lastName, middleInitial, street, city, state, zip, phone, email, password) {
     this.id = id;
     this.firstName = firstName;
@@ -86,40 +96,34 @@ function sendRequestAndProcessResponse(){
                     {
                         method: 'GET',
                         headers: {
-                          'Content-Type': 'application/xml'
+                          //'Content-Type': 'application/xml'
+                          //CONTENTTYPE JSON
+                          'Content-Type': 'application/json'
                         }
                     }).then(response => {
-                        //ERROR 401
-                        if (response.status===401){
-                          return response.text().then(text => {
-                            throw new Error('¡Ups! Parece que la dirección de correo o la contraseña no coinciden con un usuario existente.');
-                          });
-                        }
-                        //ERROR 500
-                        else if (response.status===500){
-                          return response.text().then(text => {
-                            throw new Error('Se ha producido un error en el servidor. Por favor espere un momento y vuelve a intentarlo. Si el problema persiste, contacte con Ayuda y Soporte');
-                          });
-                        }
-                        //OTRO ERROR
-                        else if (!response.ok) {
-                          return response.text().then(text => {
-                            throw new Error(text || 'Error inesperado. Por favor espere un momento y vuelve a intentarlo. Si el problema persiste, contacte con Ayuda y Soporte');
-                          });
-                        }
-                        return response.text();
-                    }).then(data => {
-                        //GUARDA LOS DATOS 
-                        storeResponseXMLData(data);
-                        //LO MANDA AL MAIN
-                        window.location.href = "main.html";
-                    }).catch(e => {
+      if (response.status === 401) {
+        throw new Error("¡Ups! Parece que la dirección de correo o la contraseña no coinciden con un usuario existente.");
+      } else if (response.status === 500) {
+        throw new Error("Error del servidor. Por favor, inténtelo de nuevo más tarde.");
+      } else if (!response.ok) {
+        throw new Error("Error inesperado.");
+      }
+      //SE NECESITA TENER LA RESPUESTA EN FORMATO JSON
+      return response.json();
+    })
+    .then(data => {
+      storeJsonData(data);
+      //SI ES 200 OK SE ENVÍA AL MAIN 
+      window.location.href = "main.html";
+    })
+    .catch(e => {
                             msgBox.className = 'error';
                             msgBox.textContent = e.message;
                             msgBox.style.display = 'block';
                     }
                 );
 }
+/*
 function storeResponseXMLData (xmlString){
     //SE CREA EN XML PARSER
     const parser = new DOMParser();
@@ -151,7 +155,23 @@ function storeResponseXMLData (xmlString){
         sessionStorage.setItem("customer.phone", customer.phone);
         sessionStorage.setItem("customer.email", customer.email);
         sessionStorage.setItem("customer.password", customer.password);
+}*/
+
+//FUNCIÓN PARA ALMACENAR EN JSON
+function storeJsonData(customer) {
+    sessionStorage.setItem("customer.id",customer.id);
+    sessionStorage.setItem("customer.firstName",customer.firstName);
+    sessionStorage.setItem("customer.lastName",customer.lastName);
+    sessionStorage.setItem("customer.middleInitial",customer.middleInitial);
+    sessionStorage.setItem("customer.street",customer.street);
+    sessionStorage.setItem("customer.city",customer.city);
+    sessionStorage.setItem("customer.state",customer.state);
+    sessionStorage.setItem("customer.zip",customer.zip);
+    sessionStorage.setItem("customer.phone",customer.phone);
+    sessionStorage.setItem("customer.email",customer.email);
+    sessionStorage.setItem("customer.password",customer.password);
 }
+
 //USADA EN EL MANEJADOR ONINPUT
 function limpiarDatos() {
   const spanEmail = document.getElementById("errorEmail");
@@ -178,3 +198,16 @@ function setEmail(){
     }
 }
 setEmail();
+
+/*Mediante el uso del método getElementsByTagName de la interfaz Document, 
+cambiar la propiedad de estilo font-weight de todos los BUTTON  al valor 300. 
+Hacerlo en el onload del BODY.*/
+//USO DEL MÉTODO getElementsByTagName
+function changeButtonsFontWeight(){
+    let buttons = document.getElementsByTagName('button');
+    let i=0;
+    for(i;i<= buttons.length;i++){
+        buttons[i].style="font-weight: 300;";   
+    }
+}
+

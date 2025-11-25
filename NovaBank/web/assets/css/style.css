@@ -21,6 +21,10 @@ body {
   color: var(--texto-parrafo);
   background-color: var(--color-fondo);
 }
+.newFont {
+    font-weight: 300;
+    background-color: black;
+}
 /*header*/
 .header {
   position: sticky;
