@@ -21,6 +21,20 @@ const mail = document.getElementById("mail");
 const pass = document.getElementById("pass");
 const duppedPass = document.getElementById("duppedPass");
 
+
+function Customer(name, surname, initial, street, city, state, zip, telf, mail, pass) {
+    this.firstName = name;
+    this.lastName = surname;
+    this.middleInitial = initial;
+    this.street = street;
+    this.city = city;
+    this.state = state;
+    this.zip = zip;
+    this.phone = telf;
+    this.email = mail;
+    this.password = pass;
+}
+
 /**
  * Realiza un chequeo de los campos dando true si la informacion
  * que contiene es válida y false en caso contrario
@@ -52,10 +66,14 @@ const letterOnlyRegExp = new RegExp("^[a-zA-ZÁáÉéÍíÓóÚúÑñ]$");
 const numbersOnlyRegExp = new RegExp("^[0-9]+$");
 const telephonesOnlyRegExp = new RegExp("^[\+]{0,1}[0-9]+$");
 const hasToContainLettersRegExp = new RegExp("[a-zA-ZÁáÉéÍíÓóÚúÑñ]+");
-const streetValidationRegExp = new RegExp("^[a-zA-ZÁáÉéÍíÓóÚúÑñ]+[,/]{0,1}[0-9]{0,}");
 const hasToContainMinusLetterRegExp = new RegExp("[a-zñáéíóú]");
 const hasToContainSpecialCharRegExp = new RegExp("[!#$%&]");
 const emailRegExp = new RegExp("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$");
+
+// regexp de examen
+const nombreCompuestoRegExp = new RegExp("^[a-zA-ZÁáÉéÍíÓóÚúÑñ]+[ ]{0,1}[a-zA-ZÁáÉéÍíÓóÚúÑñ]+");
+// la calle puede contener numeros pero no ser sólamente numeros
+const streetValidationRegExp = new RegExp("^[a-zA-ZÁáÉéÍíÓóÚúÑñ]+[,/]{0,1}[0-9]{0,}");
 
 /**
  * Funcion creada para las validaciones del campo nombre en cada
@@ -80,7 +98,7 @@ function handleNameValidations() {
             msgBox.style.display = 'none';
         }
         // Comprobar que lo introducido este permitido
-        if (lettersOnlyRegExp.exec(name.value.trim())===null) {
+        if (nombreCompuestoRegExp.exec(name.value.trim())===null) {
             throw new Error("El nombre solo puede contener letras");
         } else { // Oculta el div en caso de no haber error en la expresion
             msgBox.style.display = 'none';
@@ -125,7 +143,7 @@ function handleSurnameValidations() {
             msgBox.style.display = 'none';
         }
         // Comprobar que lo introducido este permitido
-        if (lettersOnlyRegExp.exec(surname.value.trim())===null) {
+        if (nombreCompuestoRegExp.exec(surname.value.trim())===null) {
             throw new Error("El apellido solo puede contener letras");
         } else { // Oculta el div en caso de no haber error en la expresion
             msgBox.style.display = 'none';
@@ -257,7 +275,7 @@ function handleCityValidations() {
             msgBox.style.display = 'none';
         }
         // Comprobar que lo introducido este permitido
-        if (lettersOnlyRegExp.exec(city.value.trim())===null) {
+        if (nombreCompuestoRegExp.exec(city.value.trim())===null) {
             throw new Error("La ciudad debe contener solo letras");
         } else { // Oculta el div en caso de no haber error en la expresion
             msgBox.style.display = 'none';
@@ -302,7 +320,7 @@ function handleStateValidations() {
             msgBox.style.display = 'none';
         }
         // Comprobar que lo introducido este permitido
-        if (lettersOnlyRegExp.exec(state.value.trim())===null) {
+        if (nombreCompuestoRegExp.exec(state.value.trim())===null) {
             throw new Error("El estado solo puede contener letras");
         } else { // Oculta el div en caso de no haber error en la expresion
             msgBox.style.display = 'none';
@@ -549,6 +567,19 @@ function handleSignUpOnClick(event) {
         // Recuperación del formulario
         const formularioSignUp = document.getElementById("signUpForm");
         const msgBoxSignUp = document.getElementById("responseMsgSignUp");
+        // Encapsular datos en objeto Customer antes de formatearlos y enviarlos
+        const customer = new Customer(
+                            name.value.trim(),
+                            surname.value.trim(),
+                            initial.value.trim(),
+                            street.value.trim(),
+                            city.value.trim(),
+                            state.value.trim(),
+                            zip.value.trim(),
+                            telf.value.trim(),
+                            mail.value.trim(),
+                            pass.value.trim()
+                );
         // Crear customer en xml
         const xml = `
                     <customer>
@@ -570,10 +601,9 @@ function handleSignUpOnClick(event) {
             {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/xml'
+                    'Content-Type': 'application/json'
                 },
-                body: 
-                        xml
+                body: JSON.stringify(customer)
             }).then(response => {
                 // PROCESADO DE RESPUESTA 403
                 // Correo existente en la base de datos
@@ -631,3 +661,11 @@ function guardarDatosSeison(email) {
     console.log("Data storaged in session");
 }
 
+function fontResize() {
+    const inputs = document.getElementsByTagName("input");
+    // foreach para recorrer los elementos recogidos
+    // ya que segun la documentacion, devuelve todos los inputs
+    for (const input of inputs) {
+       const fuente = input.style.fontSize = '1.25rem' ;
+    }
+}
