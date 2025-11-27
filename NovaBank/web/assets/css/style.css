@@ -371,3 +371,9 @@ body {
     padding: 2rem 1.5rem;
   }
 }
+
+@media (max-width: 764px) {
+    .buttons {
+        flex-direction: column-reverse;
+    }
+}
