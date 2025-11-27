@@ -330,8 +330,17 @@ body {
   width: 40px;
   margin-bottom: 0.5rem;
 }
+
+/*Realizar las siguientes modificaciones sobre el código de su aplicación. 
+Las modificaciones se realizarán sobre una rama llamada eval_NOMBRE_diw 
+(donde NOMBRE es su propio nombre) creada a partir del último commit de su 
+rama principal: 
+
+Modificar la responsividad de la página para no ocultar el contenedor nav 
+cuando el ancho del viewport sea max 764 px.*/
+
 /* responsive*/
-@media (max-width: 768px) {
+@media (max-width: 764px) {
   .header .container {
     flex-direction: column;
     gap: 0.8rem;
@@ -343,7 +352,8 @@ body {
   margin-right: 1rem;
   }
   .nav a{
-    display:none;
+    display:block; 
+    margin:0;
   }
   .banner {
     height: 300px;

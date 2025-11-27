@@ -330,7 +330,8 @@ body {
     font-size: 2rem;
   }
   .nav a{
-    display:none;
+    display:block; 
+    margin:0;
   }
   .cards {
     flex-direction: column;
