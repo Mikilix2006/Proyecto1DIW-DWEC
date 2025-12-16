@@ -24,7 +24,7 @@ class AccountController {
     /*
        =================================================
 
-                 METHODS OF THE CLASS ACCOUNT
+            METHODS OF THE CLASS ACCOUNTCONTROLLER
 
        -------------------------------------------------
 
@@ -46,10 +46,19 @@ class AccountController {
                 -> value = account (the object)
             ~ @throws {Error} with the message if the 
                 server side returns a 500.
+            ~ Takes the customerID from the parameters
+                and searches for all accounts that
+                are related to that specific customerID
+                saving the accountID in the key of a
+                Map() and the actual account on the
+                value.
+                The method uses a GET request to
+                search for all the accounts.
+            ~ Usable by: Admin & User
     
        · METHOD: createAccount(account)
-            ~ @param {Account} account is the
-                account that the user wants to be 
+            ~ @param {AccountController} account is 
+                the account that the user wants to be 
                 created in the server side (POST).
             ~ @returns {Map()} returns the updated Map() 
                 if the account has successfuly been 
@@ -61,27 +70,55 @@ class AccountController {
                 by parameter and creates a structure
                 in json to be sent by a POST.
                 It also calls the 
+                getAccountsByCustomerID method to 
+                update the Map() and return it.
+            ~ Usable by: Admin
+    
+       · METHOD: updateAccount(updatedAccount)
+            ~ @param {AccountController} updatedAccount 
+                is the new account that is going to
+                replace the old one.
+            ~ @returns {Map()} returns the updated Map() 
+                if the account has successfuly been 
+                updated in the server side.
+            ~ @throws {Error} with the message if the 
+                server side returns a 500.
+            ~ Takes the customer data from the
+                sessionStorage and the account passed
+                by parameter and creates a structure
+                in json to be sent by a POST.
+                It also calls the 
                 getAccountsByCustomerID method to update
                 the Map().
+            ~ Usable by: Admin & User
+    
+       · METHOD: deleteAccount(accountID)
+            ~ @param {number} accountID is the ID of 
+                the account that is going to be deleted.
+            ~ @returns {Map()} returns the updated Map() 
+                if the account has successfuly been 
+                deleted in the server side.
+            ~ @throws {Error} with the message if the 
+                server side returns a 500.
+            ~ Takes the account ID and checks if it is
+                empty (of movements) and if so, it deletes
+                the account, if it still has movements,
+                will advice the admin and tell him why he
+                couldn't delete the account.
+            ~ Usable by: Admin
 
        =================================================
      */
     getAccountsByCustomerID(customerID) {
-        // usable by: Admin & User
         
     }
-    createAccount() {
+    createAccount(account) {
         
     }
     updateAccount(updatedAccount) {
-        // usable by: Admin & User
         
     }
     deleteAccount(accountID) {
-        // check if the account is empty (of movements) and if so,
-        // delete the account, else, advice the admin why he
-        // couldn't delete his account
         
-        // usable by: Admin
     }
 }
