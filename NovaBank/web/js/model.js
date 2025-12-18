@@ -43,7 +43,7 @@ class AccountController {
                 be taken.
             ~ @returns {Map()} with a structure like:
                 -> key = account.id
-                -> value = account (the object)
+                -> value = AccountController
             ~ @throws {Error} with the message if the 
                 server side returns a 500.
             ~ Takes the customerID from the parameters
@@ -105,17 +105,122 @@ class AccountController {
                 the account, if it still has movements,
                 will advice the admin and tell him why he
                 couldn't delete the account.
+                It also calls the 
+                getAccountsByCustomerID method to update
+                the Map().
             ~ Usable by: Admin
 
        =================================================
      */
     getAccountsByCustomerID(customerID) {
+        // coger referencia de capa para mensaje 
+        // de informacion al usuario
+        //const msgBoxAccounts = document.getElementById('msgBoxAccounts');
+        var map = new Map();
         
+        fetch("/CRUDBankServerSide/webresources/account",
+            {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                //body: JSON.stringify(account)   <===   ???
+            }).then(response => {
+                // PROCESADO DE RESPUESTA 500
+                if (response.status===500) {
+                    return response.text().then(text => {
+                        throw new Error("An error happend, try again and if the error persists, try again later");
+                    }); // Fin del return
+                } // Fin del if
+                // PROCESADO DE RESPUESTA DESCONOCIDA
+                // Ha habido un error inesperado
+                else if (!response.ok) {
+                    return response.text().then(text => {
+                        throw new Error(text || "An unknown error happend");
+                    }); // Fin del return
+                } // Fin del if
+                return response;
+            })
+            // PROCESAR RESPUESTA OK
+                .then(data => {
+                    // Guardamos datos de en sesion
+                    //guardarDatosSeison(mail.value.trim());
+                    //msgBoxAccounts.style.color = "#5620ad";
+                    //msgBoxAccounts.textContent = "Account created successfuly.";
+                    //msgBoxAccounts.style.display = 'block';
+                    //window.location.href = 'movements.html';
+                    
+                    // RECORRER DATA Y GUARDARLO EN UN MAP PARA RETORNARLO
+                    for (const account of data['account']) {
+                        map.set(account['id'], 
+                                new AccountController(account['id'],
+                                            account['description'],
+                                            account['balance'],
+                                            account['creditLine'],
+                                            account['beginBalance'],
+                                            account['beginBalanceTimestamp'],
+                                            account['type']));
+                    }
+                    return map;
+            })
+            // MOSTRAR ERRORES
+                .catch(e => {
+//                    msgBoxAccounts.style.color = "#ff0000";
+//                    msgBoxAccounts.textContent = "Error: " + e.message;
+//                    msgBoxAccounts.style.display = 'block';
+            });
     }
     createAccount(account) {
+        // coger referencia de capa para mensaje 
+        // de informacion al usuario
+        const msgBoxAccounts = document.getElementById('msgBoxAccounts');
         
+        fetch("/CRUDBankServerSide/webresources/account",
+            {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(account)
+            }).then(response => {
+                // PROCESADO DE RESPUESTA 500
+                if (response.status===500) {
+                    return response.text().then(text => {
+                        throw new Error("An error happend, try again and if the error persists, try again later");
+                    }); // Fin del return
+                } // Fin del if
+                // PROCESADO DE RESPUESTA DESCONOCIDA
+                // Ha habido un error inesperado
+                else if (!response.ok) {
+                    return response.text().then(text => {
+                        throw new Error(text || "An unknown error happend");
+                    }); // Fin del return
+                } // Fin del if
+                return response;
+            })
+            // PROCESAR RESPUESTA OK
+                .then(data => {
+                    // Guardamos datos de en sesion
+                    //guardarDatosSeison(mail.value.trim());
+                    msgBoxAccounts.style.color = "#5620ad";
+                    msgBoxAccounts.textContent = "Account created successfuly.";
+                    msgBoxAccounts.style.display = 'block';
+                    //window.location.href = 'movements.html';
+                    const customerID= sessionStorage.getItem("curtomerID");
+                    if (customerID !== null) {
+                        return getAccountsByCustomerID(customerID);
+                    }
+            })
+            // MOSTRAR ERRORES
+                .catch(e => {
+                    msgBoxAccounts.style.color = "#ff0000";
+                    msgBoxAccounts.textContent = "Error: " + e.message;
+                    msgBoxAccounts.style.display = 'block';
+            });
     }
     updateAccount(updatedAccount) {
+        // Key: the updatedAccount should have 
+        // it's ID, to update it easly
         
     }
     deleteAccount(accountID) {

@@ -49,7 +49,7 @@
 
    The Map() structure is:
    -> key = account.id
-   -> value = account (the object)
+   -> value = AccountController
 
    To add all the accounts to the Map() we will use
    a for that runs over all the accounts recieved
@@ -59,9 +59,26 @@
    =================================================
  */
 
-const reference1 = document.getElementById('elementId');
+const id = document.getElementById('id');
+const description = document.getElementById('description');
+const balance = document.getElementById('balance');
+const creditLine = document.getElementById('creditLine');
+const beginBalance = document.getElementById('beginBalance');
+const beginBalanceTimestamp = document.getElementById('beginBalanceTimestamp');
+const type = document.getElementById('type');
 
 var accountsMap = new Map();
+
+var ac = new AccountController(id.value.trim(),
+                               description.value.trim(),
+                               balance.value.trim(),
+                               creditLine.value.trim(),
+                               beginBalance.value.trim(),
+                               beginBalanceTimestamp.value.trim(),
+                               type.value.trim());
+
+// Crear una cuenta siempre despues de una confirmación
+accountsMap = ac.createAccount(ac);
 
 /*
    =================================================
