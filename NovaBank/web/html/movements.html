@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="es">
+<meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nova Bank - Inicio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/facilities.css">
+  <link rel="stylesheet" href="../css/main.css">
+  <link rel="alternate stylesheet" title="ModoOscuro" id="theme-link" href="css/oscuro.css" disabled>
+<body>
+  <header class="header">
+    <div class="container">
+      <div class="logo">
+        <a href="main.html"><img src="assets/img/logo.png" alt="Nova Bank"></a>
+        <a href="main.html"> <h1>Nova Bank</h1></a>
+      </div>
+      <div class="buttons">
+        <button id="themeToggle" class="btn-theme" onclick="changeTheme();" title="Cambiar tema">
+          <svg id="icon-sun" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m8.485-8.485h1M4.515 12.515h1M17.657 6.343l.707-.707M6.343 17.657l.707-.707M17.657 17.657l.707.707M6.343 6.343l.707.707M12 8a4 4 0 100 8 4 4 0 000-8z"/>
+          </svg>
+          <svg id="icon-moon" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M21 12.79A9 9 0 1111.21 3a7 7 0 109.79 9.79z"/>
+          </svg>
+        </button>
+        <div class="menu-container">
+          <button class="menu-toggle" id="menuBtn" onclick="dropDownMenu();">&#9776;</button>
+          <ul class="dropdown-menu" id="dropdownMenu">
+                <li><a href="changePassword.html" accesskey="c">Cambiar Contraseña <span> Alt + C</span></a></li>
+                <li><a href="index.html" accesskey="H">Ayuda y soporte <span> Alt + H</span></a></li>
+                <li><a id="botonCerrarSesion" onclick="salirSession();" accesskey="S">Cerrar session <span> Alt + S</span></a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </header>
+  <main>
+    <!-- Accessible Basic Table -->
+    <table id="userMovements" aria-label="User Movements" border="1">
+    <!-- Caption should be visible and descriptive -->
+    <caption class="text-left font-semibold mb-2 pb-2">
+    Movimientos del usuario
+    </caption>
+        <thead>
+            <tr>
+                <th scope="col">Identificador</th>
+                <th scope="col">Tipo</th>
+                <th scope="col">Cantidad</th>
+                <th scope="col">Saldo Actual</th>
+                <th scope="col">Fecha y hora</th>
+                <th scope="col">Descripción</th>
+            </tr>
+        </thead>
+        <tbody id="contentMovements">
+            <tr>
+              <td>John Doe</td>
+              <td>John Doe</td>
+              <td>John Doe</td>
+              <td>John Doe</td>
+              <td>John Doe</td>
+              <td>John Doe</td>
+            </tr>
+        </tbody>
+    </table>   
+  </main>
+  <footer class="footer">
+    <div class="logo_footer">
+      <img src="assets/img/logo.png" alt="Nova Bank">
+      <p>Nova Bank</p>
+    </div>
+    <p>© Copyright 2025 Nova Bank. All Rights Reserved.</p>
+  </footer>
+  <script src="../js/facilities.js"></script>
+  <script src="../js/movementsController.js"></script>
+</body>
+</html>
