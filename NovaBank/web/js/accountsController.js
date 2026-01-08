@@ -135,7 +135,7 @@ function* generateAccountRow(accounts) {
 
 console.log("Hola 1");
 const msgBoxAccounts = document.getElementById('msgBoxAccounts');
-fetch("/CRUDBankServerSide/webresources/customer",
+fetch("/CRUDBankServerSide/webresources/account/" + `102263301`,
             {
                 method: 'GET',
                 headers: {
