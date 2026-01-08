@@ -115,7 +115,8 @@ class AccountController {
     getAccountsByCustomerID(customerID) {
         // coger referencia de capa para mensaje 
         // de informacion al usuario
-        //const msgBoxAccounts = document.getElementById('msgBoxAccounts');
+        const msgBoxAccounts = document.getElementById('msgBoxAccounts');
+        // Crear mapa para almacenar cuentas
         var map = new Map();
         
         fetch("/CRUDBankServerSide/webresources/account",
@@ -151,17 +152,18 @@ class AccountController {
                     //window.location.href = 'movements.html';
                     
                     // RECORRER DATA Y GUARDARLO EN UN MAP PARA RETORNARLO
-                    for (const account of data['account']) {
-                        map.set(account['id'], 
-                                new AccountController(account['id'],
-                                            account['description'],
-                                            account['balance'],
-                                            account['creditLine'],
-                                            account['beginBalance'],
-                                            account['beginBalanceTimestamp'],
-                                            account['type']));
-                    }
-                    return map;
+//                    for (const account of data['account']) {
+//                        map.set(account['id'], 
+//                                new AccountController(account['id'],
+//                                            account['description'],
+//                                            account['balance'],
+//                                            account['creditLine'],
+//                                            account['beginBalance'],
+//                                            account['beginBalanceTimestamp'],
+//                                            account['type']));
+//                    }
+//                    return map;
+                    return data;
             })
             // MOSTRAR ERRORES
                 .catch(e => {
@@ -209,6 +211,8 @@ class AccountController {
                     const customerID= sessionStorage.getItem("curtomerID");
                     if (customerID !== null) {
                         return getAccountsByCustomerID(customerID);
+                    } else {
+                        throw new Error("No cusotmer ID storaged in the sesison");
                     }
             })
             // MOSTRAR ERRORES

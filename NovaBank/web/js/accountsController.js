@@ -2,7 +2,7 @@
    ================================================
    
     THIS JS FILE IS IN CHARGE OF THE BEHAVIOUR OF
-    THE ACCOUNTS SECTION LOCATED IN accounts.html
+    THE ACCOUNTS SECTION LOCATED IN cuentas.html
    
    -----------------------------------------------
    
@@ -59,26 +59,26 @@
    =================================================
  */
 
-const id = document.getElementById('id');
-const description = document.getElementById('description');
-const balance = document.getElementById('balance');
-const creditLine = document.getElementById('creditLine');
-const beginBalance = document.getElementById('beginBalance');
-const beginBalanceTimestamp = document.getElementById('beginBalanceTimestamp');
-const type = document.getElementById('type');
-
-var accountsMap = new Map();
-
-var ac = new AccountController(id.value.trim(),
-                               description.value.trim(),
-                               balance.value.trim(),
-                               creditLine.value.trim(),
-                               beginBalance.value.trim(),
-                               beginBalanceTimestamp.value.trim(),
-                               type.value.trim());
-
-// Crear una cuenta siempre despues de una confirmación
-accountsMap = ac.createAccount(ac);
+//const id = document.getElementById('id');
+//const description = document.getElementById('description');
+//const balance = document.getElementById('balance');
+//const creditLine = document.getElementById('creditLine');
+//const beginBalance = document.getElementById('beginBalance');
+//const beginBalanceTimestamp = document.getElementById('beginBalanceTimestamp');
+//const type = document.getElementById('type');
+//
+//var accountsMap = new Map();
+//
+//var ac = new AccountController(id.value.trim(),
+//                               description.value.trim(),
+//                               balance.value.trim(),
+//                               creditLine.value.trim(),
+//                               beginBalance.value.trim(),
+//                               beginBalanceTimestamp.value.trim(),
+//                               type.value.trim());
+//
+//// Crear una cuenta siempre despues de una confirmación
+//accountsMap = ac.createAccount(ac);
 
 /*
    =================================================
@@ -95,7 +95,7 @@ accountsMap = ac.createAccount(ac);
    =================================================
  */
 
-reference1.addEventListener('element',handleReferencia1OnEvent);
+//reference1.addEventListener('element',handleReferencia1OnEvent);
 
 /*
    =================================================
@@ -127,3 +127,47 @@ function handleReferencia1OnEvent() {
    
    =================================================
  */
+
+function* generateAccountRow(accounts) {
+    // generator
+    
+}
+
+console.log("Hola 1");
+const msgBoxAccounts = document.getElementById('msgBoxAccounts');
+fetch("/CRUDBankServerSide/webresources/customer",
+            {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                //body: JSON.stringify(account)   <===   ???
+            }).then(response => {
+                // PROCESADO DE RESPUESTA 500
+                if (response.status===500) {
+                    return response.text().then(text => {
+                        throw new Error("An error happend, try again and if the error persists, try again later");
+                    }); // Fin del return
+                } // Fin del if
+                // PROCESADO DE RESPUESTA DESCONOCIDA
+                // Ha habido un error inesperado
+                else if (!response.ok) {
+                    return response.text().then(text => {
+                        throw new Error(text || "An unknown error happend");
+                    }); // Fin del return
+                } // Fin del if
+                return response;
+            })
+            // PROCESAR RESPUESTA OK
+                .then(data => {
+                    msgBoxAccounts.style.color = "#5620ad";
+                    msgBoxAccounts.textContent = "Todo bien";
+                    msgBoxAccounts.style.display = 'block';
+                    return data;
+            })
+            // MOSTRAR ERRORES
+                .catch(e => {
+                    msgBoxAccounts.style.color = "#ff0000";
+                    msgBoxAccounts.textContent = "Error: " + e.message;
+                    msgBoxAccounts.style.display = 'block';
+            });

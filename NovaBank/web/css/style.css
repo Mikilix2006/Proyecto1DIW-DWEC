@@ -237,6 +237,10 @@ body {
   outline: none;
   transition: border 0.3s ease;
 }
+/*tablas*/
+#accounts-table {
+    border: solid 1px black;
+}
 /*ERRORES Y JERARQUÍA DE CSS*/
 .form-group input.input-error {
   border: 2px solid #e63946;
