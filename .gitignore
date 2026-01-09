@@ -3,3 +3,6 @@
 /NovaBank/dist/
 /build/
 /dist/
+/nbproject/
+/build.xml
+/glassfish-web.xml
