@@ -133,9 +133,12 @@ function* generateAccountRow(accounts) {
     
 }
 
+
 console.log("Hola 1");
+const SERVICE_URL = "/CRUDBankServerSide/webresources/account/customer/";
+const idCustomer = "299985563";
 const msgBoxAccounts = document.getElementById('msgBoxAccounts');
-fetch("/CRUDBankServerSide/webresources/account/" + `102263301`,
+fetch(SERVICE_URL +`${encodeURIComponent(idCustomer)}`,
             {
                 method: 'GET',
                 headers: {
