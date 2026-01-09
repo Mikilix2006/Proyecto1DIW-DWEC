@@ -8,14 +8,18 @@
       ATTRIBUTES TO BE USED BY THIS CONTROLLER
    =================================================
  */
-
+const idUser = "2654785441"; //id de prueba
+const SERVICE_URL = "/CRUDBankServerSide/webresources/movement/account/";
 
 /*
    =================================================
          LISTENERS FOR HANDLING EVENTS ON HTML
    =================================================
  */
-
+//This listener load the R procedure of the app. Show all the movements of the current acount
+window.addEventListener("load", (event) => {
+  buildMovementsTable();
+});
 /*
    =================================================
        EVENT HANDLERS CALLED FROM THE LISTENERS
@@ -32,8 +36,6 @@
 /**
 * Fetch users in XML format
 */
-const idUser = "2654785441";
-const SERVICE_URL = "/CRUDBankServerSide/webresources/movement/account/";
 
 async function fetchMovements() {
     try {
@@ -86,4 +88,3 @@ async function buildMovementsTable() {
 }
 
 // Llamada al cargar la página
-buildMovementsTable();
