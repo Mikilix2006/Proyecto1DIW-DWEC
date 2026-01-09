@@ -17,9 +17,7 @@ const SERVICE_URL = "/CRUDBankServerSide/webresources/movement/account/";
    =================================================
  */
 //This listener load the R procedure of the app. Show all the movements of the current acount
-window.addEventListener("load", (event) => {
-  buildMovementsTable();
-});
+
 /*
    =================================================
        EVENT HANDLERS CALLED FROM THE LISTENERS
@@ -88,3 +86,4 @@ async function buildMovementsTable() {
 }
 
 // Llamada al cargar la página
+buildMovementsTable();
