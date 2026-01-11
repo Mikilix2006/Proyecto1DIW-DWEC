@@ -59,6 +59,9 @@
    =================================================
  */
 
+const SERVICE_URL = "/CRUDBankServerSide/webresources/account/customer/";
+const idCustomer = sessionStorage.getItem("customerID");
+
 //const id = document.getElementById('id');
 //const description = document.getElementById('description');
 //const balance = document.getElementById('balance');
@@ -133,44 +136,55 @@ function* generateAccountRow(accounts) {
     
 }
 
-
-console.log("Hola 1");
-const SERVICE_URL = "/CRUDBankServerSide/webresources/account/customer/";
-const idCustomer = "299985563";
 const msgBoxAccounts = document.getElementById('msgBoxAccounts');
-fetch(SERVICE_URL +`${encodeURIComponent(idCustomer)}`,
-            {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                //body: JSON.stringify(account)   <===   ???
-            }).then(response => {
-                // PROCESADO DE RESPUESTA 500
-                if (response.status===500) {
-                    return response.text().then(text => {
-                        throw new Error("An error happend, try again and if the error persists, try again later");
-                    }); // Fin del return
-                } // Fin del if
-                // PROCESADO DE RESPUESTA DESCONOCIDA
-                // Ha habido un error inesperado
-                else if (!response.ok) {
-                    return response.text().then(text => {
-                        throw new Error(text || "An unknown error happend");
-                    }); // Fin del return
-                } // Fin del if
-                return response;
-            })
-            // PROCESAR RESPUESTA OK
-                .then(data => {
-                    msgBoxAccounts.style.color = "#5620ad";
-                    msgBoxAccounts.textContent = "Todo bien";
-                    msgBoxAccounts.style.display = 'block';
-                    return data;
-            })
-            // MOSTRAR ERRORES
-                .catch(e => {
-                    msgBoxAccounts.style.color = "#ff0000";
-                    msgBoxAccounts.textContent = "Error: " + e.message;
-                    msgBoxAccounts.style.display = 'block';
-            });
+
+
+async function fetchAccounts() {
+    try {
+        const response = await fetch(SERVICE_URL +`${encodeURIComponent(idCustomer)}`, {
+            method: "GET",
+            headers: {
+                "Accept": "application/json"
+            }
+            // Eliminado el body: JSON.stringify(), GET no permite cuerpo
+        });
+
+        if (!response.ok) throw new Error("Error en la petición");
+        
+        return await response.json(); // Importante retornar el JSON
+    } catch (error) {
+        console.error("Error al obtener cuentas:", error);
+        return []; // Retorna un array vacío para evitar que el generador falle
+    }
+}
+
+function* accountRowGenerator(accounts) {
+    for (const account of accounts) {
+        const tr = document.createElement("tr");
+        // Corregido "tiemstamp" a "timestamp" (asumiendo que así viene del servidor)
+        ["id", "description", "balance", "creditLine", "beginBalance", "beginBalanceTimestamp", "type"].forEach(field => {
+            const td = document.createElement("td");
+            td.textContent = account[field] ?? "N/A"; // Evita valores vacíos
+            tr.appendChild(td);
+        });
+        yield tr;
+    }
+}
+
+async function buildAccountsTable() {
+    const accounts = await fetchAccounts(); // Cambiado 'users' por 'movements'
+    const tbody = document.querySelector("#contentAccounts");
+    
+    if (!tbody) return; // Seguridad si el elemento no existe en el DOM
+    
+    // Limpiar tabla antes de insertar (opcional)
+    tbody.innerHTML = "";
+
+    const rowGenerator = accountRowGenerator(accounts);
+    for (const row of rowGenerator) {
+        tbody.appendChild(row);
+    }
+}
+
+// Llamada al cargar la página
+buildAccountsTable();
