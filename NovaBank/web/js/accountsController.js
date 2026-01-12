@@ -61,8 +61,68 @@
 
 // fetch resources
 const SERVICE_URL = "/CRUDBankServerSide/webresources/account/customer/";
-sessionStorage.setItem("customerID", "102263301");
-const idCustomer = sessionStorage.getItem("customerID");
+
+/*
+        ESTRUCTURA DEL XML PARA CREAR UNA CUENTA ASOCIADA A UN CUSTOMER
+        <account>
+            <balance>999.99</balance>
+            <beginBalance>999.99</beginBalance>
+            <beginBalanceTimestamp>2019-01-14T19:19:04+01:00</beginBalanceTimestamp>
+            <creditLine>0.0</creditLine>
+            <customers>
+                <city>New York</city>
+                <email>jsmith@enterprise.net</email>
+                <firstName>John</firstName>
+                <id>102263301</id>
+                <lastName>Smith</lastName>
+                <middleInitial>S.</middleInitial>
+                <password>abcd*1234</password>
+                <phone>15556969699</phone>
+                <state>New York</state>
+                <street>163rd St.</street>
+                <zip>10032</zip>
+            </customers>
+            <movements>
+                <amount>100.0</amount>
+                <balance>100.0</balance>
+                <description>Deposit</description>
+                <id>6</id>
+                <timestamp>2019-02-02T16:56:44+01:00</timestamp>
+            </movements>
+            <movements>
+                <amount>100.0</amount>
+                <balance>200.0</balance>
+                <description>Deposit</description>
+                <id>7</id>
+                <timestamp>2019-02-02T16:57:40+01:00</timestamp>
+            </movements>
+            <description>Cuenta de prueba 1</description>
+            <id>1234567899</id>
+            <type>STANDARD</type>
+       </account> 
+*/
+
+sessionStorage.setItem("account.account", "999.99");
+sessionStorage.setItem("account.beginBalance", "999.99");
+sessionStorage.setItem("account.beginBalanceTimestamp", "2019-01-14T19:19:04+01:00");
+sessionStorage.setItem("account.creditLine", "0.0");
+sessionStorage.setItem("account.customers", "New York");
+sessionStorage.setItem("account.description", "Cuenta de prueba 1");
+sessionStorage.setItem("account.id", "1234567899");
+sessionStorage.setItem("account.type", "STANDARD");
+sessionStorage.setItem("account.customers.city", "New York");
+sessionStorage.setItem("account.customers.email", "jsmith@enterprise.net");
+sessionStorage.setItem("account.customers.firstName", "John");
+sessionStorage.setItem("account.customers.id", "102263301");
+sessionStorage.setItem("account.customers.lastName", "Smith");
+sessionStorage.setItem("account.customers.middleInitial", "S.");
+sessionStorage.setItem("account.customers.password", "abcd*1234");
+sessionStorage.setItem("account.customers.phone", "15556969699");
+sessionStorage.setItem("account.customers.state", "New York");
+sessionStorage.setItem("account.customers.street", "163rd St.");
+sessionStorage.setItem("account.customers.zip", "10032");
+
+const idCustomer = sessionStorage.getItem("account.customers.id");
 
 // user info message box
 const msgBoxAccounts = document.getElementById('msgBoxAccounts');
@@ -146,30 +206,7 @@ async function createAccount() {
         movements:[],
         type:"CREDIT"
     }
-    /*
-        <customer>
-           <accounts>
-               <balance>999.99</balance>
-               <beginBalance>999.99</beginBalance>
-               <beginBalanceTimestamp>2019-01-14T19:19:04+01:00</beginBalanceTimestamp>
-               <creditLine>0.0</creditLine>
-               <description>Cuenta de prueba 1</description>
-               <id>1234567899</id>
-               <type>STANDARD</type>
-           </accounts>
-           <city>New York</city>
-           <email>jsmith@enterprise.net</email>
-           <firstName>John</firstName>
-           <id>102263301</id>
-           <lastName>Smith</lastName>
-           <middleInitial>S.</middleInitial>
-           <password>abcd*1234</password>
-           <phone>15556969699</phone>
-           <state>New York</state>
-           <street>163rd St.</street>
-           <zip>10032</zip>
-        </customer>
-     */
+    
     
 }
 
@@ -177,11 +214,14 @@ async function createAccount() {
 function* accountRowGenerator(accounts) {
     for (const account of accounts) {
         const tr = document.createElement("tr");
+        var accID;
         // Corregido "tiemstamp" a "timestamp" (asumiendo que así viene del servidor)
         ["id", "type", "description", "creditLine", "beginBalanceTimestamp", "beginBalance", "balance"].forEach(field => {
             const td = document.createElement("td");
             td.textContent = account[field]; // Evita valores vacíos
             tr.appendChild(td);
+            // saves the account id for the button data attribute
+            if (field === "id") accID = account[field];
         });
         
         /*
@@ -189,6 +229,18 @@ function* accountRowGenerator(accounts) {
          * los botones para editar y borrar esa cuenta para que estén
          * en la misma fila que la cuenta a la que están asociados.
          */
+        // Create necessary HTML elements
+        const tdButtons = document.createElement("td");
+        const buttonEdit = document.createElement("button");
+        const buttonDelete = document.createElement("button");
+        // IMG
+        buttonEdit.textContent = accId;
+        buttonDelete.textContent = "IMG2";
+        
+        tdButtons.appendChild(buttonEdit);
+        tdButtons.appendChild(buttonDelete);
+        
+        tr.appendChild(tdButtons);
         
         yield tr;
     }
