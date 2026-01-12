@@ -371,3 +371,17 @@ body {
     padding: 2rem 1.5rem;
   }
 }
+
+/*tablas*/
+#accounts-table, th, td {
+    border: solid 1px black;
+    padding: 35px;
+    text-align: center;
+}
+
+#table-section {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    margin-top: 2.5rem;
+}

@@ -112,6 +112,7 @@ class AccountController {
 
        =================================================
      */
+    // Deprecated
     getAccountsByCustomerID(customerID) {
         // coger referencia de capa para mensaje 
         // de informacion al usuario

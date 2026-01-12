@@ -2,16 +2,16 @@
    ================================================
    
     THIS JS FILE IS IN CHARGE OF THE BEHAVIOUR OF
-    THE ACCOUNTS SECTION LOCATED IN cuentas.html
+    THE ACCOUNTS SECTION LOCATED IN main.html
    
    -----------------------------------------------
    
    The file includes the recovery of the accounts
-   that is going to be setted on a Map.
+   that are going to be setted on an Array.
    
    Then the accounts of a given Customer ID passed
    by the sessionStorage, will be displayed on a
-   modificable table on html/accounts.html.
+   modificable table on html/main.html.
    
    The user can add, delete or modify data from
    that table and it will be checked in this file
@@ -33,7 +33,7 @@
    -------------------------------------------------
    
    Takes the necessary elements from
-   html/accounts.html to be handled later by the
+   html/main.html to be handled later by the
    event handlers.
    
    All the elements on the html/accounts.html that 
@@ -59,29 +59,13 @@
    =================================================
  */
 
+// fetch resources
 const SERVICE_URL = "/CRUDBankServerSide/webresources/account/customer/";
+sessionStorage.setItem("customerID", "102263301");
 const idCustomer = sessionStorage.getItem("customerID");
 
-//const id = document.getElementById('id');
-//const description = document.getElementById('description');
-//const balance = document.getElementById('balance');
-//const creditLine = document.getElementById('creditLine');
-//const beginBalance = document.getElementById('beginBalance');
-//const beginBalanceTimestamp = document.getElementById('beginBalanceTimestamp');
-//const type = document.getElementById('type');
-//
-//var accountsMap = new Map();
-//
-//var ac = new AccountController(id.value.trim(),
-//                               description.value.trim(),
-//                               balance.value.trim(),
-//                               creditLine.value.trim(),
-//                               beginBalance.value.trim(),
-//                               beginBalanceTimestamp.value.trim(),
-//                               type.value.trim());
-//
-//// Crear una cuenta siempre despues de una confirmación
-//accountsMap = ac.createAccount(ac);
+// user info message box
+const msgBoxAccounts = document.getElementById('msgBoxAccounts');
 
 /*
    =================================================
@@ -131,13 +115,6 @@ function handleReferencia1OnEvent() {
    =================================================
  */
 
-function* generateAccountRow(accounts) {
-    // generator
-    
-}
-
-const msgBoxAccounts = document.getElementById('msgBoxAccounts');
-
 
 async function fetchAccounts() {
     try {
@@ -158,26 +135,81 @@ async function fetchAccounts() {
     }
 }
 
+async function createAccount() {
+    const account = {
+        balance: 200.0,
+        beginBalance: 200.0,
+        beginBalanceTimestamp:"2025-12-14T19:28:28+01:00",
+        creditLine:500.0,
+        description:"Cuenta de prueba 1",
+        id:0123456789,
+        movements:[],
+        type:"CREDIT"
+    }
+    /*
+        <customer>
+           <accounts>
+               <balance>999.99</balance>
+               <beginBalance>999.99</beginBalance>
+               <beginBalanceTimestamp>2019-01-14T19:19:04+01:00</beginBalanceTimestamp>
+               <creditLine>0.0</creditLine>
+               <description>Cuenta de prueba 1</description>
+               <id>1234567899</id>
+               <type>STANDARD</type>
+           </accounts>
+           <city>New York</city>
+           <email>jsmith@enterprise.net</email>
+           <firstName>John</firstName>
+           <id>102263301</id>
+           <lastName>Smith</lastName>
+           <middleInitial>S.</middleInitial>
+           <password>abcd*1234</password>
+           <phone>15556969699</phone>
+           <state>New York</state>
+           <street>163rd St.</street>
+           <zip>10032</zip>
+        </customer>
+     */
+    
+}
+
+
 function* accountRowGenerator(accounts) {
     for (const account of accounts) {
         const tr = document.createElement("tr");
         // Corregido "tiemstamp" a "timestamp" (asumiendo que así viene del servidor)
-        ["id", "description", "balance", "creditLine", "beginBalance", "beginBalanceTimestamp", "type"].forEach(field => {
+        ["id", "type", "description", "creditLine", "beginBalanceTimestamp", "beginBalance", "balance"].forEach(field => {
             const td = document.createElement("td");
-            td.textContent = account[field] ?? "N/A"; // Evita valores vacíos
+            td.textContent = account[field]; // Evita valores vacíos
             tr.appendChild(td);
         });
+        
+        /*
+         * Cuando termine el forEach, añadir en la sección "Acción"
+         * los botones para editar y borrar esa cuenta para que estén
+         * en la misma fila que la cuenta a la que están asociados.
+         */
+        
         yield tr;
     }
 }
 
+/**
+ * Async function that calls the fetchAccounts function to get the
+ * accounts of a customer ID passed by the session storage and
+ * then returns nothing if there are no accounts or calls the
+ * accountRowGenerator function to build the table for these
+ * accounts and display the data.
+ * 
+ * @returns {undefined} nothing if no accounts where given
+ */
 async function buildAccountsTable() {
-    const accounts = await fetchAccounts(); // Cambiado 'users' por 'movements'
+    const accounts = await fetchAccounts(); // Fetching accounts into const
     const tbody = document.querySelector("#contentAccounts");
     
-    if (!tbody) return; // Seguridad si el elemento no existe en el DOM
+    if (!tbody) return; // Security if the element doesn't exists in the DOM
     
-    // Limpiar tabla antes de insertar (opcional)
+    // Clean table before insert (just in case)
     tbody.innerHTML = "";
 
     const rowGenerator = accountRowGenerator(accounts);
@@ -186,5 +218,5 @@ async function buildAccountsTable() {
     }
 }
 
-// Llamada al cargar la página
+// Call when loading page
 buildAccountsTable();
