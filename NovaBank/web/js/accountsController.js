@@ -58,9 +58,13 @@
    
    =================================================
  */
+// Call when page loaded all the elements
+document.addEventListener("DOMContentLoaded", buildAccountsTable);
 
 // fetch resources
-const SERVICE_URL = "/CRUDBankServerSide/webresources/account/customer/";
+const GET_ALL_SERVICE_URL = "/CRUDBankServerSide/webresources/account/customer/";
+const GET_BY_ID_SERVICE_URL = "/CRUDBankServerSide/webresources/account/";
+const DELETE_SERVICE_URL = "/CRUDBankServerSide/webresources/account/";
 
 /*
         ESTRUCTURA DEL XML PARA CREAR UNA CUENTA ASOCIADA A UN CUSTOMER
@@ -99,10 +103,10 @@ const SERVICE_URL = "/CRUDBankServerSide/webresources/account/customer/";
             <description>Cuenta de prueba 1</description>
             <id>1234567899</id>
             <type>STANDARD</type>
-       </account> 
+       </account>
 */
 
-sessionStorage.setItem("account.account", "999.99");
+sessionStorage.setItem("account.balance", "999.99");
 sessionStorage.setItem("account.beginBalance", "999.99");
 sessionStorage.setItem("account.beginBalanceTimestamp", "2019-01-14T19:19:04+01:00");
 sessionStorage.setItem("account.creditLine", "0.0");
@@ -110,18 +114,19 @@ sessionStorage.setItem("account.customers", "New York");
 sessionStorage.setItem("account.description", "Cuenta de prueba 1");
 sessionStorage.setItem("account.id", "1234567899");
 sessionStorage.setItem("account.type", "STANDARD");
-sessionStorage.setItem("account.customers.city", "New York");
-sessionStorage.setItem("account.customers.email", "jsmith@enterprise.net");
-sessionStorage.setItem("account.customers.firstName", "John");
+//sessionStorage.setItem("account.customers.city", "New York");
+//sessionStorage.setItem("account.customers.email", "jsmith@enterprise.net");
+//sessionStorage.setItem("account.customers.firstName", "John");
 sessionStorage.setItem("account.customers.id", "102263301");
-sessionStorage.setItem("account.customers.lastName", "Smith");
-sessionStorage.setItem("account.customers.middleInitial", "S.");
-sessionStorage.setItem("account.customers.password", "abcd*1234");
-sessionStorage.setItem("account.customers.phone", "15556969699");
-sessionStorage.setItem("account.customers.state", "New York");
-sessionStorage.setItem("account.customers.street", "163rd St.");
-sessionStorage.setItem("account.customers.zip", "10032");
+//sessionStorage.setItem("account.customers.lastName", "Smith");
+//sessionStorage.setItem("account.customers.middleInitial", "S.");
+//sessionStorage.setItem("account.customers.password", "abcd*1234");
+//sessionStorage.setItem("account.customers.phone", "15556969699");
+//sessionStorage.setItem("account.customers.state", "New York");
+//sessionStorage.setItem("account.customers.street", "163rd St.");
+//sessionStorage.setItem("account.customers.zip", "10032");
 
+// keep the customer data in constants
 const idCustomer = sessionStorage.getItem("account.customers.id");
 
 // user info message box
@@ -166,7 +171,7 @@ function handleReferencia1OnEvent() {
 /*
    =================================================
    
-                   OTHER FUNCTIONS
+                    CRUD FUNCTIONS
    
    -------------------------------------------------
        
@@ -176,9 +181,9 @@ function handleReferencia1OnEvent() {
  */
 
 
-async function fetchAccounts() {
+async function getAccounts() {
     try {
-        const response = await fetch(SERVICE_URL +`${encodeURIComponent(idCustomer)}`, {
+        const response = await fetch(GET_ALL_SERVICE_URL +`${encodeURIComponent(idCustomer)}`, {
             method: "GET",
             headers: {
                 "Accept": "application/json"
@@ -195,22 +200,114 @@ async function fetchAccounts() {
     }
 }
 
+async function getAccountByID(accountID) {
+    try {
+        const response = await fetch(GET_BY_ID_SERVICE_URL +`${encodeURIComponent(accountID)}`, {
+            method: "GET",
+            headers: {
+                "Accept": "application/json"
+            }
+            // Eliminado el body: JSON.stringify(), GET no permite cuerpo
+        });
+
+        if (!response.ok) throw new Error("Error en la petición");
+        
+        return await response.json(); // Importante retornar el JSON
+    } catch (error) {
+        console.error("Error al obtener la cuenta:", error);
+        return []; // Retorna un array vacío para evitar que el generador falle
+    }
+}
+
+/*
+ * Building function...
+ * 
+ * @returns {undefined}
+ */
 async function createAccount() {
+    // 
     const account = {
         balance: 200.0,
         beginBalance: 200.0,
         beginBalanceTimestamp:"2025-12-14T19:28:28+01:00",
         creditLine:500.0,
         description:"Cuenta de prueba 1",
-        id:0123456789,
-        movements:[],
+        id:0123456789, // 10 digit-generated number
+        //movements:[], no movements in new accounts
         type:"CREDIT"
     }
     
     
 }
 
+/*
+ * Building function...
+ * 
+ * @param {type} evt
+ * @returns {undefined}
+ */
+async function deleteAccount(evt) {
+    const accountID = evt.target.dataset.accId;
+    console.log("Borrar cuenta: " + accountID);
+    try {
+        // Checks if the account has movements
+        // true: throw new Error
+        // false: proceed
+        if (hasMovements(accountID))
+            throw new Error("La cuenta tiene movimientos, no puede ser borrada");
+        // At this point the account doesn't have movements
+        const response = await fetch(DELETE_SERVICE_URL +`${encodeURIComponent(accountID)}`, {
+            method: "DELETE",
+            headers: {
+                "Accept": "application/json"
+            }
+        });
 
+        if (!response.ok) throw new Error("Error en la petición");
+
+
+
+        // Asks for a confirmation
+        // true: pass
+        // false: exit the function
+
+        buildAccountsTable(); // Reloads the table
+        
+    } catch (error) {
+        window.alert("La cuenta tiene movimientos, no puede ser borrada");
+        console.error("Error al borrar la cuenta:", error);
+    }
+}
+
+/*
+ * Building function...
+ * 
+ * @param {type} evt
+ * @returns {undefined}
+ */
+async function updateAccount(evt) {
+    const accountID = evt.target.dataset.accId;
+    console.log("Editar cuenta: " + accountID);
+}
+
+/*
+   =================================================
+   
+                   OTHER FUNCTIONS
+   
+   -------------------------------------------------
+       
+   These functions 
+   
+   =================================================
+ */
+
+/*
+ * FUNC DESCRIPTION
+ * 
+ * @param {type} accounts are the accounts in json object format
+ * @returns {Generator}
+ */
 function* accountRowGenerator(accounts) {
     for (const account of accounts) {
         const tr = document.createElement("tr");
@@ -234,14 +331,20 @@ function* accountRowGenerator(accounts) {
         const buttonEdit = document.createElement("button");
         const buttonDelete = document.createElement("button");
         // IMG
-        buttonEdit.textContent = accId;
-        buttonDelete.textContent = "IMG2";
-        
+        buttonEdit.textContent = "EDIT";
+        buttonDelete.textContent = "DEL";
+        // Button id attributes
+        buttonEdit.setAttribute("data-acc-id", accID);
+        buttonDelete.setAttribute("data-acc-id", accID);
+        // Button name attributes
+        buttonEdit.setAttribute("name", "edit-button");
+        buttonDelete.setAttribute("name", "delete-button");
+        // Put buttons into td
         tdButtons.appendChild(buttonEdit);
         tdButtons.appendChild(buttonDelete);
-        
+        // Put td into tr
         tr.appendChild(tdButtons);
-        
+        // Show the table row
         yield tr;
     }
 }
@@ -256,11 +359,10 @@ function* accountRowGenerator(accounts) {
  * @returns {undefined} nothing if no accounts where given
  */
 async function buildAccountsTable() {
-    const accounts = await fetchAccounts(); // Fetching accounts into const
+    const accounts = await getAccounts(); // Fetching accounts into const
     const tbody = document.querySelector("#contentAccounts");
     
     if (!tbody) return; // Security if the element doesn't exists in the DOM
-    
     // Clean table before insert (just in case)
     tbody.innerHTML = "";
 
@@ -268,7 +370,22 @@ async function buildAccountsTable() {
     for (const row of rowGenerator) {
         tbody.appendChild(row);
     }
+    // Recover the buttons into arrays
+    let editButtons = document.getElementsByName("edit-button");
+    let deleteButtons = document.getElementsByName("delete-button");
+    // Set listeners into each button
+    for (const editButton of editButtons) {
+        editButton.addEventListener("click",updateAccount);
+    }
+    for (const deleteButton of deleteButtons) {
+        deleteButton.addEventListener("click",deleteAccount);
+    }
 }
 
-// Call when loading page
-buildAccountsTable();
+function hasMovements(accountID) {
+    const cuenta = getAccountByID(accountID);
+    if (cuenta.movements === null) {
+        return false;
+    }
+    return true;
+}
