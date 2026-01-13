@@ -36,21 +36,25 @@
    html/main.html to be handled later by the
    event handlers.
    
-   All the elements on the html/accounts.html that 
+   All the elements on the html/main.html that 
    need to be handled, have an id called like 
-   it's name.
+   it's name attribute.
    
    Each of those elements are going to have an
    instance with the element content taken by
-   the method reference.getElementById().
+   the methods reference.getElementById() and
+   reference.getElementsByTagName().
    
+   DEPRECATED
    Also a Map() will be instanced to contain
    all the Accounts of the given Costumer ID.
 
+   DEPRECATED
    The Map() structure is:
    -> key = account.id
    -> value = AccountController
-
+    
+   DEPRECATTED
    To add all the accounts to the Map() we will use
    a for that runs over all the accounts recieved
    by the fetch method and the GET request and
@@ -101,7 +105,7 @@ const DELETE_SERVICE_URL = "/CRUDBankServerSide/webresources/account/";
                 <timestamp>2019-02-02T16:57:40+01:00</timestamp>
             </movements>
             <description>Cuenta de prueba 1</description>
-            <id>1234567899</id>
+            <id>1111111111</id>
             <type>STANDARD</type>
        </account>
 */
@@ -114,17 +118,17 @@ sessionStorage.setItem("account.customers", "New York");
 sessionStorage.setItem("account.description", "Cuenta de prueba 1");
 sessionStorage.setItem("account.id", "1234567899");
 sessionStorage.setItem("account.type", "STANDARD");
-//sessionStorage.setItem("account.customers.city", "New York");
-//sessionStorage.setItem("account.customers.email", "jsmith@enterprise.net");
-//sessionStorage.setItem("account.customers.firstName", "John");
+sessionStorage.setItem("account.customers.city", "New York");
+sessionStorage.setItem("account.customers.email", "jsmith@enterprise.net");
+sessionStorage.setItem("account.customers.firstName", "John");
 sessionStorage.setItem("account.customers.id", "102263301");
-//sessionStorage.setItem("account.customers.lastName", "Smith");
-//sessionStorage.setItem("account.customers.middleInitial", "S.");
-//sessionStorage.setItem("account.customers.password", "abcd*1234");
-//sessionStorage.setItem("account.customers.phone", "15556969699");
-//sessionStorage.setItem("account.customers.state", "New York");
-//sessionStorage.setItem("account.customers.street", "163rd St.");
-//sessionStorage.setItem("account.customers.zip", "10032");
+sessionStorage.setItem("account.customers.lastName", "Smith");
+sessionStorage.setItem("account.customers.middleInitial", "S.");
+sessionStorage.setItem("account.customers.password", "abcd*1234");
+sessionStorage.setItem("account.customers.phone", "15556969699");
+sessionStorage.setItem("account.customers.state", "New York");
+sessionStorage.setItem("account.customers.street", "163rd St.");
+sessionStorage.setItem("account.customers.zip", "10032");
 
 // keep the customer data in constants
 const idCustomer = sessionStorage.getItem("account.customers.id");
@@ -175,12 +179,30 @@ function handleReferencia1OnEvent() {
    
    -------------------------------------------------
        
-   These functions 
+   These functions fetch resources in the server
+   side.
+
+   The funcitons create, recover, update or delete
+   accounts.
+
+   POSSIBLE HTTP RESPONSES:
+   · 200: The GET method will return data if there
+          weren't no problems. The data returned
+          will always be in json format.
+   · 500: This response can happen if the service
+          of mysql is not running, there is no
+          internet connection or forbidden actions
+          (like creating new accounts with existing
+          ID) were attempted.
    
    =================================================
  */
 
-
+/*
+ * DOCUMENTAR METODO
+ * 
+ * @returns {Array}
+ */
 async function getAccounts() {
     try {
         const response = await fetch(GET_ALL_SERVICE_URL +`${encodeURIComponent(idCustomer)}`, {
@@ -200,6 +222,17 @@ async function getAccounts() {
     }
 }
 
+/*
+ * By an ID passed by parameters, search the account related to
+ * that ID in the service to return it in json format.
+ * 
+ * The function uses the GET method and 
+ * the fetch method.
+ * 
+ * If no accounts were found, will return null.
+ * 
+ * @returns {json} with the account or null if no account found
+ */
 async function getAccountByID(accountID) {
     try {
         const response = await fetch(GET_BY_ID_SERVICE_URL +`${encodeURIComponent(accountID)}`, {
@@ -212,15 +245,17 @@ async function getAccountByID(accountID) {
 
         if (!response.ok) throw new Error("Error en la petición");
         
-        return await response.json(); // Importante retornar el JSON
+        return await response.json(); // Return the json os the full account
     } catch (error) {
-        console.error("Error al obtener la cuenta:", error);
-        return []; // Retorna un array vacío para evitar que el generador falle
+        console.error("Error al obtener la cuenta:", error.message);
+        // Returns null if no accounts were found related to the given ID
+        return null;
     }
 }
 
 /*
  * Building function...
+ * REMAINS: Everything
  * 
  * @returns {undefined}
  */
@@ -242,6 +277,7 @@ async function createAccount() {
 
 /*
  * Building function...
+ * REMAINS: Deletion confirmation <== !!! IMPORTANT !!!
  * 
  * @param {type} evt
  * @returns {undefined}
@@ -251,10 +287,9 @@ async function deleteAccount(evt) {
     console.log("Borrar cuenta: " + accountID);
     try {
         // Checks if the account has movements
-        // true: throw new Error
-        // false: proceed
-        if (hasMovements(accountID))
-            throw new Error("La cuenta tiene movimientos, no puede ser borrada");
+        // true: throw Error "La cuenta tiene movimientos, no puede ser borrada"
+        // false: procceed
+        if (await hasMovements(accountID)) throw new Error("La cuenta con ID: ("+ accountID +") tiene movimientos, no puede ser borrada");
         // At this point the account doesn't have movements
         const response = await fetch(DELETE_SERVICE_URL +`${encodeURIComponent(accountID)}`, {
             method: "DELETE",
@@ -265,17 +300,24 @@ async function deleteAccount(evt) {
 
         if (!response.ok) throw new Error("Error en la petición");
 
-
-
         // Asks for a confirmation
-        // true: pass
-        // false: exit the function
-
+        // true: procceed
+        // false: throw Error "Se ha cancelado la eliminación de la cuenta"
+        
         buildAccountsTable(); // Reloads the table
+        // Informs the user account deleted successfully
+        msgBoxAccounts.style.color = "#5620ad";
+        msgBoxAccounts.style.marginTop = "5px";
+        msgBoxAccounts.textContent = "Se ha borrado la cuenta exitosamente";
+        msgBoxAccounts.style.display = 'block';
         
     } catch (error) {
-        window.alert("La cuenta tiene movimientos, no puede ser borrada");
-        console.error("Error al borrar la cuenta:", error);
+        // Informs to the user the errors
+        msgBoxAccounts.style.color = "#ff0000";
+        msgBoxAccounts.style.marginTop = "5px";
+        msgBoxAccounts.textContent = error.message;
+        msgBoxAccounts.style.display = 'block';
+        console.error("Error al borrar la cuenta:", error.message);
     }
 }
 
@@ -339,6 +381,8 @@ function* accountRowGenerator(accounts) {
         // Button name attributes
         buttonEdit.setAttribute("name", "edit-button");
         buttonDelete.setAttribute("name", "delete-button");
+        // Table row listener
+        // tr.addEventListener("click", goToMovementsPage)
         // Put buttons into td
         tdButtons.appendChild(buttonEdit);
         tdButtons.appendChild(buttonDelete);
@@ -382,9 +426,9 @@ async function buildAccountsTable() {
     }
 }
 
-function hasMovements(accountID) {
-    const cuenta = getAccountByID(accountID);
-    if (cuenta.movements === null) {
+async function hasMovements(accountID) {
+    const cuenta = await getAccountByID(accountID);
+    if (cuenta.movements.length === 0) {
         return false;
     }
     return true;
