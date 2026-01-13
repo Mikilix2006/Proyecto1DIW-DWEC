@@ -8,13 +8,14 @@
       ATTRIBUTES TO BE USED BY THIS CONTROLLER
    =================================================
  */
-const idUser = "3252214522"; //id de prueba
-const idAccount = "3252214522"; //sacar el id del account del session storage
+const idAccount = "100000001"; //sacar el id del account del session storage
+const idMovementAcc = "14"; //sacar el 
+
 const SERVICE_URL_MOV= "/CRUDBankServerSide/webresources/movement/";
 const isoRegex = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}:\d{2})/;
 const addMovementBtn = document.getElementById("addMovement");
 const deleteMovementBtn = document.getElementById("deleteLastMovement");
-
+var movements = [];
 /*
    =================================================
          LISTENERS FOR HANDLING EVENTS ON HTML
@@ -22,8 +23,9 @@ const deleteMovementBtn = document.getElementById("deleteLastMovement");
  */
 //This listener load the R procedure of the app. Show all the movements of the current acount
 window.addEventListener('load', buildMovementsTable);
-// O mejor aún, para el botón específico:
+//Adding and deleting confirm listeners, trigger by click action
 addMovementBtn.addEventListener('click', createNewMovement);
+deleteMovementBtn.addEventListener('click', deleteLastMovement);
 
 /*
    =================================================
@@ -31,10 +33,10 @@ addMovementBtn.addEventListener('click', createNewMovement);
    =================================================
  */
 async function buildMovementsTable() {
-    const movements = await fetchMovements(idUser); //AQUÍ ESTÁN LOS DATOS. NECESITAMOS HACERLO GLOBAL
+    movements = await fetchMovements(); //Estos datos se declara de forma global
     const tbody = document.querySelector("#contentMovements");
     
-    if (!tbody) return;
+    if (!tbody) return; //AGREGAR MENSAJE QUE NO HAY MOVIMIENTOS
     tbody.innerHTML = "";
 
     const rowGenerator = movementRowGenerator(movements);
@@ -45,18 +47,16 @@ async function buildMovementsTable() {
 
 async function createNewMovement() {
     try {
-        // El servidor suele esperar formato ISO, no un timestamp de milisegundos
         const fechaActual = new Date().toISOString(); 
-
         const response = await fetch(`${SERVICE_URL_MOV}${encodeURIComponent(idAccount)}`, {
             method: "POST",
             headers: {
                 "Accept": "application/json",
-                "Content-Type": "application/json" // Imprescindible para enviar JSON
+                "Content-Type": "application/json"
             },
-            body: JSON.stringify({
+            body: JSON.stringify({ //SACAR ESTO y hacer una palntilla de insersión
                 "amount": 100.0,
-                "balance": 700.0,
+                "balance": 400.0,
                 "description": "Deposit",
                 "timestamp": fechaActual
             })
@@ -72,11 +72,22 @@ async function createNewMovement() {
     }
 }
 
-function deleteLastMovement() {
-    try{
-        fetchMovements(17);
-    }catch{
+async function deleteLastMovement() {
+    const deleteMovId = movements[(movements.length)-1].id; //This store the last movement id
+    try {
+        const response = await fetch(`${SERVICE_URL_MOV}${encodeURIComponent(deleteMovId)}`, {
+            method: "DELETE",
+            headers: {
+                "Accept": "application/json"
+            }
+        });
+        if (!response.ok) throw new Error("Error en el borrado");  //TENGO QUE ACTUALIZAR EL VALOR DE account
         
+        buildMovementsTable(); 
+        return; 
+        
+    } catch (error) {
+        console.error("Error al eliminar el movimiento:", error);
     }
 }
 
@@ -85,11 +96,10 @@ function deleteLastMovement() {
                    OTHER FUNCTIONS
    =================================================
  */
-/*Functions related to generate and load movements`s content*/
-async function fetchMovements(id) {
+//Functions related to generate and load movementss content
+async function fetchMovements() {
     try {
-        // Corregida la concatenación de la URL (eliminado el '+' literal)
-        const response = await fetch(`${SERVICE_URL_MOV}account/${encodeURIComponent(id)}`, {
+        const response = await fetch(`${SERVICE_URL_MOV}account/${encodeURIComponent(idAccount)}`, {
             method: "GET",
             headers: {
                 "Accept": "application/json"
@@ -98,13 +108,14 @@ async function fetchMovements(id) {
 
         if (!response.ok) throw new Error("Error en la petición");
         
-        return await response.json(); 
+        return await response.json();   
     } catch (error) {
         console.error("Error al obtener movimientos:", error);
         return []; 
     }
 }
 
+// Formato día/mes/año hora
 function* movementRowGenerator(movements) {
     for (const movement of movements) {
         const tr = document.createElement("tr");
@@ -132,3 +143,35 @@ function* movementRowGenerator(movements) {
         yield tr;
     }
 }
+/*
+//tengo que tener un modelo de cuentas const accountBalance = ;
+//Update function to use after delete the last account
+//This function calls an resource that is not directly related to Movements.
+async function updateBalanceByMovements() {
+    const updateBalance = {
+        id: ,
+        description: ,
+        balance:,
+               
+    };
+    try {
+        const response = await fetch(`/CRUDBankServerSide/webresources/account`, {
+            method: "PUT",
+            headers: {
+                "Accept": "application/json",
+                "Content-Type": "application/json"
+            },
+            body:{
+                
+            }
+        });
+        if (!response.ok) throw new Error("Error en el borrado");  //TENGO QUE ACTUALIZAR EL VALOR DE account
+        //account.name sessionstorage
+        
+        buildMovementsTable(); 
+        //return await response.json(); 
+        
+    } catch (error) {
+        console.error("Error al eliminar el movimiento:", error);
+    }
+}*/
