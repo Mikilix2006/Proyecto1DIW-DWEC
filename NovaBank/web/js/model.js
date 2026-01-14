@@ -7,7 +7,7 @@
 
 class AccountController {
     //constructor
-    constructor (id, description, balance, creditLine, beginBalance, beginBalanceTimestamp, type) {
+    constructor (id, description, balance, creditLine, beginBalance, beginBalanceTimestamp, type, movements) {
         this.id = id;
         this.description = description;
         this.balance = balance;
@@ -15,6 +15,7 @@ class AccountController {
         this.beginBalance = beginBalance;
         this.beginBalanceTimestamp = beginBalanceTimestamp;
         this.type = type;
+        this.movements = movements;
     }
     //getters
     get id() {

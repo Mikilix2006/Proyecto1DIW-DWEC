@@ -2,7 +2,7 @@
    ================================================
    
     THIS JS FILE IS IN CHARGE OF THE BEHAVIOUR OF
-    THE ACCOUNTS SECTION LOCATED IN main.html
+      THE ACCOUNTS SECTION LOCATED IN main.html
    
    -----------------------------------------------
    
@@ -23,6 +23,68 @@
    CREATION DATE: 2025-12-5 9:08 UTC+01
    
    ================================================
+ */
+
+/*
+ 
+  ∎∎∎∎∎∎∎∎∎ ∎∎∎∎∎∎∎       ∎∎∎∎∎   ∎∎∎∎∎∎∎
+      ∎     ∎     ∎       ∎    ∎  ∎     ∎
+      ∎     ∎     ∎       ∎     ∎ ∎     ∎
+      ∎     ∎     ∎       ∎     ∎ ∎     ∎
+      ∎     ∎     ∎       ∎     ∎ ∎     ∎
+      ∎     ∎     ∎       ∎    ∎  ∎     ∎
+      ∎     ∎∎∎∎∎∎∎       ∎∎∎∎∎   ∎∎∎∎∎∎∎
+
+    -> TAREA 1: LISTENERS DE TR
+       · Añadir listener a cada table row.
+       · Al hacer click a un table row:
+         - Guardar los datos de la cuenta
+           de esa table row en la sesión.
+         - Redirigir a la página de
+           movimientos en caso de que
+           esa cuenta tenga movimientos.
+
+    -> TAREA 2: CREAR CLASE ACCOUNT
+       · Crear constructor con los
+         atributos [id, description, 
+         balance, creditLine, beginBalance,
+         beginBalanceTimestamp, type, 
+         movements, customers] donde
+         movements será un array
+         que contenga objetos Movements
+         y customers será un objeto de
+         la clase Customers.
+       · Crear métodos de la clase.
+
+    -> TAREA 3: INSTANCIAR ACCOUNTS
+       · Durante la generación de filas
+         instanciar los datos de todas
+         las cuentas en objetos de la  
+         clase Account.
+       · Introducir cada instanciación
+         en el Array global accountsArray.
+
+    -> TAREA 4: DELETE ACCOUNT
+       · Crear confirmación para la
+         eliminación de una cuenta.
+    
+    -> TAREA 5: CREATE ACCOUNT
+       · Codificar creación de una cuenta.
+
+    -> TAREA 6: UPDATE ACCOUNT
+       · Codficar actualización de una
+         cuenta desde la tabla de cuentas.
+
+    -> TAREA 7: DOCUMENTAR
+       · Documentar métodos de este script.
+       · Documentar métodos de las clases.
+       · Documentar de nuevo las secciones
+         de este script.
+
+    -> TAREA 8: REORDENAR
+       · Reordenar métodos de este script
+         en sus respectivas secciones.
+
  */
 
 /*
@@ -129,12 +191,12 @@ sessionStorage.setItem("account.customers.phone", "15556969699");
 sessionStorage.setItem("account.customers.state", "New York");
 sessionStorage.setItem("account.customers.street", "163rd St.");
 sessionStorage.setItem("account.customers.zip", "10032");
-
 // keep the customer data in constants
 const idCustomer = sessionStorage.getItem("account.customers.id");
-
 // user info message box
 const msgBoxAccounts = document.getElementById('msgBoxAccounts');
+// Array that contains objects AccountController
+var accountsArray = [];
 
 /*
    =================================================
@@ -189,6 +251,8 @@ function handleReferencia1OnEvent() {
    · 200: The GET method will return data if there
           weren't no problems. The data returned
           will always be in json format.
+   · 204: The POST, PUT and DELETE methods will
+          not return data if everything went well.
    · 500: This response can happen if the service
           of mysql is not running, there is no
           internet connection or forbidden actions
@@ -354,7 +418,7 @@ function* accountRowGenerator(accounts) {
     for (const account of accounts) {
         const tr = document.createElement("tr");
         var accID;
-        // Corregido "tiemstamp" a "timestamp" (asumiendo que así viene del servidor)
+        // Run through every element of the account
         ["id", "type", "description", "creditLine", "beginBalanceTimestamp", "beginBalance", "balance"].forEach(field => {
             const td = document.createElement("td");
             td.textContent = account[field]; // Evita valores vacíos
@@ -362,7 +426,10 @@ function* accountRowGenerator(accounts) {
             // saves the account id for the button data attribute
             if (field === "id") accID = account[field];
         });
-        
+        /*
+         * Guardar en el Array accountsArray objetos AccountController
+         * 
+         */
         /*
          * Cuando termine el forEach, añadir en la sección "Acción"
          * los botones para editar y borrar esa cuenta para que estén
