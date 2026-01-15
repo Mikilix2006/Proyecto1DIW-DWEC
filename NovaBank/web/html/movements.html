@@ -38,9 +38,7 @@
     </div>
   </header>
   <main>
-    <!-- Accessible Basic Table -->
     <table id="userMovements" aria-label="User Movements" border="1">
-    <!-- Caption should be visible and descriptive -->
     <caption class="text-left font-semibold mb-2 pb-2">
     Movimientos del usuario
     </caption>
@@ -57,6 +55,16 @@
     </table>
     <button id="addMovement">Añadir</button>
     <button id="deleteLastMovement">Eliminar</button>
+    
+    <section>
+        <form>
+            <input type="number" id="newAmount" name="newAmount" placeholder="Introduce una cantidad" required>
+            <select id="newTypeAmount">
+                <option value="Deposit">Depósito</option>
+                <option value="Payment">Pago</option>
+            </select>
+        </form>
+    </section>
   </main>
   <footer class="footer">
     <div class="logo_footer">

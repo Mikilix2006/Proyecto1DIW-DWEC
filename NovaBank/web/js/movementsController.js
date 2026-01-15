@@ -8,14 +8,13 @@
       ATTRIBUTES TO BE USED BY THIS CONTROLLER
    =================================================
  */
-const idAccount = "100000001"; //sacar el id del account del session storage
-const idMovementAcc = "14"; //sacar el 
-
 const SERVICE_URL_MOV= "/CRUDBankServerSide/webresources/movement/";
-const isoRegex = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}:\d{2})/;
+var movements = [];
 const addMovementBtn = document.getElementById("addMovement");
 const deleteMovementBtn = document.getElementById("deleteLastMovement");
-var movements = [];
+
+//const idAccount1 = sessionStorage.getItem("account.id"); 
+const idAccount = "3252214522"; //sacar el id del account del session storage
 /*
    =================================================
          LISTENERS FOR HANDLING EVENTS ON HTML
@@ -45,7 +44,7 @@ async function buildMovementsTable() {
     }
 }
 
-async function createNewMovement() {
+async function createNewMovement(newMovement) {
     try {
         const fechaActual = new Date().toISOString(); 
         const response = await fetch(`${SERVICE_URL_MOV}${encodeURIComponent(idAccount)}`, {
@@ -54,17 +53,10 @@ async function createNewMovement() {
                 "Accept": "application/json",
                 "Content-Type": "application/json"
             },
-            body: JSON.stringify({ //SACAR ESTO y hacer una palntilla de insersión
-                "amount": 100.0,
-                "balance": 400.0,
-                "description": "Deposit",
-                "timestamp": fechaActual
-            })
+            body: JSON.stringify(newMovement)
         });
 
         if (!response.ok) throw new Error("Error en la petición");
-        
-        // Refrescar la tabla tras añadir uno nuevo
         await buildMovementsTable(); 
 
     } catch (error) {
@@ -73,16 +65,16 @@ async function createNewMovement() {
 }
 
 async function deleteLastMovement() {
-    const deleteMovId = movements[(movements.length)-1].id; //This store the last movement id
+    const idMovement = movements[(movements.length)-1].id; //This store the last movement id
     try {
-        const response = await fetch(`${SERVICE_URL_MOV}${encodeURIComponent(deleteMovId)}`, {
+        const response = await fetch(`${SERVICE_URL_MOV}${encodeURIComponent(idMovement)}`, {
             method: "DELETE",
             headers: {
                 "Accept": "application/json"
             }
         });
-        if (!response.ok) throw new Error("Error en el borrado");  //TENGO QUE ACTUALIZAR EL VALOR DE account
-        
+        if (!response.ok) throw new Error("Error en el borrado.");  
+        //TENGO QUE ACTUALIZAR EL VALOR DE account
         buildMovementsTable(); 
         return; 
         
@@ -117,6 +109,7 @@ async function fetchMovements() {
 
 // Formato día/mes/año hora
 function* movementRowGenerator(movements) {
+    const isoRegex = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}:\d{2})/;
     for (const movement of movements) {
         const tr = document.createElement("tr");
         
@@ -143,6 +136,27 @@ function* movementRowGenerator(movements) {
         yield tr;
     }
 }
+//Redefinir el método toJSON 
+//This
+function NewMovementValidation(){
+    const newAmount = document.getElementById("newAmount");
+    const newTypeAmount = document.getElementById("newTypeAmount");
+    const valueTypeAmount = newTypeAmount.value;
+    const newMovement = new Movements;
+    
+    //validación 
+    
+     return newMovement.constructor(null,fechaActual,newAmount,balance,);
+    
+    constructor(id,timestamp,amount,balance,description) {
+    this.id=id;
+    this.timestamp=timestamp;
+    this.amount=amount;
+    this.balance=balance;
+    this.description=description;
+  }
+}
+
 /*
 //tengo que tener un modelo de cuentas const accountBalance = ;
 //Update function to use after delete the last account

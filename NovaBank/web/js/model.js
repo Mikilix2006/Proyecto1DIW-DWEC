@@ -11,5 +11,10 @@ class Movements {
     this.balance=balance;
     this.description=description;
   }
+  
+  toJSON(){
+      
+  }
+  
 }
 
