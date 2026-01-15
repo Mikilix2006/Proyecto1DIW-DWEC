@@ -233,3 +233,16 @@ class AccountController {
         
     }
 }
+
+class Account {
+    //constructor
+    constructor (id, description, balance, creditLine, beginBalance, beginBalanceTimestamp, type) {
+        this.id = id;
+        this.description = description;
+        this.balance = balance;
+        this.creditLine = creditLine;
+        this.beginBalance = beginBalance;
+        this.beginBalanceTimestamp = beginBalanceTimestamp;
+        this.type = type;
+    }
+}

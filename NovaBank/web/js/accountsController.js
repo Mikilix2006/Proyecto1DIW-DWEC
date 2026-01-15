@@ -44,16 +44,48 @@
            movimientos en caso de que
            esa cuenta tenga movimientos.
 
-    -> TAREA 2: CREAR CLASE ACCOUNT
+    -> TAREA 2.1: CLASE Customer
        · Crear constructor con los
-         atributos [id, description, 
+         atributos [id, city, email,
+         firstName, lastName, 
+         middleInitial, password, phone,
+         state, street, zip].
+       · Crear métodos de la clase.
+       
+    -> TAREA 2.2: CLASE Account
+       · Crear constructor con los
+         atributos [id, description,
          balance, creditLine, beginBalance,
-         beginBalanceTimestamp, type, 
-         movements, customers] donde
-         movements será un array
-         que contenga objetos Movements
-         y customers será un objeto de
-         la clase Customers.
+         beginBalanceTimestamp, type].
+       · Crear métodos de la clase.
+
+    -> TAREA 2.3: CLASE Movement
+       · Crear constructor con los
+         atributos [id, amount, balance,
+         description, timestamp].
+       · Crear métodos de la clase.
+
+    -> TAREA 2.4: CLASE AccountController
+       · Crear constructor con los
+         atributos [accountData, 
+         movements, customers].
+       · accountData será un objeto
+         de la clase Account.
+       · movements y customers serán
+         arrays que contengan objetos
+         Movement y Customer.
+       · Crear método toJSON().
+       · Crear métodos de la clase.
+
+    -> TAREA 2.5: CLASE MovementController
+       · Crear constructor con los
+         atributos [accountData, 
+         movements, customers].
+       · accountData será un objeto
+         de la clase Account.
+       · movements y customers serán
+         arrays que contengan objetos
+         Movement y Customer.
        · Crear métodos de la clase.
 
     -> TAREA 3: INSTANCIAR ACCOUNTS
@@ -172,14 +204,75 @@ const DELETE_SERVICE_URL = "/CRUDBankServerSide/webresources/account/";
        </account>
 */
 
-sessionStorage.setItem("account.balance", "999.99");
-sessionStorage.setItem("account.beginBalance", "999.99");
-sessionStorage.setItem("account.beginBalanceTimestamp", "2019-01-14T19:19:04+01:00");
-sessionStorage.setItem("account.creditLine", "0.0");
-sessionStorage.setItem("account.customers", "New York");
-sessionStorage.setItem("account.description", "Cuenta de prueba 1");
-sessionStorage.setItem("account.id", "1234567899");
-sessionStorage.setItem("account.type", "STANDARD");
+/*
+  
+  {
+  "balance":10000.0,
+  "beginBalance":10000.0,
+  "beginBalanceTimestamp":"2019-01-14T19:29:50+01:00",
+  "creditLine":0.0,
+  "customers":[
+        {
+        "city":"Philadelphia",
+        "email":"awallace@gmail.com",
+        "firstName":"Ann",
+        "id":299985563,
+        "lastName":"Wallace",
+        "middleInitial":"M.",
+        "password":"qwerty*9876",
+        "phone":16665984477,
+        "state":"Pennsylvania",
+        "street":"Main St.",
+        "zip":10056
+        },
+        {
+        "city":"New York",
+        "email":"jsmith@enterprise.net",
+        "firstName":"John",
+        "id":102263301,
+        "lastName":"Smith",
+        "middleInitial":"S.",
+        "password":"abcd*1234",
+        "phone":15556969699,
+        "state":"New York",
+        "street":"163rd St.",
+        "zip":10032
+        }],
+  "description":"Check Account",
+  "id":2654785441,
+  "movements":[
+        {
+        "amount":100.0,
+        "balance":100.0,
+        "description":"Deposit",
+        "id":1,
+        "timestamp":"2019-01-14T19:34:06+01:00"
+        },
+        {
+        "amount":9900.0,
+        "balance":10000.0,
+        "description":"Deposit",
+        "id":2,
+        "timestamp":"2019-02-02T16:32:41+01:00"
+        },
+        {
+        "amount":200.0,
+        "balance":10200.0,
+        "description":"Deposit",
+        "id":3,
+        "timestamp":"2019-02-02T16:35:11+01:00"},
+        {
+        "amount":-200.0,
+        "balance":10000.0,
+        "description":"Payment",
+        "id":4,
+        "timestamp":"2019-02-02T16:35:47+01:00"
+        }],
+  "type":"STANDARD"
+  }
+  
+  
+ */
 sessionStorage.setItem("account.customers.city", "New York");
 sessionStorage.setItem("account.customers.email", "jsmith@enterprise.net");
 sessionStorage.setItem("account.customers.firstName", "John");
@@ -195,6 +288,9 @@ sessionStorage.setItem("account.customers.zip", "10032");
 const idCustomer = sessionStorage.getItem("account.customers.id");
 // user info message box
 const msgBoxAccounts = document.getElementById('msgBoxAccounts');
+const confirmationBoxAccounts = document.getElementById('confirmationBoxAccounts');
+const confirmButton = document.getElementById('confirm-button');
+const denyButton = document.getElementById('deny-button');
 // Array that contains objects AccountController
 var accountsArray = [];
 
@@ -213,7 +309,8 @@ var accountsArray = [];
    =================================================
  */
 
-//reference1.addEventListener('element',handleReferencia1OnEvent);
+confirmButton.addEventListener("click", deleteAccount);
+denyButton.addEventListener("click", cancellDeleteAccount); // Crear método
 
 /*
    =================================================
@@ -230,8 +327,50 @@ var accountsArray = [];
    =================================================
  */
 
-function handleReferencia1OnEvent() {
-    // handler
+async function handleDeleteAccount(event) {
+    const accountID = event.target.dataset.accId;
+    console.log("Borrar cuenta: " + accountID);
+    var movementsError = false;
+    try {
+        // Checks if the account has movements
+        // true: throw Error "La cuenta tiene movimientos, no puede ser borrada"
+        // false: procceed
+        if (await hasMovements(accountID)) {
+            movementsError = true;
+            throw new Error('La cuenta con ID: ('+ accountID +') tiene movimientos, no puede ser borrada');
+        }
+        // At this point the account doesn't have movements
+        
+        // Asks for a confirmation
+        // true: procceed
+        // false: throw Error "Se ha cancelado la eliminación de la cuenta"
+        
+        confirmationBoxAccounts.style.display = 'block';
+        confirmationBoxAccounts.style.marginTop = "5px";
+        confirmButton.setAttribute("data-acc-id", accountID);
+        
+    } catch (error) {
+        // Informs to the user the errors
+        msgBoxAccounts.style.color = "#ff0000";
+        msgBoxAccounts.style.marginTop = "5px";
+        msgBoxAccounts.textContent = error.message;
+        msgBoxAccounts.style.display = 'flex';
+        msgBoxAccounts.style.flexDirection = 'column';
+        msgBoxAccounts.style.alignItems = 'center';
+        if (movementsError) {
+            const enlaceMovements = document.createElement("u");
+            enlaceMovements.setAttribute("data-acc-id", accountID);
+            enlaceMovements.innerHTML = "Ir a movimientos de la cuenta";
+            enlaceMovements.style.color = "#5620ad";
+            enlaceMovements.addEventListener("click", storeAccountData);
+            msgBoxAccounts.appendChild(enlaceMovements);
+        }
+        console.error("Error al borrar la cuenta:", error.message);
+    }
+}
+
+function cancellDeleteAccount(event) {
+    confirmationBoxAccounts.style.display = 'none';
 }
 
 /*
@@ -244,7 +383,7 @@ function handleReferencia1OnEvent() {
    These functions fetch resources in the server
    side.
 
-   The funcitons create, recover, update or delete
+   The funcitons create, read, update or delete
    accounts.
 
    POSSIBLE HTTP RESPONSES:
@@ -309,7 +448,7 @@ async function getAccountByID(accountID) {
 
         if (!response.ok) throw new Error("Error en la petición");
         
-        return await response.json(); // Return the json os the full account
+        return await response.json(); // Return the JSON of the full account
     } catch (error) {
         console.error("Error al obtener la cuenta:", error.message);
         // Returns null if no accounts were found related to the given ID
@@ -348,13 +487,7 @@ async function createAccount() {
  */
 async function deleteAccount(evt) {
     const accountID = evt.target.dataset.accId;
-    console.log("Borrar cuenta: " + accountID);
-    try {
-        // Checks if the account has movements
-        // true: throw Error "La cuenta tiene movimientos, no puede ser borrada"
-        // false: procceed
-        if (await hasMovements(accountID)) throw new Error("La cuenta con ID: ("+ accountID +") tiene movimientos, no puede ser borrada");
-        // At this point the account doesn't have movements
+    try {        
         const response = await fetch(DELETE_SERVICE_URL +`${encodeURIComponent(accountID)}`, {
             method: "DELETE",
             headers: {
@@ -364,9 +497,6 @@ async function deleteAccount(evt) {
 
         if (!response.ok) throw new Error("Error en la petición");
 
-        // Asks for a confirmation
-        // true: procceed
-        // false: throw Error "Se ha cancelado la eliminación de la cuenta"
         
         buildAccountsTable(); // Reloads the table
         // Informs the user account deleted successfully
@@ -374,6 +504,7 @@ async function deleteAccount(evt) {
         msgBoxAccounts.style.marginTop = "5px";
         msgBoxAccounts.textContent = "Se ha borrado la cuenta exitosamente";
         msgBoxAccounts.style.display = 'block';
+        confirmationBoxAccounts.style.display = 'none';
         
     } catch (error) {
         // Informs to the user the errors
@@ -489,7 +620,7 @@ async function buildAccountsTable() {
         editButton.addEventListener("click",updateAccount);
     }
     for (const deleteButton of deleteButtons) {
-        deleteButton.addEventListener("click",deleteAccount);
+        deleteButton.addEventListener("click",handleDeleteAccount);
     }
 }
 
@@ -499,4 +630,18 @@ async function hasMovements(accountID) {
         return false;
     }
     return true;
+}
+
+async function storeAccountData(event) {
+    const accountID = event.target.dataset.accId;
+    const account = await getAccountByID(accountID);
+    sessionStorage.setItem("account.balance", account.balance);
+    sessionStorage.setItem("account.beginBalance", account.beginBalance);
+    sessionStorage.setItem("account.beginBalanceTimestamp", account.beginBalanceTimestamp);
+    sessionStorage.setItem("account.creditLine", account.creditLine);
+    sessionStorage.setItem("account.description", account.description);
+    sessionStorage.setItem("account.id", account.id);
+    sessionStorage.setItem("account.type", account.type);
+    // Redirect a movimientos.html
+    window.location.href = 'movements.html';
 }
