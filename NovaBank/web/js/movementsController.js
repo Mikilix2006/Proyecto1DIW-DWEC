@@ -8,13 +8,16 @@
       ATTRIBUTES TO BE USED BY THIS CONTROLLER
    =================================================
  */
+import { Movements } from './model.js';
 const SERVICE_URL_MOV= "/CRUDBankServerSide/webresources/movement/";
-var movements = [];
+const SERVICE_URL_ACC = "/CRUDBankServerSide/webresources/account/";
+const newMovement = '{"balance":200.0,"beginBalance":100.0,"beginBalanceTimestamp":"2019-01-14T19:28:28+01:00","creditLine":1000.0,"customers":[{"city":"Philadelphia","email":"awallace@gmail.com","firstName":"Ann","id":299985563,"lastName":"Wallace","middleInitial":"M.","password":"qwerty*9876","phone":16665984477,"state":"Pennsylvania","street":"Main St.","zip":10056}],"description":"Check Account with Credit Line","id":3252214522,"movements":[{"amount":100.0,"balance":100.0,"description":"Deposit","id":6,"timestamp":"2019-02-02T16:56:44+01:00"},{"amount":100.0,"balance":200.0,"description":"Deposit","id":7,"timestamp":"2019-02-02T16:57:40+01:00"}],"type":"CREDIT"}';
+let movements = [];
 const addMovementBtn = document.getElementById("addMovement");
 const deleteMovementBtn = document.getElementById("deleteLastMovement");
 
 //const idAccount1 = sessionStorage.getItem("account.id"); 
-const idAccount = "3252214522"; //sacar el id del account del session storage
+//const idAccount = "3252214522"; //sacar el id del account del session storage
 /*
    =================================================
          LISTENERS FOR HANDLING EVENTS ON HTML
@@ -23,7 +26,7 @@ const idAccount = "3252214522"; //sacar el id del account del session storage
 //This listener load the R procedure of the app. Show all the movements of the current acount
 window.addEventListener('load', buildMovementsTable);
 //Adding and deleting confirm listeners, trigger by click action
-addMovementBtn.addEventListener('click', createNewMovement);
+addMovementBtn.addEventListener('click', () => createNewMovement(100.0, "Deposit"));
 deleteMovementBtn.addEventListener('click', deleteLastMovement);
 
 /*
@@ -32,160 +35,132 @@ deleteMovementBtn.addEventListener('click', deleteLastMovement);
    =================================================
  */
 async function buildMovementsTable() {
-    movements = await fetchMovements(); //Estos datos se declara de forma global
+    movements = await fetchMovements();
     const tbody = document.querySelector("#contentMovements");
+    if (!tbody) return;
     
-    if (!tbody) return; //AGREGAR MENSAJE QUE NO HAY MOVIMIENTOS
     tbody.innerHTML = "";
-
     const rowGenerator = movementRowGenerator(movements);
     for (const row of rowGenerator) {
         tbody.appendChild(row);
     }
 }
 
-async function createNewMovement(newMovement) {
+async function createNewMovement(amount, description) {
     try {
-        const fechaActual = new Date().toISOString(); 
-        const response = await fetch(`${SERVICE_URL_MOV}${encodeURIComponent(idAccount)}`, {
+        // 1. Obtener datos de la cuenta desde SessionStorage
+        const accountData = JSON.parse(newMovement);
+        //const accountData = JSON.parse(sessionStorage.getItem("account"));
+        if (!accountData) throw new Error("No se encontró información de la cuenta.");
+
+        const idAccount = accountData.id;
+        const newBalance = accountData.balance + amount;
+
+        // 2. Crear objeto usando el modelo
+        const movObj = new Movements(amount, newBalance, description);
+
+        // 3. POST: Crear movimiento
+        const resMov = await fetch(`${SERVICE_URL_MOV}${encodeURIComponent(idAccount)}`, {
             method: "POST",
-            headers: {
-                "Accept": "application/json",
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(newMovement)
+            headers: { "Content-Type": "application/json", "Accept": "application/json" },
+            body: JSON.stringify(movObj)
         });
 
-        if (!response.ok) throw new Error("Error en la petición");
-        await buildMovementsTable(); 
+        if (!resMov.ok) throw new Error("Error al crear movimiento");
+
+        // 4. PUT: Actualizar Balance de la cuenta
+        accountData.balance = newBalance;
+        await updateAccountBalance(accountData);
+
+        // 5. Refrescar UI
+        await buildMovementsTable();
+        alert("Movimiento creado y saldo actualizado.");
 
     } catch (error) {
-        console.error("Error al crear movimiento:", error);
+        console.error("Error:", error);
     }
 }
 
 async function deleteLastMovement() {
-    const idMovement = movements[(movements.length)-1].id; //This store the last movement id
+    if (movements.length === 0) return;
+    
+    const lastMov = movements[movements.length - 1];
+    const idMovement = lastMov.id;
+
     try {
+        // 1. DELETE: Movimiento
         const response = await fetch(`${SERVICE_URL_MOV}${encodeURIComponent(idMovement)}`, {
             method: "DELETE",
-            headers: {
-                "Accept": "application/json"
-            }
+            headers: { "Accept": "application/json" }
         });
-        if (!response.ok) throw new Error("Error en el borrado.");  
-        //TENGO QUE ACTUALIZAR EL VALOR DE account
-        buildMovementsTable(); 
-        return; 
+
+        if (!response.ok) throw new Error("Error en el borrado.");
+
+        // 2. Actualizar objeto Account localmente y en servidor
+        const accountData = JSON.parse(sessionStorage.getItem("account"));
+        accountData.balance -= lastMov.amount; // Revertimos el balance
+        
+        await updateAccountBalance(accountData);
+        await buildMovementsTable();
         
     } catch (error) {
-        console.error("Error al eliminar el movimiento:", error);
+        console.error("Error al eliminar:", error);
     }
 }
-
 /*
    =================================================
                    OTHER FUNCTIONS
    =================================================
  */
 //Functions related to generate and load movementss content
-async function fetchMovements() {
-    try {
-        const response = await fetch(`${SERVICE_URL_MOV}account/${encodeURIComponent(idAccount)}`, {
-            method: "GET",
-            headers: {
-                "Accept": "application/json"
-            }
-        });
-
-        if (!response.ok) throw new Error("Error en la petición");
-        
-        return await response.json();   
-    } catch (error) {
-        console.error("Error al obtener movimientos:", error);
-        return []; 
+async function updateAccountBalance(accountObj) {
+    const response = await fetch(`${SERVICE_URL_ACC}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json", "Accept": "application/json" },
+        body: JSON.stringify(accountObj)
+    });
+    
+    if (response.ok) {
+        // Actualizar el storage para que persista el cambio
+        sessionStorage.setItem("account", JSON.stringify(accountObj));
+    } else {
+        throw new Error("No se pudo actualizar la cuenta en el servidor.");
     }
 }
 
-// Formato día/mes/año hora
-function* movementRowGenerator(movements) {
+async function fetchMovements() {
+    const accountData = JSON.parse(sessionStorage.getItem("account"));
+    const idAccount = accountData ? accountData.id : "3252214522";
+
+    try {
+        const response = await fetch(`${SERVICE_URL_MOV}account/${encodeURIComponent(idAccount)}`, {
+            method: "GET",
+            headers: { "Accept": "application/json" }
+        });
+        return response.ok ? await response.json() : [];
+    } catch (error) {
+        return [];
+    }
+}
+
+function* movementRowGenerator(movementsList) {
     const isoRegex = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}:\d{2})/;
-    for (const movement of movements) {
+    for (const movement of movementsList) {
         const tr = document.createElement("tr");
-        
         ["timestamp", "description", "amount", "balance"].forEach(field => {
             const td = document.createElement("td");
             let value = movement[field] ?? "N/A";
 
             if (field === "timestamp" && value !== "N/A") {
-                const match = value.match(isoRegex);
-                if (match) {
-                    // Formato día/mes/año hora
-                    value = `${match[3]}/${match[2]}/${match[1]} ${match[4]}`;
-                }
-            }
-            
-            // Opcional: Estilo para números negativos en el monto
-            if (field === "amount" && parseFloat(value) < 0) {
-                td.style.color = "red";
+                const match = String(value).match(isoRegex);
+                if (match) value = `${match[3]}/${match[2]}/${match[1]} ${match[4]}`;
             }
 
+            if (field === "amount" && parseFloat(value) < 0) td.style.color = "red";
+            
             td.textContent = value;
             tr.appendChild(td);
         });
         yield tr;
     }
 }
-//Redefinir el método toJSON 
-//This
-function NewMovementValidation(){
-    const newAmount = document.getElementById("newAmount");
-    const newTypeAmount = document.getElementById("newTypeAmount");
-    const valueTypeAmount = newTypeAmount.value;
-    const newMovement = new Movements;
-    
-    //validación 
-    
-     return newMovement.constructor(null,fechaActual,newAmount,balance,);
-    
-    constructor(id,timestamp,amount,balance,description) {
-    this.id=id;
-    this.timestamp=timestamp;
-    this.amount=amount;
-    this.balance=balance;
-    this.description=description;
-  }
-}
-
-/*
-//tengo que tener un modelo de cuentas const accountBalance = ;
-//Update function to use after delete the last account
-//This function calls an resource that is not directly related to Movements.
-async function updateBalanceByMovements() {
-    const updateBalance = {
-        id: ,
-        description: ,
-        balance:,
-               
-    };
-    try {
-        const response = await fetch(`/CRUDBankServerSide/webresources/account`, {
-            method: "PUT",
-            headers: {
-                "Accept": "application/json",
-                "Content-Type": "application/json"
-            },
-            body:{
-                
-            }
-        });
-        if (!response.ok) throw new Error("Error en el borrado");  //TENGO QUE ACTUALIZAR EL VALOR DE account
-        //account.name sessionstorage
-        
-        buildMovementsTable(); 
-        //return await response.json(); 
-        
-    } catch (error) {
-        console.error("Error al eliminar el movimiento:", error);
-    }
-}*/

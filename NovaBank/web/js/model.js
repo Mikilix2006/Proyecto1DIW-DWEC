@@ -3,18 +3,22 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-class Movements {
-  constructor(id,timestamp,amount,balance,description) {
-    this.id=id;
-    this.timestamp=timestamp;
-    this.amount=amount;
-    this.balance=balance;
-    this.description=description;
-  }
+export class Movements {
+  constructor(amount, balance, description) {
+        this.amount = parseFloat(amount);
+        this.balance = parseFloat(balance);
+        this.description = description;
+        this.timestamp = new Date().toISOString(); 
+    }
+
   
-  toJSON(){
-      
-  }
-  
+  toJSON() {
+        return {
+            amount: this.amount,
+            balance: this.balance,
+            description: this.description,
+            timestamp: this.timestamp
+        };
+    }
 }
 
