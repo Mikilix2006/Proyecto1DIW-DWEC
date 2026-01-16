@@ -11,7 +11,7 @@
 import { Movements } from './model.js';
 const SERVICE_URL_MOV= "/CRUDBankServerSide/webresources/movement/";
 const SERVICE_URL_ACC = "/CRUDBankServerSide/webresources/account/";
-const newMovement = '{"balance":200.0,"beginBalance":100.0,"beginBalanceTimestamp":"2019-01-14T19:28:28+01:00","creditLine":1000.0,"customers":[{"city":"Philadelphia","email":"awallace@gmail.com","firstName":"Ann","id":299985563,"lastName":"Wallace","middleInitial":"M.","password":"qwerty*9876","phone":16665984477,"state":"Pennsylvania","street":"Main St.","zip":10056}],"description":"Check Account with Credit Line","id":3252214522,"movements":[{"amount":100.0,"balance":100.0,"description":"Deposit","id":6,"timestamp":"2019-02-02T16:56:44+01:00"},{"amount":100.0,"balance":200.0,"description":"Deposit","id":7,"timestamp":"2019-02-02T16:57:40+01:00"}],"type":"CREDIT"}';
+const currentAccount = '{"balance":300.0,"beginBalance":100.0,"beginBalanceTimestamp":"2019-01-14T19:28:28+01:00","creditLine":1000.0,"customers":[{"city":"Philadelphia","email":"awallace@gmail.com","firstName":"Ann","id":299985563,"lastName":"Wallace","middleInitial":"M.","password":"qwerty*9876","phone":16665984477,"state":"Pennsylvania","street":"Main St.","zip":10056}],"description":"Check Account with Credit Line","id":3252214522,"movements":[{"amount":100.0,"balance":300.0,"description":"Deposit","id":53,"timestamp":"2026-01-16T09:23:28+01:00"},{"amount":100.0,"balance":100.0,"description":"Deposit","id":6,"timestamp":"2019-02-02T16:56:44+01:00"},{"amount":100.0,"balance":200.0,"description":"Deposit","id":7,"timestamp":"2019-02-02T16:57:40+01:00"}],"type":"CREDIT"}';
 let movements = [];
 const addMovementBtn = document.getElementById("addMovement");
 const deleteMovementBtn = document.getElementById("deleteLastMovement");
@@ -26,14 +26,22 @@ const deleteMovementBtn = document.getElementById("deleteLastMovement");
 //This listener load the R procedure of the app. Show all the movements of the current acount
 window.addEventListener('load', buildMovementsTable);
 //Adding and deleting confirm listeners, trigger by click action
-addMovementBtn.addEventListener('click', () => createNewMovement(100.0, "Deposit"));
+//addMovementBtn.addEventListener('click', () => createNewMovement(100.0, "Deposit"));
+//addMovementBtn.addEventListener('click', () => createNewMovement(100.0, "Deposit"));
 deleteMovementBtn.addEventListener('click', deleteLastMovement);
+
+const form = document.getElementById("formMovement");
+if (form) {
+    form.addEventListener('submit', handlerCreateMov);
+}
 
 /*
    =================================================
        EVENT HANDLERS CALLED FROM THE LISTENERS
    =================================================
  */
+
+
 async function buildMovementsTable() {
     movements = await fetchMovements();
     const tbody = document.querySelector("#contentMovements");
@@ -46,10 +54,39 @@ async function buildMovementsTable() {
     }
 }
 
+async function handlerCreateMov(e) {
+    e.preventDefault();
+
+    const inputAmount = document.getElementById("newAmount");
+    const inputType = document.getElementById("newTypeAmount");
+
+    // 2. Convertir el valor a número flotante
+    const amount = parseFloat(inputAmount.value);
+    const description = inputType.value;
+
+    // 3. Validación básica
+    if (isNaN(amount) || amount <= 0) {
+        alert("Por favor, ingrese un monto válido mayor a 0.");
+        return;
+    }
+
+    if (!description) {
+        alert("Por favor, seleccione un tipo de movimiento.");
+        return;
+    }
+
+    // 4. Llamar a tu función de creación (la que hicimos antes)
+    console.log("Enviando:", amount, description);
+    await createNewMovement(amount, description);
+
+    // 5. Limpiar el formulario tras el éxito
+    form.reset();
+}
+
 async function createNewMovement(amount, description) {
     try {
         // 1. Obtener datos de la cuenta desde SessionStorage
-        const accountData = JSON.parse(newMovement);
+        const accountData = JSON.parse(currentAccount);
         //const accountData = JSON.parse(sessionStorage.getItem("account"));
         if (!accountData) throw new Error("No se encontró información de la cuenta.");
 
@@ -81,6 +118,7 @@ async function createNewMovement(amount, description) {
     }
 }
 
+
 async function deleteLastMovement() {
     if (movements.length === 0) return;
     
@@ -88,15 +126,13 @@ async function deleteLastMovement() {
     const idMovement = lastMov.id;
 
     try {
-        // 1. DELETE: Movimiento
         const response = await fetch(`${SERVICE_URL_MOV}${encodeURIComponent(idMovement)}`, {
             method: "DELETE",
             headers: { "Accept": "application/json" }
         });
 
         if (!response.ok) throw new Error("Error en el borrado.");
-
-        // 2. Actualizar objeto Account localmente y en servidor
+        
         const accountData = JSON.parse(sessionStorage.getItem("account"));
         accountData.balance -= lastMov.amount; // Revertimos el balance
         

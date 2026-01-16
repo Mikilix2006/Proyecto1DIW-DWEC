@@ -53,16 +53,17 @@
         <tbody id="contentMovements">
         </tbody>
     </table>
-    <button id="addMovement">Añadir</button>
+    <button id="addMovementPrueba">Añadir</button>
     <button id="deleteLastMovement">Eliminar</button>
     
     <section>
-        <form>
+        <form id="formMovement">
             <input type="number" id="newAmount" name="newAmount" placeholder="Introduce una cantidad" required>
             <select id="newTypeAmount">
                 <option value="Deposit">Depósito</option>
                 <option value="Payment">Pago</option>
             </select>
+            <button type="submit" id="addMovement">Crear Movimiento</button>
         </form>
     </section>
   </main>
