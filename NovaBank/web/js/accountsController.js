@@ -1,4 +1,6 @@
-/* 
+import { Account } from './model.js';
+
+/*
    ================================================
    
     THIS JS FILE IS IN CHARGE OF THE BEHAVIOUR OF
@@ -205,7 +207,7 @@ const DELETE_SERVICE_URL = "/CRUDBankServerSide/webresources/account/";
 */
 
 /*
-  
+         ESTRUCTURA DEL JSON PARA CREAR UNA CUENTA ASOCIADA A UN CUSTOMER
   {
   "balance":10000.0,
   "beginBalance":10000.0,
@@ -273,26 +275,15 @@ const DELETE_SERVICE_URL = "/CRUDBankServerSide/webresources/account/";
   
   
  */
-sessionStorage.setItem("account.customers.city", "New York");
-sessionStorage.setItem("account.customers.email", "jsmith@enterprise.net");
-sessionStorage.setItem("account.customers.firstName", "John");
-sessionStorage.setItem("account.customers.id", "102263301");
-sessionStorage.setItem("account.customers.lastName", "Smith");
-sessionStorage.setItem("account.customers.middleInitial", "S.");
-sessionStorage.setItem("account.customers.password", "abcd*1234");
-sessionStorage.setItem("account.customers.phone", "15556969699");
-sessionStorage.setItem("account.customers.state", "New York");
-sessionStorage.setItem("account.customers.street", "163rd St.");
-sessionStorage.setItem("account.customers.zip", "10032");
 // keep the customer data in constants
-const idCustomer = sessionStorage.getItem("account.customers.id");
+const idCustomer = sessionStorage.getItem("customer.id");
 // user info message box
 const msgBoxAccounts = document.getElementById('msgBoxAccounts');
 const confirmationBoxAccounts = document.getElementById('confirmationBoxAccounts');
 const confirmButton = document.getElementById('confirm-button');
 const denyButton = document.getElementById('deny-button');
 // Array that contains objects AccountController
-var accountsArray = [];
+let accountsArray = [];
 
 /*
    =================================================
@@ -462,20 +453,41 @@ async function getAccountByID(accountID) {
  * 
  * @returns {undefined}
  */
-async function createAccount() {
-    // 
-    const account = {
-        balance: 200.0,
-        beginBalance: 200.0,
-        beginBalanceTimestamp:"2025-12-14T19:28:28+01:00",
-        creditLine:500.0,
-        description:"Cuenta de prueba 1",
-        id:0123456789, // 10 digit-generated number
-        //movements:[], no movements in new accounts
-        type:"CREDIT"
+async function createAccount(evt) {
+    // generar id
+    const newAccountID = accountsArray[accountsArray.length-1].id+1;
+    // obtener fecha del sistema actual
+    // crear objeto account = new Account
+    
+    const accountID = evt.target.dataset.accId;
+    try {
+        const response = await fetch(DELETE_SERVICE_URL +`${encodeURIComponent(accountID)}`, {
+            method: 'POST',
+                headers: {
+                    "Accept": "application/json"
+                },
+                body: JSON.stringify(account)
+        });
+
+        if (!response.ok) throw new Error("Error en la petición");
+
+        
+        buildAccountsTable(); // Reloads the table
+        // Informs the user account deleted successfully
+        msgBoxAccounts.style.color = "#5620ad";
+        msgBoxAccounts.style.marginTop = "5px";
+        msgBoxAccounts.textContent = "Se ha borrado la cuenta exitosamente";
+        msgBoxAccounts.style.display = 'block';
+        confirmationBoxAccounts.style.display = 'none';
+        
+    } catch (error) {
+        // Informs to the user the errors
+        msgBoxAccounts.style.color = "#ff0000";
+        msgBoxAccounts.style.marginTop = "5px";
+        msgBoxAccounts.textContent = error.message;
+        msgBoxAccounts.style.display = 'block';
+        console.error("Error al borrar la cuenta:", error.message);
     }
-    
-    
 }
 
 /*
@@ -558,9 +570,17 @@ function* accountRowGenerator(accounts) {
             if (field === "id") accID = account[field];
         });
         /*
-         * Guardar en el Array accountsArray objetos AccountController
-         * 
+         * Guardar al final del Array accountsArray objetos Account
          */
+        accountsArray.push(new Account(
+                                        account["id"],
+                                        account["description"],
+                                        account["balance"],
+                                        account["creditLine"],
+                                        account["beginBalance"],
+                                        account["beginBalanceTimestamp"],
+                                        account["type"]
+                                        ));
         /*
          * Cuando termine el forEach, añadir en la sección "Acción"
          * los botones para editar y borrar esa cuenta para que estén
