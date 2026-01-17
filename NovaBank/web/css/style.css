@@ -387,3 +387,10 @@ body {
     justify-content: center;
     margin-top: 2.5rem;
 }
+
+#createNewAccountButton {
+    align-self: start;
+}
+
+#newAccountForm {
+}

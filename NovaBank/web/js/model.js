@@ -51,7 +51,7 @@ export class Account {
                     lastName: lastName,
                     middleInitial: middleInitial,
                     password: password,
-                    phone:15556969699,
+                    phone: phone,
                     state: state,
                     street: street,
                     zip: zip

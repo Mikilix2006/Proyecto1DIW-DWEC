@@ -76,6 +76,7 @@
                 <!-- Generative content here -->
             </tbody>
         </table>
+        <button id="createNewAccountButton"> + </button>
         <div id="msgBoxAccounts" hidden>
             <!-- Error messages here -->
         </div>
@@ -84,6 +85,19 @@
             <div id="confirmationButtons">
                 <button id="confirm-button">Confirmar</button>
                 <button id="deny-button">Denegar</button>
+            </div>
+        </div>
+        <div id="newAccountForm" hidden>
+            <select id="comboAccountType">
+                <option value="-" selected>-</option>
+                <option value="STANDARD">STANDARD</option>
+                <option value="CREDIT">CREDIT</option>
+            </select>
+            <input type="number" id="tfBeginBalance" placeholder="Saldo inicial">
+            <input type="number" id="tfCreditLine" placeholder="Línea de crédito">
+            <div id="confirmationButtons">
+                <button id="candellNewAccountButton">Cancelar</button>
+                <button id="confirmNewAccountButton">Crear</button>
             </div>
         </div>
     </section>

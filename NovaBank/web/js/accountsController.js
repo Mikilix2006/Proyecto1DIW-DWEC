@@ -1,4 +1,4 @@
-import { Account } from './model.js';
+import { Account, Customer } from './model.js';
 
 /*
    ================================================
@@ -43,8 +43,7 @@ import { Account } from './model.js';
          - Guardar los datos de la cuenta
            de esa table row en la sesión.
          - Redirigir a la página de
-           movimientos en caso de que
-           esa cuenta tenga movimientos.
+           movimientos.
 
     -> TAREA 2.1: CLASE Customer
        · Crear constructor con los
@@ -162,9 +161,11 @@ import { Account } from './model.js';
 document.addEventListener("DOMContentLoaded", buildAccountsTable);
 
 // fetch resources
-const GET_ALL_SERVICE_URL = "/CRUDBankServerSide/webresources/account/customer/";
-const GET_BY_ID_SERVICE_URL = "/CRUDBankServerSide/webresources/account/";
-const DELETE_SERVICE_URL = "/CRUDBankServerSide/webresources/account/";
+const GET_ALL_SERVICE_URL = "/CRUDBankServerSide/webresources/account/customer/"; // Then append the customer ID
+const GET_BY_ID_SERVICE_URL = "/CRUDBankServerSide/webresources/account/"; // Then append the account ID
+const DELETE_SERVICE_URL = GET_BY_ID_SERVICE_URL; // Then append the account ID
+const CREATE_SERVICE_URL = GET_BY_ID_SERVICE_URL; // Same as getting by ID URL
+const UPDATE_SERVICE_URL = GET_BY_ID_SERVICE_URL; // Same as getting by ID URL
 
 /*
         ESTRUCTURA DEL XML PARA CREAR UNA CUENTA ASOCIADA A UN CUSTOMER
@@ -277,13 +278,22 @@ const DELETE_SERVICE_URL = "/CRUDBankServerSide/webresources/account/";
  */
 // keep the customer data in constants
 const idCustomer = sessionStorage.getItem("customer.id");
-// user info message box
-const msgBoxAccounts = document.getElementById('msgBoxAccounts');
-const confirmationBoxAccounts = document.getElementById('confirmationBoxAccounts');
-const confirmButton = document.getElementById('confirm-button');
-const denyButton = document.getElementById('deny-button');
 // Array that contains objects AccountController
 let accountsArray = [];
+// === Elements from main.html ===
+// message boxes
+const msgBoxAccounts = document.getElementById('msgBoxAccounts');
+const confirmationBoxAccounts = document.getElementById('confirmationBoxAccounts');
+// === buttons ===
+// delete account
+const confirmButton = document.getElementById('confirm-button');
+const denyButton = document.getElementById('deny-button');
+// new account
+const createNewAccountButton = document.getElementById('createNewAccountButton');
+const confirmNewAccountButton = document.getElementById('confirmNewAccountButton');
+const candellNewAccountButton = document.getElementById('candellNewAccountButton');
+// forms
+const newAccountForm = document.getElementById("newAccountForm");
 
 /*
    =================================================
@@ -301,7 +311,11 @@ let accountsArray = [];
  */
 
 confirmButton.addEventListener("click", deleteAccount);
-denyButton.addEventListener("click", cancellDeleteAccount); // Crear método
+denyButton.addEventListener("click", cancellDeleteAccount);
+createNewAccountButton.addEventListener("click", showCreateAccountForm);
+
+confirmNewAccountButton.addEventListener("click", handleCreateAccount);
+candellNewAccountButton.addEventListener("click", cancellCreateAccount);
 
 /*
    =================================================
@@ -335,7 +349,6 @@ async function handleDeleteAccount(event) {
         // Asks for a confirmation
         // true: procceed
         // false: throw Error "Se ha cancelado la eliminación de la cuenta"
-        
         confirmationBoxAccounts.style.display = 'block';
         confirmationBoxAccounts.style.marginTop = "5px";
         confirmButton.setAttribute("data-acc-id", accountID);
@@ -362,6 +375,32 @@ async function handleDeleteAccount(event) {
 
 function cancellDeleteAccount(event) {
     confirmationBoxAccounts.style.display = 'none';
+}
+
+function showCreateAccountForm(event) {
+    // show new account form
+    // pressed cancell button => call cancellCreateAccount();
+    // pressed create button => call handleCreateAccount();
+    newAccountForm.removeAttribute("hidden");
+}
+
+async function handleCreateAccount(event) {
+    // check values
+    // everything ok => call createAccount();
+    // not everything ok => show error messages
+    console.log("Crear nueva cuenta");
+    
+}
+
+function cancellCreateAccount(event) {
+    newAccountForm.setAttribute("hidden", true);
+}
+
+async function handleUpdateAccount(event) {
+    
+}
+
+function cancellUpdateAccount(event) {
 }
 
 /*
@@ -476,7 +515,7 @@ async function createAccount(evt) {
         // Informs the user account deleted successfully
         msgBoxAccounts.style.color = "#5620ad";
         msgBoxAccounts.style.marginTop = "5px";
-        msgBoxAccounts.textContent = "Se ha borrado la cuenta exitosamente";
+        msgBoxAccounts.textContent = "Se ha creado la cuenta exitosamente";
         msgBoxAccounts.style.display = 'block';
         confirmationBoxAccounts.style.display = 'none';
         
@@ -564,10 +603,34 @@ function* accountRowGenerator(accounts) {
         // Run through every element of the account
         ["id", "type", "description", "creditLine", "beginBalanceTimestamp", "beginBalance", "balance"].forEach(field => {
             const td = document.createElement("td");
-            td.textContent = account[field]; // Evita valores vacíos
-            tr.appendChild(td);
+            if (field === "beginBalanceTimestamp") {
+                const originalDateFormat = new Date(account[field]);
+                const opciones = {
+                    day: '2-digit',
+                    month: '2-digit',
+                    year: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    hour12: false // formato 24h
+                  };
+                const newDateFormat = originalDateFormat.toLocaleDateString('es-ES', opciones);
+                // Fecha formateada
+                td.textContent = newDateFormat;
+            } else {
+                // Valor tal cual
+                td.textContent = account[field];
+            }
             // saves the account id for the button data attribute
-            if (field === "id") accID = account[field];
+            if (field === "id") {
+                accID = account[field];
+                // td simulating link color
+                td.style.color = "#5620ad";
+                // td id attributes
+                td.setAttribute("data-acc-id", accID);
+                // td listener
+                td.addEventListener("click", storeAccountData);
+            }
+            tr.appendChild(td);
         });
         /*
          * Guardar al final del Array accountsArray objetos Account
@@ -599,8 +662,6 @@ function* accountRowGenerator(accounts) {
         // Button name attributes
         buttonEdit.setAttribute("name", "edit-button");
         buttonDelete.setAttribute("name", "delete-button");
-        // Table row listener
-        // tr.addEventListener("click", goToMovementsPage)
         // Put buttons into td
         tdButtons.appendChild(buttonEdit);
         tdButtons.appendChild(buttonDelete);
@@ -637,7 +698,7 @@ async function buildAccountsTable() {
     let deleteButtons = document.getElementsByName("delete-button");
     // Set listeners into each button
     for (const editButton of editButtons) {
-        editButton.addEventListener("click",updateAccount);
+        editButton.addEventListener("click",handleUpdateAccount);
     }
     for (const deleteButton of deleteButtons) {
         deleteButton.addEventListener("click",handleDeleteAccount);
