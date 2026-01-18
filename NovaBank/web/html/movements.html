@@ -9,12 +9,13 @@
   <link rel="stylesheet" href="../css/style.css">
   <link rel="stylesheet" href="../css/facilities.css">
   <link rel="stylesheet" href="../css/main.css">
-  <link rel="alternate stylesheet" title="ModoOscuro" id="theme-link" href="css/oscuro.css" disabled>
+  <link rel="alternate stylesheet" title="ModoOscuro" id="theme-link" href="../css/oscuro.css" disabled>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <body>
   <header class="header">
     <div class="container">
       <div class="logo">
-        <a href="main.html"><img src="assets/img/logo.png" alt="Nova Bank"></a>
+        <a href="main.html"><img src="../assets/img/logo.png" alt="Nova Bank"></a>
         <a href="main.html"> <h1>Nova Bank</h1></a>
       </div>
       <div class="buttons">
@@ -38,24 +39,121 @@
     </div>
   </header>
   <main>
-    <table id="userMovements" aria-label="User Movements" border="1">
-    <caption class="text-left font-semibold mb-2 pb-2">
-    Movimientos del usuario
-    </caption>
-        <thead>
-            <tr>
-                <th scope="col">Fecha y hora</th>
-                <th scope="col">Descripción</th>
-                <th scope="col">Cantidad</th>
-                <th scope="col">Saldo Actual</th>
-            </tr>
-        </thead>
-        <tbody id="contentMovements">
-        </tbody>
-    </table>
-    <button id="addMovementPrueba">Añadir</button>
-    <button id="deleteLastMovement">Eliminar</button>
-    
+
+
+    <!--PARA QUE LO COPIES MIGUEL :P -->
+    <section class="tableContainerBody">
+      <div class="tableContainer">
+        <h1>Cuentas</h1>
+        <div class="table-card">
+            <table id="showCOMPLETAR" aria-label="User Movements">
+            <!-- <caption>Cuentas/Movimientos</caption> -->
+                <thead>
+                    <tr>
+                        <th scope="col">Identificador</th>
+                        <th scope="col">Tipo</th>
+                        <th scope="col">Saldo actual</th>
+                        <th scope="col">Saldo inicial</th>
+                        <th scope="col">Línea de crédito</th>
+                        <th scope="col">Descripción</th>
+                        <th scope="col">Acción</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>nnnnnnnnn</td>
+                        <td>S</td>
+                        <td>0.00</td>
+                        <td>0.00</td>
+                        <td>0.00</td>
+                        <td>nnnnnnnnn</td>
+                        <td class="actions">
+                            <button class="btn-edit"><i class="fa-solid fa-pen-to-square"></i></button>
+                            <button class="btn-delete"><i class="fa-solid fa-trash-can"></i></button>
+                        </td>
+                    </tr>
+                     <tr>
+                        <td>nnnnnnnnn</td>
+                        <td>S</td>
+                        <td>0.00</td>
+                        <td>0.00</td>
+                        <td>0.00</td>
+                        <td>nnnnnnnnn</td>
+                        <td class="actions">
+                            <button class="btn-edit"><i class="fa-solid fa-pen-to-square"></i></button>
+                            <button class="btn-delete"><i class="fa-solid fa-trash-can"></i></button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>nnnnnnnnn</td>
+                        <td>S</td>
+                        <td>0.00</td>
+                        <td>0.00</td>
+                        <td>0.00</td>
+                        <td>nnnnnnnnn</td>
+                        <td class="actions">
+                            <button class="btn-edit"><i class="fa-solid fa-pen-to-square"></i></button>
+                            <button class="btn-delete"><i class="fa-solid fa-trash-can"></i></button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="footer-actions">
+            <button class="btn-add-large"><i class="fa-solid fa-plus"></i></button>
+        </div>
+    </div>
+    </section>
+    <!--HASTA AQUÍ PUEDES COPIAR, CAMBIA EL CAPTION Y CAMBIA EL ID DE LA TABLA-->
+
+
+    <section class="tableContainerBody">
+      <div class="tableContainer">
+        <h1>Movimientos</h1>
+        <div class="table-card">
+            <table id="userMovements" aria-label="User Movements">
+            <!-- <caption>Cuentas/Movimientos</caption> -->
+                <thead>
+                    <tr>
+                      <th scope="col">Fecha y hora</th>
+                      <th scope="col">Descripción</th>
+                      <th scope="col">Cantidad</th>
+                      <th scope="col">Saldo Actual</th>
+                    </tr>
+                </thead>
+                <tbody id="contentMovements">
+                    <tr>
+                      <td>nnnnnnnnn</td>
+                      <td>S</td>
+                      <td>0.00</td>
+                      <td>0.00</td>
+                    </tr>
+                    <tr>
+                      <td>nnnnnnnnn</td>
+                      <td>S</td>
+                      <td>0.00</td>
+                      <td>0.00</td>
+                    </tr>
+                    <tr>
+                      <td>nnnnnnnnn</td>
+                      <td>S</td>
+                      <td>0.00</td>
+                      <td>0.00</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="footer-controls">
+            <button class="btn-back"><i class="fa-solid fa-arrow-rotate-left"></i></button>
+            
+            <div class="right-group">
+                <button class="btn-delete-outline" id="deleteLastMovement"><i class="fa-solid fa-trash-can"></i></button>
+                <button class="btn-add-large" id="addMovementPrueba"><i class="fa-solid fa-plus"></i></button>
+            </div>
+        </div>
+    </div>
+    </section>
     <section>
         <form id="formMovement">
             <input type="number" id="newAmount" name="newAmount" placeholder="Introduce una cantidad" required>
@@ -69,7 +167,7 @@
   </main>
   <footer class="footer">
     <div class="logo_footer">
-      <img src="assets/img/logo.png" alt="Nova Bank">
+      <img src="../assets/img/logo.png" alt="Nova Bank">
       <p>Nova Bank</p>
     </div>
     <p>© Copyright 2025 Nova Bank. All Rights Reserved.</p>
