@@ -1,5 +1,6 @@
 import { Account, Customer } from './model.js';
 
+
 /*
    ================================================
    
@@ -28,6 +29,49 @@ import { Account, Customer } from './model.js';
  */
 
 /*
+   =================================================
+   
+                         INDEX
+   
+   -------------------------------------------------
+          
+         SECTION #1  -> GLOBAL HTML LISTENER
+         SECTION #2  -> CONSTANT VALUES
+         SECTION #3  -> LISTENERS FOR HANDLING 
+                         EVENTS ON HTML
+         SECTION #4  -> ENEVT HANDLERS CALLED FROM 
+                          THE LISTENERS
+         SECTION #5  -> VALUE CHECKERS
+         SECTION #6  -> CONFIRMATION & CANCELL 
+                          ACTIONS
+         SECTION #7  -> CRUD FUNCTIONS
+         SECTION #8  -> ACCOUNT TABLE METHODS
+         SECTION #9  -> SHOW & HIDE ACTIONS
+         SECTION #10 -> BOOLEAN CHECKING METHODS
+         SECTION #11 -> STORE DATA
+                  
+   
+   =================================================
+ */
+
+/*
+   =================================================        ∎∎
+                                                           ∎∎∎
+                 GLOBAL HTML LISTENER                     ∎∎∎∎
+                                                         ∎∎ ∎∎
+   -------------------------------------------------    ∎∎  ∎∎
+                                                            ∎∎
+                        Caption                             ∎∎
+                                                            ∎∎
+                                                            ∎∎
+                                                            ∎∎    
+   =================================================    ∎∎∎∎∎∎∎∎∎∎
+ */
+
+// Call buildAccountsTable when page loaded all the elements
+document.addEventListener("DOMContentLoaded", buildAccountsTable);
+
+/*
  
   ∎∎∎∎∎∎∎∎∎ ∎∎∎∎∎∎∎       ∎∎∎∎∎   ∎∎∎∎∎∎∎
       ∎     ∎     ∎       ∎    ∎  ∎     ∎
@@ -37,13 +81,11 @@ import { Account, Customer } from './model.js';
       ∎     ∎     ∎       ∎    ∎  ∎     ∎
       ∎     ∎∎∎∎∎∎∎       ∎∎∎∎∎   ∎∎∎∎∎∎∎
 
-    -> TAREA 1: LISTENERS DE TR
-       · Añadir listener a cada table row.
-       · Al hacer click a un table row:
-         - Guardar los datos de la cuenta
-           de esa table row en la sesión.
-         - Redirigir a la página de
-           movimientos.
+    -> TAREA 1: CONTROLAR VALORES
+       · Checkear valores de tfBeginBalance
+       · Checkear valores de tfCreditLine
+       · Checkear valores de tfDescription
+         para que no esté vacío.
 
     -> TAREA 2.1: CLASE Customer
        · Crear constructor con los
@@ -88,18 +130,6 @@ import { Account, Customer } from './model.js';
          arrays que contengan objetos
          Movement y Customer.
        · Crear métodos de la clase.
-
-    -> TAREA 3: INSTANCIAR ACCOUNTS
-       · Durante la generación de filas
-         instanciar los datos de todas
-         las cuentas en objetos de la  
-         clase Account.
-       · Introducir cada instanciación
-         en el Array global accountsArray.
-
-    -> TAREA 4: DELETE ACCOUNT
-       · Crear confirmación para la
-         eliminación de una cuenta.
     
     -> TAREA 5: CREATE ACCOUNT
        · Codificar creación de una cuenta.
@@ -121,44 +151,30 @@ import { Account, Customer } from './model.js';
  */
 
 /*
-   =================================================
-   
-       ATTRIBUTES TO BE USED BY THIS CONTROLLER
-       
-   -------------------------------------------------
-   
-   Takes the necessary elements from
-   html/main.html to be handled later by the
-   event handlers.
-   
-   All the elements on the html/main.html that 
-   need to be handled, have an id called like 
-   it's name attribute.
-   
-   Each of those elements are going to have an
-   instance with the element content taken by
-   the methods reference.getElementById() and
-   reference.getElementsByTagName().
-   
-   DEPRECATED
-   Also a Map() will be instanced to contain
-   all the Accounts of the given Costumer ID.
-
-   DEPRECATED
-   The Map() structure is:
-   -> key = account.id
-   -> value = AccountController
-    
-   DEPRECATTED
-   To add all the accounts to the Map() we will use
-   a for that runs over all the accounts recieved
-   by the fetch method and the GET request and
-   are going to be given in JSON format.
+   =================================================        ∎∎∎∎∎
+                                                          ∎∎     ∎∎
+                   CONSTANT VALUES                      ∎∎         ∎∎
+                                                                  ∎∎
+   -------------------------------------------------             ∎∎
+                                                               ∎∎
+   This section contains global constants to let all         ∎∎
+   the methods use them.                                   ∎∎
+                                                          ∎∎
+   -> URL service constant for fetch API                ∎∎         ∎∎
+   -> Data from session storage                         ∎∎∎∎∎∎∎∎∎∎∎∎∎
+   -> Elements from HMTL                                
+      · All the elements on the html/main.html that     
+        need to be handled, have an id called like      
+        it's name attribute.
+      · Each of those elements are going to have an
+        instance with the element content taken by
+        the methods reference.getElementById() and
+        reference.getElementsByTagName().
+   -> Global Array accountsArray that is filled
+        up with all the Account instances.
    
    =================================================
  */
-// Call when page loaded all the elements
-document.addEventListener("DOMContentLoaded", buildAccountsTable);
 
 // fetch resources
 const GET_ALL_SERVICE_URL = "/CRUDBankServerSide/webresources/account/customer/"; // Then append the customer ID
@@ -167,121 +183,11 @@ const DELETE_SERVICE_URL = GET_BY_ID_SERVICE_URL; // Then append the account ID
 const CREATE_SERVICE_URL = GET_BY_ID_SERVICE_URL; // Same as getting by ID URL
 const UPDATE_SERVICE_URL = GET_BY_ID_SERVICE_URL; // Same as getting by ID URL
 
-/*
-        ESTRUCTURA DEL XML PARA CREAR UNA CUENTA ASOCIADA A UN CUSTOMER
-        <account>
-            <balance>999.99</balance>
-            <beginBalance>999.99</beginBalance>
-            <beginBalanceTimestamp>2019-01-14T19:19:04+01:00</beginBalanceTimestamp>
-            <creditLine>0.0</creditLine>
-            <customers>
-                <city>New York</city>
-                <email>jsmith@enterprise.net</email>
-                <firstName>John</firstName>
-                <id>102263301</id>
-                <lastName>Smith</lastName>
-                <middleInitial>S.</middleInitial>
-                <password>abcd*1234</password>
-                <phone>15556969699</phone>
-                <state>New York</state>
-                <street>163rd St.</street>
-                <zip>10032</zip>
-            </customers>
-            <movements>
-                <amount>100.0</amount>
-                <balance>100.0</balance>
-                <description>Deposit</description>
-                <id>6</id>
-                <timestamp>2019-02-02T16:56:44+01:00</timestamp>
-            </movements>
-            <movements>
-                <amount>100.0</amount>
-                <balance>200.0</balance>
-                <description>Deposit</description>
-                <id>7</id>
-                <timestamp>2019-02-02T16:57:40+01:00</timestamp>
-            </movements>
-            <description>Cuenta de prueba 1</description>
-            <id>1111111111</id>
-            <type>STANDARD</type>
-       </account>
-*/
-
-/*
-         ESTRUCTURA DEL JSON PARA CREAR UNA CUENTA ASOCIADA A UN CUSTOMER
-  {
-  "balance":10000.0,
-  "beginBalance":10000.0,
-  "beginBalanceTimestamp":"2019-01-14T19:29:50+01:00",
-  "creditLine":0.0,
-  "customers":[
-        {
-        "city":"Philadelphia",
-        "email":"awallace@gmail.com",
-        "firstName":"Ann",
-        "id":299985563,
-        "lastName":"Wallace",
-        "middleInitial":"M.",
-        "password":"qwerty*9876",
-        "phone":16665984477,
-        "state":"Pennsylvania",
-        "street":"Main St.",
-        "zip":10056
-        },
-        {
-        "city":"New York",
-        "email":"jsmith@enterprise.net",
-        "firstName":"John",
-        "id":102263301,
-        "lastName":"Smith",
-        "middleInitial":"S.",
-        "password":"abcd*1234",
-        "phone":15556969699,
-        "state":"New York",
-        "street":"163rd St.",
-        "zip":10032
-        }],
-  "description":"Check Account",
-  "id":2654785441,
-  "movements":[
-        {
-        "amount":100.0,
-        "balance":100.0,
-        "description":"Deposit",
-        "id":1,
-        "timestamp":"2019-01-14T19:34:06+01:00"
-        },
-        {
-        "amount":9900.0,
-        "balance":10000.0,
-        "description":"Deposit",
-        "id":2,
-        "timestamp":"2019-02-02T16:32:41+01:00"
-        },
-        {
-        "amount":200.0,
-        "balance":10200.0,
-        "description":"Deposit",
-        "id":3,
-        "timestamp":"2019-02-02T16:35:11+01:00"},
-        {
-        "amount":-200.0,
-        "balance":10000.0,
-        "description":"Payment",
-        "id":4,
-        "timestamp":"2019-02-02T16:35:47+01:00"
-        }],
-  "type":"STANDARD"
-  }
-  
-  
- */
 // keep the customer data in constants
 const idCustomer = sessionStorage.getItem("customer.id");
-// Array that contains objects AccountController
-let accountsArray = [];
-// === Elements from main.html ===
-// message boxes
+
+// <=><=><=> Elements from main.html <=><=><=>
+// === message boxes ===
 const msgBoxAccounts = document.getElementById('msgBoxAccounts');
 const confirmationBoxAccounts = document.getElementById('confirmationBoxAccounts');
 // === buttons ===
@@ -292,44 +198,60 @@ const denyButton = document.getElementById('deny-button');
 const createNewAccountButton = document.getElementById('createNewAccountButton');
 const confirmNewAccountButton = document.getElementById('confirmNewAccountButton');
 const candellNewAccountButton = document.getElementById('candellNewAccountButton');
-// forms
+// === forms ===
 const newAccountForm = document.getElementById("newAccountForm");
+// === inputs ===
+const tfBeginBalance = document.getElementById("tfBeginBalance");
+const tfCreditLine = document.getElementById("tfCreditLine");
+const tfDescription = document.getElementById("tfDescription");
+// === combo ===
+const comboAccountType = document.getElementById("comboAccountType");
+
+// Array that contains objects AccountController
+let accountsArray = [];
 
 /*
-   =================================================
-   
-         LISTENERS FOR HANDLING EVENTS ON HTML
-         
-   -------------------------------------------------
-   
-   These listeners triggers the handlers for the
-   attributes taken from the form in 
-   html/accounts.html when an event triggers caused 
-   by a modification on the form.
-   
-   =================================================
+   =================================================      ∎∎∎∎
+                                                        ∎∎    ∎∎
+         LISTENERS FOR HANDLING EVENTS ON HTML                 ∎∎
+                                                               ∎∎
+   -------------------------------------------------          ∎∎
+                                                          ∎∎∎∎
+   These listeners triggers the handlers for the              ∎∎
+   attributes taken from the form in                           ∎∎
+   html/accounts.html when an event triggers caused            ∎∎
+   by a modification on the form.                       ∎∎    ∎∎
+                                                          ∎∎∎∎
+   =================================================    
  */
 
+// === buttons ===
+// delete account
 confirmButton.addEventListener("click", deleteAccount);
 denyButton.addEventListener("click", cancellDeleteAccount);
+// new account
 createNewAccountButton.addEventListener("click", showCreateAccountForm);
-
 confirmNewAccountButton.addEventListener("click", handleCreateAccount);
 candellNewAccountButton.addEventListener("click", cancellCreateAccount);
+// === combo ===
+comboAccountType.addEventListener("change", checkSelectedValue);
+// === inputs ===
+tfBeginBalance.addEventListener("input", checkNewAccountBeginBalance);
+tfCreditLine.addEventListener("input", checkNewAccountCreditLine);
+tfDescription.addEventListener("input", checkNewAccountDescription);
 
 /*
-   =================================================
-   
-       ENEVT HANDLERS CALLED FROM THE LISTENERS
-   
-   -------------------------------------------------
-       
-   These functions are the triggered handlers from
-   the event listeners.
-
-   
-   
-   =================================================
+   =================================================        ∎∎    ∎∎
+                                                            ∎∎    ∎∎
+       ENEVT HANDLERS CALLED FROM THE LISTENERS             ∎∎    ∎∎
+                                                            ∎∎∎∎∎∎∎∎∎∎
+   -------------------------------------------------              ∎∎
+                                                                  ∎∎
+   These functions are the triggered handlers from                ∎∎
+   the event listeners.                                           ∎∎
+                                                                  ∎∎
+                                                                  ∎∎
+   =================================================              ∎∎
  */
 
 async function handleDeleteAccount(event) {
@@ -373,49 +295,126 @@ async function handleDeleteAccount(event) {
     }
 }
 
-function cancellDeleteAccount(event) {
-    confirmationBoxAccounts.style.display = 'none';
-}
-
-function showCreateAccountForm(event) {
-    // show new account form
-    // pressed cancell button => call cancellCreateAccount();
-    // pressed create button => call handleCreateAccount();
-    newAccountForm.removeAttribute("hidden");
-}
-
 async function handleCreateAccount(event) {
     // check values
     // everything ok => call createAccount();
-    // not everything ok => show error messages
+    // not everything ok => show error messages in msgBoxAccounts
     console.log("Crear nueva cuenta");
     
-}
-
-function cancellCreateAccount(event) {
-    newAccountForm.setAttribute("hidden", true);
 }
 
 async function handleUpdateAccount(event) {
     
 }
 
+
+/*
+   =================================================        ∎∎∎∎∎∎∎∎∎∎
+                                                            ∎∎
+                    VALUE CHECKERS                          ∎∎
+                                                            ∎∎
+   -------------------------------------------------        ∎∎∎∎∎∎∎∎∎
+                                                                    ∎∎
+                                                                    ∎∎
+                                                                    ∎∎
+                                                                    ∎∎
+                                                            ∎∎      ∎∎
+   =================================================         ∎∎∎∎∎∎∎∎
+ */
+
+/*
+ * Funcion que detecta la seleccion del combo de main.html
+ * referente al tipo de cuenta seleciconado en el formulario
+ * para crear una cuenta nueva
+ * 
+ * @param {type} event
+ * @returns {string} account type selected
+ */
+function checkSelectedValue(event) {
+    const selectedAccountType = event.target.value;
+    switch (selectedAccountType) {
+        case "NotSelected":
+            tfBeginBalance.setAttribute("hidden", true);
+            tfCreditLine.setAttribute("hidden", true);
+            tfDescription.setAttribute("hidden", true);
+            confirmNewAccountButton.setAttribute("hidden", true);
+            break;
+        case "STANDARD":
+            tfBeginBalance.removeAttribute("hidden");
+            tfCreditLine.setAttribute("hidden", true);
+            tfDescription.removeAttribute("hidden");
+            confirmNewAccountButton.removeAttribute("hidden");
+            break;
+        case "CREDIT":
+            tfBeginBalance.removeAttribute("hidden");
+            tfCreditLine.removeAttribute("hidden");
+            tfDescription.removeAttribute("hidden");
+            confirmNewAccountButton.removeAttribute("hidden");
+            break;
+    }
+    return selectedAccountType;
+}
+
+
+/*
+ * Funcion que controla el valor introducido de salario
+ * en el formulario impidiendo que sea menor a 0
+ * 
+ * @param {type} event
+ * @returns {undefined}
+ */
+function checkNewAccountBeginBalance(event) {
+    switch (checkSelectedValue()) {
+        case "NotSelected":
+            break;
+        default:
+            if (tfBeginBalance.value < 0) {
+                // lanzar error e informar al usuario
+                console.error("Begin balance inferior a 0");
+                return false;
+            }
+            break;
+    }
+}
+
+/*
+   =================================================          ∎∎∎∎∎∎
+                                                            ∎∎      ∎∎
+             CONFIRMATION & CANCELL ACTIONS                 ∎∎
+                                                            ∎∎
+   -------------------------------------------------        ∎∎∎∎∎∎∎∎
+                                                            ∎∎      ∎∎
+                                                            ∎∎      ∎∎
+                                                            ∎∎      ∎∎
+                                                            ∎∎      ∎∎
+                                                            ∎∎      ∎∎
+   =================================================          ∎∎∎∎∎∎
+ */
+
+function cancellDeleteAccount(event) {
+    confirmationBoxAccounts.style.display = 'none';
+}
+
+function cancellCreateAccount(event) {
+    newAccountForm.setAttribute("hidden", true);
+}
+
 function cancellUpdateAccount(event) {
 }
 
 /*
-   =================================================
-   
-                    CRUD FUNCTIONS
-   
-   -------------------------------------------------
-       
-   These functions fetch resources in the server
-   side.
-
-   The funcitons create, read, update or delete
-   accounts.
-
+   =================================================        ∎∎∎∎∎∎∎∎∎∎
+                                                                   ∎∎
+                    CRUD FUNCTIONS                                ∎∎
+                                                                 ∎∎
+   -------------------------------------------------            ∎∎
+                                                               ∎∎
+   These functions fetch resources in the server              ∎∎
+   side.                                                     ∎∎
+                                                            ∎∎
+   The funcitons create, read, update or delete            ∎∎
+   accounts.                                              ∎∎
+                                                         ∎∎
    POSSIBLE HTTP RESPONSES:
    · 200: The GET method will return data if there
           weren't no problems. The data returned
@@ -579,15 +578,17 @@ async function updateAccount(evt) {
 }
 
 /*
-   =================================================
-   
-                   OTHER FUNCTIONS
-   
-   -------------------------------------------------
-       
-   These functions 
-   
-   =================================================
+   =================================================          ∎∎∎∎∎∎
+                                                            ∎∎      ∎∎
+                 ACCOUNT TABLE METHODS                      ∎∎      ∎∎
+                                                            ∎∎      ∎∎
+   -------------------------------------------------          ∎∎∎∎∎∎
+                                                            ∎∎      ∎∎
+   These functions                                          ∎∎      ∎∎
+                                                            ∎∎      ∎∎
+                                                            ∎∎      ∎∎
+                                                            ∎∎      ∎∎
+   =================================================          ∎∎∎∎∎∎
  */
 
 /*
@@ -705,6 +706,41 @@ async function buildAccountsTable() {
     }
 }
 
+/*
+   =================================================          ∎∎∎∎∎∎
+                                                            ∎∎      ∎∎
+                  SHOW & HIDE ACTIONS                       ∎∎      ∎∎
+                                                            ∎∎      ∎∎
+   -------------------------------------------------          ∎∎∎∎∎∎∎∎
+                                                                    ∎∎
+   These functions                                                  ∎∎
+                                                                    ∎∎
+                                                            ∎∎      ∎∎
+                                                            ∎∎      ∎∎
+   =================================================          ∎∎∎∎∎∎
+ */
+
+function showCreateAccountForm(event) {
+    // show new account form
+    // pressed cancell button => call cancellCreateAccount();
+    // pressed create button => call handleCreateAccount();
+    newAccountForm.removeAttribute("hidden");
+}
+
+/*
+   =================================================          ∎∎       ∎∎∎∎
+                                                             ∎∎∎     ∎∎    ∎∎
+                BOOLEAN CHECKING METHODS                    ∎∎∎∎    ∎∎      ∎∎
+                                                           ∎∎ ∎∎    ∎∎      ∎∎
+   -------------------------------------------------      ∎∎  ∎∎    ∎∎      ∎∎
+                                                              ∎∎    ∎∎      ∎∎
+   These functions                                            ∎∎    ∎∎      ∎∎
+                                                              ∎∎    ∎∎      ∎∎
+                                                              ∎∎    ∎∎      ∎∎
+                                                              ∎∎     ∎∎    ∎∎
+   =================================================      ∎∎∎∎∎∎∎∎∎∎   ∎∎∎∎
+ */
+
 async function hasMovements(accountID) {
     const cuenta = await getAccountByID(accountID);
     if (cuenta.movements.length === 0) {
@@ -712,6 +748,20 @@ async function hasMovements(accountID) {
     }
     return true;
 }
+
+/*
+   =================================================          ∎∎         ∎∎    
+                                                             ∎∎∎        ∎∎∎    
+                      STORE DATA                            ∎∎∎∎       ∎∎∎∎    
+                                                           ∎∎ ∎∎      ∎∎ ∎∎    
+   -------------------------------------------------      ∎∎  ∎∎     ∎∎  ∎∎    
+                                                              ∎∎         ∎∎    
+   These functions                                            ∎∎         ∎∎    
+                                                              ∎∎         ∎∎    
+                                                              ∎∎         ∎∎    
+                                                              ∎∎         ∎∎    
+   =================================================      ∎∎∎∎∎∎∎∎∎∎ ∎∎∎∎∎∎∎∎∎∎
+ */
 
 async function storeAccountData(event) {
     const accountID = event.target.dataset.accId;
@@ -726,3 +776,112 @@ async function storeAccountData(event) {
     // Redirect a movimientos.html
     window.location.href = 'movements.html';
 }
+
+
+/*
+        ESTRUCTURA DEL XML PARA CREAR UNA CUENTA ASOCIADA A UN CUSTOMER
+        <account>
+            <balance>999.99</balance>
+            <beginBalance>999.99</beginBalance>
+            <beginBalanceTimestamp>2019-01-14T19:19:04+01:00</beginBalanceTimestamp>
+            <creditLine>0.0</creditLine>
+            <customers>
+                <city>New York</city>
+                <email>jsmith@enterprise.net</email>
+                <firstName>John</firstName>
+                <id>102263301</id>
+                <lastName>Smith</lastName>
+                <middleInitial>S.</middleInitial>
+                <password>abcd*1234</password>
+                <phone>15556969699</phone>
+                <state>New York</state>
+                <street>163rd St.</street>
+                <zip>10032</zip>
+            </customers>
+            <movements>
+                <amount>100.0</amount>
+                <balance>100.0</balance>
+                <description>Deposit</description>
+                <id>6</id>
+                <timestamp>2019-02-02T16:56:44+01:00</timestamp>
+            </movements>
+            <movements>
+                <amount>100.0</amount>
+                <balance>200.0</balance>
+                <description>Deposit</description>
+                <id>7</id>
+                <timestamp>2019-02-02T16:57:40+01:00</timestamp>
+            </movements>
+            <description>Cuenta de prueba 1</description>
+            <id>1111111111</id>
+            <type>STANDARD</type>
+       </account>
+                    
+         ESTRUCTURA DEL JSON PARA CREAR UNA CUENTA ASOCIADA A UN CUSTOMER
+  {
+  "balance":10000.0,
+  "beginBalance":10000.0,
+  "beginBalanceTimestamp":"2019-01-14T19:29:50+01:00",
+  "creditLine":0.0,
+  "customers":[
+        {
+        "city":"Philadelphia",
+        "email":"awallace@gmail.com",
+        "firstName":"Ann",
+        "id":299985563,
+        "lastName":"Wallace",
+        "middleInitial":"M.",
+        "password":"qwerty*9876",
+        "phone":16665984477,
+        "state":"Pennsylvania",
+        "street":"Main St.",
+        "zip":10056
+        },
+        {
+        "city":"New York",
+        "email":"jsmith@enterprise.net",
+        "firstName":"John",
+        "id":102263301,
+        "lastName":"Smith",
+        "middleInitial":"S.",
+        "password":"abcd*1234",
+        "phone":15556969699,
+        "state":"New York",
+        "street":"163rd St.",
+        "zip":10032
+        }],
+  "description":"Check Account",
+  "id":2654785441,
+  "movements":[
+        {
+        "amount":100.0,
+        "balance":100.0,
+        "description":"Deposit",
+        "id":1,
+        "timestamp":"2019-01-14T19:34:06+01:00"
+        },
+        {
+        "amount":9900.0,
+        "balance":10000.0,
+        "description":"Deposit",
+        "id":2,
+        "timestamp":"2019-02-02T16:32:41+01:00"
+        },
+        {
+        "amount":200.0,
+        "balance":10200.0,
+        "description":"Deposit",
+        "id":3,
+        "timestamp":"2019-02-02T16:35:11+01:00"},
+        {
+        "amount":-200.0,
+        "balance":10000.0,
+        "description":"Payment",
+        "id":4,
+        "timestamp":"2019-02-02T16:35:47+01:00"
+        }],
+  "type":"STANDARD"
+  }
+  
+  
+ */

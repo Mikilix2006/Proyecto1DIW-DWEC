@@ -83,21 +83,22 @@
         <div id="confirmationBoxAccounts" hidden>
             <p>¿Borrar cuenta?</p>
             <div id="confirmationButtons">
+                <button id="deny-button">Cancelar</button>
                 <button id="confirm-button">Confirmar</button>
-                <button id="deny-button">Denegar</button>
             </div>
         </div>
         <div id="newAccountForm" hidden>
             <select id="comboAccountType">
-                <option value="-" selected>-</option>
+                <option value="NotSelected" selected>Tipo de cuenta</option>
                 <option value="STANDARD">STANDARD</option>
                 <option value="CREDIT">CREDIT</option>
             </select>
-            <input type="number" id="tfBeginBalance" placeholder="Saldo inicial">
-            <input type="number" id="tfCreditLine" placeholder="Línea de crédito">
+            <input type="number" id="tfBeginBalance" placeholder="Saldo inicial" hidden>
+            <input type="number" id="tfCreditLine" placeholder="Línea de crédito" hidden>
+            <input type="text" id="tfDescription" placeholder="Descripción" hidden>
             <div id="confirmationButtons">
                 <button id="candellNewAccountButton">Cancelar</button>
-                <button id="confirmNewAccountButton">Crear</button>
+                <button id="confirmNewAccountButton" hidden>Crear</button>
             </div>
         </div>
     </section>
