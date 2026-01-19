@@ -81,12 +81,6 @@ document.addEventListener("DOMContentLoaded", buildAccountsTable);
       ∎     ∎     ∎       ∎    ∎  ∎     ∎
       ∎     ∎∎∎∎∎∎∎       ∎∎∎∎∎   ∎∎∎∎∎∎∎
 
-    -> TAREA 1: CONTROLAR VALORES
-       · Checkear valores de tfBeginBalance
-       · Checkear valores de tfCreditLine
-       · Checkear valores de tfDescription
-         para que no esté vacío.
-
     -> TAREA 2.1: CLASE Customer
        · Crear constructor con los
          atributos [id, city, email,
@@ -107,32 +101,6 @@ document.addEventListener("DOMContentLoaded", buildAccountsTable);
          atributos [id, amount, balance,
          description, timestamp].
        · Crear métodos de la clase.
-
-    -> TAREA 2.4: CLASE AccountController
-       · Crear constructor con los
-         atributos [accountData, 
-         movements, customers].
-       · accountData será un objeto
-         de la clase Account.
-       · movements y customers serán
-         arrays que contengan objetos
-         Movement y Customer.
-       · Crear método toJSON().
-       · Crear métodos de la clase.
-
-    -> TAREA 2.5: CLASE MovementController
-       · Crear constructor con los
-         atributos [accountData, 
-         movements, customers].
-       · accountData será un objeto
-         de la clase Account.
-       · movements y customers serán
-         arrays que contengan objetos
-         Movement y Customer.
-       · Crear métodos de la clase.
-    
-    -> TAREA 5: CREATE ACCOUNT
-       · Codificar creación de una cuenta.
 
     -> TAREA 6: UPDATE ACCOUNT
        · Codficar actualización de una
@@ -185,8 +153,8 @@ const CREATE_SERVICE_URL = GET_BY_ID_SERVICE_URL; // Same as getting by ID URL
 const UPDATE_SERVICE_URL = GET_BY_ID_SERVICE_URL; // Same as getting by ID URL
 
 // regular expressions
-const regExpOnlyNumbers = new RegExp("^[0-9]+$");
-const regExpHasToContainLetters = new RegExp("[a-zA-ZñÑ]+");
+const regExpOnlyNumbers = new RegExp("^[0-9]+(\.[0-9]+)?$");
+const regExpHasToContainLetters = new RegExp("[a-zA-ZñÑáÁéÉíÍóÓúÚüÜïÏ]+");
 
 // keep the customer data in constants
 const idCustomer = sessionStorage.getItem("customer.id");
@@ -212,6 +180,7 @@ const tfDescription = document.getElementById("tfDescription");
 // === combo ===
 const comboAccountType = document.getElementById("comboAccountType");
 
+// === GLOBAL ARRAY ===
 // Array that contains objects AccountController
 let accountsArray = [];
 
@@ -598,6 +567,7 @@ async function createAccount() {
         const response = await fetch(CREATE_SERVICE_URL, {
             method: 'POST',
                 headers: {
+                    "Content-Type": "application/json",
                     "Accept": "application/json"
                 },
                 body: JSON.stringify(newAccount)
@@ -614,6 +584,7 @@ async function createAccount() {
         msgBoxAccounts.textContent = "Se ha creado la cuenta exitosamente";
         msgBoxAccounts.style.display = 'block';
         confirmationBoxAccounts.style.display = 'none';
+        newAccountForm.style.display = 'none';
         
     } catch (error) {
         // Informs to the user the errors
@@ -675,6 +646,14 @@ async function deleteAccount(evt) {
 async function updateAccount(evt) {
     const accountID = evt.target.dataset.accId;
     console.log("Editar cuenta: " + accountID);
+    /*
+        AÑADIR A CLASE ACCOUNT UN ATRIBUTO
+        CUSTOMERS QUE SEA UN ARRAY DE
+        OBJETOS CUSTOMER, ADEMAS CREAR
+        toJSON() DE CUSTOMER Y HACER
+        UN STRING GENERATIVO DE CUSTOMERS
+        A LOS QUE PERTENECE LA CUENTA.
+     */
 }
 
 /*
@@ -924,6 +903,21 @@ async function storeAccountData(event) {
             <id>1111111111</id>
             <type>STANDARD</type>
        </account>
+            
+            
+       <customer>
+           <city>Philadelphia</city>
+           <email>awallace@gmail.com</email>
+           <firstName>Ann</firstName>
+           <id>299985563</id>
+           <lastName>Wallace</lastName>
+           <middleInitial>M.</middleInitial>
+           <password>qwerty*9876</password>
+           <phone>16665984477</phone>
+           <state>Pennsylvania</state>
+           <street>Main St.</street>
+           <zip>10056</zip>
+       </customer> 
                     
          ESTRUCTURA DEL JSON PARA CREAR UNA CUENTA ASOCIADA A UN CUSTOMER
   {
