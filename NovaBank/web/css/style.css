@@ -237,11 +237,149 @@ body {
   outline: none;
   transition: border 0.3s ease;
 }
+/*Estilos de tablas base*/
+.tableContainerBody {
+    display: flex;
+    justify-content: center;
+    padding-top: 50px;
+}
+.tableContainer {
+    width: 90%;
+    max-width: 1000px;
+}
+.tableContainer h1 {
+    text-align: center;
+    color: #4a4a4a;
+    font-size: 3rem;
+    margin-bottom: 30px;
+}
+.table-card {
+    background-color: var(--color-fondo);
+    border-radius: 25px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+}
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: var(--color-fondo);
+}
+thead {
+    background-color: var(--color-navbar);
+    color: white;
+}
+th {
+    padding: 15px;
+    font-weight: 400;
+    font-size: 0.9rem;
+    text-align: center;
+}
+td {
+    padding: 15px;
+    text-align: center;
+    color: #555;
+    border-bottom: 1px solid #eee;
+}
+tbody tr:nth-child(even) {
+    background-color: #f0f0f0;
+}
+tbody tr:nth-child(odd) {
+    background-color: #ffffff;
+}
+tbody tr:hover {
+    background-color: #e8e0eb;
+    transition: background-color 0.3s ease;
+}
+.actions {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+}
+.btn-edit, .btn-delete {
+    border: none;
+    border-radius: 8px;
+    width: 35px;
+    height: 35px;
+    color: white;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.btn-edit { background-color: var(--btn-color-solido); }
+.btn-delete { background-color: var(--color-navbar); }
+.footer-actions {
+    display: flex;
+    justify-content: flex-end;
+    padding: 20px 10px;
+}
+/*Botones inferiores movimientos*/
+.footer-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 10px;
+}
+
+.right-group {
+    display: flex;
+    gap: 20px;
+}
+
+/* Botón Regresar (Oscuro) */
+.btn-back {
+    background-color: var(--color-navbar);
+    color: white;
+    border: none;
+    padding: 5px 40px;
+    border-radius: 15px;
+    font-size: 1.2rem;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    transition: transform 0.2s;
+}
+
+/* Botón Eliminar (Blanco con borde morado) */
+.btn-delete-outline {
+    background-color: white;
+    color: var(--btn-color-solido);
+    border: 2px solid var(--btn-color-solido);
+    padding: 5px 40px;
+    border-radius: 20px;
+    font-size: 1.2rem;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    transition: transform 0.2s;
+}
+
+/* Botón Agregar (Morado claro) */
+.btn-add-large {
+    background-color: var(--btn-color-solido);
+    color: white;
+    border: none;
+    padding: 5px 40px;
+    border-radius: 20px;
+    font-size: 1.2rem;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    transition: transform 0.2s;
+}
+
+/* Efectos Hover */
+button:hover {
+    opacity: 0.9;
+    transform: translateY(-2px);
+    transition: all 0.1s;
+    background: var(--btn-color-hover);
+    border: 2px solid var(--btn-color-hover);
+    color: white;
+
+}
+
 /*ERRORES Y JERARQUÍA DE CSS*/
 .form-group input.input-error {
   border: 2px solid #e63946;
 }
-
 .form-group input:focus {
   border-color: var(--btn-color-hover);
 }
@@ -370,27 +508,4 @@ body {
   .login-form {
     padding: 2rem 1.5rem;
   }
-}
-
-/*tablas*/
-#accounts-table, th, td {
-    border: solid 1px black;
-    padding: 25px;
-    text-align: center;
-}
-
-#table-section {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 100%;
-    justify-content: center;
-    margin-top: 2.5rem;
-}
-
-#createNewAccountButton {
-    align-self: start;
-}
-
-#newAccountForm {
 }

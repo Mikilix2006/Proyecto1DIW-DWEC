@@ -37,7 +37,7 @@ export class Account {
         const street = sessionStorage.getItem("customer.street");
         const zip = sessionStorage.getItem("customer.zip");
         
-        var rawJSON = `{
+        //var rawJSON = `{
                         balance: ${this.balance},
                         beginBalance: ${this.beginBalance},
                         beginBalanceTimestamp: ${this.beginBalanceTimestamp},
@@ -57,7 +57,6 @@ export class Account {
                                 zip: ${zip}
                             }
                         ],
-                        movements: [],
                         description: ${this.description},
                         id: ${this.id},
                         type: ${this.type}
@@ -83,7 +82,6 @@ export class Account {
                     zip: zip
                 }
             ],
-            movements: [], // empty array
             description: this.description,
             id: this.id,
             type: this.type

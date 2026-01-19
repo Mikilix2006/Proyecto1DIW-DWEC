@@ -160,7 +160,8 @@ document.addEventListener("DOMContentLoaded", buildAccountsTable);
    This section contains global constants to let all         ∎∎
    the methods use them.                                   ∎∎
                                                           ∎∎
-   -> URL service constant for fetch API                ∎∎         ∎∎
+   -> URL service constant for fetch API                  ∎∎
+   -> Regular expressions to check inputs               ∎∎         ∎∎
    -> Data from session storage                         ∎∎∎∎∎∎∎∎∎∎∎∎∎
    -> Elements from HMTL                                
       · All the elements on the html/main.html that     
@@ -182,6 +183,10 @@ const GET_BY_ID_SERVICE_URL = "/CRUDBankServerSide/webresources/account/"; // Th
 const DELETE_SERVICE_URL = GET_BY_ID_SERVICE_URL; // Then append the account ID
 const CREATE_SERVICE_URL = GET_BY_ID_SERVICE_URL; // Same as getting by ID URL
 const UPDATE_SERVICE_URL = GET_BY_ID_SERVICE_URL; // Same as getting by ID URL
+
+// regular expressions
+const regExpOnlyNumbers = new RegExp("^[0-9]+$");
+const regExpHasToContainLetters = new RegExp("[a-zA-ZñÑ]+");
 
 // keep the customer data in constants
 const idCustomer = sessionStorage.getItem("customer.id");
@@ -277,6 +282,7 @@ async function handleDeleteAccount(event) {
         
     } catch (error) {
         // Informs to the user the errors
+        msgBoxAccounts.innerHTML = "";
         msgBoxAccounts.style.color = "#ff0000";
         msgBoxAccounts.style.marginTop = "5px";
         msgBoxAccounts.textContent = error.message;
@@ -300,7 +306,19 @@ async function handleCreateAccount(event) {
     // everything ok => call createAccount();
     // not everything ok => show error messages in msgBoxAccounts
     console.log("Crear nueva cuenta");
-    
+    if (checkNewAccountBeginBalance() &
+        checkNewAccountCreditLine() &
+        checkNewAccountDescription()) {
+        createAccount();
+    } else {
+        msgBoxAccounts.innerHTML = "";
+        msgBoxAccounts.style.color = "#ff0000";
+        msgBoxAccounts.style.marginTop = "5px";
+        msgBoxAccounts.textContent = "No todos los datos son correctos";
+        msgBoxAccounts.style.display = 'flex';
+        msgBoxAccounts.style.flexDirection = 'column';
+        msgBoxAccounts.style.alignItems = 'center';
+    }
 }
 
 async function handleUpdateAccount(event) {
@@ -364,16 +382,77 @@ function checkSelectedValue(event) {
  * @returns {undefined}
  */
 function checkNewAccountBeginBalance(event) {
-    switch (checkSelectedValue()) {
-        case "NotSelected":
-            break;
-        default:
-            if (tfBeginBalance.value < 0) {
-                // lanzar error e informar al usuario
-                console.error("Begin balance inferior a 0");
-                return false;
-            }
-            break;
+    try {
+        if (tfBeginBalance.value < 0) {
+            // lanzar error e informar al usuario
+            throw new Error("Saldo inicial inferior a 0");
+        }
+        if (regExpOnlyNumbers.exec(tfBeginBalance.value.trim())===null) {
+            // lanzar error e informar al usuario
+            throw new Error("Solo se admiten números en el saldo inicial");
+        }
+        msgBoxAccounts.innerHTML = "";
+        return true; // Everything ok
+    } catch (error) {
+        // Informs to the user the errors
+        msgBoxAccounts.innerHTML = "";
+        msgBoxAccounts.style.color = "#ff0000";
+        msgBoxAccounts.style.marginTop = "5px";
+        msgBoxAccounts.textContent = error.message;
+        msgBoxAccounts.style.display = 'flex';
+        msgBoxAccounts.style.flexDirection = 'column';
+        msgBoxAccounts.style.alignItems = 'center';
+        return false; // Not everything ok
+    }
+}
+
+function checkNewAccountCreditLine(event) {
+    try {
+        if (tfCreditLine.value < 0) {
+            // lanzar error e informar al usuario
+            throw new Error("Linea de crédito inferior a 0");
+        }
+        if (regExpOnlyNumbers.exec(tfCreditLine.value.trim())===null) {
+            // lanzar error e informar al usuario
+            throw new Error("Solo se admiten números en la línea de crédito");
+        }
+        msgBoxAccounts.innerHTML = "";
+        return true; // Everything ok
+    } catch (error) {
+        // Informs to the user the errors
+        msgBoxAccounts.innerHTML = "";
+        msgBoxAccounts.style.color = "#ff0000";
+        msgBoxAccounts.style.marginTop = "5px";
+        msgBoxAccounts.textContent = error.message;
+        msgBoxAccounts.style.display = 'flex';
+        msgBoxAccounts.style.flexDirection = 'column';
+        msgBoxAccounts.style.alignItems = 'center';
+        return false; // Not everything ok
+    }
+}
+
+function checkNewAccountDescription(event) {
+    try {
+        if (tfDescription.value.trim()==="") {
+            // lanzar error e informar al usuario
+            throw new Error("Incluye una descripción a la cuenta");
+        }
+        if (regExpHasToContainLetters.exec(tfDescription.value.trim())===null) {
+            // lanzar error e informar al usuario
+            throw new Error("La descripción debe contener letras");
+        }
+        msgBoxAccounts.innerHTML = "";
+        return true; // Everything ok
+    } catch (error) {
+        // Informs to the user the errors
+        msgBoxAccounts.innerHTML = "";
+        msgBoxAccounts.style.color = "#ff0000";
+        msgBoxAccounts.style.marginTop = "5px";
+        msgBoxAccounts.textContent = error.message;
+        msgBoxAccounts.style.display = 'flex';
+        msgBoxAccounts.style.flexDirection = 'column';
+        msgBoxAccounts.style.alignItems = 'center';
+        return false; // Not everything ok
     }
 }
 
@@ -397,6 +476,7 @@ function cancellDeleteAccount(event) {
 
 function cancellCreateAccount(event) {
     newAccountForm.setAttribute("hidden", true);
+    msgBoxAccounts.style.display = 'none';
 }
 
 function cancellUpdateAccount(event) {
@@ -491,20 +571,36 @@ async function getAccountByID(accountID) {
  * 
  * @returns {undefined}
  */
-async function createAccount(evt) {
+async function createAccount() {
     // generar id
     const newAccountID = accountsArray[accountsArray.length-1].id+1;
     // obtener fecha del sistema actual
+    const date = new Date().toISOString();
+    // controll credit line value
+    var creditLine;
+    if (tfCreditLine.value.trim() == "") {
+        creditLine = 0;
+    } else {
+        creditLine = tfCreditLine.value.trim();
+    }
     // crear objeto account = new Account
+    const newAccount = new Account(
+                                    newAccountID,
+                                    tfDescription.value.trim(),
+                                    tfBeginBalance.value.trim(),
+                                    creditLine,
+                                    tfBeginBalance.value.trim(),
+                                    date,
+                                    comboAccountType.value
+                                );
     
-    const accountID = evt.target.dataset.accId;
     try {
-        const response = await fetch(DELETE_SERVICE_URL +`${encodeURIComponent(accountID)}`, {
+        const response = await fetch(CREATE_SERVICE_URL, {
             method: 'POST',
                 headers: {
                     "Accept": "application/json"
                 },
-                body: JSON.stringify(account)
+                body: JSON.stringify(newAccount)
         });
 
         if (!response.ok) throw new Error("Error en la petición");
@@ -512,6 +608,7 @@ async function createAccount(evt) {
         
         buildAccountsTable(); // Reloads the table
         // Informs the user account deleted successfully
+        msgBoxAccounts.innerHTML = "";
         msgBoxAccounts.style.color = "#5620ad";
         msgBoxAccounts.style.marginTop = "5px";
         msgBoxAccounts.textContent = "Se ha creado la cuenta exitosamente";
@@ -520,11 +617,12 @@ async function createAccount(evt) {
         
     } catch (error) {
         // Informs to the user the errors
+        msgBoxAccounts.innerHTML = "";
         msgBoxAccounts.style.color = "#ff0000";
         msgBoxAccounts.style.marginTop = "5px";
         msgBoxAccounts.textContent = error.message;
         msgBoxAccounts.style.display = 'block';
-        console.error("Error al borrar la cuenta:", error.message);
+        console.error("Error al crear la cuenta:", error.message);
     }
 }
 
@@ -550,6 +648,7 @@ async function deleteAccount(evt) {
         
         buildAccountsTable(); // Reloads the table
         // Informs the user account deleted successfully
+        msgBoxAccounts.innerHTML = "";
         msgBoxAccounts.style.color = "#5620ad";
         msgBoxAccounts.style.marginTop = "5px";
         msgBoxAccounts.textContent = "Se ha borrado la cuenta exitosamente";
@@ -558,6 +657,7 @@ async function deleteAccount(evt) {
         
     } catch (error) {
         // Informs to the user the errors
+        msgBoxAccounts.innerHTML = "";
         msgBoxAccounts.style.color = "#ff0000";
         msgBoxAccounts.style.marginTop = "5px";
         msgBoxAccounts.textContent = error.message;
@@ -658,11 +758,14 @@ function* accountRowGenerator(accounts) {
         buttonEdit.textContent = "EDIT";
         buttonDelete.textContent = "DEL";
         // Button id attributes
-        buttonEdit.setAttribute("data-acc-id", accID);
-        buttonDelete.setAttribute("data-acc-id", accID);
+        buttonEdit.setAttribute("class", "btn-edit");
+        buttonDelete.setAttribute("class", "btn-delete");
         // Button name attributes
         buttonEdit.setAttribute("name", "edit-button");
         buttonDelete.setAttribute("name", "delete-button");
+        // Button aspect classes
+        buttonEdit.setAttribute("data-acc-id", accID);
+        buttonDelete.setAttribute("data-acc-id", accID);
         // Put buttons into td
         tdButtons.appendChild(buttonEdit);
         tdButtons.appendChild(buttonDelete);
@@ -765,14 +868,19 @@ async function hasMovements(accountID) {
 
 async function storeAccountData(event) {
     const accountID = event.target.dataset.accId;
-    const account = await getAccountByID(accountID);
-    sessionStorage.setItem("account.balance", account.balance);
-    sessionStorage.setItem("account.beginBalance", account.beginBalance);
-    sessionStorage.setItem("account.beginBalanceTimestamp", account.beginBalanceTimestamp);
-    sessionStorage.setItem("account.creditLine", account.creditLine);
-    sessionStorage.setItem("account.description", account.description);
-    sessionStorage.setItem("account.id", account.id);
-    sessionStorage.setItem("account.type", account.type);
+//    const account = await getAccountByID(accountID);
+//    sessionStorage.setItem("account.balance", account.balance);
+//    sessionStorage.setItem("account.beginBalance", account.beginBalance);
+//    sessionStorage.setItem("account.beginBalanceTimestamp", account.beginBalanceTimestamp);
+//    sessionStorage.setItem("account.creditLine", account.creditLine);
+//    sessionStorage.setItem("account.description", account.description);
+//    sessionStorage.setItem("account.id", account.id);
+//    sessionStorage.setItem("account.type", account.type);
+    for (const account of accountsArray) {
+        if (account.id == accountID) {
+            sessionStorage.setItem("account", account);
+        }
+    }
     // Redirect a movimientos.html
     window.location.href = 'movements.html';
 }

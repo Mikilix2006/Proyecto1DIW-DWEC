@@ -10,6 +10,7 @@
   <link rel="stylesheet" href="../css/facilities.css">
   <link rel="stylesheet" href="../css/main.css">
   <link rel="alternate stylesheet" title="ModoOscuro" id="theme-link" href="../css/oscuro.css" disabled>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   
 <body>
   <header class="header">
@@ -58,25 +59,38 @@
       </div>
     </section>
 
-    <section id="table-section">
-        <table id="accounts-table">
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Tipo</th>
-                    <th>Descripción</th>
-                    <th>Credit Line</th>
-                    <th>Fecha de apertura</th>
-                    <th>Saldo inicial</th>
-                    <th>Saldo</th>
-                    <th>Acción</th>
-                </tr>
-            </thead>
-            <tbody id="contentAccounts">
-                <!-- Generative content here -->
-            </tbody>
-        </table>
-        <button id="createNewAccountButton"> + </button>
+    <section class="tableContainerBody">
+      <div class="tableContainer">
+        <h1>Cuentas</h1>
+        <div class="table-card">
+            <table id="showCOMPLETAR" aria-label="User Accounts">
+            <caption>Cuentas</caption>
+                <thead>
+                    <tr>
+                        <th scope="col">ID</th>
+                        <th scope="col">Tipo</th>
+                        <th scope="col">Descripción</th>
+                        <th scope="col">Línea de crédito</th>
+                        <th scope="col">Fecha de apertura</th>
+                        <th scope="col">Saldo inicial</th>
+                        <th scope="col">Saldo actual</th>
+                        <th scope="col">Acción</th>
+                    </tr>
+                </thead>
+                <tbody id="contentAccounts">
+                    <!-- Generative content here -->
+                </tbody>
+            </table>
+        </div>
+
+        <div class="footer-actions">
+            <button id="createNewAccountButton" class="btn-add-large"><i class="fa-solid fa-plus"></i></button>
+        </div>
+    </div>
+    </section>
+      
+      <!-- Sucio -->
+        
         <div id="msgBoxAccounts" hidden>
             <!-- Error messages here -->
         </div>
@@ -101,7 +115,9 @@
                 <button id="confirmNewAccountButton" hidden>Crear</button>
             </div>
         </div>
-    </section>
+        
+        <!-- Fin de sucio -->
+      
   </main>
   <footer class="footer">
     <div class="logo_footer">
