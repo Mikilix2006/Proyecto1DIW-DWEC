@@ -40,19 +40,21 @@ if (form) {
        EVENT HANDLERS CALLED FROM THE LISTENERS
    =================================================
  */
-
-
+/*BUILD MOVEMENT CONTENT TABLE - LOAD PAGE*/
 async function buildMovementsTable() {
     movements = await fetchMovements();
     const tbody = document.querySelector("#contentMovements");
-    if (!tbody) return;
-    
+    if (!tbody) return; //mostrar mensaje
     tbody.innerHTML = "";
     const rowGenerator = movementRowGenerator(movements);
     for (const row of rowGenerator) {
         tbody.appendChild(row);
     }
 }
+
+/*SHOW THE CREATE NEW MOVEMENT FORM LAYER - CLICK ADD MOV  */
+
+
 
 async function handlerCreateMov(e) {
     e.preventDefault();
@@ -83,29 +85,31 @@ async function handlerCreateMov(e) {
     form.reset();
 }
 
+/*SHOW THE DELETE LAST MOVEMENT LAYER - CLICK BIN TRASH  */
+
+/*GO BACK ACCOUNT TABLE, CLEANING SESSION STORAGE - CLICK*/
+/*CONFIRM CREATE NEW MOVEMENT*/
+/*CONFIRM DELETE LAST MOVEMENT*/
+
 async function createNewMovement(amount, description) {
     try {
-        // 1. Obtener datos de la cuenta desde SessionStorage
         const accountData = JSON.parse(currentAccount);
         //const accountData = JSON.parse(sessionStorage.getItem("account"));
         if (!accountData) throw new Error("No se encontró información de la cuenta.");
-
         const idAccount = accountData.id;
-        const newBalance = accountData.balance + amount;
-
-        // 2. Crear objeto usando el modelo
+        let newBalance;
+        if(description === "Deposit"){
+            newBalance = accountData.balance + amount;
+        }else{
+            newBalance = accountData.balance - amount;
+        }
         const movObj = new Movements(amount, newBalance, description);
-
-        // 3. POST: Crear movimiento
         const resMov = await fetch(`${SERVICE_URL_MOV}${encodeURIComponent(idAccount)}`, {
             method: "POST",
             headers: { "Content-Type": "application/json", "Accept": "application/json" },
             body: JSON.stringify(movObj)
         });
-
         if (!resMov.ok) throw new Error("Error al crear movimiento");
-
-        // 4. PUT: Actualizar Balance de la cuenta
         accountData.balance = newBalance;
         await updateAccountBalance(accountData);
 
@@ -118,27 +122,30 @@ async function createNewMovement(amount, description) {
     }
 }
 
-
+/*DELETE LAST MOVEMENT FUNCTION*/
 async function deleteLastMovement() {
-    if (movements.length === 0) return;
-    
+    if (movements.length === 0) return; //mostrar mensaje
+    //En lastMov guardamos la posición de la última instancia del objeto y 
+    //recuperamos el ID del movimiento
     const lastMov = movements[movements.length - 1];
     const idMovement = lastMov.id;
-
     try {
         const response = await fetch(`${SERVICE_URL_MOV}${encodeURIComponent(idMovement)}`, {
             method: "DELETE",
             headers: { "Accept": "application/json" }
         });
-
         if (!response.ok) throw new Error("Error en el borrado.");
-        
         const accountData = JSON.parse(sessionStorage.getItem("account"));
-        accountData.balance -= lastMov.amount; // Revertimos el balance
-        
+        if(accountData.description === "Deposit"){
+            accountData.balance -= lastMov.amount;
+        }else{
+            accountData.balance += lastMov.amount;
+        }
+        // Revertimos el balance
+        //Llamamos a la función updateAccountBalance para poder actualizar
+        //el balance de cuentas, par. la cuenta con el balance modificado.
         await updateAccountBalance(accountData);
         await buildMovementsTable();
-        
     } catch (error) {
         console.error("Error al eliminar:", error);
     }
@@ -166,7 +173,7 @@ async function updateAccountBalance(accountObj) {
 
 async function fetchMovements() {
     const accountData = JSON.parse(sessionStorage.getItem("account"));
-    const idAccount = accountData ? accountData.id : "3252214522";
+    const idAccount = accountData ? accountData.id : "3252214522"; //luego dejarlo solo por el session storage
 
     try {
         const response = await fetch(`${SERVICE_URL_MOV}account/${encodeURIComponent(idAccount)}`, {
