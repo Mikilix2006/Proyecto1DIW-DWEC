@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <title>Customer</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">  
+
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/facilities.css">
+    <link rel="alternate stylesheet" title="ModoOscuro" id="theme-link" href="../css/oscuro.css" disabled>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+<header class="header">
+    <div class="container">
+        <div class="logo">
+            <img src="../assets/img/logo.png" alt="Nova Bank">
+            <a href="main.html"><h1>Nova Bank</h1></a>
+        </div>
+
+        <div class="buttons">
+            <button id="themeToggle" class="btn-theme" onclick="changeTheme();" title="Cambiar tema">
+                <!-- SVGs -->
+            </button>
+
+            <a href="main.html"><button class="btn-solid">USUARIO</button></a>
+
+            <div class="menu-container">
+                <button class="menu-toggle" id="menuBtn" onclick="dropDownMenu();">&#9776;</button>
+                <ul class="dropdown-menu" id="dropdownMenu">
+                    <li><a href="main.html">Inicio</a></li>
+                    <li><a href="index.html">Ayuda y soporte</a></li>
+                    <li><a href="index.html" onclick="salirSession();">Cerrar sesión</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</header>
+
+<section class="customers-section">
+    <h2>Usuarios</h2>
+
+    <table id="customersTable">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Middle Initial</th>
+                <th>Street</th>
+                <th>City</th>
+                <th>State</th>
+                <th>Zip</th>
+                <th>Phone</th>
+                <th>Email</th>
+            </tr>
+        </thead>
+        <tbody id="usersTabletbody">
+            <!-- contenido dinámico -->
+        </tbody>
+    </table>
+    
+</section>
+    
+<section>
+    
+    <button id="boton-borrar">Eliminar usuario </button>
+    
+    <button id="boton-crear">Crear usuario</button>
+    
+    <button id="boton-editar">Editar usuario</button>
+        
+</section>
+    
+<div id="modalCrearUsuario" class="modal hidden">
+  <div class="modal-content">
+    <h3>Crear nuevo usuario</h3>
+
+    <form id="formCrearUsuario">
+      <input type="text" name="firstName" placeholder="First Name" required>
+      <input type="text" name="lastName" placeholder="Last Name" required>
+      <input type="text" name="middleInitial" placeholder="Middle Initial">
+      <input type="text" name="street" placeholder="Street" required>
+      <input type="text" name="city" placeholder="City" required>
+      <input type="text" name="state" placeholder="State" required>
+      <input type="text" name="zip" placeholder="Zip" required>
+      <input type="text" name="phone" placeholder="Phone" required>
+      <input type="email" name="email" placeholder="Email" required>
+
+      <div class="modal-buttons">
+        <button type="submit">Guardar</button>
+        <button type="button" id="cerrarModal">Cancelar</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+
+<div id="modalEditarUsuario" class="modal hidden">
+  <div class="modal-content">
+    <h3>Editar usuario</h3>
+
+    <form id="formEditarUsuario">
+      <input type="text" name="firstName" placeholder="First Name" required>
+      <input type="text" name="lastName" placeholder="Last Name" required>
+      <input type="text" name="middleInitial" placeholder="Middle Initial">
+      <input type="text" name="street" placeholder="Street" required>
+      <input type="text" name="city" placeholder="City" required>
+      <input type="text" name="state" placeholder="State" required>
+      <input type="text" name="zip" placeholder="Zip" required>
+      <input type="text" name="phone" placeholder="Phone" required>
+      <input type="email" name="email" placeholder="Email" required>
+
+      <div class="modal-buttons">
+        <button type="submit">Guardar cambios</button>
+        <button type="button" id="cerrarModalEditar">Cancelar</button>
+      </div>
+    </form>
+  </div>
+</div>
+    
+<footer class="footer">
+    <div class="logo_footer">
+        <img src="../assets/img/logo.png" alt="Nova Bank">
+        <p>Nova Bank</p>
+    </div>
+    <p>© Copyright 2025 Nova Bank. All Rights Reserved.</p>
+</footer>
+
+<!-- ORDEN CORRECTO DE SCRIPTS  type="module" -->
+<script src="../js/facilities.js"></script>
+<!--<script src="../js/model.js"></script>-->
+<script  src="../js/customer.js"></script>
+
+</body>
+</html>
