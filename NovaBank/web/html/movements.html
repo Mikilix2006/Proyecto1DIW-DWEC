@@ -2,7 +2,7 @@
 <html lang="es">
 <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Nova Bank - Inicio</title>
+  <title>Movements</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
@@ -58,25 +58,52 @@
             </table>
         </div>
         <div class="footer-controls">
-            <button class="btn-back">Cambiar cuenta</button>
+            <button class="btn-back" id="goBackAccount">Cambiar cuenta</button>
             
             <div class="right-group">
-                <button class="btn-delete-outline" id="deleteLastMovement"><i class="fa-solid fa-trash-can"></i></button>
-                <button class="btn-add-large" id="addMovementPrueba"><i class="fa-solid fa-plus"></i></button>
+                <button class="btn-delete-outline" id="confirmDeleteMov"><i class="fa-solid fa-trash-can"></i></button>
+                <button class="btn-add-large" id="confirmAddMov"><i class="fa-solid fa-plus"></i></button>
             </div>
         </div>
     </div>
     </section>
-    <section>
-        <form id="formMovement">
-            <input type="number" id="newAmount" name="newAmount" placeholder="Introduce una cantidad" required>
-            <select id="newTypeAmount">
-                <option value="Deposit">Depósito</option>
-                <option value="Payment">Pago</option>
-            </select>
-            <button type="submit" id="addMovement">Crear Movimiento</button>
+      <!--
+    <section id="newMovementForm" class="form-section-crud">
+        <form id="formMovement" class="formulario">
+             <div class="titulo">
+                <h1>Nuevo Movimiento</h1>
+            </div>
+            <div class="form-group-crud">
+                <select id="newTypeAmount" >
+                    <option value="" disabled selected>Tipo de movimiento</option>
+                    <option value="Deposit">Depósito</option>
+                    <option value="Payment">Pago</option>
+                </select>
+            </div>
+            <div class="form-group-crud">
+                <input type="number" id="newAmount" name="newAmount" placeholder="Introduce una cantidad" required/>
+                <div id="responseMsgamount"></div>
+            </div>
+            <button id="addMovement" class="btn-form-crud">Crear Movimiento</button>
         </form>
     </section>
+    <section id="confirmDelete" class="form-section-crud">
+        <form class="formulario" id="deleteConfirmationForm">
+            <div class="titulo">
+                <h1> Elimar Movimiento</h1>
+            </div>
+            <div class="info-eliminar-cuenta">
+                <p>¿Estás seguro de que deseas eliminar esta cuenta? una vez eliminada
+                    no podrás recuperar ningún información.
+                </p>
+                <button id="cancelDeleteMovement" class="btn-form-crud" >Cancelar</button>
+                <button id="deleteLastMovement" class="btn-form-crud">Borrar</button>
+                <p class="error-msg">
+                    No puedes eliminar cuentas con movimientos. Ir a movimientos.
+                </p>
+            </div>
+        </form>
+    </section>-->
   </main>
   <footer class="footer">
     <div class="logo_footer">

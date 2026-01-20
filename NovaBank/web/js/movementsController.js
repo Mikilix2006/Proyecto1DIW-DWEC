@@ -1,7 +1,8 @@
 /* 
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * and open the template in the editor
+ * javier.martinuria@educa.madrid.org
  */
 /*
    =================================================
@@ -13,11 +14,13 @@ const SERVICE_URL_MOV= "/CRUDBankServerSide/webresources/movement/";
 const SERVICE_URL_ACC = "/CRUDBankServerSide/webresources/account/";
 const currentAccount = '{"balance":300.0,"beginBalance":100.0,"beginBalanceTimestamp":"2019-01-14T19:28:28+01:00","creditLine":1000.0,"customers":[{"city":"Philadelphia","email":"awallace@gmail.com","firstName":"Ann","id":299985563,"lastName":"Wallace","middleInitial":"M.","password":"qwerty*9876","phone":16665984477,"state":"Pennsylvania","street":"Main St.","zip":10056}],"description":"Check Account with Credit Line","id":3252214522,"movements":[{"amount":100.0,"balance":300.0,"description":"Deposit","id":53,"timestamp":"2026-01-16T09:23:28+01:00"},{"amount":100.0,"balance":100.0,"description":"Deposit","id":6,"timestamp":"2019-02-02T16:56:44+01:00"},{"amount":100.0,"balance":200.0,"description":"Deposit","id":7,"timestamp":"2019-02-02T16:57:40+01:00"}],"type":"CREDIT"}';
 let movements = [];
-const addMovementBtn = document.getElementById("addMovement");
+const addMovementBtnController = document.getElementById("confirmAddMov");
+const deleteMovementController = document.getElementById("confirmDeleteMov");
+const goBackBtnController = document.getElementById("goBackAccount");
 const deleteMovementBtn = document.getElementById("deleteLastMovement");
+const cancelDeleteBtn = document.getElementById("cancelDeleteMovement");
+const addNewMovement = document.getElementById("addMovement");
 
-//const idAccount1 = sessionStorage.getItem("account.id"); 
-//const idAccount = "3252214522"; //sacar el id del account del session storage
 /*
    =================================================
          LISTENERS FOR HANDLING EVENTS ON HTML
@@ -25,16 +28,14 @@ const deleteMovementBtn = document.getElementById("deleteLastMovement");
  */
 //This listener load the R procedure of the app. Show all the movements of the current acount
 window.addEventListener('load', buildMovementsTable);
+//Show CREATE and DELETE window
+addMovementBtnController.addEventListener('click', handlerFormCreateMovement);
+deleteMovementController.addEventListener('click', handlerFormDeleteMovement);
 //Adding and deleting confirm listeners, trigger by click action
-//addMovementBtn.addEventListener('click', () => createNewMovement(100.0, "Deposit"));
-//addMovementBtn.addEventListener('click', () => createNewMovement(100.0, "Deposit"));
-deleteMovementBtn.addEventListener('click', deleteLastMovement);
-
-const form = document.getElementById("formMovement");
-if (form) {
-    form.addEventListener('submit', handlerCreateMov);
-}
-
+deleteMovementBtn.addEventListener('click', deleteLastMovement); //cambiar esta función confirmDeleteLastMov
+addNewMovement.addEventListener('click', createNewMovement);
+//SACAR EL ID DE LA CUENTA 
+//VALIDAR SI TIENE CRÉDITO, SI SE SACA DEL CRÉDITO
 /*
    =================================================
        EVENT HANDLERS CALLED FROM THE LISTENERS
@@ -51,18 +52,18 @@ async function buildMovementsTable() {
         tbody.appendChild(row);
     }
 }
-
 /*SHOW THE CREATE NEW MOVEMENT FORM LAYER - CLICK ADD MOV  */
-
-
-
-async function handlerCreateMov(e) {
+//mejorar esto
+function handlerFormCreateMovement(){
+    const formMovementContainer = document.getElementById("newMovementForm");
+    formMovementContainer.style.visibility = (formMovementContainer.style.visibility == 'hidden') ? 'visible' : 'hidden';
+}
+/*CONFIRM CREATE NEW MOVEMENT*/
+async function createNewMovement(e) {
     e.preventDefault();
 
     const inputAmount = document.getElementById("newAmount");
     const inputType = document.getElementById("newTypeAmount");
-
-    // 2. Convertir el valor a número flotante
     const amount = parseFloat(inputAmount.value);
     const description = inputType.value;
 
@@ -79,19 +80,28 @@ async function handlerCreateMov(e) {
 
     // 4. Llamar a tu función de creación (la que hicimos antes)
     console.log("Enviando:", amount, description);
-    await createNewMovement(amount, description);
+    await fetchCreateNewMovement(amount, description);
 
     // 5. Limpiar el formulario tras el éxito
     form.reset();
 }
 
 /*SHOW THE DELETE LAST MOVEMENT LAYER - CLICK BIN TRASH  */
+function handlerFormDeleteMovement(){
+    //show two buttons
+}
+/*CONFIRM DELETE LAST MOVEMENT*/
+function confirmDeleteLastMov(){}
 
 /*GO BACK ACCOUNT TABLE, CLEANING SESSION STORAGE - CLICK*/
-/*CONFIRM CREATE NEW MOVEMENT*/
-/*CONFIRM DELETE LAST MOVEMENT*/
 
-async function createNewMovement(amount, description) {
+/*
+   =================================================
+                   OTHER FUNCTIONS
+   =================================================
+ */
+/*FETCH CREATE RESOURCE*/
+async function fetchCreateNewMovement(amount, description) {
     try {
         const accountData = JSON.parse(currentAccount);
         //const accountData = JSON.parse(sessionStorage.getItem("account"));
@@ -121,8 +131,7 @@ async function createNewMovement(amount, description) {
         console.error("Error:", error);
     }
 }
-
-/*DELETE LAST MOVEMENT FUNCTION*/
+/*FETCH DELETE MOVEMENT*/
 async function deleteLastMovement() {
     if (movements.length === 0) return; //mostrar mensaje
     //En lastMov guardamos la posición de la última instancia del objeto y 
@@ -136,7 +145,7 @@ async function deleteLastMovement() {
         });
         if (!response.ok) throw new Error("Error en el borrado.");
         const accountData = JSON.parse(sessionStorage.getItem("account"));
-        if(accountData.description === "Deposit"){
+        if(lastMov.description === "Deposit"){
             accountData.balance -= lastMov.amount;
         }else{
             accountData.balance += lastMov.amount;
@@ -150,12 +159,7 @@ async function deleteLastMovement() {
         console.error("Error al eliminar:", error);
     }
 }
-/*
-   =================================================
-                   OTHER FUNCTIONS
-   =================================================
- */
-//Functions related to generate and load movementss content
+/*FETCH UPDATE ACCOUNT RESOURCE*/
 async function updateAccountBalance(accountObj) {
     const response = await fetch(`${SERVICE_URL_ACC}`, {
         method: "PUT",
@@ -187,7 +191,7 @@ async function fetchMovements() {
 }
 
 function* movementRowGenerator(movementsList) {
-    const isoRegex = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}:\d{2})/;
+    const isoRegex = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}:\d{2})/; //CAMBIAR EL FORMATO DE LA FECHA
     for (const movement of movementsList) {
         const tr = document.createElement("tr");
         ["timestamp", "description", "amount", "balance"].forEach(field => {
@@ -206,4 +210,8 @@ function* movementRowGenerator(movementsList) {
         });
         yield tr;
     }
+}
+
+function setFormatOutput(){
+    
 }
