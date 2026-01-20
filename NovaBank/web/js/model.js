@@ -37,33 +37,6 @@ export class Account {
         const street = sessionStorage.getItem("customer.street");
         const zip = sessionStorage.getItem("customer.zip");
         
-        /*
-        var rawJSON = `{
-                        balance: ${this.balance},
-                        beginBalance: ${this.beginBalance},
-                        beginBalanceTimestamp: ${this.beginBalanceTimestamp},
-                        creditLine: ${this.creditLine},
-                        customers: [ 
-                            {
-                                city: ${city},
-                                email: ${email},
-                                firstName: ${firstName},
-                                id: ${customerID},
-                                lastName: ${lastName},
-                                middleInitial: ${middleInitial},
-                                password: ${password},
-                                phone: ${phone},
-                                state: ${state},
-                                street: ${street},
-                                zip: ${zip}
-                            }
-                        ],
-                        description: ${this.description},
-                        id: ${this.id},
-                        type: ${this.type}
-                    }`;
-        */
-        
         return {
             balance: this.balance,
             beginBalance: this.beginBalance,

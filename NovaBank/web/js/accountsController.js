@@ -1,5 +1,4 @@
-import { Account, Customer } from './model.js';
-
+import { Account } from './model.js';
 
 /*
    ================================================
@@ -9,16 +8,26 @@ import { Account, Customer } from './model.js';
    
    -----------------------------------------------
    
-   The file includes the recovery of the accounts
-   that are going to be setted on an Array.
-   
-   Then the accounts of a given Customer ID passed
-   by the sessionStorage, will be displayed on a
-   modificable table on html/main.html.
-   
-   The user can add, delete or modify data from
-   that table and it will be checked in this file
-   and posted, putted or deleted on the database.
+   The file handles the retrieval of accounts 
+   associated with a Customer ID retrieved from 
+   sessionStorage, which are then displayed in 
+   a table format.
+
+   Once retrieved, these accounts are instantiated 
+   as objects of the Account class and stored in a 
+   global array named accountsArray.
+
+   The table includes options to create, delete, 
+   or modify an account. Any data entered by the 
+   user is validated within this file before being 
+   sent via POST, PUT, or DELETE requests.
+
+   Clicking on a specific Account ID will redirect 
+   the user to a page displaying its associated 
+   transactions.
+
+   The file contains an INDEX section where you 
+   can consult the rest of the available sections.
    
    <·> <·> <·> <·> <·> <·> <·> <·> <·> <·> <·> <·> 
    
@@ -154,7 +163,7 @@ const UPDATE_SERVICE_URL = GET_BY_ID_SERVICE_URL; // Same as getting by ID URL
 
 // regular expressions
 const regExpOnlyNumbers = new RegExp("^[0-9]+(\.[0-9]+)?$");
-const regExpHasToContainLetters = new RegExp("[a-zA-ZñÑáÁéÉíÍóÓúÚüÜïÏ]+");
+const regExpHasToContainLetters = new RegExp("[a-zA-ZñÑáÁéÉíÍóÓúÚüÜïÏ ]+");
 
 // keep the customer data in constants
 const idCustomer = sessionStorage.getItem("customer.id");
@@ -171,12 +180,21 @@ const denyButton = document.getElementById('deny-button');
 const createNewAccountButton = document.getElementById('createNewAccountButton');
 const confirmNewAccountButton = document.getElementById('confirmNewAccountButton');
 const candellNewAccountButton = document.getElementById('candellNewAccountButton');
+// update account
+const confirmUpdateAccountButton = document.getElementById('confirmUpdateAccountButton');
+const cancellUpdateAccountButton = document.getElementById('cancellUpdateAccountButton');
 // === forms ===
 const newAccountForm = document.getElementById("newAccountForm");
+const updateAccountForm = document.getElementById("updateAccountForm");
 // === inputs ===
+// new account
 const tfBeginBalance = document.getElementById("tfBeginBalance");
 const tfCreditLine = document.getElementById("tfCreditLine");
 const tfDescription = document.getElementById("tfDescription");
+// update account
+const tfUpdateCreditLine = document.getElementById("tfUpdateCreditLine");
+const tfUpdateDescription = document.getElementById("tfUpdateDescription");
+
 // === combo ===
 const comboAccountType = document.getElementById("comboAccountType");
 
@@ -207,12 +225,20 @@ denyButton.addEventListener("click", cancellDeleteAccount);
 createNewAccountButton.addEventListener("click", showCreateAccountForm);
 confirmNewAccountButton.addEventListener("click", handleCreateAccount);
 candellNewAccountButton.addEventListener("click", cancellCreateAccount);
+// update account
+confirmUpdateAccountButton.addEventListener("click", handleUpdateAccount);
+cancellUpdateAccountButton.addEventListener("click", cancellUpdateAccount);
 // === combo ===
+// new account
 comboAccountType.addEventListener("change", checkSelectedValue);
 // === inputs ===
+// new account
 tfBeginBalance.addEventListener("input", checkNewAccountBeginBalance);
 tfCreditLine.addEventListener("input", checkNewAccountCreditLine);
 tfDescription.addEventListener("input", checkNewAccountDescription);
+// update account
+tfUpdateCreditLine.addEventListener("input", checkUpdateAccountCreditLine);
+tfUpdateDescription.addEventListener("input", checkUpdateAccountDescription);
 
 /*
    =================================================        ∎∎    ∎∎
@@ -276,8 +302,14 @@ async function handleCreateAccount(event) {
     // not everything ok => show error messages in msgBoxAccounts
     console.log("Crear nueva cuenta");
     if (checkNewAccountBeginBalance() &
-        checkNewAccountCreditLine() &
         checkNewAccountDescription()) {
+        // si la cuenta es de credito, que compruebe el CreditLine
+        if (comboAccountType.value === "CREDIT") {
+            if (checkNewAccountCreditLine()) {
+                createAccount();
+            }
+        }
+        // en este punto la cuenta no es de credito
         createAccount();
     } else {
         msgBoxAccounts.innerHTML = "";
@@ -449,6 +481,9 @@ function cancellCreateAccount(event) {
 }
 
 function cancellUpdateAccount(event) {
+    updateAccountForm.setAttribute("hidden", true);
+    tfUpdateCreditLine.setAttribute("hidden", true);
+    confirmUpdateAccountButton.setAttribute("hidden", true);
 }
 
 /*
@@ -584,7 +619,17 @@ async function createAccount() {
         msgBoxAccounts.textContent = "Se ha creado la cuenta exitosamente";
         msgBoxAccounts.style.display = 'block';
         confirmationBoxAccounts.style.display = 'none';
-        newAccountForm.style.display = 'none';
+        // ocultar formulario completo
+        newAccountForm.setAttribute("hidden", true);
+        tfBeginBalance.setAttribute("hidden", true);
+        tfCreditLine.setAttribute("hidden", true);
+        tfDescription.setAttribute("hidden", true);
+        confirmNewAccountButton.setAttribute("hidden", true);
+        // resetear valores de los campos
+        comboAccountType.value = "NotSelected";
+        tfBeginBalance.value = "";
+        tfCreditLine.value = "";
+        tfDescription.value = "";
         
     } catch (error) {
         // Informs to the user the errors
@@ -696,6 +741,13 @@ function* accountRowGenerator(accounts) {
                 const newDateFormat = originalDateFormat.toLocaleDateString('es-ES', opciones);
                 // Fecha formateada
                 td.textContent = newDateFormat;
+            } else if (field === "creditLine" || 
+                  field === "beginBalance" ||
+                  field === "balance" ) {
+              const numberFormat = new Intl.NumberFormat("es-ES", 
+                                                         { style: "currency", 
+                                                           currency: "EUR" }).format(account[field]);
+              td.textContent = numberFormat;
             } else {
                 // Valor tal cual
                 td.textContent = account[field];
@@ -753,6 +805,9 @@ function* accountRowGenerator(accounts) {
         // Show the table row
         yield tr;
     }
+    // hace esto para que cuando se quiera crear un nuevo ID de 
+    // cuenta, coja el más alto y asi no se pueda repetir
+    accountsArray.sort((cuenta1, cuenta2) => cuenta1.id - cuenta2.id);
 }
 
 /**
@@ -781,7 +836,7 @@ async function buildAccountsTable() {
     let deleteButtons = document.getElementsByName("delete-button");
     // Set listeners into each button
     for (const editButton of editButtons) {
-        editButton.addEventListener("click",handleUpdateAccount);
+        editButton.addEventListener("click",showUpdateAccountForm);
     }
     for (const deleteButton of deleteButtons) {
         deleteButton.addEventListener("click",handleDeleteAccount);
@@ -807,6 +862,25 @@ function showCreateAccountForm(event) {
     // pressed cancell button => call cancellCreateAccount();
     // pressed create button => call handleCreateAccount();
     newAccountForm.removeAttribute("hidden");
+}
+
+function showUpdateAccountForm(event) {
+    // show update account form
+    // pressed cancell button => call cancellUpdateAccount();
+    // pressed create button => call handleUpdateAccount();
+    updateAccountForm.removeAttribute("hidden");
+    // si el tipo de cuenta es x tatata
+    const updateAccountID = event.target.dataset.accId;
+    for (const account of accountsArray) {
+        if (account.id == updateAccountID) {
+            if (account.type === "CREDIT") {
+                tfUpdateCreditLine.removeAttribute("hidden");
+            }
+            if (account.type === "STANDARD") {
+                tfUpdateCreditLine.setAttribute("hidden", true);
+            }
+        }
+    }
 }
 
 /*
