@@ -115,6 +115,15 @@ document.addEventListener("DOMContentLoaded", buildAccountsTable);
        · Codficar actualización de una
          cuenta desde la tabla de cuentas.
 
+    -> TAREA 1: OPERZACION AGREGADA DE ARRAY
+       · Sumar todos los saldos de las cuentas
+         y mostrarlo (los saldos pueden ser
+         negativos por deuda) con .reduce()
+       · Filtrar cuentas por id con 
+         .filter() o .find()
+
+          
+
     -> TAREA 7: DOCUMENTAR
        · Documentar métodos de este script.
        · Documentar métodos de las clases.
@@ -194,11 +203,21 @@ const tfDescription = document.getElementById("tfDescription");
 // update account
 const tfUpdateCreditLine = document.getElementById("tfUpdateCreditLine");
 const tfUpdateDescription = document.getElementById("tfUpdateDescription");
-
 // === combo ===
 const comboAccountType = document.getElementById("comboAccountType");
-
+// === headers ===
+// new account
+const idNewAccountHeader = document.getElementById("idNewAccountHeader");
+// delete account
+const idDeleteAccountHeader = document.getElementById("idDeleteAccountHeader");
+// update account
+const idUpdateAccountHeader = document.getElementById("idUpdateAccountHeader");
 // === GLOBAL ARRAY ===
+/*
+    OPERACIONES AGREGADAS USADAS 
+              .sort()
+              .push()
+*/
 // Array that contains objects AccountController
 let accountsArray = [];
 
@@ -274,6 +293,7 @@ async function handleDeleteAccount(event) {
         confirmationBoxAccounts.style.display = 'block';
         confirmationBoxAccounts.style.marginTop = "5px";
         confirmButton.setAttribute("data-acc-id", accountID);
+        idDeleteAccountHeader.innerHTML = `¿Borrar cuenta con ID: ${accountID}?`;
         
     } catch (error) {
         // Informs to the user the errors
@@ -457,6 +477,31 @@ function checkNewAccountDescription(event) {
     }
 }
 
+function checkUpdateAccountCreditLine(event) {
+    try {
+        if (tfUpdateCreditLine.value < 0) {
+            // lanzar error e informar al usuario
+            throw new Error("Linea de crédito inferior a 0");
+        }
+        if (regExpOnlyNumbers.exec(tfUpdateCreditLine.value.trim())===null) {
+            // lanzar error e informar al usuario
+            throw new Error("Solo se admiten números en la línea de crédito");
+        }
+        msgBoxAccounts.innerHTML = "";
+        return true; // Everything ok
+    } catch (error) {
+        // Informs to the user the errors
+        msgBoxAccounts.innerHTML = "";
+        msgBoxAccounts.style.color = "#ff0000";
+        msgBoxAccounts.style.marginTop = "5px";
+        msgBoxAccounts.textContent = error.message;
+        msgBoxAccounts.style.display = 'flex';
+        msgBoxAccounts.style.flexDirection = 'column';
+        msgBoxAccounts.style.alignItems = 'center';
+        return false; // Not everything ok
+    }
+}
+
 /*
    =================================================          ∎∎∎∎∎∎
                                                             ∎∎      ∎∎
@@ -484,6 +529,9 @@ function cancellUpdateAccount(event) {
     updateAccountForm.setAttribute("hidden", true);
     tfUpdateCreditLine.setAttribute("hidden", true);
     confirmUpdateAccountButton.setAttribute("hidden", true);
+    // resetear valores
+    tfUpdateCreditLine.value = "";
+    tfUpdateDescription.value = "";
 }
 
 /*
@@ -862,6 +910,9 @@ function showCreateAccountForm(event) {
     // pressed cancell button => call cancellCreateAccount();
     // pressed create button => call handleCreateAccount();
     newAccountForm.removeAttribute("hidden");
+    // muestra el futuro id de la cuenta
+    const newAccountID = accountsArray[accountsArray.length-1].id+1;
+    idNewAccountHeader.innerHTML = `Futuro ID de cuenta: ${newAccountID}`;
 }
 
 function showUpdateAccountForm(event) {
@@ -869,8 +920,10 @@ function showUpdateAccountForm(event) {
     // pressed cancell button => call cancellUpdateAccount();
     // pressed create button => call handleUpdateAccount();
     updateAccountForm.removeAttribute("hidden");
-    // si el tipo de cuenta es x tatata
+    // si el tipo de cuenta es x mostrar input o no
     const updateAccountID = event.target.dataset.accId;
+    // mostrar el ID de la cuenta a actualizar
+    idUpdateAccountHeader.innerHTML = `ID de cuenta a actualizar: ${updateAccountID}`;
     for (const account of accountsArray) {
         if (account.id == updateAccountID) {
             if (account.type === "CREDIT") {

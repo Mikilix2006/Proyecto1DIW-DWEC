@@ -89,19 +89,22 @@
     </div>
     </section>
       
-      <!-- Sucio -->
+    <!-- Sucio -->
         
         <div id="msgBoxAccounts" hidden>
             <!-- Error messages here -->
         </div>
+      <!-- Confirmacion para borrado de cuenta -->
         <div id="confirmationBoxAccounts" hidden>
-            <p>¿Borrar cuenta?</p>
+            <h3 id="idDeleteAccountHeader"></h3>
             <div id="confirmationButtons">
                 <button id="deny-button">Cancelar</button>
                 <button id="confirm-button">Confirmar</button>
             </div>
         </div>
+      <!-- Formulario para creacion de cuenta -->
         <div id="newAccountForm" hidden>
+            <h3 id="idNewAccountHeader"></h3>
             <select id="comboAccountType">
                 <option value="NotSelected" selected>Tipo de cuenta</option>
                 <option value="STANDARD">STANDARD</option>
@@ -115,16 +118,18 @@
                 <button id="confirmNewAccountButton" hidden>Crear</button>
             </div>
         </div>
+      <!-- Formulario para actualizacion de cuenta -->
         <div id="updateAccountForm" hidden>
+            <h3 id="idUpdateAccountHeader"></h3>
             <input type="number" id="tfUpdateCreditLine" placeholder="Nueva línea de crédito" hidden>
             <input type="text" id="tfUpdateDescription" placeholder="Nueva descripción">
             <div id="confirmationButtons">
                 <button id="cancellUpdateAccountButton">Cancelar</button>
-                <button id="confirmUpdateAccountButton" hidden>Actualizar</button>
+                <button id="confirmUpdateAccountButton">Actualizar</button>
             </div>
         </div>
         
-        <!-- Fin de sucio -->
+    <!-- Fin de sucio -->
       
   </main>
   <footer class="footer">
