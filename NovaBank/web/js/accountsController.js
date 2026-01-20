@@ -120,7 +120,7 @@ document.addEventListener("DOMContentLoaded", buildAccountsTable);
 /*
    =================================================        ∎∎∎∎∎
                                                           ∎∎     ∎∎
-                   CONSTANT VALUES                      ∎∎         ∎∎
+                    CONSTANT VALUES                     ∎∎         ∎∎
                                                                   ∎∎
    -------------------------------------------------             ∎∎
                                                                ∎∎
@@ -209,12 +209,11 @@ let accountsArray = [];
                                                                ∎∎
    -------------------------------------------------          ∎∎
                                                           ∎∎∎∎
-   These listeners triggers the handlers for the              ∎∎
-   attributes taken from the form in                           ∎∎
-   html/accounts.html when an event triggers caused            ∎∎
-   by a modification on the form.                       ∎∎    ∎∎
-                                                          ∎∎∎∎
-   =================================================    
+   These listeners trigger the functions associated           ∎∎
+   with the correct behavior of the page as the                ∎∎
+   user interacts with the page.                               ∎∎
+                                                        ∎∎    ∎∎
+   =================================================      ∎∎∎∎
  */
 
 // === buttons ===
@@ -260,35 +259,20 @@ tfUpdateDescription.addEventListener("input", checkUpdateAccountDescription);
 
 async function handleDeleteAccount(event) {
     const accountID = event.target.dataset.accId;
-    console.log("Borrar cuenta: " + accountID);
     var movementsError = false;
     try {
-        // Checks if the account has movements
-        // true: throw Error "La cuenta tiene movimientos, no puede ser borrada"
-        // false: procceed
         if (await hasMovements(accountID)) {
             movementsError = true;
             throw new Error('La cuenta con ID: ('+ accountID +') tiene movimientos, no puede ser borrada');
-        }
-        // At this point the account doesn't have movements
-        
+        } // At this point the account doesn't have movements
         // Asks for a confirmation
-        // true: procceed
-        // false: throw Error "Se ha cancelado la eliminación de la cuenta"
         confirmationBoxAccounts.style.display = 'block';
         confirmationBoxAccounts.style.marginTop = "5px";
         confirmButton.setAttribute("data-acc-id", accountID);
         idDeleteAccountHeader.innerHTML = `¿Borrar cuenta con ID: ${accountID}?`;
         
-    } catch (error) {
-        // Informs to the user the errors
-        msgBoxAccounts.innerHTML = "";
-        msgBoxAccounts.style.color = "#ff0000";
-        msgBoxAccounts.style.marginTop = "5px";
-        msgBoxAccounts.textContent = error.message;
-        msgBoxAccounts.style.display = 'flex';
-        msgBoxAccounts.style.flexDirection = 'column';
-        msgBoxAccounts.style.alignItems = 'center';
+    } catch (error) { // Informs to the user the errors
+        showMsgBoxAccounts(error.message, "#ff0000");
         if (movementsError) {
             const enlaceMovements = document.createElement("u");
             enlaceMovements.setAttribute("data-acc-id", accountID);
@@ -297,34 +281,20 @@ async function handleDeleteAccount(event) {
             enlaceMovements.addEventListener("click", storeAccountData);
             msgBoxAccounts.appendChild(enlaceMovements);
         }
-        console.error("Error al borrar la cuenta:", error.message);
     }
 }
 
 async function handleCreateAccount(event) {
-    // check values
-    // everything ok => call createAccount();
-    // not everything ok => show error messages in msgBoxAccounts
-    console.log("Crear nueva cuenta");
-    if (checkNewAccountBeginBalance() &
-        checkNewAccountDescription()) {
-        // si la cuenta es de credito, que compruebe el CreditLine
-        if (comboAccountType.value === "CREDIT") {
-            if (checkNewAccountCreditLine()) {
-                createAccount();
-            }
-        }
-        // en este punto la cuenta no es de credito
-        createAccount();
-    } else {
-        msgBoxAccounts.innerHTML = "";
-        msgBoxAccounts.style.color = "#ff0000";
-        msgBoxAccounts.style.marginTop = "5px";
-        msgBoxAccounts.textContent = "No todos los datos son correctos";
-        msgBoxAccounts.style.display = 'flex';
-        msgBoxAccounts.style.flexDirection = 'column';
-        msgBoxAccounts.style.alignItems = 'center';
-    }
+    if (checkNewAccountBeginBalance() & checkNewAccountDescription())
+        if (comboAccountType.value === "CREDIT") // if CREDIT, check it
+            if (checkNewAccountCreditLine())
+                createAccount(); // Everything OK
+            else
+                showMsgBoxAccounts("La línea de crédito no es válida", "#ff0000");
+        else // at this point, STANDARD account
+            createAccount(); // Everything OK
+    else
+        showMsgBoxAccounts("No todos los datos son correctos", "#ff0000");
 }
 
 async function handleUpdateAccount(event) {
@@ -389,100 +359,54 @@ function checkSelectedValue(event) {
  */
 function checkNewAccountBeginBalance(event) {
     try {
-        if (tfBeginBalance.value < 0) {
-            // lanzar error e informar al usuario
-            throw new Error("Saldo inicial inferior a 0");
-        }
-        if (regExpOnlyNumbers.exec(tfBeginBalance.value.trim())===null) {
-            // lanzar error e informar al usuario
+        if (regExpOnlyNumbers.exec(tfBeginBalance.value.trim())===null)
             throw new Error("Solo se admiten números en el saldo inicial");
-        }
-        msgBoxAccounts.innerHTML = "";
+        hideMsgBoxAccounts(); // No error, no message
         return true; // Everything ok
     } catch (error) {
-        // Informs to the user the errors
-        msgBoxAccounts.innerHTML = "";
-        msgBoxAccounts.style.color = "#ff0000";
-        msgBoxAccounts.style.marginTop = "5px";
-        msgBoxAccounts.textContent = error.message;
-        msgBoxAccounts.style.display = 'flex';
-        msgBoxAccounts.style.flexDirection = 'column';
-        msgBoxAccounts.style.alignItems = 'center';
+        showMsgBoxAccounts(error.message, "#ff0000");
         return false; // Not everything ok
     }
 }
 
 function checkNewAccountCreditLine(event) {
     try {
-        if (tfCreditLine.value < 0) {
-            // lanzar error e informar al usuario
+        if (tfCreditLine.value < 0)
             throw new Error("Linea de crédito inferior a 0");
-        }
-        if (regExpOnlyNumbers.exec(tfCreditLine.value.trim())===null) {
-            // lanzar error e informar al usuario
+        if (regExpOnlyNumbers.exec(tfCreditLine.value.trim())===null)
             throw new Error("Solo se admiten números en la línea de crédito");
-        }
-        msgBoxAccounts.innerHTML = "";
+        hideMsgBoxAccounts(); // No error, no message
         return true; // Everything ok
     } catch (error) {
-        // Informs to the user the errors
-        msgBoxAccounts.innerHTML = "";
-        msgBoxAccounts.style.color = "#ff0000";
-        msgBoxAccounts.style.marginTop = "5px";
-        msgBoxAccounts.textContent = error.message;
-        msgBoxAccounts.style.display = 'flex';
-        msgBoxAccounts.style.flexDirection = 'column';
-        msgBoxAccounts.style.alignItems = 'center';
+        showMsgBoxAccounts(error.message, "#ff0000");
         return false; // Not everything ok
     }
 }
 
 function checkNewAccountDescription(event) {
     try {
-        if (tfDescription.value.trim()==="") {
-            // lanzar error e informar al usuario
+        if (tfDescription.value.trim()==="") 
             throw new Error("Incluye una descripción a la cuenta");
-        }
-        if (regExpHasToContainLetters.exec(tfDescription.value.trim())===null) {
-            // lanzar error e informar al usuario
+        if (regExpHasToContainLetters.exec(tfDescription.value.trim())===null)
             throw new Error("La descripción debe contener letras");
-        }
-        msgBoxAccounts.innerHTML = "";
+        hideMsgBoxAccounts(); // No error, no message
         return true; // Everything ok
     } catch (error) {
-        // Informs to the user the errors
-        msgBoxAccounts.innerHTML = "";
-        msgBoxAccounts.style.color = "#ff0000";
-        msgBoxAccounts.style.marginTop = "5px";
-        msgBoxAccounts.textContent = error.message;
-        msgBoxAccounts.style.display = 'flex';
-        msgBoxAccounts.style.flexDirection = 'column';
-        msgBoxAccounts.style.alignItems = 'center';
+        showMsgBoxAccounts(error.message, "#ff0000");
         return false; // Not everything ok
     }
 }
 
 function checkUpdateAccountCreditLine(event) {
     try {
-        if (tfUpdateCreditLine.value < 0) {
-            // lanzar error e informar al usuario
+        if (tfUpdateCreditLine.value < 0)
             throw new Error("Linea de crédito inferior a 0");
-        }
-        if (regExpOnlyNumbers.exec(tfUpdateCreditLine.value.trim())===null) {
-            // lanzar error e informar al usuario
+        if (regExpOnlyNumbers.exec(tfUpdateCreditLine.value.trim())===null)
             throw new Error("Solo se admiten números en la línea de crédito");
-        }
-        msgBoxAccounts.innerHTML = "";
+        hideMsgBoxAccounts(); // No error, no message
         return true; // Everything ok
     } catch (error) {
-        // Informs to the user the errors
-        msgBoxAccounts.innerHTML = "";
-        msgBoxAccounts.style.color = "#ff0000";
-        msgBoxAccounts.style.marginTop = "5px";
-        msgBoxAccounts.textContent = error.message;
-        msgBoxAccounts.style.display = 'flex';
-        msgBoxAccounts.style.flexDirection = 'column';
-        msgBoxAccounts.style.alignItems = 'center';
+        showMsgBoxAccounts(error.message, "#ff0000");
         return false; // Not everything ok
     }
 }
@@ -507,16 +431,15 @@ function cancellDeleteAccount(event) {
 
 function cancellCreateAccount(event) {
     newAccountForm.setAttribute("hidden", true);
-    msgBoxAccounts.style.display = 'none';
+    hideMsgBoxAccounts();
 }
 
 function cancellUpdateAccount(event) {
     updateAccountForm.setAttribute("hidden", true);
     tfUpdateCreditLine.setAttribute("hidden", true);
     confirmUpdateAccountButton.setAttribute("hidden", true);
-    // resetear valores
-    tfUpdateCreditLine.value = "";
-    tfUpdateDescription.value = "";
+    tfUpdateCreditLine.value = ""; // reset values to none
+    tfUpdateDescription.value = ""; // reset values to none
 }
 
 /*
@@ -556,18 +479,13 @@ async function getAccounts() {
     try {
         const response = await fetch(GET_ALL_SERVICE_URL +`${encodeURIComponent(idCustomer)}`, {
             method: "GET",
-            headers: {
-                "Accept": "application/json"
-            }
-            // Eliminado el body: JSON.stringify(), GET no permite cuerpo
+            headers: {"Accept": "application/json"}
         });
-
         if (!response.ok) throw new Error("Error en la petición");
         
-        return await response.json(); // Importante retornar el JSON
+        return await response.json(); // Important to return JSON
     } catch (error) {
-        console.error("Error al obtener cuentas:", error);
-        return []; // Retorna un array vacío para evitar que el generador falle
+        return []; // Empty array for table generator not to fail
     }
 }
 
@@ -586,19 +504,13 @@ async function getAccountByID(accountID) {
     try {
         const response = await fetch(GET_BY_ID_SERVICE_URL +`${encodeURIComponent(accountID)}`, {
             method: "GET",
-            headers: {
-                "Accept": "application/json"
-            }
-            // Eliminado el body: JSON.stringify(), GET no permite cuerpo
+            headers: {"Accept": "application/json"}
         });
-
         if (!response.ok) throw new Error("Error en la petición");
         
         return await response.json(); // Return the JSON of the full account
     } catch (error) {
-        console.error("Error al obtener la cuenta:", error.message);
-        // Returns null if no accounts were found related to the given ID
-        return null;
+        return null; // Returns null if no accounts were found
     }
 }
 
@@ -609,69 +521,45 @@ async function getAccountByID(accountID) {
  * @returns {undefined}
  */
 async function createAccount() {
-    // generar id
-    const newAccountID = accountsArray[accountsArray.length-1].id+1;
-    // obtener fecha del sistema actual
-    const date = new Date().toISOString();
-    // controll credit line value
-    var creditLine;
-    if (tfCreditLine.value.trim() == "") {
-        creditLine = 0;
-    } else {
-        creditLine = tfCreditLine.value.trim();
-    }
-    // crear objeto account = new Account
-    const newAccount = new Account(
+    const newAccountID = accountsArray[accountsArray.length-1].id+1; // new ID
+    const date = new Date().toISOString(); // get system date
+    var creditLine; // controll credit line value
+    // creditLine controll
+    if (tfCreditLine.value.trim() === "") creditLine = 0;
+    else creditLine = tfCreditLine.value.trim();
+    const newAccount = new Account( // create Accounts
                                     newAccountID,
                                     tfDescription.value.trim(),
                                     tfBeginBalance.value.trim(),
                                     creditLine,
                                     tfBeginBalance.value.trim(),
                                     date,
-                                    comboAccountType.value
-                                );
-    
+                                    comboAccountType.value);
     try {
         const response = await fetch(CREATE_SERVICE_URL, {
             method: 'POST',
-                headers: {
-                    "Content-Type": "application/json",
-                    "Accept": "application/json"
-                },
+                headers: {"Content-Type": "application/json",
+                          "Accept": "application/json"},
                 body: JSON.stringify(newAccount)
         });
-
         if (!response.ok) throw new Error("Error en la petición");
-
         
         buildAccountsTable(); // Reloads the table
-        // Informs the user account deleted successfully
-        msgBoxAccounts.innerHTML = "";
-        msgBoxAccounts.style.color = "#5620ad";
-        msgBoxAccounts.style.marginTop = "5px";
-        msgBoxAccounts.textContent = "Se ha creado la cuenta exitosamente";
-        msgBoxAccounts.style.display = 'block';
+        showMsgBoxAccounts("Se ha creado la cuenta exitosamente", "#5620ad");
         confirmationBoxAccounts.style.display = 'none';
-        // ocultar formulario completo
+        // hide form completely
         newAccountForm.setAttribute("hidden", true);
         tfBeginBalance.setAttribute("hidden", true);
         tfCreditLine.setAttribute("hidden", true);
         tfDescription.setAttribute("hidden", true);
         confirmNewAccountButton.setAttribute("hidden", true);
-        // resetear valores de los campos
+        // reset input values
         comboAccountType.value = "NotSelected";
         tfBeginBalance.value = "";
         tfCreditLine.value = "";
         tfDescription.value = "";
-        
     } catch (error) {
-        // Informs to the user the errors
-        msgBoxAccounts.innerHTML = "";
-        msgBoxAccounts.style.color = "#ff0000";
-        msgBoxAccounts.style.marginTop = "5px";
-        msgBoxAccounts.textContent = error.message;
-        msgBoxAccounts.style.display = 'block';
-        console.error("Error al crear la cuenta:", error.message);
+        showMsgBoxAccounts(error.message, "#ff0000");
     }
 }
 
@@ -687,31 +575,15 @@ async function deleteAccount(evt) {
     try {        
         const response = await fetch(DELETE_SERVICE_URL +`${encodeURIComponent(accountID)}`, {
             method: "DELETE",
-            headers: {
-                "Accept": "application/json"
-            }
+            headers: {"Accept": "application/json"}
         });
-
         if (!response.ok) throw new Error("Error en la petición");
-
         
         buildAccountsTable(); // Reloads the table
-        // Informs the user account deleted successfully
-        msgBoxAccounts.innerHTML = "";
-        msgBoxAccounts.style.color = "#5620ad";
-        msgBoxAccounts.style.marginTop = "5px";
-        msgBoxAccounts.textContent = "Se ha borrado la cuenta exitosamente";
-        msgBoxAccounts.style.display = 'block';
+        showMsgBoxAccounts("Se ha borrado la cuenta exitosamente", "#5620ad");
         confirmationBoxAccounts.style.display = 'none';
-        
-    } catch (error) {
-        // Informs to the user the errors
-        msgBoxAccounts.innerHTML = "";
-        msgBoxAccounts.style.color = "#ff0000";
-        msgBoxAccounts.style.marginTop = "5px";
-        msgBoxAccounts.textContent = error.message;
-        msgBoxAccounts.style.display = 'block';
-        console.error("Error al borrar la cuenta:", error.message);
+    } catch (error) {   
+        showMsgBoxAccounts(error.message, "#ff0000");
     }
 }
 
@@ -771,35 +643,25 @@ function* accountRowGenerator(accounts) {
                     minute: '2-digit',
                     hour12: false // formato 24h
                   };
-                const newDateFormat = originalDateFormat.toLocaleDateString('es-ES', opciones);
-                // Fecha formateada
-                td.textContent = newDateFormat;
-            } else if (field === "creditLine" || 
-                  field === "beginBalance" ||
-                  field === "balance" ) {
-              const numberFormat = new Intl.NumberFormat("es-ES", 
-                                                         { style: "currency", 
-                                                           currency: "EUR" }).format(account[field]);
-              td.textContent = numberFormat;
-            } else {
-                // Valor tal cual
+                // Change date format
+                td.textContent = originalDateFormat.toLocaleDateString('es-ES', opciones);
+            } else if (field === "creditLine" ||
+                       field === "beginBalance" ||
+                       field === "balance" ) {
+              td.textContent = new Intl.NumberFormat("es-ES", {style: "currency", 
+                                                                   currency: "EUR"}).format(account[field]);
+            } else { // No different format
                 td.textContent = account[field];
             }
-            // saves the account id for the button data attribute
             if (field === "id") {
-                accID = account[field];
-                // td simulating link color
-                td.style.color = "#5620ad";
-                // td id attributes
-                td.setAttribute("data-acc-id", accID);
-                // td listener
-                td.addEventListener("click", storeAccountData);
+                accID = account[field]; // save account id for button data
+                td.style.color = "#5620ad"; // link color
+                td.setAttribute("data-acc-id", accID); // id attribute
+                td.addEventListener("click", storeAccountData); // listener
             }
             tr.appendChild(td);
         });
-        /*
-         * Guardar al final del Array accountsArray objetos Account
-         */
+        // Store at end of accountsArray Account objects
         accountsArray.push(new Account(
                                         account["id"],
                                         account["description"],
@@ -809,12 +671,7 @@ function* accountRowGenerator(accounts) {
                                         account["beginBalanceTimestamp"],
                                         account["type"]
                                         ));
-        /*
-         * Cuando termine el forEach, añadir en la sección "Acción"
-         * los botones para editar y borrar esa cuenta para que estén
-         * en la misma fila que la cuenta a la que están asociados.
-         */
-        // Create necessary HTML elements
+        // Edit and Delete buttons in each row in new column
         const tdButtons = document.createElement("td");
         const buttonEdit = document.createElement("button");
         const buttonDelete = document.createElement("button");
@@ -838,8 +695,7 @@ function* accountRowGenerator(accounts) {
         // Show the table row
         yield tr;
     }
-    // hace esto para que cuando se quiera crear un nuevo ID de 
-    // cuenta, coja el más alto y asi no se pueda repetir
+    // Sort accountsArray from lowest to highest
     accountsArray.sort((cuenta1, cuenta2) => cuenta1.id - cuenta2.id);
 }
 
@@ -853,27 +709,20 @@ function* accountRowGenerator(accounts) {
  * @returns {undefined} nothing if no accounts where given
  */
 async function buildAccountsTable() {
-    const accounts = await getAccounts(); // Fetching accounts into const
+    const accounts = await getAccounts(); // Fetch accounts into const
     const tbody = document.querySelector("#contentAccounts");
-    
-    if (!tbody) return; // Security if the element doesn't exists in the DOM
-    // Clean table before insert (just in case)
-    tbody.innerHTML = "";
 
     const rowGenerator = accountRowGenerator(accounts);
-    for (const row of rowGenerator) {
+    for (const row of rowGenerator)
         tbody.appendChild(row);
-    }
     // Recover the buttons into arrays
     let editButtons = document.getElementsByName("edit-button");
     let deleteButtons = document.getElementsByName("delete-button");
     // Set listeners into each button
-    for (const editButton of editButtons) {
+    for (const editButton of editButtons)
         editButton.addEventListener("click",showUpdateAccountForm);
-    }
-    for (const deleteButton of deleteButtons) {
+    for (const deleteButton of deleteButtons)
         deleteButton.addEventListener("click",handleDeleteAccount);
-    }
 }
 
 /*
@@ -891,11 +740,7 @@ async function buildAccountsTable() {
  */
 
 function showCreateAccountForm(event) {
-    // show new account form
-    // pressed cancell button => call cancellCreateAccount();
-    // pressed create button => call handleCreateAccount();
     newAccountForm.removeAttribute("hidden");
-    // muestra el futuro id de la cuenta
     const newAccountID = accountsArray[accountsArray.length-1].id+1;
     idNewAccountHeader.innerHTML = `Futuro ID de cuenta: ${newAccountID}`;
 }
@@ -905,20 +750,26 @@ function showUpdateAccountForm(event) {
     // pressed cancell button => call cancellUpdateAccount();
     // pressed create button => call handleUpdateAccount();
     updateAccountForm.removeAttribute("hidden");
-    // si el tipo de cuenta es x mostrar input o no
     const updateAccountID = event.target.dataset.accId;
-    // mostrar el ID de la cuenta a actualizar
+    // show ID of updating account
     idUpdateAccountHeader.innerHTML = `ID de cuenta a actualizar: ${updateAccountID}`;
-    for (const account of accountsArray) {
-        if (account.id == updateAccountID) {
-            if (account.type === "CREDIT") {
-                tfUpdateCreditLine.removeAttribute("hidden");
-            }
-            if (account.type === "STANDARD") {
-                tfUpdateCreditLine.setAttribute("hidden", true);
-            }
-        }
-    }
+    for (const account of accountsArray)
+        if (account.id == updateAccountID)
+            if (account.type === "CREDIT") tfUpdateCreditLine.removeAttribute("hidden");
+            else tfUpdateCreditLine.setAttribute("hidden", true);
+}
+
+function showMsgBoxAccounts(message, color) {
+    msgBoxAccounts.style.color = color;
+    msgBoxAccounts.style.marginTop = "5px";
+    msgBoxAccounts.textContent = message;
+    msgBoxAccounts.style.display = 'flex';
+    msgBoxAccounts.style.flexDirection = 'column';
+    msgBoxAccounts.style.alignItems = 'center';
+}
+
+function hideMsgBoxAccounts() {
+    msgBoxAccounts.style.display = 'none';
 }
 
 /*
@@ -937,10 +788,7 @@ function showUpdateAccountForm(event) {
 
 async function hasMovements(accountID) {
     const cuenta = await getAccountByID(accountID);
-    if (cuenta.movements.length === 0) {
-        return false;
-    }
-    return true;
+    return cuenta.movements.length !== 0;
 }
 
 /*
@@ -961,5 +809,5 @@ function storeAccountData(event) {
     for (const account of accountsArray) 
         if (account.id == event.target.dataset.accId) 
             sessionStorage.setItem("account", account);
-    window.location.href = 'movements.html'; // Redirect a movimientos.html
+    window.location.href = 'movements.html'; // Redirect to movimientos.html
 }

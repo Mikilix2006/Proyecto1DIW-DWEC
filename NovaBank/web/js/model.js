@@ -64,25 +64,6 @@ export class Account {
     }
 }
 
-
-/*
-  ============= COMENTARIO PARA SAYURI ============
-   Tienes que cambiar de tu página
-   html la etiqueta <script> que
-   tiene como src -> ../js/customerController.js
-   (o como se llame tu archivo de customers)
-   tienes que añadir:
-   type="module"
-   quedandote una línea como esta:
-   <script type="module" src="../js/accountsController.js"></script>
-   
-   También tienes que añadir al principio de tu .js
-   la línea:
-   import { Customer } from './model.js';
-
-                 Eso sería todo :D
-  ==================================================
- */
 export class Customer {
     // attributes
     city;
