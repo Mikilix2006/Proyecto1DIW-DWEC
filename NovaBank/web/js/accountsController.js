@@ -1,40 +1,41 @@
 import { Account } from './model.js';
 
 /*
-   ================================================
-   
-    THIS JS FILE IS IN CHARGE OF THE BEHAVIOUR OF
-      THE ACCOUNTS SECTION LOCATED IN main.html
-   
-   -----------------------------------------------
-   
-   The file handles the retrieval of accounts 
-   associated with a Customer ID retrieved from 
-   sessionStorage, which are then displayed in 
-   a table format.
-
-   Once retrieved, these accounts are instantiated 
-   as objects of the Account class and stored in a 
-   global array named accountsArray.
-
-   The table includes options to create, delete, 
-   or modify an account. Any data entered by the 
-   user is validated within this file before being 
-   sent via POST, PUT, or DELETE requests.
-
-   Clicking on a specific Account ID will redirect 
-   the user to a page displaying its associated 
-   transactions.
-
-   The file contains an INDEX section where you 
-   can consult the rest of the available sections.
-   
-   <·> <·> <·> <·> <·> <·> <·> <·> <·> <·> <·> <·> 
-   
-   AUTHOR: Miguel González Delgado
-   CREATION DATE: 2025-12-5 9:08 UTC+01
-   
-   ================================================
+   ================================================     
+                                                        
+    THIS JS FILE IS IN CHARGE OF THE BEHAVIOUR OF       
+      THE ACCOUNTS SECTION LOCATED IN main.html         
+                                                        
+   -----------------------------------------------      
+                                                        
+   The file handles the retrieval of accounts                      ∎∎∎∎∎∎∎∎∎∎\         
+   associated with a Customer ID retrieved from                ∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎\     
+   sessionStorage, which are then displayed in               ∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎\  
+   a table format.                                         ∎∎∎∎∎∎\_∎∎∎∎∎∎∎∎∎∎∎\_∎∎∎∎∎∎\
+                                                           ∎∎∎∎∎∎|  ∎∎∎∎∎∎∎∎∎/  ∎∎∎∎∎∎ | 
+   Once retrieved, these accounts are instantiated       ∎∎∎∎∎∎∎∎|   ∎∎∎∎∎∎∎/   ∎∎∎∎∎∎∎∎\
+   as objects of the Account class and stored in a       ∎∎∎∎∎∎∎∎| ∎  ∎∎∎∎∎/ ∎| ∎∎∎∎∎∎∎∎ |
+   global array named accountsArray.                     ∎∎∎∎∎∎∎∎| ∎∎  ∎∎∎/ ∎∎| ∎∎∎∎∎∎∎∎ |
+                                                         ∎∎∎∎∎∎∎∎| ∎∎∎  ∎/ ∎∎∎| ∎∎∎∎∎∎∎∎ |
+   The table includes options to create, delete,         ∎∎∎∎∎∎∎∎| ∎∎∎∎   ∎∎∎∎| ∎∎∎∎∎∎∎∎ |
+   or modify an account. Any data entered by the         ∎∎∎∎∎∎∎∎| ∎∎∎∎∎ ∎∎∎∎∎| ∎∎∎∎∎∎∎∎ |
+   user is validated within this file before being        \∎∎∎∎∎∎| ∎∎∎∎∎∎∎∎∎∎∎| ∎∎∎∎∎∎\_\|  
+   sent via POST, PUT, or DELETE requests.                 ∎∎∎∎∎∎| ∎∎∎∎∎∎∎∎∎∎∎| ∎∎∎∎∎∎ |
+                                                            \∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎\_\|   
+   Clicking on a specific Account ID will redirect            \∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎\_\|
+   the user to a page displaying its associated                 \__∎∎∎∎∎∎∎∎∎∎∎\___\|
+   transactions.                                                    \_________\|                                        
+                                                        
+   The file contains an INDEX section where you         
+   can consult the rest of the available sections.      
+                                                        
+   <·> <·> <·> <·> <·> <·> <·> <·> <·> <·> <·> <·>      
+                                                        
+   AUTHOR: Miguel González Delgado                      
+   CREATION DATE: 2025-12-5 9:08 UTC+01                 
+   FINALIZATION DATE: undefined                         
+                                                        
+   ================================================     
  */
 
 /*
@@ -53,7 +54,7 @@ import { Account } from './model.js';
          SECTION #5  -> VALUE CHECKERS
          SECTION #6  -> CONFIRMATION & CANCELL 
                           ACTIONS
-         SECTION #7  -> CRUD FUNCTIONS
+         SECTION #7  -> CRUD
          SECTION #8  -> ACCOUNT TABLE METHODS
          SECTION #9  -> SHOW & HIDE ACTIONS
          SECTION #10 -> BOOLEAN CHECKING METHODS
@@ -90,31 +91,6 @@ document.addEventListener("DOMContentLoaded", buildAccountsTable);
       ∎     ∎     ∎       ∎    ∎  ∎     ∎
       ∎     ∎∎∎∎∎∎∎       ∎∎∎∎∎   ∎∎∎∎∎∎∎
 
-    -> TAREA 2.1: CLASE Customer
-       · Crear constructor con los
-         atributos [id, city, email,
-         firstName, lastName, 
-         middleInitial, password, phone,
-         state, street, zip].
-       · Crear métodos de la clase.
-       
-    -> TAREA 2.2: CLASE Account
-       · Crear constructor con los
-         atributos [id, description,
-         balance, creditLine, beginBalance,
-         beginBalanceTimestamp, type].
-       · Crear métodos de la clase.
-
-    -> TAREA 2.3: CLASE Movement
-       · Crear constructor con los
-         atributos [id, amount, balance,
-         description, timestamp].
-       · Crear métodos de la clase.
-
-    -> TAREA 6: UPDATE ACCOUNT
-       · Codficar actualización de una
-         cuenta desde la tabla de cuentas.
-
     -> TAREA 1: OPERZACION AGREGADA DE ARRAY
        · Sumar todos los saldos de las cuentas
          y mostrarlo (los saldos pueden ser
@@ -122,7 +98,9 @@ document.addEventListener("DOMContentLoaded", buildAccountsTable);
        · Filtrar cuentas por id con 
          .filter() o .find()
 
-          
+    -> TAREA 6: UPDATE ACCOUNT
+       · Codficar actualización de una
+         cuenta desde la tabla de cuentas.
 
     -> TAREA 7: DOCUMENTAR
        · Documentar métodos de este script.
@@ -130,9 +108,12 @@ document.addEventListener("DOMContentLoaded", buildAccountsTable);
        · Documentar de nuevo las secciones
          de este script.
 
-    -> TAREA 8: REORDENAR
-       · Reordenar métodos de este script
-         en sus respectivas secciones.
+    -> TAREA 8: REFACTORIZAR
+       · Crear funciones mas pequeñas para
+         mejor legibilidad del codigo.
+       · Cambiar el nombre de algunas
+         funciones ademas de nombres de
+         id sacados del HTML.
 
  */
 
@@ -238,6 +219,8 @@ let accountsArray = [];
 
 // === buttons ===
 // delete account
+// the listener of the delete button on the table, 
+// is created while the table is generated
 confirmButton.addEventListener("click", deleteAccount);
 denyButton.addEventListener("click", cancellDeleteAccount);
 // new account
@@ -245,6 +228,8 @@ createNewAccountButton.addEventListener("click", showCreateAccountForm);
 confirmNewAccountButton.addEventListener("click", handleCreateAccount);
 candellNewAccountButton.addEventListener("click", cancellCreateAccount);
 // update account
+// the listener of the update button on the table, 
+// is created while the table is generated
 confirmUpdateAccountButton.addEventListener("click", handleUpdateAccount);
 cancellUpdateAccountButton.addEventListener("click", cancellUpdateAccount);
 // === combo ===
@@ -537,7 +522,7 @@ function cancellUpdateAccount(event) {
 /*
    =================================================        ∎∎∎∎∎∎∎∎∎∎
                                                                    ∎∎
-                    CRUD FUNCTIONS                                ∎∎
+                         CRUD                                     ∎∎
                                                                  ∎∎
    -------------------------------------------------            ∎∎
                                                                ∎∎
@@ -972,145 +957,9 @@ async function hasMovements(accountID) {
    =================================================      ∎∎∎∎∎∎∎∎∎∎ ∎∎∎∎∎∎∎∎∎∎
  */
 
-async function storeAccountData(event) {
-    const accountID = event.target.dataset.accId;
-//    const account = await getAccountByID(accountID);
-//    sessionStorage.setItem("account.balance", account.balance);
-//    sessionStorage.setItem("account.beginBalance", account.beginBalance);
-//    sessionStorage.setItem("account.beginBalanceTimestamp", account.beginBalanceTimestamp);
-//    sessionStorage.setItem("account.creditLine", account.creditLine);
-//    sessionStorage.setItem("account.description", account.description);
-//    sessionStorage.setItem("account.id", account.id);
-//    sessionStorage.setItem("account.type", account.type);
-    for (const account of accountsArray) {
-        if (account.id == accountID) {
+function storeAccountData(event) {
+    for (const account of accountsArray) 
+        if (account.id == event.target.dataset.accId) 
             sessionStorage.setItem("account", account);
-        }
-    }
-    // Redirect a movimientos.html
-    window.location.href = 'movements.html';
+    window.location.href = 'movements.html'; // Redirect a movimientos.html
 }
-
-
-/*
-        ESTRUCTURA DEL XML PARA CREAR UNA CUENTA ASOCIADA A UN CUSTOMER
-        <account>
-            <balance>999.99</balance>
-            <beginBalance>999.99</beginBalance>
-            <beginBalanceTimestamp>2019-01-14T19:19:04+01:00</beginBalanceTimestamp>
-            <creditLine>0.0</creditLine>
-            <customers>
-                <city>New York</city>
-                <email>jsmith@enterprise.net</email>
-                <firstName>John</firstName>
-                <id>102263301</id>
-                <lastName>Smith</lastName>
-                <middleInitial>S.</middleInitial>
-                <password>abcd*1234</password>
-                <phone>15556969699</phone>
-                <state>New York</state>
-                <street>163rd St.</street>
-                <zip>10032</zip>
-            </customers>
-            <movements>
-                <amount>100.0</amount>
-                <balance>100.0</balance>
-                <description>Deposit</description>
-                <id>6</id>
-                <timestamp>2019-02-02T16:56:44+01:00</timestamp>
-            </movements>
-            <movements>
-                <amount>100.0</amount>
-                <balance>200.0</balance>
-                <description>Deposit</description>
-                <id>7</id>
-                <timestamp>2019-02-02T16:57:40+01:00</timestamp>
-            </movements>
-            <description>Cuenta de prueba 1</description>
-            <id>1111111111</id>
-            <type>STANDARD</type>
-       </account>
-            
-            
-       <customer>
-           <city>Philadelphia</city>
-           <email>awallace@gmail.com</email>
-           <firstName>Ann</firstName>
-           <id>299985563</id>
-           <lastName>Wallace</lastName>
-           <middleInitial>M.</middleInitial>
-           <password>qwerty*9876</password>
-           <phone>16665984477</phone>
-           <state>Pennsylvania</state>
-           <street>Main St.</street>
-           <zip>10056</zip>
-       </customer> 
-                    
-         ESTRUCTURA DEL JSON PARA CREAR UNA CUENTA ASOCIADA A UN CUSTOMER
-  {
-  "balance":10000.0,
-  "beginBalance":10000.0,
-  "beginBalanceTimestamp":"2019-01-14T19:29:50+01:00",
-  "creditLine":0.0,
-  "customers":[
-        {
-        "city":"Philadelphia",
-        "email":"awallace@gmail.com",
-        "firstName":"Ann",
-        "id":299985563,
-        "lastName":"Wallace",
-        "middleInitial":"M.",
-        "password":"qwerty*9876",
-        "phone":16665984477,
-        "state":"Pennsylvania",
-        "street":"Main St.",
-        "zip":10056
-        },
-        {
-        "city":"New York",
-        "email":"jsmith@enterprise.net",
-        "firstName":"John",
-        "id":102263301,
-        "lastName":"Smith",
-        "middleInitial":"S.",
-        "password":"abcd*1234",
-        "phone":15556969699,
-        "state":"New York",
-        "street":"163rd St.",
-        "zip":10032
-        }],
-  "description":"Check Account",
-  "id":2654785441,
-  "movements":[
-        {
-        "amount":100.0,
-        "balance":100.0,
-        "description":"Deposit",
-        "id":1,
-        "timestamp":"2019-01-14T19:34:06+01:00"
-        },
-        {
-        "amount":9900.0,
-        "balance":10000.0,
-        "description":"Deposit",
-        "id":2,
-        "timestamp":"2019-02-02T16:32:41+01:00"
-        },
-        {
-        "amount":200.0,
-        "balance":10200.0,
-        "description":"Deposit",
-        "id":3,
-        "timestamp":"2019-02-02T16:35:11+01:00"},
-        {
-        "amount":-200.0,
-        "balance":10000.0,
-        "description":"Payment",
-        "id":4,
-        "timestamp":"2019-02-02T16:35:47+01:00"
-        }],
-  "type":"STANDARD"
-  }
-  
-  
- */
