@@ -131,30 +131,31 @@
         
     <!-- Fin de sucio -->
     
-    <!--
+    
     <section id="newMovementForm" class="form-section-crud">
         <form id="formMovement" class="formulario">
              <div class="titulo">
-                <h1>Nuevo Movimiento</h1>
+                <h1>Nueva Cuenta</h1>
             </div>
             <div class="form-group-crud">
                 <select id="newTypeAmount" >
-                    <option value="" disabled selected>Tipo de movimiento</option>
-                    <option value="Deposit">Depósito</option>
-                    <option value="Payment">Pago</option>
+                    <option value="NotSelected" disabled selected>Tipo de cuenta</option>
+                    <option value="STANDARD">STANDARD</option>
+                    <option value="CREDIT">CREDIT</option>
                 </select>
             </div>
             <div class="form-group-crud">
                 <input type="number" id="newAmount" name="newAmount" placeholder="Introduce una cantidad" required/>
                 <div id="responseMsgamount"></div>
             </div>
-            <button id="addMovement" class="btn-form-crud">Crear Movimiento</button>
+            <button id="candellNewAccountButton" class="btn-form-crud">Cancelar</button>
+            <button id="addMovement" class="btn-form-crud">Crear Cuenta</button>
         </form>
     </section>
     <section id="confirmDelete" class="form-section-crud">
         <form class="formulario" id="deleteConfirmationForm">
             <div class="titulo">
-                <h1> Elimar Movimiento</h1>
+                <h1> Elimar Cuenta</h1>
             </div>
             <div class="info-eliminar-cuenta">
                 <p>¿Estás seguro de que deseas eliminar esta cuenta? una vez eliminada
@@ -168,7 +169,7 @@
             </div>
         </form>
     </section>
-    -->
+    
       
   </main>
   <footer class="footer">

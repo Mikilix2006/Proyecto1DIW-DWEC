@@ -155,7 +155,7 @@ const CREATE_SERVICE_URL = UPDATE_SERVICE_URL; // Same as updating an account
 const regExpOnlyNumbers = new RegExp("^[\-]?[0-9]+(\.[0-9]+)?$");
 const regExpHasToContainLetters = new RegExp("[a-zA-ZñÑáÁéÉíÍóÓúÚüÜïÏ ]+");
 
-// keep the customer data in constants
+// keep the customer id
 const idCustomer = sessionStorage.getItem("customer.id");
 
 // <=><=><=> Elements from main.html <=><=><=>
@@ -197,7 +197,7 @@ const idUpdateAccountHeader = document.getElementById("idUpdateAccountHeader");
 /*
     OPERACIONES AGREGADAS USADAS 
               .sort()
-              .push()
+          .push() .find()
 */
 // Array that contains objects AccountController
 let accountsArray = [];
@@ -333,7 +333,6 @@ function checkSelectedValue(event) {
             showElements([tfBeginBalance,tfDescription,confirmNewAccountButton]);
             hideElements([tfCreditLine]);
             resetValueOfElements([tfCreditLine]);
-//            tfCreditLine.value = "";
             break;
         case "CREDIT":
             showElements([tfBeginBalance,tfDescription,confirmNewAccountButton,tfCreditLine]);
@@ -450,11 +449,8 @@ function cancellCreateAccount(event) {
 
 function cancellUpdateAccount(event) {
     hideElements([updateAccountForm]);
-//    tfUpdateCreditLine.value = ""; // reset values to none
-//    tfUpdateDescription.value = ""; // reset values to none
-    resetValueOfElements([tfUpdateCreditLine,tfUpdateDescription]);
-//    hideMsgBoxAccounts();
     hideDisplayOf([msgBoxAccounts]);
+    resetValueOfElements([tfUpdateCreditLine,tfUpdateDescription]);
 }
 
 /*
@@ -848,8 +844,7 @@ async function hasMovements(accountID) {
  */
 
 function storeAccountData(event) {
-    for (const account of accountsArray) 
-        if (account.id == event.target.dataset.accId) 
-            sessionStorage.setItem("account", account);
+    const account = accountsArray.find((acc) => acc.id == event.target.dataset.accId);
+    sessionStorage.setItem("account", account);
     window.location.href = 'movements.html'; // Redirect to movimientos.html
 }
