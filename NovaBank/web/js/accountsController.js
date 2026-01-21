@@ -1,5 +1,3 @@
-import { Account } from './model.js';
-
 /*
    ================================================     
                                                         
@@ -37,6 +35,8 @@ import { Account } from './model.js';
                                                         
    ================================================     
  */
+
+import { Account } from './model.js';
 
 /*
    =================================================
@@ -147,9 +147,9 @@ document.addEventListener("DOMContentLoaded", buildAccountsTable);
 // fetch resources
 const GET_ALL_SERVICE_URL = "/CRUDBankServerSide/webresources/account/customer/"; // Then append the customer ID
 const GET_BY_ID_SERVICE_URL = "/CRUDBankServerSide/webresources/account/"; // Then append the account ID
+const UPDATE_SERVICE_URL = "/CRUDBankServerSide/webresources/account"; // Just the URL
 const DELETE_SERVICE_URL = GET_BY_ID_SERVICE_URL; // Then append the account ID
-const CREATE_SERVICE_URL = GET_BY_ID_SERVICE_URL; // Same as getting by ID URL
-const UPDATE_SERVICE_URL = GET_BY_ID_SERVICE_URL; // Same as getting by ID URL
+const CREATE_SERVICE_URL = UPDATE_SERVICE_URL; // Same as updating an account
 
 // regular expressions
 const regExpOnlyNumbers = new RegExp("^[\-]?[0-9]+(\.[0-9]+)?$");
@@ -218,8 +218,7 @@ let accountsArray = [];
 
 // === buttons ===
 // delete account
-// the listener of the delete button on the table, 
-// is created while the table is generated
+// listener of delete button in table generation
 confirmButton.addEventListener("click", handleDeleteAccount);
 denyButton.addEventListener("click", cancellDeleteAccount);
 // new account
@@ -227,8 +226,7 @@ createNewAccountButton.addEventListener("click", showCreateAccountForm);
 confirmNewAccountButton.addEventListener("click", handleCreateAccount);
 candellNewAccountButton.addEventListener("click", cancellCreateAccount);
 // update account
-// the listener of the update button on the table, 
-// is created while the table is generated
+// listener of update button in table generation
 confirmUpdateAccountButton.addEventListener("click", handleUpdateAccount);
 cancellUpdateAccountButton.addEventListener("click", cancellUpdateAccount);
 // === combo ===
@@ -293,9 +291,14 @@ function handleCreateAccount(event) {
 }
 
 async function handleUpdateAccount(event) {
-    
+    const updatingAccount = await getAccountByID(event.target.dataset.accId);
+    if (checkUpdateAccountDescription())
+        if (updatingAccount.type === "CREDIT") // if CREDIT, check it
+            if (checkUpdateAccountCreditLine()) updateAccount(event); // Everything OK
+            else showMsgBoxAccounts("La línea de crédito no es válida", "#ff0000");
+        else updateAccount(event); // Everything OK
+    else showMsgBoxAccounts("La descripción no es válida", "#ff0000");
 }
-
 
 /*
    =================================================        ∎∎∎∎∎∎∎∎∎∎
@@ -324,12 +327,13 @@ function checkSelectedValue(event) {
     switch (selectedAccountType) {
         case "NotSelected":
             hideElements([tfBeginBalance,tfCreditLine,tfDescription,confirmNewAccountButton]);
+            resetValueOfElements([tfBeginBalance,tfCreditLine,tfDescription]);
             break;
         case "STANDARD":
             showElements([tfBeginBalance,tfDescription,confirmNewAccountButton]);
             hideElements([tfCreditLine]);
-//            tfCreditLine.value = "";
             resetValueOfElements([tfCreditLine]);
+//            tfCreditLine.value = "";
             break;
         case "CREDIT":
             showElements([tfBeginBalance,tfDescription,confirmNewAccountButton,tfCreditLine]);
@@ -387,6 +391,17 @@ function checkUpdateAccountCreditLine(event) {
             throw new Error("Linea de crédito inferior a 0");
         if (regExpOnlyNumbers.exec(tfUpdateCreditLine.value.trim())===null)
             throw new Error("Solo se admiten números en la línea de crédito");
+        hideDisplayOf([msgBoxAccounts]); // No error, no message
+        return true; // Everything ok
+    } catch (error) {
+        showMsgBoxAccounts(error.message, "#ff0000");
+        return false; // Not everything ok
+    }
+}
+
+function checkUpdateAccountDescription(event) {
+    try {
+        checkDescription(tfUpdateDescription); // May throw Error
         hideDisplayOf([msgBoxAccounts]); // No error, no message
         return true; // Everything ok
     } catch (error) {
@@ -587,20 +602,42 @@ async function deleteAccount(evt) {
 /*
  * Building function...
  * 
- * @param {type} evt
+ * @param {type} event
  * @returns {undefined}
  */
-async function updateAccount(evt) {
-    const accountID = evt.target.dataset.accId;
-    console.log("Editar cuenta: " + accountID);
-    /*
-        AÑADIR A CLASE ACCOUNT UN ATRIBUTO
-        CUSTOMERS QUE SEA UN ARRAY DE
-        OBJETOS CUSTOMER, ADEMAS CREAR
-        toJSON() DE CUSTOMER Y HACER
-        UN STRING GENERATIVO DE CUSTOMERS
-        A LOS QUE PERTENECE LA CUENTA.
-     */
+async function updateAccount(event) {
+    const accountID = event.target.dataset.accId;
+    let updateAccount;
+    
+    try {
+        for (const account of accountsArray) {
+            if (account.id == accountID) {
+                updateAccount = new Account( // create Accounts
+                                            account.id,
+                                            tfUpdateDescription.value.trim(),
+                                            account.beginBalance,
+                                            account.creditLine,
+                                            account.beginBalance,
+                                            account.beginBalanceTimestamp,
+                                            account.type);
+                if (account.type === "CREDIT") {
+                    updateAccount.creditLine = tfUpdateCreditLine.value.trim();
+                }
+            }
+        }
+        const response = await fetch(UPDATE_SERVICE_URL, {
+            method: "PUT",
+            headers: {"Content-Type": "application/json", "Accept": "application/json"},
+            body: JSON.stringify(updateAccount)
+        });
+        if (!response.ok) throw new Error("Error en la petición");
+        
+        buildAccountsTable(); // Reloads the table
+        showMsgBoxAccounts("Se ha actualizado la cuenta exitosamente", "#5620ad");
+        hideDisplayOf([updateAccountForm]);
+    } catch (error) {   
+        showMsgBoxAccounts(error.message, "#ff0000");
+    }
 }
 
 /*
@@ -667,15 +704,23 @@ function* accountRowGenerator(accounts) {
                                         ));
         // Edit and Delete buttons in each row in new column
         const tdButtons = document.createElement("td");
-        const buttonEdit = document.createElement("button");
-        const buttonDelete = document.createElement("button");
+//        const buttonEdit = document.createElement("button");
+//        const buttonDelete = document.createElement("button");
+        const buttonEdit = document.createElement("img");
+        const buttonDelete = document.createElement("img");
         // IMG
-        buttonEdit.textContent = "EDIT";
-        buttonDelete.textContent = "DEL";
-        // Button id attributes
+//        buttonEdit.textContent = "EDIT";
+//        buttonDelete.textContent = "DEL";
+        buttonEdit.setAttribute("src", "../assets/img/edit-pencil-01-svgrepo-com.svg");
+        buttonDelete.setAttribute("src", "../assets/img/delete-2-svgrepo-com.svg");
+        // Button aspect attributes
         buttonEdit.setAttribute("class", "btn-edit");
         buttonDelete.setAttribute("class", "btn-delete");
-        // Button aspect classes
+        buttonDelete.style.marginTop = "5px";
+        // Button alt attributes
+        buttonEdit.setAttribute("alt", "edit button");
+        buttonDelete.setAttribute("alt", "delete button");
+        // Button id classes
         buttonEdit.setAttribute("data-acc-id", accID);
         buttonDelete.setAttribute("data-acc-id", accID);
         // listeners
@@ -740,10 +785,14 @@ function showUpdateAccountForm(event) {
     const updateAccountID = event.target.dataset.accId;
     // show ID of updating account
     idUpdateAccountHeader.innerHTML = `ID de cuenta a actualizar: ${updateAccountID}`;
+    confirmUpdateAccountButton.setAttribute("data-acc-id", updateAccountID);
     for (const account of accountsArray)
         if (account.id == updateAccountID)
             if (account.type === "CREDIT") showElements([tfUpdateCreditLine]);
-            else hideElements([tfUpdateCreditLine]);
+            else {
+                hideElements([tfUpdateCreditLine]);
+                resetValueOfElements([tfUpdateCreditLine]);
+            }
 }
 
 function showMsgBoxAccounts(message, color) {
