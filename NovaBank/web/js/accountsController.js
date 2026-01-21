@@ -582,8 +582,7 @@ async function createAccount() {
  * @param {type} evt
  * @returns {undefined}
  */
-async function deleteAccount(evt) {
-    const accountID = evt.target.dataset.accId;
+async function deleteAccount(accountID) {
     try {        
         const response = await fetch(DELETE_SERVICE_URL +`${encodeURIComponent(accountID)}`, {
             method: "DELETE",
