@@ -536,7 +536,7 @@ async function getAccountByID(accountID) {
  * @returns {undefined}
  */
 async function createAccount() {
-    const newAccountID = accountsArray[accountsArray.length-1].id+1; // new ID
+    const newAccountID = accountsArray[0].id+1; // new ID
     const date = new Date().toISOString(); // get system date
     var creditLine; // controll credit line value
     // creditLine controll
@@ -566,9 +566,6 @@ async function createAccount() {
         hideNewAccountForm();
         // reset input values
         comboAccountType.value = "NotSelected";
-//        tfBeginBalance.value = "";
-//        tfCreditLine.value = "";
-//        tfDescription.value = "";
         resetValueOfElements([tfBeginBalance,tfCreditLine,tfDescription]);
     } catch (error) {
         showMsgBoxAccounts(error.message, "#ff0000");
@@ -606,23 +603,18 @@ async function deleteAccount(accountID) {
  */
 async function updateAccount(event) {
     const accountID = event.target.dataset.accId;
-    let updateAccount;
-    
     try {
-        for (const account of accountsArray) {
-            if (account.id == accountID) {
-                updateAccount = new Account( // create Accounts
-                                            account.id,
-                                            tfUpdateDescription.value.trim(),
-                                            account.beginBalance,
-                                            account.creditLine,
-                                            account.beginBalance,
-                                            account.beginBalanceTimestamp,
-                                            account.type);
-                if (account.type === "CREDIT") {
-                    updateAccount.creditLine = tfUpdateCreditLine.value.trim();
-                }
-            }
+        const account = accountsArray.find((acc) => acc.id == accountID);
+        let updateAccount = new Account( // create Accounts
+                                    account.id,
+                                    tfUpdateDescription.value.trim(),
+                                    account.beginBalance,
+                                    account.creditLine,
+                                    account.beginBalance,
+                                    account.beginBalanceTimestamp,
+                                    account.type);
+        if (account.type === "CREDIT") {
+            updateAccount.creditLine = tfUpdateCreditLine.value.trim();
         }
         const response = await fetch(UPDATE_SERVICE_URL, {
             method: "PUT",
@@ -734,8 +726,8 @@ function* accountRowGenerator(accounts) {
         // Show the table row
         yield tr;
     }
-    // Sort accountsArray from lowest to highest
-    accountsArray.sort((cuenta1, cuenta2) => cuenta1.id - cuenta2.id);
+    // Sort accountsArray from highest to lowest
+    accountsArray.sort((cuenta1, cuenta2) => cuenta2.id - cuenta1.id);
 }
 
 /**
@@ -772,7 +764,7 @@ async function buildAccountsTable() {
 
 function showCreateAccountForm(event) {
     showElements([newAccountForm]);
-    const newAccountID = accountsArray[accountsArray.length-1].id+1;
+    const newAccountID = accountsArray[0].id+1;
     idNewAccountHeader.innerHTML = `Futuro ID de cuenta: ${newAccountID}`;
 }
 
@@ -785,13 +777,12 @@ function showUpdateAccountForm(event) {
     // show ID of updating account
     idUpdateAccountHeader.innerHTML = `ID de cuenta a actualizar: ${updateAccountID}`;
     confirmUpdateAccountButton.setAttribute("data-acc-id", updateAccountID);
-    for (const account of accountsArray)
-        if (account.id == updateAccountID)
-            if (account.type === "CREDIT") showElements([tfUpdateCreditLine]);
-            else {
-                hideElements([tfUpdateCreditLine]);
-                resetValueOfElements([tfUpdateCreditLine]);
-            }
+    const account = accountsArray.find((acc) => acc.id == updateAccountID);
+    if (account.type === "CREDIT") showElements([tfUpdateCreditLine]);
+    else {
+        hideElements([tfUpdateCreditLine]);
+        resetValueOfElements([tfUpdateCreditLine]);
+    }
 }
 
 function showMsgBoxAccounts(message, color) {
