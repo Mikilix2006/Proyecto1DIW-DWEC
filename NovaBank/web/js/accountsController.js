@@ -52,8 +52,7 @@ import { Account } from './model.js';
          SECTION #4  -> ENEVT HANDLERS CALLED FROM 
                           THE LISTENERS
          SECTION #5  -> VALUE CHECKERS
-         SECTION #6  -> CONFIRMATION & CANCELL 
-                          ACTIONS
+         SECTION #6  -> CANCELL ACTIONS
          SECTION #7  -> CRUD
          SECTION #8  -> ACCOUNT TABLE METHODS
          SECTION #9  -> SHOW & HIDE ACTIONS
@@ -159,13 +158,30 @@ const regExpHasToContainLetters = new RegExp("[a-zA-ZñÑáÁéÉíÍóÓúÚü�
 const idCustomer = sessionStorage.getItem("customer.id");
 
 // <=><=><=> Elements from main.html <=><=><=>
-// === message boxes ===
+//// === message boxes ===
+//const msgBoxAccounts = document.getElementById('msgBoxAccounts');
+//const confirmationBoxAccounts = document.getElementById('confirmationBoxAccounts');
+
+// === message boxes new form ===
 const msgBoxAccounts = document.getElementById('msgBoxAccounts');
 const confirmationBoxAccounts = document.getElementById('confirmationBoxAccounts');
-// === buttons ===
+
+//// === buttons ===
+//// delete account
+//const confirmButton = document.getElementById('confirm-button');
+//const denyButton = document.getElementById('deny-button');
+//// new account
+//const createNewAccountButton = document.getElementById('createNewAccountButton');
+//const confirmNewAccountButton = document.getElementById('confirmNewAccountButton');
+//const candellNewAccountButton = document.getElementById('candellNewAccountButton');
+//// update account
+//const confirmUpdateAccountButton = document.getElementById('confirmUpdateAccountButton');
+//const cancellUpdateAccountButton = document.getElementById('cancellUpdateAccountButton');
+
+// === buttons new form ===
 // delete account
-const confirmButton = document.getElementById('confirm-button');
-const denyButton = document.getElementById('deny-button');
+const confirmDeleteAccountButton = document.getElementById('confirmDeleteAccountButton');
+const cancellDeleteAccountButton = document.getElementById('cancellDeleteAccountButton');
 // new account
 const createNewAccountButton = document.getElementById('createNewAccountButton');
 const confirmNewAccountButton = document.getElementById('confirmNewAccountButton');
@@ -173,10 +189,20 @@ const candellNewAccountButton = document.getElementById('candellNewAccountButton
 // update account
 const confirmUpdateAccountButton = document.getElementById('confirmUpdateAccountButton');
 const cancellUpdateAccountButton = document.getElementById('cancellUpdateAccountButton');
-// === forms ===
-const newAccountForm = document.getElementById("newAccountForm");
-const updateAccountForm = document.getElementById("updateAccountForm");
-// === inputs ===
+
+//// === forms ===
+//const newAccountForm = document.getElementById("newAccountForm");
+//const updateAccountForm = document.getElementById("updateAccountForm");
+
+//// === inputs ===
+//// new account
+//const tfBeginBalance = document.getElementById("tfBeginBalance");
+//const tfCreditLine = document.getElementById("tfCreditLine");
+//const tfDescription = document.getElementById("tfDescription");
+//// update account
+//const tfUpdateCreditLine = document.getElementById("tfUpdateCreditLine");
+//const tfUpdateDescription = document.getElementById("tfUpdateDescription");
+// === inputs new form ===
 // new account
 const tfBeginBalance = document.getElementById("tfBeginBalance");
 const tfCreditLine = document.getElementById("tfCreditLine");
@@ -184,9 +210,20 @@ const tfDescription = document.getElementById("tfDescription");
 // update account
 const tfUpdateCreditLine = document.getElementById("tfUpdateCreditLine");
 const tfUpdateDescription = document.getElementById("tfUpdateDescription");
-// === combo ===
+
+//// === combo ===
+//const comboAccountType = document.getElementById("comboAccountType");
+// === combo new form ===
 const comboAccountType = document.getElementById("comboAccountType");
-// === headers ===
+
+//// === headers ===
+//// new account
+//const idNewAccountHeader = document.getElementById("idNewAccountHeader");
+//// delete account
+//const idDeleteAccountHeader = document.getElementById("idDeleteAccountHeader");
+//// update account
+//const idUpdateAccountHeader = document.getElementById("idUpdateAccountHeader");
+// === headers new form ===
 // new account
 const idNewAccountHeader = document.getElementById("idNewAccountHeader");
 // delete account
@@ -216,11 +253,24 @@ let accountsArray = [];
    =================================================      ∎∎∎∎
  */
 
-// === buttons ===
+//// === buttons ===
+//// delete account
+//// listener of delete button in table generation
+//confirmButton.addEventListener("click", handleDeleteAccount);
+//denyButton.addEventListener("click", cancellDeleteAccount);
+//// new account
+//createNewAccountButton.addEventListener("click", showCreateAccountForm);
+//confirmNewAccountButton.addEventListener("click", handleCreateAccount);
+//candellNewAccountButton.addEventListener("click", cancellCreateAccount);
+//// update account
+//// listener of update button in table generation
+//confirmUpdateAccountButton.addEventListener("click", handleUpdateAccount);
+//cancellUpdateAccountButton.addEventListener("click", cancellUpdateAccount);
+// === buttons new form ===
 // delete account
 // listener of delete button in table generation
-confirmButton.addEventListener("click", handleDeleteAccount);
-denyButton.addEventListener("click", cancellDeleteAccount);
+confirmDeleteAccountButton.addEventListener("click", handleDeleteAccount);
+cancellDeleteAccountButton.addEventListener("click", toggleDeleteAccountFormVisibility);
 // new account
 createNewAccountButton.addEventListener("click", showCreateAccountForm);
 confirmNewAccountButton.addEventListener("click", handleCreateAccount);
@@ -229,6 +279,7 @@ candellNewAccountButton.addEventListener("click", cancellCreateAccount);
 // listener of update button in table generation
 confirmUpdateAccountButton.addEventListener("click", handleUpdateAccount);
 cancellUpdateAccountButton.addEventListener("click", cancellUpdateAccount);
+
 // === combo ===
 // new account
 comboAccountType.addEventListener("change", checkSelectedValue);
@@ -255,15 +306,33 @@ tfUpdateDescription.addEventListener("input", checkUpdateAccountDescription);
    =================================================              ∎∎
  */
 
-function showDeleteAccountForm(event) {
-    const accountID = event.target.dataset.accId;
-    confirmationBoxAccounts.style.display = 'block';
-    confirmationBoxAccounts.style.marginTop = "5px";
-    confirmButton.setAttribute("data-acc-id", accountID);
-    idDeleteAccountHeader.innerHTML = `¿Borrar cuenta con ID: ${accountID}?`;
+function toggleDeleteAccountFormVisibility(event) {
+    document.getElementById("responseMsgDeleteDescription").style.visibility = 'hidden';
+    const deleteAccountForm = document.getElementById("deleteAccountForm");
+    deleteAccountForm.style.visibility = (deleteAccountForm.style.visibility == 'hidden') ? 'visible' : 'hidden';
+    confirmDeleteAccountButton.setAttribute("data-acc-id", event.target.dataset.accId);
+//    const accountID = event.target.dataset.accId;
+//    confirmationBoxAccounts.style.display = 'block';
+//    confirmationBoxAccounts.style.marginTop = "5px";
+//    confirmButton.setAttribute("data-acc-id", accountID);
+//    idDeleteAccountHeader.innerHTML = `¿Borrar cuenta con ID: ${accountID}?`;
 }
 
 async function handleDeleteAccount(event) {
+//    const accountID = event.target.dataset.accId;
+//    try {
+//        if (await hasMovements(accountID))
+//            throw new Error('La cuenta con ID: ('+ accountID +') tiene movimientos, no puede ser borrada');
+//        // At this point the account doesn't have movements
+//        deleteAccount(accountID);
+//    } catch (error) { // Informs to the user the errors
+//        showMsgBoxAccounts(error.message, "#ff0000");
+//        const enlaceMovements = document.createElement("u");
+//        enlaceMovements.setAttribute("data-acc-id", accountID);
+//        enlaceMovements.innerHTML = "Ir a movimientos de la cuenta";
+//        enlaceMovements.style.color = "#5620ad";
+//        enlaceMovements.addEventListener("click", storeAccountData);
+//        msgBoxAccounts.appendChild(enlaceMovements);
     const accountID = event.target.dataset.accId;
     try {
         if (await hasMovements(accountID))
@@ -271,13 +340,8 @@ async function handleDeleteAccount(event) {
         // At this point the account doesn't have movements
         deleteAccount(accountID);
     } catch (error) { // Informs to the user the errors
-        showMsgBoxAccounts(error.message, "#ff0000");
-        const enlaceMovements = document.createElement("u");
-        enlaceMovements.setAttribute("data-acc-id", accountID);
-        enlaceMovements.innerHTML = "Ir a movimientos de la cuenta";
-        enlaceMovements.style.color = "#5620ad";
-        enlaceMovements.addEventListener("click", storeAccountData);
-        msgBoxAccounts.appendChild(enlaceMovements);
+        const box = document.getElementById("responseMsgDeleteDescription");
+        showMsgBoxAccounts(box, error.message, "#ff0000");
     }
 }
 
@@ -350,7 +414,8 @@ function checkSelectedValue(event) {
  */
 function checkNewAccountBeginBalance(event) {
     try {
-        const errorMessages = ["Solo se admiten números en el saldo inicial"];
+        const errorMessages = ["Solo se admiten números en el saldo inicial",
+                               "Saldo inicial inferior a 0"];
         checkInputNumbers(tfBeginBalance, errorMessages); // May throw Error
         hideDisplayOf([msgBoxAccounts]); // No error, no message
         return true; // Everything ok
@@ -426,7 +491,7 @@ function checkInputNumbers(input, errorMessages) {
 /*
    =================================================          ∎∎∎∎∎∎
                                                             ∎∎      ∎∎
-             CONFIRMATION & CANCELL ACTIONS                 ∎∎
+                    CANCELL ACTIONS                         ∎∎
                                                             ∎∎
    -------------------------------------------------        ∎∎∎∎∎∎∎∎
                                                             ∎∎      ∎∎
@@ -584,7 +649,7 @@ async function deleteAccount(accountID) {
         if (!response.ok) throw new Error("Error en la petición");
         
         buildAccountsTable(); // Reloads the table
-        showMsgBoxAccounts("Se ha borrado la cuenta exitosamente", "#5620ad");
+        showMsgBoxAccounts(msgBoxAccounts, "Se ha borrado la cuenta exitosamente", "#5620ad");
         hideDisplayOf([confirmationBoxAccounts]);
     } catch (error) {   
         showMsgBoxAccounts(error.message, "#ff0000");
@@ -712,7 +777,7 @@ function* accountRowGenerator(accounts) {
         buttonDelete.setAttribute("data-acc-id", accID);
         // listeners
         buttonEdit.addEventListener("click",showUpdateAccountForm);
-        buttonDelete.addEventListener("click",showDeleteAccountForm);
+        buttonDelete.addEventListener("click",toggleDeleteAccountFormVisibility);
         //buttonDelete.addEventListener("click",handleDeleteAccount);
         // Put buttons into td
         tdButtons.appendChild(buttonEdit);
@@ -781,17 +846,23 @@ function showUpdateAccountForm(event) {
     }
 }
 
-function showMsgBoxAccounts(message, color) {
-    msgBoxAccounts.style.color = color;
-    msgBoxAccounts.style.marginTop = "5px";
-    msgBoxAccounts.textContent = message;
-    msgBoxAccounts.style.display = 'flex';
-    msgBoxAccounts.style.flexDirection = 'column';
-    msgBoxAccounts.style.alignItems = 'center';
+//function showMsgBoxAccounts(message, color) {
+//    msgBoxAccounts.style.color = color;
+//    msgBoxAccounts.style.marginTop = "5px";
+//    msgBoxAccounts.textContent = message;
+//    msgBoxAccounts.style.display = 'flex';
+//    msgBoxAccounts.style.flexDirection = 'column';
+//    msgBoxAccounts.style.alignItems = 'center';
+//}
+
+function showMsgBoxAccounts(box, message, color) {
+    box.style.visibility = 'visible';
+    box.textContent = message;
+    box.style.color = color;
 }
 
 function hideDisplayOf(elements) {
-    for (const element of elements) element.style.display = 'none';
+//    for (const element of elements) element.style.display = 'none';
 }
 
 function hideNewAccountForm() {
@@ -825,8 +896,8 @@ function resetValueOfElements(elements) {
  */
 
 async function hasMovements(accountID) {
-    const cuenta = await getAccountByID(accountID);
-    return cuenta.movements.length !== 0;
+    const account = await getAccountByID(accountID);
+    return account.movements.length !== 0;
 }
 
 /*

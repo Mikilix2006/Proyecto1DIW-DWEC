@@ -91,7 +91,7 @@
       
     <!-- Sucio -->
         
-        <div id="msgBoxAccounts" hidden>
+        <div id="msgBoxAccounts">
             <!-- Error messages here -->
         </div>
       <!-- Confirmacion para borrado de cuenta -->
@@ -131,43 +131,72 @@
         
     <!-- Fin de sucio -->
     
+    <!-- New account Form -->
     
-    <section id="newMovementForm" class="form-section-crud">
-        <form id="formMovement" class="formulario">
+    <section id="newAccountForm" class="form-section-crud, formulario">
+        <!--form class="formulario"-->
              <div class="titulo">
                 <h1>Nueva Cuenta</h1>
             </div>
             <div class="form-group-crud">
-                <select id="newTypeAmount" >
+                <select id="newAccountType" >
                     <option value="NotSelected" disabled selected>Tipo de cuenta</option>
                     <option value="STANDARD">STANDARD</option>
                     <option value="CREDIT">CREDIT</option>
                 </select>
             </div>
             <div class="form-group-crud">
-                <input type="number" id="newAmount" name="newAmount" placeholder="Introduce una cantidad" required/>
-                <div id="responseMsgamount"></div>
+                <input type="number" id="newCreditLine" name="newCreditLine" placeholder="Introduce una cantidad" required/>
+                <div id="responseMsgNewCreditLine"></div>
             </div>
-            <button id="candellNewAccountButton" class="btn-form-crud">Cancelar</button>
-            <button id="addMovement" class="btn-form-crud">Crear Cuenta</button>
-        </form>
+            <div class="form-group-crud">
+                <input type="text" id="newDescription" name="newDescription" placeholder="Introduce una descripción" required/>
+                <div id="responseMsgNewDescription"></div>
+            </div>
+            <button id="cancellNewAccountButton" class="btn-form-crud">Cancelar</button>
+            <button id="confirmNewAccountButton" class="btn-form-crud">Crear Cuenta</button>
+        <!--/form-->
     </section>
-    <section id="confirmDelete" class="form-section-crud">
-        <form class="formulario" id="deleteConfirmationForm">
+    
+    <!-- Update account Form -->
+    
+    <section id="editAccountForm" class="form-section-crud, formulario">
+        <!--form class="formulario"-->
+             <div class="titulo">
+                <h1>Editar Cuenta</h1>
+            </div>
+            <div class="form-group-crud">
+                <input type="number" id="newCreditLine" name="updateCreditLine" placeholder="Introduce una cantidad" required/>
+                <div id="responseMsgUpdateCreditLine"></div>
+            </div>
+            <div class="form-group-crud">
+                <input type="text" id="newDescription" name="updateDescription" placeholder="Introduce una descripción" required/>
+                <div id="responseMsgUpdateDescription"></div>
+            </div>
+            <button id="cancellUpdateAccountButton" class="btn-form-crud">Cancelar</button>
+            <button id="confirmUpdateAccountButton" class="btn-form-crud">Crear Cuenta</button>
+        <!--/form-->
+    </section>
+    
+    <!-- Delete account Form -->
+    
+    <section id="deleteAccountForm" class="form-section-crud, formulario">
+        <!--form class="formulario"-->
             <div class="titulo">
                 <h1> Elimar Cuenta</h1>
             </div>
             <div class="info-eliminar-cuenta">
                 <p>¿Estás seguro de que deseas eliminar esta cuenta? una vez eliminada
-                    no podrás recuperar ningún información.
+                    no podrás recuperar ningúna información.
                 </p>
-                <button id="cancelDeleteMovement" class="btn-form-crud" >Cancelar</button>
-                <button id="deleteLastMovement" class="btn-form-crud">Borrar</button>
-                <p class="error-msg">
+                <button id="cancellDeleteAccountButton" class="btn-form-crud" >Cancelar</button>
+                <button id="confirmDeleteAccountButton" class="btn-form-crud">Borrar</button>
+                <!--p class="error-msg">
                     No puedes eliminar cuentas con movimientos. Ir a movimientos.
-                </p>
+                </p-->
+                <div id="responseMsgDeleteDescription"></div>
             </div>
-        </form>
+        <!--/form-->
     </section>
     
       
