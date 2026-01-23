@@ -20,6 +20,12 @@
 body {
   color: var(--texto-parrafo);
   background-color: var(--color-fondo);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+.mainContent{
+    flex: 1;
 }
 /*header*/
 .header {
@@ -477,12 +483,10 @@ tbody tr:hover {
     align-items: center;
     padding: 20px 10px;
 }
-
 .right-group {
     display: flex;
     gap: 20px;
 }
-
 /* Botón Regresar (Oscuro) */
 .btn-back {
     background-color: var(--color-navbar);
@@ -495,7 +499,6 @@ tbody tr:hover {
     box-shadow: 0 4px 10px rgba(0,0,0,0.1);
     transition: transform 0.2s;
 }
-
 /* Botón Eliminar (Blanco con borde morado) */
 .btn-delete-outline {
     background-color: white;
@@ -508,7 +511,6 @@ tbody tr:hover {
     box-shadow: 0 4px 10px rgba(0,0,0,0.1);
     transition: transform 0.2s;
 }
-
 /* Botón Agregar (Morado claro) */
 .btn-add-large {
     background-color: var(--btn-color-solido);
@@ -521,7 +523,6 @@ tbody tr:hover {
     box-shadow: 0 4px 10px rgba(0,0,0,0.1);
     transition: transform 0.2s;
 }
-
 /* Efectos Hover */
 button:hover {
     opacity: 0.9;
@@ -532,9 +533,6 @@ button:hover {
     color: white;
 
 }
-
-
-
 /* footer*/
 .footer {
   background-color: var(--color-footer);

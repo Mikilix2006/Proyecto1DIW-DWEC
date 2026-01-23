@@ -27,15 +27,8 @@ window.addEventListener('load', buildMovementsTable);
 addMovementBtnController.addEventListener('click', handlerFormCreateMovement);
 deleteMovementController.addEventListener('click', handlerFormDeleteMovement);
 //Adding and deleting confirm listeners, trigger by click action
-//deleteMovementBtn.addEventListener('click', deleteLastMovement); //cambiar esta función confirmDeleteLastMov
 addNewMovement.addEventListener('click', createNewMovement);
-
-deleteMovementBtn.addEventListener('click', async () => {
-    await deleteLastMovement(); // Llama a tu función original de borrar en el servidor
-    cerrarDeleteForm();
-});
-
-// Botón "Cancelar" (Abortar)
+deleteMovementBtn.addEventListener('click', deleteLastMovement);
 cancelDeleteBtn.addEventListener('click', cerrarDeleteForm);
 //SACAR EL ID DE LA CUENTA 
 //VALIDAR SI TIENE CRÉDITO, SI SE SACA DEL CRÉDITO
@@ -56,7 +49,6 @@ async function buildMovementsTable() {
     }
 }
 /*SHOW THE CREATE NEW MOVEMENT FORM LAYER - CLICK ADD MOV  */
-//mejorar esto
 function handlerFormCreateMovement() {
     const formContainer = document.getElementById("newMovementForm");
     formContainer.style.display = 'flex';
@@ -76,6 +68,7 @@ function handlerFormCreateMovement() {
  *
  **/
 /*CONFIRM CREATE NEW MOVEMENT*/
+/*
 async function createNewMovement(e) {
     e.preventDefault();
 
@@ -94,7 +87,72 @@ async function createNewMovement(e) {
     }
     await fetchCreateNewMovement(amount, description);
 }
+*/
+///////////
+async function createNewMovement(e) {
+    e.preventDefault();
 
+    try {
+        // 1. Obtención de datos de los inputs
+        const inputAmount = document.getElementById("newAmount");
+        const inputType = document.getElementById("newTypeAmount");
+        const amountStr = inputAmount.value.trim();
+        const amount = parseFloat(amountStr);
+        const description = inputType.value; // "Deposit" o "Payment"
+
+        // 2. Obtención de datos de la cuenta (Estado actual)
+        const accountData = JSON.parse(sessionStorage.getItem("account")) || JSON.parse(currentAccount);
+        const { balance, type, creditLine } = accountData;
+
+        // --- VALIDACIONES INICIALES ---
+
+        // Validar que sea un número y no esté vacío
+        if (amountStr === "" || isNaN(amount)) throw new Error("Por favor, ingrese un monto numérico.");
+
+        // Validar negativos o cero
+        if (amount <= 0) throw new Error("El monto debe ser mayor a cero.");
+
+        // Validar máximo dos decimales
+        if (amountStr.includes(".") && amountStr.split(".")[1].length > 2) {
+            throw new Error("No se permiten más de dos decimales.");
+        }
+
+        // Validar selección del select
+        if (!description) throw new Error("Debe seleccionar un tipo de movimiento.");
+
+        // --- LÓGICA DE BALANCE Y CRÉDITO (Solo para Payment) ---
+
+        if (description === "Payment") {
+            let totalDisponible = balance;
+
+            // Si la cuenta es de tipo CREDIT, sumamos la línea de crédito al disponible
+            if (type === "CREDIT") {
+                totalDisponible += creditLine;
+            }
+
+            if (amount > totalDisponible) {
+                let mensajeError = `Fondos insuficientes. Su saldo actual es ${currencyFormatter.format(balance)}.`;
+                if (type === "CREDIT") {
+                    mensajeError += ` Sumando su crédito, el máximo permitido es ${currencyFormatter.format(totalDisponible)}.`;
+                }
+                throw new Error(mensajeError);
+            }
+        }
+
+        // 3. PROCESO DE ENVÍO
+        // Si llegamos aquí, todas las validaciones pasaron
+        await fetchCreateNewMovement(amount, description);
+        
+        // Limpieza y cierre
+        cerrarModal(); 
+
+    } catch (error) {
+        // El bloque catch captura cualquier Error lanzado arriba
+        alert(error.message);
+        console.error("Error en el proceso:", error);
+    }
+}
+///////
 /*SHOW THE DELETE LAST MOVEMENT LAYER - CLICK BIN TRASH  */
 function handlerFormDeleteMovement(){
     const deleteFormContainer = document.getElementById("confirmDelete");
@@ -164,6 +222,7 @@ async function deleteLastMovement() {
         //el balance de cuentas, par. la cuenta con el balance modificado.
         await updateAccountBalance(accountData);
         await buildMovementsTable();
+        cerrarDeleteForm();
     } catch (error) {
         console.error("Error al eliminar:", error);
     }
