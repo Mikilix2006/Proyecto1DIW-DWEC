@@ -119,7 +119,7 @@
             </div>
         </div>
       <!-- Formulario para actualizacion de cuenta -->
-        <div id="updateAccountForm" hidden>
+        <!--div id="updateAccountForm" hidden>
             <h3 id="idUpdateAccountHeader"></h3>
             <input type="number" id="tfUpdateCreditLine" placeholder="Nueva línea de crédito" hidden>
             <input type="text" id="tfUpdateDescription" placeholder="Nueva descripción">
@@ -127,7 +127,7 @@
                 <button id="cancellUpdateAccountButton">Cancelar</button>
                 <button id="confirmUpdateAccountButton">Actualizar</button>
             </div>
-        </div>
+        </div-->
         
     <!-- Fin de sucio -->
     
@@ -166,15 +166,15 @@
                 <h1>Editar Cuenta</h1>
             </div>
             <div class="form-group-crud">
-                <input type="number" id="newCreditLine" name="updateCreditLine" placeholder="Introduce una cantidad" required/>
+                <input type="number" id="tfUpdateCreditLine" placeholder="Linea de Crédito"/>
                 <div id="responseMsgUpdateCreditLine"></div>
             </div>
             <div class="form-group-crud">
-                <input type="text" id="newDescription" name="updateDescription" placeholder="Introduce una descripción" required/>
+                <input type="text" id="tfUpdateDescription" placeholder="Introduce una descripción"/>
                 <div id="responseMsgUpdateDescription"></div>
             </div>
             <button id="cancellUpdateAccountButton" class="btn-form-crud">Cancelar</button>
-            <button id="confirmUpdateAccountButton" class="btn-form-crud">Crear Cuenta</button>
+            <button id="confirmUpdateAccountButton" class="btn-form-crud">Confirmar cambios</button>
         <!--/form-->
     </section>
     

@@ -228,8 +228,8 @@ const comboAccountType = document.getElementById("comboAccountType");
 const idNewAccountHeader = document.getElementById("idNewAccountHeader");
 // delete account
 const idDeleteAccountHeader = document.getElementById("idDeleteAccountHeader");
-// update account
-const idUpdateAccountHeader = document.getElementById("idUpdateAccountHeader");
+//// update account
+//const idUpdateAccountHeader = document.getElementById("idUpdateAccountHeader");
 // === GLOBAL ARRAY ===
 /*
     OPERACIONES AGREGADAS USADAS 
@@ -278,7 +278,7 @@ candellNewAccountButton.addEventListener("click", cancellCreateAccount);
 // update account
 // listener of update button in table generation
 confirmUpdateAccountButton.addEventListener("click", handleUpdateAccount);
-cancellUpdateAccountButton.addEventListener("click", cancellUpdateAccount);
+cancellUpdateAccountButton.addEventListener("click", toggleUpdateAccountFormVisibility);
 
 // === combo ===
 // new account
@@ -306,11 +306,38 @@ tfUpdateDescription.addEventListener("input", checkUpdateAccountDescription);
    =================================================              ∎∎
  */
 
+/*
+ * Usado por new forms
+ * @param {type} event
+ * @returns {undefined}
+ */
 function toggleDeleteAccountFormVisibility(event) {
     document.getElementById("responseMsgDeleteDescription").style.visibility = 'hidden';
     const deleteAccountForm = document.getElementById("deleteAccountForm");
     deleteAccountForm.style.visibility = (deleteAccountForm.style.visibility == 'hidden') ? 'visible' : 'hidden';
-    confirmDeleteAccountButton.setAttribute("data-acc-id", event.target.dataset.accId);
+    if (event !== null) // comes from delete method without event
+        confirmDeleteAccountButton.setAttribute("data-acc-id", event.target.dataset.accId);
+//    const accountID = event.target.dataset.accId;
+//    confirmationBoxAccounts.style.display = 'block';
+//    confirmationBoxAccounts.style.marginTop = "5px";
+//    confirmButton.setAttribute("data-acc-id", accountID);
+//    idDeleteAccountHeader.innerHTML = `¿Borrar cuenta con ID: ${accountID}?`;
+}
+/*
+ * Usado por new forms
+ * @param {type} event
+ * @returns {undefined}
+ */
+function toggleUpdateAccountFormVisibility(event) {
+    const account = accountsArray.find((acc) => acc.id == event.target.dataset.accId);
+    if (account.type === "CREDIT") tfUpdateCreditLine.removeAttribute("disabled");
+    else tfUpdateCreditLine.setAttribute("disabled", true);
+    document.getElementById("responseMsgUpdateCreditLine").style.visibility = 'hidden';
+    document.getElementById("responseMsgUpdateDescription").style.visibility = 'hidden';
+    const editAccountForm = document.getElementById("editAccountForm");
+    editAccountForm.style.visibility = (editAccountForm.style.visibility == 'hidden') ? 'visible' : 'hidden';
+    confirmUpdateAccountButton.setAttribute("data-acc-id", event.target.dataset.accId);
+    resetValueOfElements([tfUpdateCreditLine,tfUpdateDescription])
 //    const accountID = event.target.dataset.accId;
 //    confirmationBoxAccounts.style.display = 'block';
 //    confirmationBoxAccounts.style.marginTop = "5px";
@@ -318,6 +345,11 @@ function toggleDeleteAccountFormVisibility(event) {
 //    idDeleteAccountHeader.innerHTML = `¿Borrar cuenta con ID: ${accountID}?`;
 }
 
+/*
+ * Usado por new forms
+ * @param {type} event
+ * @returns {undefined}
+ */
 async function handleDeleteAccount(event) {
 //    const accountID = event.target.dataset.accId;
 //    try {
@@ -354,14 +386,25 @@ function handleCreateAccount(event) {
     else showMsgBoxAccounts("No todos los datos son correctos", "#ff0000");
 }
 
+/*
+ * Usado por new forms
+ * @param {type} event
+ * @returns {undefined}
+ */
 async function handleUpdateAccount(event) {
-    const updatingAccount = await getAccountByID(event.target.dataset.accId);
+    const updatingAccount = accountsArray.find((acc) => acc.id == event.target.dataset.accId);
     if (checkUpdateAccountDescription())
         if (updatingAccount.type === "CREDIT") // if CREDIT, check it
             if (checkUpdateAccountCreditLine()) updateAccount(event); // Everything OK
-            else showMsgBoxAccounts("La línea de crédito no es válida", "#ff0000");
+            else {
+                const box = document.getElementById("responseMsgUpdateCreditLine");
+                showMsgBoxAccounts(box, "La línea de crédito no es válida", "#ff0000");
+            }
         else updateAccount(event); // Everything OK
-    else showMsgBoxAccounts("La descripción no es válida", "#ff0000");
+    else {
+        const box = document.getElementById("responseMsgUpdateDescription");
+        showMsgBoxAccounts(box,"La descripción no es válida", "#ff0000");
+    }
 }
 
 /*
@@ -449,36 +492,62 @@ function checkNewAccountDescription(event) {
     }
 }
 
+/*
+ * Usado por new forms
+ * @param {type} input
+ * @returns {undefined}
+ */
 function checkUpdateAccountCreditLine(event) {
     try {
-        if (tfUpdateCreditLine.value < 0)
-            throw new Error("Linea de crédito inferior a 0");
-        if (regExpOnlyNumbers.exec(tfUpdateCreditLine.value.trim())===null)
-            throw new Error("Solo se admiten números en la línea de crédito");
-        hideDisplayOf([msgBoxAccounts]); // No error, no message
+        checkCreditLine(tfUpdateCreditLine); // May throw Error
+        document.getElementById("responseMsgUpdateCreditLine").style.visibility = 'hidden'; // No error, no message
         return true; // Everything ok
     } catch (error) {
-        showMsgBoxAccounts(error.message, "#ff0000");
+        const box = document.getElementById("responseMsgUpdateCreditLine");
+        showMsgBoxAccounts(box, error.message, "#ff0000");
         return false; // Not everything ok
     }
 }
 
+/*
+ * Usado por new forms
+ * @param {type} event
+ * @returns {Boolean}
+ */
 function checkUpdateAccountDescription(event) {
     try {
         checkDescription(tfUpdateDescription); // May throw Error
-        hideDisplayOf([msgBoxAccounts]); // No error, no message
+        document.getElementById("responseMsgUpdateDescription").style.visibility = 'hidden'; // No error, no message
         return true; // Everything ok
     } catch (error) {
-        showMsgBoxAccounts(error.message, "#ff0000");
+        const box = document.getElementById("responseMsgUpdateDescription");
+        showMsgBoxAccounts(box, error.message, "#ff0000");
         return false; // Not everything ok
     }
 }
 
+/*
+ * Usado por new forms
+ * @param {type} input
+ * @returns {undefined}
+ */
 function checkDescription(input) {
     if (input.value.trim()==="") 
         throw new Error("Incluye una descripción a la cuenta");
     if (regExpHasToContainLetters.exec(input.value.trim())===null)
         throw new Error("La descripción debe contener letras");
+}
+
+/*
+ * Usado por new forms
+ * @param {type} input
+ * @returns {undefined}
+ */
+function checkCreditLine(input) {
+    if (input.value < 0)
+        throw new Error("Linea de crédito inferior a 0");
+    if (regExpOnlyNumbers.exec(input.value.trim())===null)
+        throw new Error("Solo se admiten números en la línea de crédito");
 }
 
 function checkInputNumbers(input, errorMessages) {
@@ -513,7 +582,7 @@ function cancellCreateAccount(event) {
 }
 
 function cancellUpdateAccount(event) {
-    hideElements([updateAccountForm]);
+    hideElements([editAccountForm]);
     hideDisplayOf([msgBoxAccounts]);
     resetValueOfElements([tfUpdateCreditLine,tfUpdateDescription]);
 }
@@ -634,8 +703,7 @@ async function createAccount() {
 }
 
 /*
- * Building function...
- * REMAINS: Deletion confirmation <== !!! IMPORTANT !!!
+ * Usado por new forms
  * 
  * @param {type} evt
  * @returns {undefined}
@@ -650,14 +718,15 @@ async function deleteAccount(accountID) {
         
         buildAccountsTable(); // Reloads the table
         showMsgBoxAccounts(msgBoxAccounts, "Se ha borrado la cuenta exitosamente", "#5620ad");
-        hideDisplayOf([confirmationBoxAccounts]);
+        toggleDeleteAccountFormVisibility();
     } catch (error) {   
         showMsgBoxAccounts(error.message, "#ff0000");
     }
 }
 
 /*
- * Building function...
+ * Usado por new forms
+ * 
  * 
  * @param {type} event
  * @returns {undefined}
@@ -685,10 +754,10 @@ async function updateAccount(event) {
         if (!response.ok) throw new Error("Error en la petición");
         
         buildAccountsTable(); // Reloads the table
-        showMsgBoxAccounts("Se ha actualizado la cuenta exitosamente", "#5620ad");
-        hideDisplayOf([updateAccountForm]);
+        showMsgBoxAccounts(msgBoxAccounts,"Se ha actualizado la cuenta exitosamente", "#5620ad");
+        toggleUpdateAccountFormVisibility(event); 
     } catch (error) {   
-        showMsgBoxAccounts(error.message, "#ff0000");
+        showMsgBoxAccounts(msgBoxAccounts,error.message, "#ff0000");
     }
 }
 
@@ -708,6 +777,8 @@ async function updateAccount(event) {
 
 /*
  * FUNC DESCRIPTION
+ * 
+ * Usado por new forms
  * 
  * @param {type} accounts are the accounts in json object format
  * @returns {Generator}
@@ -776,8 +847,9 @@ function* accountRowGenerator(accounts) {
         buttonEdit.setAttribute("data-acc-id", accID);
         buttonDelete.setAttribute("data-acc-id", accID);
         // listeners
-        buttonEdit.addEventListener("click",showUpdateAccountForm);
+        buttonEdit.addEventListener("click",toggleUpdateAccountFormVisibility);
         buttonDelete.addEventListener("click",toggleDeleteAccountFormVisibility);
+        //buttonEdit.addEventListener("click",showUpdateAccountForm);
         //buttonDelete.addEventListener("click",handleDeleteAccount);
         // Put buttons into td
         tdButtons.appendChild(buttonEdit);
@@ -797,6 +869,8 @@ function* accountRowGenerator(accounts) {
  * then returns nothing if there are no accounts or calls the
  * accountRowGenerator function to build the table for these
  * accounts and display the data.
+ * 
+ * Usado por new forms
  * 
  * @returns {undefined} nothing if no accounts where given
  */
@@ -855,6 +929,13 @@ function showUpdateAccountForm(event) {
 //    msgBoxAccounts.style.alignItems = 'center';
 //}
 
+/*
+ * Usado por new forms
+ * @param {type} box
+ * @param {type} message
+ * @param {type} color
+ * @returns {undefined}
+ */
 function showMsgBoxAccounts(box, message, color) {
     box.style.visibility = 'visible';
     box.textContent = message;
@@ -895,6 +976,11 @@ function resetValueOfElements(elements) {
    =================================================      ∎∎∎∎∎∎∎∎∎∎   ∎∎∎∎
  */
 
+/*
+ * Usado por new forms
+ * @param {type} accountID
+ * @returns {Boolean}
+ */
 async function hasMovements(accountID) {
     const account = await getAccountByID(accountID);
     return account.movements.length !== 0;
@@ -914,6 +1000,9 @@ async function hasMovements(accountID) {
    =================================================      ∎∎∎∎∎∎∎∎∎∎ ∎∎∎∎∎∎∎∎∎∎
  */
 
+/*
+ * Usado por new forms
+ */
 function storeAccountData(event) {
     const account = accountsArray.find((acc) => acc.id == event.target.dataset.accId);
     sessionStorage.setItem("account", account);
