@@ -1,9 +1,3 @@
-/* 
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor
- * javier.martinuria@educa.madrid.org
- */
 /*
    =================================================
       ATTRIBUTES TO BE USED BY THIS CONTROLLER
@@ -54,9 +48,14 @@ async function buildMovementsTable() {
 }
 /*SHOW THE CREATE NEW MOVEMENT FORM LAYER - CLICK ADD MOV  */
 //mejorar esto
-function handlerFormCreateMovement(){
-    const formMovementContainer = document.getElementById("newMovementForm");
-    formMovementContainer.style.visibility = (formMovementContainer.style.visibility == 'hidden') ? 'visible' : 'hidden';
+function handlerFormCreateMovement() {
+    const formContainer = document.getElementById("newMovementForm");
+    formContainer.style.display = 'flex';
+    formContainer.addEventListener('click', (e) => {
+        if (e.target.id === "newMovementForm") {
+            cerrarFormulario();
+        }
+    });
 }
 /*CONFIRM CREATE NEW MOVEMENT*/
 async function createNewMovement(e) {
@@ -67,23 +66,18 @@ async function createNewMovement(e) {
     const amount = parseFloat(inputAmount.value);
     const description = inputType.value;
 
-    // 3. Validación básica
     if (isNaN(amount) || amount <= 0) {
         alert("Por favor, ingrese un monto válido mayor a 0.");
         return;
     }
-
     if (!description) {
         alert("Por favor, seleccione un tipo de movimiento.");
         return;
     }
-
-    // 4. Llamar a tu función de creación (la que hicimos antes)
-    console.log("Enviando:", amount, description);
     await fetchCreateNewMovement(amount, description);
 
-    // 5. Limpiar el formulario tras el éxito
-    form.reset();
+    inputAmount.value = "";
+    document.getElementById("newMovementForm").style.visibility = "hidden";
 }
 
 /*SHOW THE DELETE LAST MOVEMENT LAYER - CLICK BIN TRASH  */
@@ -191,27 +185,44 @@ async function fetchMovements() {
 }
 
 function* movementRowGenerator(movementsList) {
-    const isoRegex = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}:\d{2})/; //CAMBIAR EL FORMATO DE LA FECHA
+    const currencyFormatter = new Intl.NumberFormat(undefined, {
+        style: 'currency',
+        currency: 'EUR',
+        minimumFractionDigits: 2
+    });
+    const dateFormatter = new Intl.DateTimeFormat(undefined, {
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit'
+    });
+
     for (const movement of movementsList) {
         const tr = document.createElement("tr");
         ["timestamp", "description", "amount", "balance"].forEach(field => {
             const td = document.createElement("td");
-            let value = movement[field] ?? "N/A";
-
-            if (field === "timestamp" && value !== "N/A") {
-                const match = String(value).match(isoRegex);
-                if (match) value = `${match[3]}/${match[2]}/${match[1]} ${match[4]}`;
+            let value = movement[field];
+            if (field === "timestamp" && value) {
+                value = dateFormatter.format(new Date(value));
+            } 
+            else if ((field === "amount" || field === "balance") && value !== undefined) {
+                if (field === "amount" && parseFloat(value) < 0) {
+                    td.style.color = "red";
+                    td.style.fontWeight = "bold";
+                }
+                value = currencyFormatter.format(value);
             }
-
-            if (field === "amount" && parseFloat(value) < 0) td.style.color = "red";
-            
-            td.textContent = value;
+            td.textContent = value ?? "N/A";
             tr.appendChild(td);
         });
         yield tr;
     }
 }
 
-function setFormatOutput(){
-    
+function cerrarFormulario() {
+    const formContainer = document.getElementById("newMovementForm");
+    formContainer.style.display = 'none';
+    document.getElementById("newAmount").value = "";
 }
