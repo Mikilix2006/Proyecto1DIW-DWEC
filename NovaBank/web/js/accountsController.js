@@ -185,7 +185,7 @@ const cancellDeleteAccountButton = document.getElementById('cancellDeleteAccount
 // new account
 const createNewAccountButton = document.getElementById('createNewAccountButton');
 const confirmNewAccountButton = document.getElementById('confirmNewAccountButton');
-const candellNewAccountButton = document.getElementById('candellNewAccountButton');
+const cancellNewAccountButton = document.getElementById('cancellNewAccountButton');
 // update account
 const confirmUpdateAccountButton = document.getElementById('confirmUpdateAccountButton');
 const cancellUpdateAccountButton = document.getElementById('cancellUpdateAccountButton');
@@ -204,9 +204,9 @@ const cancellUpdateAccountButton = document.getElementById('cancellUpdateAccount
 //const tfUpdateDescription = document.getElementById("tfUpdateDescription");
 // === inputs new form ===
 // new account
-const tfBeginBalance = document.getElementById("tfBeginBalance");
-const tfCreditLine = document.getElementById("tfCreditLine");
-const tfDescription = document.getElementById("tfDescription");
+const newBeginBalance = document.getElementById("newBeginBalance");
+const newCreditLine = document.getElementById("newCreditLine");
+const newDescription = document.getElementById("newDescription");
 // update account
 const tfUpdateCreditLine = document.getElementById("tfUpdateCreditLine");
 const tfUpdateDescription = document.getElementById("tfUpdateDescription");
@@ -272,9 +272,9 @@ let accountsArray = [];
 confirmDeleteAccountButton.addEventListener("click", handleDeleteAccount);
 cancellDeleteAccountButton.addEventListener("click", toggleDeleteAccountFormVisibility);
 // new account
-createNewAccountButton.addEventListener("click", showCreateAccountForm);
+createNewAccountButton.addEventListener("click", toggleNewAccountFormVisibility);
 confirmNewAccountButton.addEventListener("click", handleCreateAccount);
-candellNewAccountButton.addEventListener("click", cancellCreateAccount);
+cancellNewAccountButton.addEventListener("click", toggleNewAccountFormVisibility);
 // update account
 // listener of update button in table generation
 confirmUpdateAccountButton.addEventListener("click", handleUpdateAccount);
@@ -285,9 +285,9 @@ cancellUpdateAccountButton.addEventListener("click", toggleUpdateAccountFormVisi
 comboAccountType.addEventListener("change", checkSelectedValue);
 // === inputs ===
 // new account
-tfBeginBalance.addEventListener("input", checkNewAccountBeginBalance);
-tfCreditLine.addEventListener("input", checkNewAccountCreditLine);
-tfDescription.addEventListener("input", checkNewAccountDescription);
+newBeginBalance.addEventListener("input", checkNewAccountBeginBalance);
+newCreditLine.addEventListener("input", checkNewAccountCreditLine);
+newDescription.addEventListener("input", checkNewAccountDescription);
 // update account
 tfUpdateCreditLine.addEventListener("input", checkUpdateAccountCreditLine);
 tfUpdateDescription.addEventListener("input", checkUpdateAccountDescription);
@@ -325,6 +325,7 @@ function toggleDeleteAccountFormVisibility(event) {
 //    confirmButton.setAttribute("data-acc-id", accountID);
 //    idDeleteAccountHeader.innerHTML = `¿Borrar cuenta con ID: ${accountID}?`;
 }
+
 /*
  * Usado por new forms
  * @param {type} event
@@ -343,7 +344,30 @@ function toggleUpdateAccountFormVisibility(event) {
     editAccountForm.style.display = (editAccountForm.style.display == 'none') ? 'flex' : 'none';
     confirmUpdateAccountButton.setAttribute("data-acc-id", event.target.dataset.accId);
     cancellUpdateAccountButton.setAttribute("data-acc-id", event.target.dataset.accId);
-    resetValueOfElements([tfUpdateCreditLine,tfUpdateDescription])
+    resetValueOfElements([tfUpdateCreditLine,tfUpdateDescription]);
+//    const accountID = event.target.dataset.accId;
+//    confirmationBoxAccounts.style.display = 'block';
+//    confirmationBoxAccounts.style.marginTop = "5px";
+//    confirmButton.setAttribute("data-acc-id", accountID);
+//    idDeleteAccountHeader.innerHTML = `¿Borrar cuenta con ID: ${accountID}?`;
+}
+
+/*
+ * Usado por new forms
+ * @param {type} event
+ * @returns {undefined}
+ */
+function toggleNewAccountFormVisibility(event) {
+    document.getElementById("responseMsgNewCreditLine").style.display = 'none';
+    document.getElementById("responseMsgNewDescription").style.display = 'none';
+    document.getElementById("responseMsgNewBeginBalance").style.display = 'none';
+    const newAccountForm = document.getElementById("newAccountForm");
+    newAccountForm.style.display = (newAccountForm.style.display == 'none') ? 'flex' : 'none';
+    if (event !== null) { // comes from delete method without event
+        confirmNewAccountButton.setAttribute("data-acc-id", event.target.dataset.accId);
+        cancellNewAccountButton.setAttribute("data-acc-id", event.target.dataset.accId);
+    }
+    resetValueOfElements([newBeginBalance,newDescription,newCreditLine]);
 //    const accountID = event.target.dataset.accId;
 //    confirmationBoxAccounts.style.display = 'block';
 //    confirmationBoxAccounts.style.marginTop = "5px";
@@ -384,12 +408,23 @@ async function handleDeleteAccount(event) {
 }
 
 function handleCreateAccount(event) {
-    if (checkNewAccountBeginBalance() & checkNewAccountDescription())
-        if (comboAccountType.value === "CREDIT") // if CREDIT, check it
-            if (checkNewAccountCreditLine()) createAccount(); // Everything OK
-            else showMsgBoxAccounts("La línea de crédito no es válida", "#ff0000");
-        else createAccount(); // Everything OK
-    else showMsgBoxAccounts("No todos los datos son correctos", "#ff0000");
+    if (checkNewAccountBeginBalance())
+        if (checkNewAccountDescription())
+            if (comboAccountType.value === "CREDIT") // if CREDIT, check it
+                if (checkNewAccountCreditLine()) createAccount(); // Everything OK
+                else {
+                    const box = document.getElementById("responseMsgNewCreditLine");
+                    showMsgBoxAccounts(box, "La línea de crédito no es válida", "#ff0000");
+                }
+            else createAccount(); // Everything OK
+        else {
+            const box = document.getElementById("responseMsgUpdateDescription");
+            showMsgBoxAccounts(box,"La descripción no es válida", "#ff0000");
+        }
+    else {
+        const box = document.getElementById("responseMsgNewBeginBalance");
+        showMsgBoxAccounts(box,"El saldo inicial no es válido", "#ff0000");
+    }
 }
 
 /*
@@ -432,6 +467,8 @@ async function handleUpdateAccount(event) {
  * referente al tipo de cuenta seleciconado en el formulario
  * para crear una cuenta nueva
  * 
+ * Usado por new forms
+ * 
  * @param {type} event
  * @returns {string} account type selected
  */
@@ -439,16 +476,18 @@ function checkSelectedValue(event) {
     const selectedAccountType = event.target.value;
     switch (selectedAccountType) {
         case "NotSelected":
-            hideElements([tfBeginBalance,tfCreditLine,tfDescription,confirmNewAccountButton]);
-            resetValueOfElements([tfBeginBalance,tfCreditLine,tfDescription]);
+            newCreditLine.setAttribute("disabled", true);
             break;
         case "STANDARD":
-            showElements([tfBeginBalance,tfDescription,confirmNewAccountButton]);
-            hideElements([tfCreditLine]);
-            resetValueOfElements([tfCreditLine]);
+            newCreditLine.setAttribute("disabled", true);
+            newDescription.removeAttribute("disabled");
+            newBeginBalance.removeAttribute("disabled");
+            resetValueOfElements([newCreditLine]);
             break;
         case "CREDIT":
-            showElements([tfBeginBalance,tfDescription,confirmNewAccountButton,tfCreditLine]);
+            newCreditLine.removeAttribute("disabled");
+            newDescription.removeAttribute("disabled");
+            newBeginBalance.removeAttribute("disabled");
             break;
     }
     return selectedAccountType;
@@ -458,6 +497,8 @@ function checkSelectedValue(event) {
  * Funcion que controla el valor introducido de salario
  * en el formulario impidiendo que sea menor a 0
  * 
+ * Usado por new forms
+ * 
  * @param {type} event
  * @returns {undefined}
  */
@@ -465,35 +506,50 @@ function checkNewAccountBeginBalance(event) {
     try {
         const errorMessages = ["Solo se admiten números en el saldo inicial",
                                "Saldo inicial inferior a 0"];
-        checkInputNumbers(tfBeginBalance, errorMessages); // May throw Error
-        hideDisplayOf([msgBoxAccounts]); // No error, no message
+        checkInputNumbers(newBeginBalance, errorMessages); // May throw Error
+        document.getElementById("responseMsgNewBeginBalance").style.display = 'none'; // No error, no message
         return true; // Everything ok
     } catch (error) {
-        showMsgBoxAccounts(error.message, "#ff0000");
+        const box = document.getElementById("responseMsgNewBeginBalance");
+        showMsgBoxAccounts(box, error.message, "#ff0000");
         return false; // Not everything ok
     }
 }
 
+/*
+ * Usado por new forms
+ * 
+ * @param {type} event
+ * @returns {Boolean}
+ */
 function checkNewAccountCreditLine(event) {
     try {
         const errorMessages = ["Solo se admiten números en la línea de crédito",
                                "Linea de crédito inferior a 0"];
-        checkInputNumbers(tfCreditLine, errorMessages); // May throw Error
-        hideDisplayOf([msgBoxAccounts]); // No error, no message
+        checkInputNumbers(newCreditLine, errorMessages); // May throw Error
+        document.getElementById("responseMsgNewCreditLine").style.display = 'none'; // No error, no message
         return true; // Everything ok
     } catch (error) {
-        showMsgBoxAccounts(error.message, "#ff0000");
+        const box = document.getElementById("responseMsgNewCreditLine");
+        showMsgBoxAccounts(box, error.message, "#ff0000");
         return false; // Not everything ok
     }
 }
 
+/*
+ * Usado por new forms
+ * 
+ * @param {type} event
+ * @returns {Boolean}
+ */
 function checkNewAccountDescription(event) {
     try {
-        checkDescription(tfDescription); // May throw Error
-        hideDisplayOf([msgBoxAccounts]); // No error, no message
+        checkDescription(newDescription); // May throw Error
+        document.getElementById("responseMsgNewDescription").style.display = 'none'; // No error, no message
         return true; // Everything ok
     } catch (error) {
-        showMsgBoxAccounts(error.message, "#ff0000");
+        const box = document.getElementById("responseMsgNewDescription");
+        showMsgBoxAccounts(box, error.message, "#ff0000");
         return false; // Not everything ok
     }
 }
@@ -676,14 +732,14 @@ async function createAccount() {
     const date = new Date().toISOString(); // get system date
     var creditLine; // controll credit line value
     // creditLine controll
-    if (tfCreditLine.value.trim() === "") creditLine = 0;
-    else creditLine = tfCreditLine.value.trim();
+    if (newCreditLine.value.trim() === "") creditLine = 0;
+    else creditLine = newCreditLine.value.trim();
     const newAccount = new Account( // create Accounts
                                     newAccountID,
-                                    tfDescription.value.trim(),
-                                    tfBeginBalance.value.trim(),
+                                    newDescription.value.trim(),
+                                    newBeginBalance.value.trim(),
                                     creditLine,
-                                    tfBeginBalance.value.trim(),
+                                    newBeginBalance.value.trim(),
                                     date,
                                     comboAccountType.value);
     try {
@@ -696,15 +752,13 @@ async function createAccount() {
         if (!response.ok) throw new Error("Error en la petición");
         
         buildAccountsTable(); // Reloads the table
-        showMsgBoxAccounts("Se ha creado la cuenta exitosamente", "#5620ad");
-        hideDisplayOf([confirmationBoxAccounts]);
-        // hide form completely
-        hideNewAccountForm();
+        showMsgBoxAccounts(msgBoxAccounts, "Se ha creado la cuenta exitosamente", "#5620ad");
+        toggleNewAccountFormVisibility(null);
         // reset input values
         comboAccountType.value = "NotSelected";
-        resetValueOfElements([tfBeginBalance,tfCreditLine,tfDescription]);
+        resetValueOfElements([newBeginBalance,newCreditLine,newDescription]);
     } catch (error) {
-        showMsgBoxAccounts(error.message, "#ff0000");
+        showMsgBoxAccounts(msgBoxAccounts, error.message, "#ff0000");
     }
 }
 
@@ -954,7 +1008,7 @@ function hideDisplayOf(elements) {
 }
 
 function hideNewAccountForm() {
-    newAccountForm.setAttribute("hidden", true);
+    //newAccountForm.setAttribute("hidden", true);
 }
 
 function hideElements(elements) {

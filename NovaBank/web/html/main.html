@@ -95,29 +95,6 @@
             <!-- Error messages here -->
         </div>
       <!-- Confirmacion para borrado de cuenta -->
-        <div id="confirmationBoxAccounts" hidden>
-            <h3 id="idDeleteAccountHeader"></h3>
-            <div id="confirmationButtons">
-                <button id="deny-button">Cancelar</button>
-                <button id="confirm-button">Confirmar</button>
-            </div>
-        </div>
-      <!-- Formulario para creacion de cuenta -->
-        <div id="newAccountForm" hidden>
-            <h3 id="idNewAccountHeader"></h3>
-            <select id="comboAccountType">
-                <option value="NotSelected" selected>Tipo de cuenta</option>
-                <option value="STANDARD">STANDARD</option>
-                <option value="CREDIT">CREDIT</option>
-            </select>
-            <input type="number" id="tfBeginBalance" placeholder="Saldo inicial" hidden>
-            <input type="number" id="tfCreditLine" placeholder="Línea de crédito" hidden>
-            <input type="text" id="tfDescription" placeholder="Descripción" hidden>
-            <div id="confirmationButtons">
-                <button id="candellNewAccountButton">Cancelar</button>
-                <button id="confirmNewAccountButton" hidden>Crear</button>
-            </div>
-        </div>
       <!-- Formulario para actualizacion de cuenta -->
         <!--div id="updateAccountForm" hidden>
             <h3 id="idUpdateAccountHeader"></h3>
@@ -133,8 +110,8 @@
     
     <!-- New account Form -->
     
-    <section id="newAccountForm" class="form-section-crud, formulario" style="display: none">
-        <!--form class="formulario"-->
+    <!--section id="newAccountForm" class="form-section-crud, formulario" style="display: none">
+        <form class="formulario">
              <div class="titulo">
                 <h1>Nueva Cuenta</h1>
             </div>
@@ -155,28 +132,40 @@
             </div>
             <button id="cancellNewAccountButton" class="btn-form-crud">Cancelar</button>
             <button id="confirmNewAccountButton" class="btn-form-crud">Crear Cuenta</button>
-        <!--/form-->
+        </form>
+    </section-->
+    
+    <section id="newAccountForm" class="form-section-crud" style="display: none">
+        <div class="formulario">
+            <div class="titulo">
+                <h1>Nueva Cuenta</h1>
+            </div>
+            <div class="form-group-crud">
+                <select id="comboAccountType">
+                    <option value="NotSelected" disabled selected>Tipo de cuenta</option>
+                    <option value="STANDARD">STANDARD</option>
+                    <option value="CREDIT">CREDIT</option>
+                </select>
+            </div>
+            <div class="form-group-crud">
+                <input type="number" id="newBeginBalance" placeholder="Saldo inicial" disabled/>
+                <div id="responseMsgNewBeginBalance"></div>
+            </div>
+            <div class="form-group-crud">
+                <textarea class="descripcion" id="newDescription" placeholder="Descripcion" disabled></textarea>
+                <div id="responseMsgNewDescription"></div>
+            </div>
+            <div class="form-group-crud">
+                <input type="number" id="newCreditLine" placeholder="Línea de crédito" disabled/>
+                <div id="responseMsgNewCreditLine"></div>
+            </div>
+            <button id="confirmNewAccountButton" class="btn-form-crud">Crear Cuenta</button>
+            <button id="cancellNewAccountButton" class="btn-form-crud">Cancelar</button>
+        </div>
     </section>
     
     <!-- Update account Form -->
     
-    <!--section id="editAccountForm" class="form-section-crud" style="display: none">
-        <div class="formulario">
-             <div class="titulo">
-                <h1>Editar Cuenta</h1>
-            </div>
-            <div class="form-group-crud">
-                <input type="number" id="tfUpdateCreditLine" placeholder="Linea de Crédito"/>
-                <div id="responseMsgUpdateCreditLine"></div>
-            </div>
-            <div class="form-group-crud">
-                <input type="text" id="tfUpdateDescription" placeholder="Introduce una descripción"/>
-                <div id="responseMsgUpdateDescription"></div>
-            </div>
-            <button id="cancellUpdateAccountButton" class="btn-form-crud">Cancelar</button>
-            <button id="confirmUpdateAccountButton" class="btn-form-crud">Confirmar cambios</button>
-        </div>
-    </section-->
     <section id="editAccountForm" class="form-section-crud" style="display: none">
         <div class="formulario">
             <div class="titulo">
