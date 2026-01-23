@@ -312,9 +312,11 @@ tfUpdateDescription.addEventListener("input", checkUpdateAccountDescription);
  * @returns {undefined}
  */
 function toggleDeleteAccountFormVisibility(event) {
-    document.getElementById("responseMsgDeleteDescription").style.visibility = 'hidden';
+    //document.getElementById("responseMsgDeleteDescription").style.visibility = 'hidden';
+    document.getElementById("responseMsgDeleteDescription").style.display = 'none';
     const deleteAccountForm = document.getElementById("deleteAccountForm");
-    deleteAccountForm.style.visibility = (deleteAccountForm.style.visibility == 'hidden') ? 'visible' : 'hidden';
+    //deleteAccountForm.style.visibility = (deleteAccountForm.style.visibility == 'hidden') ? 'visible' : 'hidden';
+    deleteAccountForm.style.display = (deleteAccountForm.style.display == 'none') ? 'flex' : 'none';
     if (event !== null) // comes from delete method without event
         confirmDeleteAccountButton.setAttribute("data-acc-id", event.target.dataset.accId);
 //    const accountID = event.target.dataset.accId;
@@ -332,10 +334,13 @@ function toggleUpdateAccountFormVisibility(event) {
     const account = accountsArray.find((acc) => acc.id == event.target.dataset.accId);
     if (account.type === "CREDIT") tfUpdateCreditLine.removeAttribute("disabled");
     else tfUpdateCreditLine.setAttribute("disabled", true);
-    document.getElementById("responseMsgUpdateCreditLine").style.visibility = 'hidden';
-    document.getElementById("responseMsgUpdateDescription").style.visibility = 'hidden';
+    //document.getElementById("responseMsgUpdateCreditLine").style.visibility = 'hidden';
+    //document.getElementById("responseMsgUpdateDescription").style.visibility = 'hidden';
+    document.getElementById("responseMsgUpdateCreditLine").style.display = 'none';
+    document.getElementById("responseMsgUpdateDescription").style.display = 'none';
     const editAccountForm = document.getElementById("editAccountForm");
-    editAccountForm.style.visibility = (editAccountForm.style.visibility == 'hidden') ? 'visible' : 'hidden';
+    //editAccountForm.style.visibility = (editAccountForm.style.visibility == 'hidden') ? 'visible' : 'hidden';
+    editAccountForm.style.display = (editAccountForm.style.display == 'none') ? 'flex' : 'none';
     confirmUpdateAccountButton.setAttribute("data-acc-id", event.target.dataset.accId);
     cancellUpdateAccountButton.setAttribute("data-acc-id", event.target.dataset.accId);
     resetValueOfElements([tfUpdateCreditLine,tfUpdateDescription])
@@ -501,7 +506,7 @@ function checkNewAccountDescription(event) {
 function checkUpdateAccountCreditLine(event) {
     try {
         checkCreditLine(tfUpdateCreditLine); // May throw Error
-        document.getElementById("responseMsgUpdateCreditLine").style.visibility = 'hidden'; // No error, no message
+        document.getElementById("responseMsgUpdateCreditLine").style.display = 'none'; // No error, no message
         return true; // Everything ok
     } catch (error) {
         const box = document.getElementById("responseMsgUpdateCreditLine");
@@ -518,7 +523,7 @@ function checkUpdateAccountCreditLine(event) {
 function checkUpdateAccountDescription(event) {
     try {
         checkDescription(tfUpdateDescription); // May throw Error
-        document.getElementById("responseMsgUpdateDescription").style.visibility = 'hidden'; // No error, no message
+        document.getElementById("responseMsgUpdateDescription").style.display = 'none'; // No error, no message
         return true; // Everything ok
     } catch (error) {
         const box = document.getElementById("responseMsgUpdateDescription");
@@ -938,7 +943,8 @@ function showUpdateAccountForm(event) {
  * @returns {undefined}
  */
 function showMsgBoxAccounts(box, message, color) {
-    box.style.visibility = 'visible';
+    //box.style.visibility = 'visible';
+    box.style.display = 'flex';
     box.textContent = message;
     box.style.color = color;
 }
@@ -952,13 +958,18 @@ function hideNewAccountForm() {
 }
 
 function hideElements(elements) {
-    for (const element of elements) element.setAttribute("hidden", true);
+    for (const element of elements) element.style.display = 'none';
 }
 
 function showElements(elements) {
-    for (const element of elements) element.removeAttribute("hidden");
+    for (const element of elements) element.style.display = 'flex';
 }
 
+/*
+ * Usado por new forms
+ * 
+ * @param {type} 
+ */
 function resetValueOfElements(elements) {
     for (const element of elements) element.value = "";
 }
