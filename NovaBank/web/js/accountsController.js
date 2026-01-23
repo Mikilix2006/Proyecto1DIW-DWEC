@@ -337,6 +337,7 @@ function toggleUpdateAccountFormVisibility(event) {
     const editAccountForm = document.getElementById("editAccountForm");
     editAccountForm.style.visibility = (editAccountForm.style.visibility == 'hidden') ? 'visible' : 'hidden';
     confirmUpdateAccountButton.setAttribute("data-acc-id", event.target.dataset.accId);
+    cancellUpdateAccountButton.setAttribute("data-acc-id", event.target.dataset.accId);
     resetValueOfElements([tfUpdateCreditLine,tfUpdateDescription])
 //    const accountID = event.target.dataset.accId;
 //    confirmationBoxAccounts.style.display = 'block';
