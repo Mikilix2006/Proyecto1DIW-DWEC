@@ -97,10 +97,6 @@ document.addEventListener("DOMContentLoaded", buildAccountsTable);
        · Filtrar cuentas por id con 
          .filter() o .find()
 
-    -> TAREA 6: UPDATE ACCOUNT
-       · Codficar actualización de una
-         cuenta desde la tabla de cuentas.
-
     -> TAREA 7: DOCUMENTAR
        · Documentar métodos de este script.
        · Documentar métodos de las clases.
@@ -143,42 +139,21 @@ document.addEventListener("DOMContentLoaded", buildAccountsTable);
    =================================================
  */
 
-// fetch resources
+// <=><=><=> fetch resources <=><=><=>
 const GET_ALL_SERVICE_URL = "/CRUDBankServerSide/webresources/account/customer/"; // Then append the customer ID
 const GET_BY_ID_SERVICE_URL = "/CRUDBankServerSide/webresources/account/"; // Then append the account ID
 const UPDATE_SERVICE_URL = "/CRUDBankServerSide/webresources/account"; // Just the URL
 const DELETE_SERVICE_URL = GET_BY_ID_SERVICE_URL; // Then append the account ID
 const CREATE_SERVICE_URL = UPDATE_SERVICE_URL; // Same as updating an account
-
-// regular expressions
+// <=><=><=> regular expressions <=><=><=>
 const regExpOnlyNumbers = new RegExp("^[\-]?[0-9]+(\.[0-9]+)?$");
 const regExpHasToContainLetters = new RegExp("[a-zA-ZñÑáÁéÉíÍóÓúÚüÜïÏ ]+");
-
-// keep the customer id
+// <=><=><=> keep the customer id <=><=><=>
 const idCustomer = sessionStorage.getItem("customer.id");
-
 // <=><=><=> Elements from main.html <=><=><=>
-//// === message boxes ===
-//const msgBoxAccounts = document.getElementById('msgBoxAccounts');
-//const confirmationBoxAccounts = document.getElementById('confirmationBoxAccounts');
-
-// === message boxes new form ===
+// === message boxes ===
 const msgBoxAccounts = document.getElementById('msgBoxAccounts');
-const confirmationBoxAccounts = document.getElementById('confirmationBoxAccounts');
-
-//// === buttons ===
-//// delete account
-//const confirmButton = document.getElementById('confirm-button');
-//const denyButton = document.getElementById('deny-button');
-//// new account
-//const createNewAccountButton = document.getElementById('createNewAccountButton');
-//const confirmNewAccountButton = document.getElementById('confirmNewAccountButton');
-//const candellNewAccountButton = document.getElementById('candellNewAccountButton');
-//// update account
-//const confirmUpdateAccountButton = document.getElementById('confirmUpdateAccountButton');
-//const cancellUpdateAccountButton = document.getElementById('cancellUpdateAccountButton');
-
-// === buttons new form ===
+// === buttons ===
 // delete account
 const confirmDeleteAccountButton = document.getElementById('confirmDeleteAccountButton');
 const cancellDeleteAccountButton = document.getElementById('cancellDeleteAccountButton');
@@ -189,20 +164,7 @@ const cancellNewAccountButton = document.getElementById('cancellNewAccountButton
 // update account
 const confirmUpdateAccountButton = document.getElementById('confirmUpdateAccountButton');
 const cancellUpdateAccountButton = document.getElementById('cancellUpdateAccountButton');
-
-//// === forms ===
-//const newAccountForm = document.getElementById("newAccountForm");
-//const updateAccountForm = document.getElementById("updateAccountForm");
-
-//// === inputs ===
-//// new account
-//const tfBeginBalance = document.getElementById("tfBeginBalance");
-//const tfCreditLine = document.getElementById("tfCreditLine");
-//const tfDescription = document.getElementById("tfDescription");
-//// update account
-//const tfUpdateCreditLine = document.getElementById("tfUpdateCreditLine");
-//const tfUpdateDescription = document.getElementById("tfUpdateDescription");
-// === inputs new form ===
+// === inputs ===
 // new account
 const newBeginBalance = document.getElementById("newBeginBalance");
 const newCreditLine = document.getElementById("newCreditLine");
@@ -210,26 +172,8 @@ const newDescription = document.getElementById("newDescription");
 // update account
 const tfUpdateCreditLine = document.getElementById("tfUpdateCreditLine");
 const tfUpdateDescription = document.getElementById("tfUpdateDescription");
-
-//// === combo ===
-//const comboAccountType = document.getElementById("comboAccountType");
-// === combo new form ===
+// === combo ===
 const comboAccountType = document.getElementById("comboAccountType");
-
-//// === headers ===
-//// new account
-//const idNewAccountHeader = document.getElementById("idNewAccountHeader");
-//// delete account
-//const idDeleteAccountHeader = document.getElementById("idDeleteAccountHeader");
-//// update account
-//const idUpdateAccountHeader = document.getElementById("idUpdateAccountHeader");
-// === headers new form ===
-// new account
-const idNewAccountHeader = document.getElementById("idNewAccountHeader");
-// delete account
-const idDeleteAccountHeader = document.getElementById("idDeleteAccountHeader");
-//// update account
-//const idUpdateAccountHeader = document.getElementById("idUpdateAccountHeader");
 // === GLOBAL ARRAY ===
 /*
     OPERACIONES AGREGADAS USADAS 
@@ -253,20 +197,7 @@ let accountsArray = [];
    =================================================      ∎∎∎∎
  */
 
-//// === buttons ===
-//// delete account
-//// listener of delete button in table generation
-//confirmButton.addEventListener("click", handleDeleteAccount);
-//denyButton.addEventListener("click", cancellDeleteAccount);
-//// new account
-//createNewAccountButton.addEventListener("click", showCreateAccountForm);
-//confirmNewAccountButton.addEventListener("click", handleCreateAccount);
-//candellNewAccountButton.addEventListener("click", cancellCreateAccount);
-//// update account
-//// listener of update button in table generation
-//confirmUpdateAccountButton.addEventListener("click", handleUpdateAccount);
-//cancellUpdateAccountButton.addEventListener("click", cancellUpdateAccount);
-// === buttons new form ===
+// === buttons ===
 // delete account
 // listener of delete button in table generation
 confirmDeleteAccountButton.addEventListener("click", handleDeleteAccount);
@@ -279,7 +210,6 @@ cancellNewAccountButton.addEventListener("click", toggleNewAccountFormVisibility
 // listener of update button in table generation
 confirmUpdateAccountButton.addEventListener("click", handleUpdateAccount);
 cancellUpdateAccountButton.addEventListener("click", toggleUpdateAccountFormVisibility);
-
 // === combo ===
 // new account
 comboAccountType.addEventListener("change", checkSelectedValue);
@@ -312,18 +242,11 @@ tfUpdateDescription.addEventListener("input", checkUpdateAccountDescription);
  * @returns {undefined}
  */
 function toggleDeleteAccountFormVisibility(event) {
-    //document.getElementById("responseMsgDeleteDescription").style.visibility = 'hidden';
     document.getElementById("responseMsgDeleteDescription").style.display = 'none';
     const deleteAccountForm = document.getElementById("deleteAccountForm");
-    //deleteAccountForm.style.visibility = (deleteAccountForm.style.visibility == 'hidden') ? 'visible' : 'hidden';
     deleteAccountForm.style.display = (deleteAccountForm.style.display == 'none') ? 'flex' : 'none';
     if (event !== null) // comes from delete method without event
         confirmDeleteAccountButton.setAttribute("data-acc-id", event.target.dataset.accId);
-//    const accountID = event.target.dataset.accId;
-//    confirmationBoxAccounts.style.display = 'block';
-//    confirmationBoxAccounts.style.marginTop = "5px";
-//    confirmButton.setAttribute("data-acc-id", accountID);
-//    idDeleteAccountHeader.innerHTML = `¿Borrar cuenta con ID: ${accountID}?`;
 }
 
 /*
@@ -335,21 +258,13 @@ function toggleUpdateAccountFormVisibility(event) {
     const account = accountsArray.find((acc) => acc.id == event.target.dataset.accId);
     if (account.type === "CREDIT") tfUpdateCreditLine.removeAttribute("disabled");
     else tfUpdateCreditLine.setAttribute("disabled", true);
-    //document.getElementById("responseMsgUpdateCreditLine").style.visibility = 'hidden';
-    //document.getElementById("responseMsgUpdateDescription").style.visibility = 'hidden';
     document.getElementById("responseMsgUpdateCreditLine").style.display = 'none';
     document.getElementById("responseMsgUpdateDescription").style.display = 'none';
     const editAccountForm = document.getElementById("editAccountForm");
-    //editAccountForm.style.visibility = (editAccountForm.style.visibility == 'hidden') ? 'visible' : 'hidden';
     editAccountForm.style.display = (editAccountForm.style.display == 'none') ? 'flex' : 'none';
     confirmUpdateAccountButton.setAttribute("data-acc-id", event.target.dataset.accId);
     cancellUpdateAccountButton.setAttribute("data-acc-id", event.target.dataset.accId);
     resetValueOfElements([tfUpdateCreditLine,tfUpdateDescription]);
-//    const accountID = event.target.dataset.accId;
-//    confirmationBoxAccounts.style.display = 'block';
-//    confirmationBoxAccounts.style.marginTop = "5px";
-//    confirmButton.setAttribute("data-acc-id", accountID);
-//    idDeleteAccountHeader.innerHTML = `¿Borrar cuenta con ID: ${accountID}?`;
 }
 
 /*
@@ -368,11 +283,6 @@ function toggleNewAccountFormVisibility(event) {
         cancellNewAccountButton.setAttribute("data-acc-id", event.target.dataset.accId);
     }
     resetValueOfElements([newBeginBalance,newDescription,newCreditLine]);
-//    const accountID = event.target.dataset.accId;
-//    confirmationBoxAccounts.style.display = 'block';
-//    confirmationBoxAccounts.style.marginTop = "5px";
-//    confirmButton.setAttribute("data-acc-id", accountID);
-//    idDeleteAccountHeader.innerHTML = `¿Borrar cuenta con ID: ${accountID}?`;
 }
 
 /*
@@ -381,20 +291,6 @@ function toggleNewAccountFormVisibility(event) {
  * @returns {undefined}
  */
 async function handleDeleteAccount(event) {
-//    const accountID = event.target.dataset.accId;
-//    try {
-//        if (await hasMovements(accountID))
-//            throw new Error('La cuenta con ID: ('+ accountID +') tiene movimientos, no puede ser borrada');
-//        // At this point the account doesn't have movements
-//        deleteAccount(accountID);
-//    } catch (error) { // Informs to the user the errors
-//        showMsgBoxAccounts(error.message, "#ff0000");
-//        const enlaceMovements = document.createElement("u");
-//        enlaceMovements.setAttribute("data-acc-id", accountID);
-//        enlaceMovements.innerHTML = "Ir a movimientos de la cuenta";
-//        enlaceMovements.style.color = "#5620ad";
-//        enlaceMovements.addEventListener("click", storeAccountData);
-//        msgBoxAccounts.appendChild(enlaceMovements);
     const accountID = event.target.dataset.accId;
     try {
         if (await hasMovements(accountID))
@@ -406,7 +302,11 @@ async function handleDeleteAccount(event) {
         showMsgBoxAccounts(box, error.message, "#ff0000");
     }
 }
-
+/*
+ * Usado por new forms
+ * @param {type} event
+ * @returns {undefined}
+ */
 function handleCreateAccount(event) {
     if (checkNewAccountBeginBalance())
         if (checkNewAccountDescription())
@@ -612,6 +512,11 @@ function checkCreditLine(input) {
         throw new Error("Solo se admiten números en la línea de crédito");
 }
 
+/*
+ * Usado por new forms
+ * @param {type} input
+ * @returns {undefined}
+ */
 function checkInputNumbers(input, errorMessages) {
     if (errorMessages.length >= 1 && regExpOnlyNumbers.exec(input.value.trim())===null)
         throw new Error(errorMessages[0]);
@@ -632,22 +537,6 @@ function checkInputNumbers(input, errorMessages) {
                                                             ∎∎      ∎∎
    =================================================          ∎∎∎∎∎∎
  */
-
-function cancellDeleteAccount(event) {
-    hideDisplayOf([confirmationBoxAccounts]);
-    hideDisplayOf([msgBoxAccounts]);
-}
-
-function cancellCreateAccount(event) {
-    hideElements([newAccountForm]);
-    hideDisplayOf([msgBoxAccounts]);
-}
-
-function cancellUpdateAccount(event) {
-    hideElements([editAccountForm]);
-    hideDisplayOf([msgBoxAccounts]);
-    resetValueOfElements([tfUpdateCreditLine,tfUpdateDescription]);
-}
 
 /*
    =================================================        ∎∎∎∎∎∎∎∎∎∎
@@ -731,7 +620,7 @@ async function createAccount() {
     const newAccountID = accountsArray[0].id+1; // new ID
     const date = new Date().toISOString(); // get system date
     var creditLine; // controll credit line value
-    // creditLine controll
+    // creditLine input controll
     if (newCreditLine.value.trim() === "") creditLine = 0;
     else creditLine = newCreditLine.value.trim();
     const newAccount = new Account( // create Accounts
@@ -887,13 +776,9 @@ function* accountRowGenerator(accounts) {
                                         ));
         // Edit and Delete buttons in each row in new column
         const tdButtons = document.createElement("td");
-//        const buttonEdit = document.createElement("button");
-//        const buttonDelete = document.createElement("button");
         const buttonEdit = document.createElement("img");
         const buttonDelete = document.createElement("img");
         // IMG
-//        buttonEdit.textContent = "EDIT";
-//        buttonDelete.textContent = "DEL";
         buttonEdit.setAttribute("src", "../assets/img/edit-pencil-01-svgrepo-com.svg");
         buttonDelete.setAttribute("src", "../assets/img/delete-2-svgrepo-com.svg");
         // Button aspect attributes
@@ -909,8 +794,6 @@ function* accountRowGenerator(accounts) {
         // listeners
         buttonEdit.addEventListener("click",toggleUpdateAccountFormVisibility);
         buttonDelete.addEventListener("click",toggleDeleteAccountFormVisibility);
-        //buttonEdit.addEventListener("click",showUpdateAccountForm);
-        //buttonDelete.addEventListener("click",handleDeleteAccount);
         // Put buttons into td
         tdButtons.appendChild(buttonEdit);
         tdButtons.appendChild(buttonDelete);
@@ -957,38 +840,6 @@ async function buildAccountsTable() {
    =================================================          ∎∎∎∎∎∎
  */
 
-function showCreateAccountForm(event) {
-    showElements([newAccountForm]);
-    const newAccountID = accountsArray[0].id+1;
-    idNewAccountHeader.innerHTML = `Futuro ID de cuenta: ${newAccountID}`;
-}
-
-function showUpdateAccountForm(event) {
-    // show update account form
-    // pressed cancell button => call cancellUpdateAccount();
-    // pressed create button => call handleUpdateAccount();
-    showElements([updateAccountForm]);
-    const updateAccountID = event.target.dataset.accId;
-    // show ID of updating account
-    idUpdateAccountHeader.innerHTML = `ID de cuenta a actualizar: ${updateAccountID}`;
-    confirmUpdateAccountButton.setAttribute("data-acc-id", updateAccountID);
-    const account = accountsArray.find((acc) => acc.id == updateAccountID);
-    if (account.type === "CREDIT") showElements([tfUpdateCreditLine]);
-    else {
-        hideElements([tfUpdateCreditLine]);
-        resetValueOfElements([tfUpdateCreditLine]);
-    }
-}
-
-//function showMsgBoxAccounts(message, color) {
-//    msgBoxAccounts.style.color = color;
-//    msgBoxAccounts.style.marginTop = "5px";
-//    msgBoxAccounts.textContent = message;
-//    msgBoxAccounts.style.display = 'flex';
-//    msgBoxAccounts.style.flexDirection = 'column';
-//    msgBoxAccounts.style.alignItems = 'center';
-//}
-
 /*
  * Usado por new forms
  * @param {type} box
@@ -997,26 +848,9 @@ function showUpdateAccountForm(event) {
  * @returns {undefined}
  */
 function showMsgBoxAccounts(box, message, color) {
-    //box.style.visibility = 'visible';
     box.style.display = 'flex';
     box.textContent = message;
     box.style.color = color;
-}
-
-function hideDisplayOf(elements) {
-//    for (const element of elements) element.style.display = 'none';
-}
-
-function hideNewAccountForm() {
-    //newAccountForm.setAttribute("hidden", true);
-}
-
-function hideElements(elements) {
-    for (const element of elements) element.style.display = 'none';
-}
-
-function showElements(elements) {
-    for (const element of elements) element.style.display = 'flex';
 }
 
 /*
