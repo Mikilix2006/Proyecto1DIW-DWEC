@@ -6,7 +6,8 @@
 import { Movements } from './model.js';
 const SERVICE_URL_MOV= "/CRUDBankServerSide/webresources/movement/";
 const SERVICE_URL_ACC = "/CRUDBankServerSide/webresources/account/";
-const currentAccount = '{"balance":300.0,"beginBalance":100.0,"beginBalanceTimestamp":"2019-01-14T19:28:28+01:00","creditLine":1000.0,"customers":[{"city":"Philadelphia","email":"awallace@gmail.com","firstName":"Ann","id":299985563,"lastName":"Wallace","middleInitial":"M.","password":"qwerty*9876","phone":16665984477,"state":"Pennsylvania","street":"Main St.","zip":10056}],"description":"Check Account with Credit Line","id":3252214522,"movements":[{"amount":100.0,"balance":300.0,"description":"Deposit","id":53,"timestamp":"2026-01-16T09:23:28+01:00"},{"amount":100.0,"balance":100.0,"description":"Deposit","id":6,"timestamp":"2019-02-02T16:56:44+01:00"},{"amount":100.0,"balance":200.0,"description":"Deposit","id":7,"timestamp":"2019-02-02T16:57:40+01:00"}],"type":"CREDIT"}';
+sessionStorage.setItem("account", '{"balance":400.0,"beginBalance":100.0,"beginBalanceTimestamp":"2019-01-14T19:28:28+01:00","creditLine":1000.0,"customers":[{"city":"Philadelphia","email":"awallace@gmail.com","firstName":"Ann","id":299985563,"lastName":"Wallace","middleInitial":"M.","password":"qwerty*9876","phone":16665984477,"state":"Pennsylvania","street":"Main St.","zip":10056}],"description":"Check Account with Credit Line","id":3252214522,"movements":[{"amount":100.0,"balance":300.0,"description":"Deposit","id":53,"timestamp":"2026-01-16T09:23:28+01:00"},{"amount":100.0,"balance":100.0,"description":"Deposit","id":6,"timestamp":"2019-02-02T16:56:44+01:00"},{"amount":100.0,"balance":200.0,"description":"Deposit","id":7,"timestamp":"2019-02-02T16:57:40+01:00"},{"amount":100.0,"balance":400.0,"description":"Deposit","id":75,"timestamp":"2026-01-20T12:50:38+01:00"}],"type":"CREDIT"}');
+//const currentAccount = '{"balance":300.0,"beginBalance":100.0,"beginBalanceTimestamp":"2019-01-14T19:28:28+01:00","creditLine":1000.0,"customers":[{"city":"Philadelphia","email":"awallace@gmail.com","firstName":"Ann","id":299985563,"lastName":"Wallace","middleInitial":"M.","password":"qwerty*9876","phone":16665984477,"state":"Pennsylvania","street":"Main St.","zip":10056}],"description":"Check Account with Credit Line","id":3252214522,"movements":[{"amount":100.0,"balance":300.0,"description":"Deposit","id":53,"timestamp":"2026-01-16T09:23:28+01:00"},{"amount":100.0,"balance":100.0,"description":"Deposit","id":6,"timestamp":"2019-02-02T16:56:44+01:00"},{"amount":100.0,"balance":200.0,"description":"Deposit","id":7,"timestamp":"2019-02-02T16:57:40+01:00"}],"type":"CREDIT"}';
 let movements = [];
 const addMovementBtnController = document.getElementById("confirmAddMov");
 const deleteMovementController = document.getElementById("confirmDeleteMov");
@@ -26,8 +27,16 @@ window.addEventListener('load', buildMovementsTable);
 addMovementBtnController.addEventListener('click', handlerFormCreateMovement);
 deleteMovementController.addEventListener('click', handlerFormDeleteMovement);
 //Adding and deleting confirm listeners, trigger by click action
-deleteMovementBtn.addEventListener('click', deleteLastMovement); //cambiar esta función confirmDeleteLastMov
+//deleteMovementBtn.addEventListener('click', deleteLastMovement); //cambiar esta función confirmDeleteLastMov
 addNewMovement.addEventListener('click', createNewMovement);
+
+deleteMovementBtn.addEventListener('click', async () => {
+    await deleteLastMovement(); // Llama a tu función original de borrar en el servidor
+    cerrarDeleteForm();
+});
+
+// Botón "Cancelar" (Abortar)
+cancelDeleteBtn.addEventListener('click', cerrarDeleteForm);
 //SACAR EL ID DE LA CUENTA 
 //VALIDAR SI TIENE CRÉDITO, SI SE SACA DEL CRÉDITO
 /*
@@ -57,6 +66,15 @@ function handlerFormCreateMovement() {
         }
     });
 }
+/*
+ * VALIDAR SI LOS CAMPOS SON NÚMEROS
+ * NO PUEDES METER MÁS DE DOS DECIMALES
+ * NO PUEDES COLOCAR NEGATIVOS
+ * TIENE QUE ELEGIR UNA OPCIÓN DEL SELECT
+ * NO PUEDES RETIRAR DINERO SI NO TIENES LA CANTIDAD SUFICIENTE EN BALANCE 
+ * SI TIENES LÍNEA DE CRÉDITO, DEBES DE 
+ *
+ **/
 /*CONFIRM CREATE NEW MOVEMENT*/
 async function createNewMovement(e) {
     e.preventDefault();
@@ -75,14 +93,12 @@ async function createNewMovement(e) {
         return;
     }
     await fetchCreateNewMovement(amount, description);
-
-    inputAmount.value = "";
-    document.getElementById("newMovementForm").style.visibility = "hidden";
 }
 
 /*SHOW THE DELETE LAST MOVEMENT LAYER - CLICK BIN TRASH  */
 function handlerFormDeleteMovement(){
-    //show two buttons
+    const deleteFormContainer = document.getElementById("confirmDelete");
+    deleteFormContainer.style.display = 'flex';
 }
 /*CONFIRM DELETE LAST MOVEMENT*/
 function confirmDeleteLastMov(){}
@@ -97,7 +113,7 @@ function confirmDeleteLastMov(){}
 /*FETCH CREATE RESOURCE*/
 async function fetchCreateNewMovement(amount, description) {
     try {
-        const accountData = JSON.parse(currentAccount);
+        const accountData = JSON.parse(sessionStorage.getItem("account"));
         //const accountData = JSON.parse(sessionStorage.getItem("account"));
         if (!accountData) throw new Error("No se encontró información de la cuenta.");
         const idAccount = accountData.id;
@@ -116,10 +132,9 @@ async function fetchCreateNewMovement(amount, description) {
         if (!resMov.ok) throw new Error("Error al crear movimiento");
         accountData.balance = newBalance;
         await updateAccountBalance(accountData);
-
-        // 5. Refrescar UI
         await buildMovementsTable();
-        alert("Movimiento creado y saldo actualizado.");
+        alert("Movimiento creado y saldo actualizado.");//Cambiar
+        cerrarFormulario();
 
     } catch (error) {
         console.error("Error:", error);
@@ -171,8 +186,8 @@ async function updateAccountBalance(accountObj) {
 
 async function fetchMovements() {
     const accountData = JSON.parse(sessionStorage.getItem("account"));
-    const idAccount = accountData ? accountData.id : "3252214522"; //luego dejarlo solo por el session storage
-
+    //const idAccount = accountData ? accountData.id : "3252214522"; //luego dejarlo solo por el session storage
+    const idAccount = accountData.id;
     try {
         const response = await fetch(`${SERVICE_URL_MOV}account/${encodeURIComponent(idAccount)}`, {
             method: "GET",
@@ -220,9 +235,15 @@ function* movementRowGenerator(movementsList) {
         yield tr;
     }
 }
-
+/**/
 function cerrarFormulario() {
     const formContainer = document.getElementById("newMovementForm");
     formContainer.style.display = 'none';
     document.getElementById("newAmount").value = "";
+    document.getElementById("newTypeAmount").selectedIndex = 0;
 }
+
+function cerrarDeleteForm() {
+    document.getElementById("confirmDelete").style.display = 'none';
+}
+
