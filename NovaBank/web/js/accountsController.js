@@ -905,6 +905,6 @@ async function hasMovements(accountID) {
  */
 function storeAccountData(event) {
     const account = accountsArray.find((acc) => acc.id == event.target.dataset.accId);
-    sessionStorage.setItem("account", account);
+    sessionStorage.setItem("account", JSON.stringify(account));
     window.location.href = 'movements.html'; // Redirect to movimientos.html
 }
