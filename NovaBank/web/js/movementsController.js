@@ -50,6 +50,23 @@ async function buildMovementsTable() {
 /*SHOW THE CREATE NEW MOVEMENT FORM LAYER - CLICK ADD MOV  */
 function handlerFormCreateMovement() {
     const formContainer = document.getElementById("newMovementForm");
+    const creditDisplay = document.getElementById("creditInfoDisplay");
+    const accountData = JSON.parse(sessionStorage.getItem("account")) || JSON.parse(currentAccount);
+    const { balance, type, creditLine } = accountData;
+
+    creditDisplay.innerHTML = "";
+    if (type === "CREDIT") {
+        const totalDisponible = balance + creditLine;
+        
+        creditDisplay.innerHTML = `
+                <p ><strong>Saldo:</strong> ${currencyFormatter.format(balance)}</p>
+                <p ><strong>Línea de Crédito:</strong> ${currencyFormatter.format(creditLine)}</p>
+                <p ><strong>Disponible total:</strong> ${currencyFormatter.format(totalDisponible)}</p>
+        `;
+    } else {
+        // Si es una cuenta de débito, solo mostrar saldo
+        creditDisplay.innerHTML = `<p><strong>Saldo actual:</strong> ${currencyFormatter.format(balance)}</p>`;
+    }
     formContainer.style.display = 'flex';
     formContainer.addEventListener('click', (e) => {
         if (e.target.id === "newMovementForm") {
