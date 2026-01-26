@@ -144,7 +144,7 @@ async function createNewMovement(e) {
         await fetchCreateNewMovement(amount, description);
         
         // Limpieza y cierre
-        cerrarModal(); 
+        cerrarFormulario(); 
 
     } catch (error) {
         // El bloque catch captura cualquier Error lanzado arriba
@@ -305,4 +305,3 @@ function cerrarFormulario() {
 function cerrarDeleteForm() {
     document.getElementById("confirmDelete").style.display = 'none';
 }
-
