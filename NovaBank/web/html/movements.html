@@ -2,19 +2,20 @@
 <html lang="es">
 <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Nova Bank - Inicio</title>
+  <title>Movements</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../css/style.css">
   <link rel="stylesheet" href="../css/facilities.css">
   <link rel="stylesheet" href="../css/main.css">
-  <link rel="alternate stylesheet" title="ModoOscuro" id="theme-link" href="css/oscuro.css" disabled>
+  <link rel="alternate stylesheet" title="ModoOscuro" id="theme-link" href="../css/oscuro.css" disabled>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <body>
   <header class="header">
     <div class="container">
       <div class="logo">
-        <a href="main.html"><img src="assets/img/logo.png" alt="Nova Bank"></a>
+        <a href="main.html"><img src="../assets/img/logo.png" alt="Nova Bank"></a>
         <a href="main.html"> <h1>Nova Bank</h1></a>
       </div>
       <div class="buttons">
@@ -37,35 +38,79 @@
       </div>
     </div>
   </header>
-  <main>
-    <!-- Accessible Basic Table -->
-    <table id="userMovements" aria-label="User Movements" border="1">
-    <!-- Caption should be visible and descriptive -->
-    <caption class="text-left font-semibold mb-2 pb-2">
-    Movimientos del usuario
-    </caption>
-        <thead>
-            <tr>
-                <th scope="col">Fecha y hora</th>
-                <th scope="col">Descripción</th>
-                <th scope="col">Cantidad</th>
-                <th scope="col">Saldo Actual</th>
-            </tr>
-        </thead>
-        <tbody id="contentMovements">
-        </tbody>
-    </table>
-    <button id="addMovement">Añadir</button>
-    <button id="deleteLastMovement">Eliminar</button>
+  <main class="mainContent">
+    <section class="tableContainerBody">
+      <div class="tableContainer">
+        <h1>Movimientos</h1>
+        <div class="table-card">
+            <table id="userMovements" aria-label="User Movements">
+            <!-- <caption>Cuentas/Movimientos</caption> -->
+                <thead>
+                    <tr>
+                      <th scope="col">Fecha y hora</th>
+                      <th scope="col">Descripción</th>
+                      <th scope="col">Cantidad</th>
+                      <th scope="col">Saldo Actual</th>
+                    </tr>
+                </thead>
+                <tbody id="contentMovements">
+                </tbody>
+            </table>
+        </div>
+        <div class="footer-controls">
+            <button class="btn-back" id="goBackAccount">Cambiar cuenta</button>
+            
+            <div class="right-group">
+                <button class="btn-delete-outline" id="confirmDeleteMov"><i class="fa-solid fa-trash-can"></i></button>
+                <button class="btn-add-large" id="confirmAddMov"><i class="fa-solid fa-plus"></i></button>
+            </div>
+        </div>
+    </div>
+    </section>
+    <section id="newMovementForm" class="form-section-crud" style="display: none;">
+        <form id="formMovement" class="formulario">
+             <div class="titulo">
+                <h1>Nuevo Movimiento</h1>
+            </div>
+            <div class="form-group-crud">
+                <select id="newTypeAmount" >
+                    <option value="" disabled selected>Tipo de movimiento</option>
+                    <option value="Deposit">Depósito</option>
+                    <option value="Payment">Pago</option>
+                </select>
+            </div>
+            <div class="form-group-crud">
+                <input type="number" id="newAmount" min="0.01" step="0.01" placeholder="0.00" name="newAmount"required/>
+                <div id="responseMsgamount"></div>
+            </div>
+            <button id="addMovement" class="btn-form-crud">Crear Movimiento</button>
+        </form>
+    </section>
+    <section id="confirmDelete" class="form-section-crud" style="display: none;">
+        <div class="formulario" id="deleteConfirmationForm">
+            <div class="titulo">
+                <h1> Elimar Movimiento</h1>
+            </div>
+            <div class="info-eliminar-cuenta">
+                <p>¿Estás seguro de que deseas eliminar esta cuenta? una vez eliminada
+                    no podrás recuperar ningún información.
+                </p>
+                <button id="cancelDeleteMovement" class="btn-form-crud" >Cancelar</button>
+                <button id="deleteLastMovement" class="btn-form-crud">Borrar</button>
+                <p class="error-msg">
+                </p>
+            </div>
+        </div>
+    </section>
   </main>
   <footer class="footer">
     <div class="logo_footer">
-      <img src="assets/img/logo.png" alt="Nova Bank">
+      <img src="../assets/img/logo.png" alt="Nova Bank">
       <p>Nova Bank</p>
     </div>
     <p>© Copyright 2025 Nova Bank. All Rights Reserved.</p>
   </footer>
   <script src="../js/facilities.js"></script>
-  <script src="../js/movementsController.js"></script>
+  <script type="module" src="../js/movementsController.js"></script>
 </body>
 </html>

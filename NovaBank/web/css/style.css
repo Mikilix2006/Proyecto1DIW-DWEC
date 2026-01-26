@@ -20,6 +20,12 @@
 body {
   color: var(--texto-parrafo);
   background-color: var(--color-fondo);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+.mainContent{
+    flex: 1;
 }
 /*header*/
 .header {
