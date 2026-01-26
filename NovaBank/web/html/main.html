@@ -6,15 +6,17 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="assets/css/style.css">
-  <link rel="stylesheet" href="assets/css/facilities.css">
-  <link rel="stylesheet" href="assets/css/main.css">
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/facilities.css">
+  <link rel="stylesheet" href="../css/main.css">
   <link rel="alternate stylesheet" title="ModoOscuro" id="theme-link" href="../css/oscuro.css" disabled>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
 <body>
   <header class="header">
     <div class="container">
       <div class="logo">
-        <a href="main.html"><img src="assets/img/logo.png" alt="Nova Bank"></a>
+        <a href="main.html"><img src="../assets/img/logo.png" alt="Nova Bank"></a>
         <a href="main.html"> <h1>Nova Bank</h1></a>
       </div>
       <div class="buttons">
@@ -57,23 +59,149 @@
       </div>
     </section>
 
-    <section class="gestiona-section">
-      <h2>Gestiona</h2>
-      <div class="gestiona-grid">
-        <div class="gestiona-card">
-          <img src="assets/img/credit-card-svgrepo-com.png" alt="Ahorro mensual">
-          <p>Estado</p>
+    <section class="tableContainerBody">
+      <div class="tableContainer">
+        <h1>Cuentas</h1>
+        <div class="table-card">
+            <table id="showCOMPLETAR" aria-label="User Accounts">
+            <!--caption>Cuentas</caption-->
+                <thead>
+                    <tr>
+                        <th scope="col">ID</th>
+                        <th scope="col">Tipo</th>
+                        <th scope="col">Descripción</th>
+                        <th scope="col">Línea de crédito</th>
+                        <th scope="col">Fecha de apertura</th>
+                        <th scope="col">Saldo inicial</th>
+                        <th scope="col">Saldo actual</th>
+                        <th scope="col">Acción</th>
+                    </tr>
+                </thead>
+                <tbody id="contentAccounts">
+                    <!-- Generative content here -->
+                </tbody>
+            </table>
         </div>
-        <div class="gestiona-card">
-          <img src="assets/img/credit-card-plus-svgrepo-com.png" alt="Ahorro mensual">
-          <p>Nuevo movimiento</p>
+
+        <div class="footer-actions">
+            <button id="createNewAccountButton" class="btn-add-large"><i class="fa-solid fa-plus"></i></button>
         </div>
-        <div class="gestiona-card">
-          <img src="assets/img/credit-card-arrow-right-svgrepo-com.png" alt="Ahorro mensual">
-          <p>Enviar dinero</p>
-        </div>
-      </div>
+    </div>
     </section>
+      
+    <!-- Sucio -->
+        
+        <div id="msgBoxAccounts">
+            <!-- Error messages here -->
+        </div>
+      <!-- Confirmacion para borrado de cuenta -->
+      <!-- Formulario para actualizacion de cuenta -->
+        <!--div id="updateAccountForm" hidden>
+            <h3 id="idUpdateAccountHeader"></h3>
+            <input type="number" id="tfUpdateCreditLine" placeholder="Nueva línea de crédito" hidden>
+            <input type="text" id="tfUpdateDescription" placeholder="Nueva descripción">
+            <div id="confirmationButtons">
+                <button id="cancellUpdateAccountButton">Cancelar</button>
+                <button id="confirmUpdateAccountButton">Actualizar</button>
+            </div>
+        </div-->
+        
+    <!-- Fin de sucio -->
+    
+    <!-- New account Form -->
+    
+    <!--section id="newAccountForm" class="form-section-crud, formulario" style="display: none">
+        <form class="formulario">
+             <div class="titulo">
+                <h1>Nueva Cuenta</h1>
+            </div>
+            <div class="form-group-crud">
+                <select id="newAccountType" >
+                    <option value="NotSelected" disabled selected>Tipo de cuenta</option>
+                    <option value="STANDARD">STANDARD</option>
+                    <option value="CREDIT">CREDIT</option>
+                </select>
+            </div>
+            <div class="form-group-crud">
+                <input type="number" id="newCreditLine" name="newCreditLine" placeholder="Introduce una cantidad" required/>
+                <div id="responseMsgNewCreditLine"></div>
+            </div>
+            <div class="form-group-crud">
+                <input type="text" id="newDescription" name="newDescription" placeholder="Introduce una descripción" required/>
+                <div id="responseMsgNewDescription"></div>
+            </div>
+            <button id="cancellNewAccountButton" class="btn-form-crud">Cancelar</button>
+            <button id="confirmNewAccountButton" class="btn-form-crud">Crear Cuenta</button>
+        </form>
+    </section-->
+    
+    <section id="newAccountForm" class="form-section-crud" style="display: none">
+        <div class="formulario">
+            <div class="titulo">
+                <h1>Nueva Cuenta</h1>
+            </div>
+            <div class="form-group-crud">
+                <select id="comboAccountType">
+                    <option value="NotSelected" disabled selected>Tipo de cuenta</option>
+                    <option value="STANDARD">STANDARD</option>
+                    <option value="CREDIT">CREDIT</option>
+                </select>
+            </div>
+            <div class="form-group-crud">
+                <input type="number" id="newBeginBalance" placeholder="Saldo inicial" disabled/>
+                <div id="responseMsgNewBeginBalance"></div>
+            </div>
+            <div class="form-group-crud">
+                <textarea class="descripcion" id="newDescription" placeholder="Descripcion" disabled></textarea>
+                <div id="responseMsgNewDescription"></div>
+            </div>
+            <div class="form-group-crud">
+                <input type="number" id="newCreditLine" placeholder="Línea de crédito" disabled/>
+                <div id="responseMsgNewCreditLine"></div>
+            </div>
+            <button id="confirmNewAccountButton" class="btn-form-crud">Crear Cuenta</button>
+            <button id="cancellNewAccountButton" class="btn-form-crud">Cancelar</button>
+        </div>
+    </section>
+    
+    <!-- Update account Form -->
+    
+    <section id="editAccountForm" class="form-section-crud" style="display: none">
+        <div class="formulario">
+            <div class="titulo">
+                <h1>Editar Cuenta</h1>
+            </div>
+            <div class="form-group-crud">
+                <input type="number" id="tfUpdateCreditLine" placeholder="Linea de Crédito"/>
+                <div id="responseMsgUpdateCreditLine"></div>
+            </div>
+            <div class="form-group-crud">
+                <textarea class="descripcion" id="tfUpdateDescription" placeholder="Descripción"></textarea>
+                <div id="responseMsgUpdateDescription"></div>
+            </div>
+            <button id="confirmUpdateAccountButton" class="btn-form-crud">Confirmar cambios</button>
+            <button id="cancellUpdateAccountButton" class="btn-form-crud">Cancelar</button>
+        </div>
+    </section>
+    
+    <!-- Delete account Form -->
+    
+    <section id="deleteAccountForm" class="form-section-crud" style="display: none">
+        <div class="formulario" id="form-account">
+            <div class="titulo">
+                <h1> Elimar Cuenta</h1>
+            </div>
+            <div class="info-eliminar-cuenta">
+                <p>¿Estás seguro de que deseas eliminar esta cuenta? una vez eliminada
+                    no podrás recuperar ningún información.
+                </p>
+                <button id="confirmDeleteAccountButton" class="btn-form-crud">Eliminar Cuenta</button>
+                <button id="cancellDeleteAccountButton" class="btn-form-crud">Cancelar</button>
+                <div class="error-msg" id="responseMsgDeleteDescription"></div>
+            </div>
+        </div>
+    </section>
+    
   </main>
   <footer class="footer">
     <div class="logo_footer">
@@ -96,7 +224,6 @@
     }
   </script>
   <script src="../js/facilities.js"></script>
-  <script src="../js/signInDev.js"></script>
-  <script src="../js/changePassword.js"></script>
+  <script type="module" src="../js/accountsController.js"></script>
 </body>
 </html>
