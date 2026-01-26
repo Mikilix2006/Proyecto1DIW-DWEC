@@ -12,6 +12,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 
 <body>
@@ -42,88 +43,141 @@
     </div>
 </header>
 
-<section class="customers-section">
-    <h2>Usuarios</h2>
-
-    <table id="customersTable">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>First Name</th>
-                <th>Last Name</th>
-                <th>Middle Initial</th>
-                <th>Street</th>
-                <th>City</th>
-                <th>State</th>
-                <th>Zip</th>
-                <th>Phone</th>
-                <th>Email</th>
-            </tr>
-        </thead>
-        <tbody id="usersTabletbody">
-            <!-- contenido dinámico -->
-        </tbody>
-    </table>
+<main>
+    <section class="tableContainerBody">
+        <div class="tableContainer">
+            <h1>Usuarios</h1>
+            <div class="table-card">
+                <table id="showCOMPLETAR" aria-label="Customers">
+                    <thead>
+                        <tr>
+                            <th scope="col">Identificador</th>
+                            <th scope="col">Nombre</th>
+                            <th scope="col">Inicial segundo nombre</th>
+                            <th scope="col">Apellido</th>
+                            <th scope="col">Calle</th>
+                            <th scope="col">Ciudad</th>
+                            <th scope="col">Estado</th>
+                            <th scope="col">C.P</th>
+                            <th scope="col">Teléfono</th>
+                            <th scope="col">Correo Electrónico</th>
+                            <th scope="col">Acción</th>
+                        </tr>
+                    </thead>
+                    <tbody id="usersTabletbody">
+                        <!-- contenido dinámico -->
+                        <!--<td class="actions">
+                                <button class="btn-edit"><i class="fa-solid fa-pen-to-square"></i></button>
+                                <button class="btn-delete"><i class="fa-solid fa-trash-can"></i></button>
+                        </td>-->
+                    </tbody>
+                </table>
+            </div>
+            <div class="footer-actions">
+                <button class="btn-add-large" id="crearUsuario"><i class="fa-solid fa-plus"></i></button>
+            </div>
+        </div>
+    </section>
+</main>
     
-</section>
-    
-<section>
-    
-    <button id="boton-borrar">Eliminar usuario </button>
-    
-    <button id="boton-crear">Crear usuario</button>
-    
-    <button id="boton-editar">Editar usuario</button>
-        
-</section>
-    
-<div id="modalCrearUsuario" class="modal hidden">
-  <div class="modal-content">
-    <h3>Crear nuevo usuario</h3>
+ <!--FORMULARIO PARA CREAR NUEVO USUARIO-->
+    <section class="form-section-crud hidden" id="modalCrear">
+        <form class="formulario" id="formCrearUsuario">
+            <div class="titulo">
+                <h1> Nuevo Usuario</h1>
+            </div>
+            <div class="form-group-crud">
+                <input type="text" name="firstName" placeholder="Nombre" />
+            <div id="responseMsgName"></div>
+            </div>
+            <div class="form-group-crud">
+                <input type="text" name="middleInitial" placeholder="Inicial segundo nombre" />
+                <div id="responseMsgInitial"></div>
+            </div>
+            <div class="form-group-crud">
+                <input type="text" name="lastName" placeholder="Apellido" />
+                <div id="responseMsgSurname"></div>
+            </div>
+            <div class="form-group-crud">
+                <input type="text" name="street" placeholder="Calle" />
+                <div id="responseMsgStreet"></div>
+            </div>
+            <div class="form-group-crud">
+                <input type="text" name="city" placeholder="Ciudad" />
+                <div id="responseMsgCity"></div>
+            </div>
+            <div class="form-group-crud">
+                <input type="text" name="state" placeholder="Estado" />
+                <div id="responseMsgState"></div>
+            </div>
+            <div class="form-group-crud">
+                <input type="number" name="zip" placeholder="Código postal" />
+                <div id="responseMsgZip"></div>
+            </div>
+            <div class="form-group-crud">
+                <input type="number" name="phone" placeholder="Teléfono" />
+                <div id="responseMsgTelf"></div>
+            </div>
+            <div class="form-group-crud">
+                <input type="email" name="email" placeholder="Correo electrónico" />
+                <div id="responseMsgMail"></div>
+            </div>
+             <div class="modal-buttons">
+                <button type="submit" class="btn-form-crud">Crear Usuario</button>
+                <button type="button" id="cerrarModalCrear" class="btn-form-crud">Cancelar </button>
+             </div>
+        </form>
+    </section>    
 
-    <form id="formCrearUsuario">
-      <input type="text" name="firstName" placeholder="First Name" required>
-      <input type="text" name="lastName" placeholder="Last Name" required>
-      <input type="text" name="middleInitial" placeholder="Middle Initial">
-      <input type="text" name="street" placeholder="Street" required>
-      <input type="text" name="city" placeholder="City" required>
-      <input type="text" name="state" placeholder="State" required>
-      <input type="text" name="zip" placeholder="Zip" required>
-      <input type="text" name="phone" placeholder="Phone" required>
-      <input type="email" name="email" placeholder="Email" required>
-
-      <div class="modal-buttons">
-        <button type="submit">Guardar</button>
-        <button type="button" id="cerrarModal">Cancelar</button>
-      </div>
-    </form>
-  </div>
-</div>
-
-
-<div id="modalEditarUsuario" class="modal hidden">
-  <div class="modal-content">
-    <h3>Editar usuario</h3>
-
-    <form id="formEditarUsuario">
-      <input type="text" name="firstName" placeholder="First Name" required>
-      <input type="text" name="lastName" placeholder="Last Name" required>
-      <input type="text" name="middleInitial" placeholder="Middle Initial">
-      <input type="text" name="street" placeholder="Street" required>
-      <input type="text" name="city" placeholder="City" required>
-      <input type="text" name="state" placeholder="State" required>
-      <input type="text" name="zip" placeholder="Zip" required>
-      <input type="text" name="phone" placeholder="Phone" required>
-      <input type="email" name="email" placeholder="Email" required>
-
-      <div class="modal-buttons">
-        <button type="submit">Guardar cambios</button>
-        <button type="button" id="cerrarModalEditar">Cancelar</button>
-      </div>
-    </form>
-  </div>
-</div>
+    <!--FORMULARIO PARA EDITAR USUARIO-->
     
+    <section class="form-section-crud hidden" id="modalEditar">
+        <form class="formulario" id="formEditarUsuario">
+            <div class="titulo">
+                <h1> Editar Usuario</h1>
+            </div>
+            <div class="form-group-crud">
+                 <input type="text" name="firstName" placeholder="Nombre" />
+            <div id="responseMsgName"></div>
+            </div>
+            <div class="form-group-crud">
+                <input type="text" name="middleInitial" placeholder="Inicial segundo nombre" />
+                <div id="responseMsgInitial"></div>
+            </div>
+            <div class="form-group-crud">
+                <input type="text" name="lastName" placeholder="Apellido" />
+                <div id="responseMsgSurname"></div>
+            </div>
+            <div class="form-group-crud">
+                <input type="text" name="street" placeholder="Calle" />
+                <div id="responseMsgStreet"></div>
+            </div>
+            <div class="form-group-crud">
+                <input type="text" name="city" placeholder="Ciudad" />
+                <div id="responseMsgCity"></div>
+            </div>
+            <div class="form-group-crud">
+                <input type="text" name="state" placeholder="Estado" />
+                <div id="responseMsgState"></div>
+            </div>
+            <div class="form-group-crud">
+                <input type="number" name="zip" placeholder="Código postal" />
+                <div id="responseMsgZip"></div>
+            </div>
+            <div class="form-group-crud">
+                <input type="number" name="phone" placeholder="Teléfono" />
+                <div id="responseMsgTelf"></div>
+            </div>
+            <div class="form-group-crud">
+                <input type="email" name="email" placeholder="Correo electrónico" />
+                <div id="responseMsgMail"></div>
+            </div>
+                <button type="submit" class="btn-form-crud">Guardar</button>
+                <button type="button" id="cerrarModalEditar" class="btn-form-crud"> Cancelar </button>
+        </form>
+    </section>    
+    
+   
 <footer class="footer">
     <div class="logo_footer">
         <img src="../assets/img/logo.png" alt="Nova Bank">
@@ -134,8 +188,8 @@
 
 <!-- ORDEN CORRECTO DE SCRIPTS  type="module" -->
 <script src="../js/facilities.js"></script>
-<!--<script src="../js/model.js"></script>-->
-<script  src="../js/customer.js"></script>
+<script type="module" src="../js/customer.js"></script>
+
 
 </body>
 </html>

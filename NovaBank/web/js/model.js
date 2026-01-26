@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-class Customer {
+export class Customer {
     constructor (id, firstName, lastName, middleInitial, street, city, state, zip, phone, email, password){
     this.id = id;
     this.firstName = firstName;
