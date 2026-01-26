@@ -262,9 +262,10 @@ function toggleUpdateAccountFormVisibility(event) {
     document.getElementById("responseMsgUpdateDescription").style.display = 'none';
     const editAccountForm = document.getElementById("editAccountForm");
     editAccountForm.style.display = (editAccountForm.style.display == 'none') ? 'flex' : 'none';
-    confirmUpdateAccountButton.setAttribute("data-acc-id", event.target.dataset.accId);
-    cancellUpdateAccountButton.setAttribute("data-acc-id", event.target.dataset.accId);
-    resetValueOfElements([tfUpdateCreditLine,tfUpdateDescription]);
+    confirmUpdateAccountButton.setAttribute("data-acc-id", account.id);
+    cancellUpdateAccountButton.setAttribute("data-acc-id", account.id);
+    tfUpdateCreditLine.value = account.creditLine;
+    tfUpdateDescription.value = account.description;
 }
 
 /*
@@ -523,21 +524,6 @@ function checkInputNumbers(input, errorMessages) {
     if (errorMessages.length >= 2 && input.value < 0)
         throw new Error(errorMessages[1]);
 }
-
-/*
-   =================================================          ∎∎∎∎∎∎
-                                                            ∎∎      ∎∎
-                    CANCELL ACTIONS                         ∎∎
-                                                            ∎∎
-   -------------------------------------------------        ∎∎∎∎∎∎∎∎
-                                                            ∎∎      ∎∎
-                                                            ∎∎      ∎∎
-                                                            ∎∎      ∎∎
-                                                            ∎∎      ∎∎
-                                                            ∎∎      ∎∎
-   =================================================          ∎∎∎∎∎∎
- */
-
 /*
    =================================================        ∎∎∎∎∎∎∎∎∎∎
                                                                    ∎∎
@@ -646,6 +632,7 @@ async function createAccount() {
         // reset input values
         comboAccountType.value = "NotSelected";
         resetValueOfElements([newBeginBalance,newCreditLine,newDescription]);
+        location.reload();
     } catch (error) {
         showMsgBoxAccounts(msgBoxAccounts, error.message, "#ff0000");
     }
@@ -668,6 +655,7 @@ async function deleteAccount(accountID) {
         buildAccountsTable(); // Reloads the table
         showMsgBoxAccounts(msgBoxAccounts, "Se ha borrado la cuenta exitosamente", "#5620ad");
         toggleDeleteAccountFormVisibility();
+        location.reload();
     } catch (error) {   
         showMsgBoxAccounts(error.message, "#ff0000");
     }
@@ -705,6 +693,7 @@ async function updateAccount(event) {
         buildAccountsTable(); // Reloads the table
         showMsgBoxAccounts(msgBoxAccounts,"Se ha actualizado la cuenta exitosamente", "#5620ad");
         toggleUpdateAccountFormVisibility(event); 
+        location.reload();
     } catch (error) {   
         showMsgBoxAccounts(msgBoxAccounts,error.message, "#ff0000");
     }
