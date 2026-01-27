@@ -1,16 +1,22 @@
 <!DOCTYPE html>
 <html lang="es">
-<meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Movements</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="../css/style.css">
-  <link rel="stylesheet" href="../css/facilities.css">
-  <link rel="stylesheet" href="../css/main.css">
-  <link rel="alternate stylesheet" title="ModoOscuro" id="theme-link" href="../css/oscuro.css" disabled>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<head>
+    <title>Movements</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="../css/style.css">
+        <link rel="stylesheet" href="../css/facilities.css">
+        <link rel="stylesheet" href="../css/main.css">
+        <link rel="alternate stylesheet" title="ModoOscuro" id="theme-link" href="../css/oscuro.css" disabled>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+   <script src="/NovaBank/js/model.js"></script>
+   <script type='module' src="/NovaBank/js/movementsController.js"></script>
+    <script src="/NovaBank/js/facilities.js"></script>
+    
+</head>
 <body>
   <header class="header">
     <div class="container">
@@ -28,7 +34,7 @@
           </svg>
         </button>
         <div class="menu-container">
-          <button class="menu-toggle" id="menuBtn" onclick="dropDownMenu();">&#9776;</button>
+          <button class="menu-toggle" id="menuBtn" onclick="dropDownMenu();"><i class="fa-solid fa-bars"></i></button>
           <ul class="dropdown-menu" id="dropdownMenu">
                 <li><a href="changePassword.html" accesskey="c">Cambiar Contraseña <span> Alt + C</span></a></li>
                 <li><a href="index.html" accesskey="H">Ayuda y soporte <span> Alt + H</span></a></li>
@@ -42,7 +48,13 @@
     <section class="tableContainerBody">
       <div class="tableContainer">
         <h1>Movimientos</h1>
-        <div></div>
+        <div id="account-info-header" style="margin-bottom: 20px; padding: 10px; background-color: #f9f9f9; border-radius: 5px; border-left: 5px solid #380b4c;">
+            <p><strong>ID Cuenta:</strong> <span id="display-id">-</span></p>
+            <p><strong>Tipo:</strong> <span id="display-type">-</span></p>
+            <p id="display-credit-container" style="display: none;">
+                <strong>Línea de Crédito:</strong> <span id="display-credit">-</span>
+            </p>
+        </div>
         <div class="table-card">
             <table id="userMovements" aria-label="User Movements">
             <!-- <caption>Cuentas/Movimientos</caption> -->
@@ -59,7 +71,7 @@
             </table>
         </div>
         <div class="footer-controls">
-            <button class="btn-back" id="goBackAccount">Cambiar cuenta</button>
+            <button class="btn-back" id="goBackAccount"><i class="fa-solid fa-arrow-right fa-flip-horizontal"></i></button>
             
             <div class="right-group">
                 <button class="btn-delete-outline" id="confirmDeleteMov"><i class="fa-solid fa-trash-can"></i></button>
@@ -70,7 +82,7 @@
     </section>
     <section id="newMovementForm" class="form-section-crud" style="display: none;">
         <form id="formMovement" class="formulario">
-             <div class="titulo">
+            <div class="titulo">
                 <h1>Nuevo Movimiento</h1>
             </div>
             <div id="creditInfoDisplay"></div>
@@ -104,6 +116,7 @@
             </div>
         </div>
     </section>
+    <div id="h5p-container" style="width: 50%"></div>
   </main>
   <footer class="footer">
     <div class="logo_footer">
@@ -112,7 +125,6 @@
     </div>
     <p>© Copyright 2025 Nova Bank. All Rights Reserved.</p>
   </footer>
-  <script src="../js/facilities.js"></script>
-  <script type="module" src="../js/movementsController.js"></script>
+ 
 </body>
 </html>

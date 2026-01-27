@@ -4,7 +4,6 @@
    =================================================
  */
 import { Movements } from './model.js';
-import { Account } from './model.js';
 const SERVICE_URL_MOV= "/CRUDBankServerSide/webresources/movement/";
 const SERVICE_URL_ACC = "/CRUDBankServerSide/webresources/account/";
 let movements = [];
@@ -21,7 +20,7 @@ const addNewMovement = document.getElementById("addMovement");
    =================================================
  */
 //This listener load the R procedure of the app. Show all the movements of the current acount
-window.addEventListener('load', buildMovementsTable);
+window.addEventListener('DOMContentLoaded', buildMovementsTable);
 //Show CREATE and DELETE window
 addMovementBtnController.addEventListener('click', handlerFormCreateMovement);
 deleteMovementController.addEventListener('click', handlerFormDeleteMovement);
@@ -32,12 +31,26 @@ cancelDeleteBtn.addEventListener('click', cerrarDeleteForm);
 //SACAR EL ID DE LA CUENTA 
 //MOSTRAR EL CRÉDITO EN CASO TENGA
 /*
+document.addEventListener('DOMContentLoaded', function () {
+              const el = document.getElementById('h5p-container');
+              const options = {
+                h5pJsonPath: '/NovaBank/assets/h5p-content',
+                frameJs: '/NovaBank/assets/h5p-player/frame.bundle.js', 
+                frameCss: '/NovaBank/assets/h5p-player/styles/h5p.css', 
+                librariesPath: '/NovaBank/assets/h5p-libraries' 
+              };
+              let h5p=new H5PStandalone.H5P(el, options);
+              console.log(options);
+});  
+*/
+/*
    =================================================
        EVENT HANDLERS CALLED FROM THE LISTENERS
    =================================================
  */
 /*BUILD MOVEMENT CONTENT TABLE - LOAD PAGE*/
 async function buildMovementsTable() {
+    accountHeader();
     movements = await fetchMovements();
     const tbody = document.querySelector("#contentMovements");
     if (!tbody) return; //mostrar mensaje
@@ -125,6 +138,9 @@ function handlerFormDeleteMovement(){
 function confirmDeleteLastMov(){}
 
 /*GO BACK ACCOUNT TABLE, CLEANING SESSION STORAGE - CLICK*/
+function goBackAccounts(){}
+
+/**/
 
 /*
    =================================================
@@ -136,7 +152,7 @@ const currencyFormatter = new Intl.NumberFormat(undefined, {
         currency: 'EUR',
         minimumFractionDigits: 2
     });
-    const dateFormatter = new Intl.DateTimeFormat(undefined, {
+const dateFormatter = new Intl.DateTimeFormat(undefined, {
         year: 'numeric',
         month: '2-digit',
         day: '2-digit',
@@ -267,4 +283,22 @@ function cerrarFormulario() {
 
 function cerrarDeleteForm() {
     document.getElementById("confirmDelete").style.display = 'none';
+}
+/*INFORMACIÓN ADICIONAL DE LA CUENTA*/
+function accountHeader() {
+    const accountData = JSON.parse(sessionStorage.getItem("account"));
+    if (!accountData) return;
+    const spanId = document.getElementById("display-id");
+    const spanType = document.getElementById("display-type");
+    const containerCredit = document.getElementById("display-credit-container");
+    const spanCredit = document.getElementById("display-credit");
+
+    spanId.textContent = accountData.id;
+    spanType.textContent = accountData.type;
+    if (accountData.type === "CREDIT") {
+        containerCredit.style.display = "block";
+        spanCredit.textContent = currencyFormatter.format(accountData.creditLine);
+    } else {
+        containerCredit.style.display = "none";
+    }
 }
