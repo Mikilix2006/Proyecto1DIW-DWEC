@@ -164,6 +164,8 @@ const cancellNewAccountButton = document.getElementById('cancellNewAccountButton
 // update account
 const confirmUpdateAccountButton = document.getElementById('confirmUpdateAccountButton');
 const cancellUpdateAccountButton = document.getElementById('cancellUpdateAccountButton');
+// help
+const buttonVideoHelper = document.getElementById("h5p-container");
 // === inputs ===
 // new account
 const newBeginBalance = document.getElementById("newBeginBalance");
@@ -210,6 +212,8 @@ cancellNewAccountButton.addEventListener("click", toggleNewAccountFormVisibility
 // listener of update button in table generation
 confirmUpdateAccountButton.addEventListener("click", handleUpdateAccount);
 cancellUpdateAccountButton.addEventListener("click", toggleUpdateAccountFormVisibility);
+// help
+buttonVideoHelper.addEventListener("click", toggleVideoHelperVisibility)
 // === combo ===
 // new account
 comboAccountType.addEventListener("change", checkSelectedValue);
@@ -221,6 +225,8 @@ newDescription.addEventListener("input", checkNewAccountDescription);
 // update account
 tfUpdateCreditLine.addEventListener("input", checkUpdateAccountCreditLine);
 tfUpdateDescription.addEventListener("input", checkUpdateAccountDescription);
+// === video ===
+
 
 /*
    =================================================        ∎∎    ∎∎
@@ -284,6 +290,17 @@ function toggleNewAccountFormVisibility(event) {
         cancellNewAccountButton.setAttribute("data-acc-id", event.target.dataset.accId);
     }
     resetValueOfElements([newBeginBalance,newDescription,newCreditLine]);
+}
+
+function toggleVideoHelperVisibility(event) {
+    const el = document.getElementById('h5p-container');
+    const options = {
+      h5pJsonPath: '../assets/video/h5p-content', // Path to the extracted H5P content. NOTE that paths are relative to the server root: they begin with app's Context Path!!
+      frameJs: '../assets/video/h5p-player/frame.bundle.js', // Path to player's frame.bundle.js
+      frameCss: '../assets/video/h5p-player/styles/h5p.css', // Path to player's h5p.css
+      librariesPath: '../assets/video/h5p-libraries' // Path to player's h5p.css
+    };
+    let h5p=new H5PStandalone.H5P(el, options);
 }
 
 /*

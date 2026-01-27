@@ -11,7 +11,7 @@
   <link rel="stylesheet" href="../css/main.css">
   <link rel="alternate stylesheet" title="ModoOscuro" id="theme-link" href="../css/oscuro.css" disabled>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  
+  <script type="module" src="../js/accountsController.js"></script>
 <body>
   <header class="header">
     <div class="container">
@@ -39,19 +39,8 @@
       </div>
     </div>
   </header>
-    <div id="h5p-container" style="width: 50%"></div>
-    <script type="text/javascript">
-        document.addEventListener('DOMContentLoaded', function () {
-          const el = document.getElementById('h5p-container');
-          const options = {
-            h5pJsonPath: '../assets/video/h5p-content', // Path to the extracted H5P content. NOTE that paths are relative to the server root: they begin with app's Context Path!!
-            frameJs: '../assets/video/h5p-player/frame.bundle.js', // Path to player's frame.bundle.js
-            frameCss: '../assets/video/h5p-player/styles/h5p.css', // Path to player's h5p.css
-            librariesPath: '../assets/video/h5p-libraries' // Path to player's h5p.css
-          };
-          let h5p=new H5PStandalone.H5P(el, options);
-        });            
-    </script> 
+    <button id="buttonVideoHelper" class="btn-form-crud">Help</button>
+    <div id="h5p-container"></div>
   <main class="main-container">
     <section class="welcome-section">
       <h2 id="sessionNombre"></h2>
@@ -197,6 +186,5 @@
     }
   </script>
   <script src="../js/facilities.js"></script>
-  <script type="module" src="../js/accountsController.js"></script>
 </body>
 </html>
