@@ -6,7 +6,7 @@
         </session-timeout>
     </session-config>
     <welcome-file-list>
-        <welcome-file>html/index.html</welcome-file>
+        <welcome-file>index.html</welcome-file>
         <welcome-file>html/signIn.html</welcome-file>
     </welcome-file-list>
 </web-app>

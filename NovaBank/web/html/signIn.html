@@ -7,19 +7,19 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
-  <link rel="stylesheet" title="ModoPredeterminado" href="assets/css/style.css">
-  <link rel="stylesheet" href="assets/css/facilities.css">
-  <link rel="alternate stylesheet" title="ModoOscuro" id="theme-link" href="assets/css/oscuro.css" disabled>
+  <link rel="stylesheet" title="ModoPredeterminado" href="../css/style.css">
+  <link rel="stylesheet" href="../css/facilities.css">
+  <link rel="alternate stylesheet" title="ModoOscuro" id="theme-link" href="../css/oscuro.css" disabled>
 </head>
 <body>
   <header class="header">
     <div class="container">
       <div class="logo">
-        <a href="index.html"><img src="assets/img/logo.png" alt="Nova Bank"></a>
-        <a href="index.html"> <h1>Nova Bank</h1></a>
+        <a href="../index.html"><img src="../assets/img/logo.png" alt="Nova Bank"></a>
+        <a href="../index.html"> <h1>Nova Bank</h1></a>
       </div>
       <nav class="nav">
-        <a href="index.html#aboutUs">Sobre nosotros</a>
+        <a href="../index.html#aboutUs">Sobre nosotros</a>
       </nav>
       <div class="buttons">
         <button id="themeToggle" class="btn-theme" onclick="changeTheme();" title="Cambiar tema">
@@ -35,8 +35,8 @@
             <button class="menu-toggle" id="menuBtn" onclick="dropDownMenu();">&#9776;</button>
           <ul class="dropdown-menu" id="dropdownMenu">
               <!--TENER EN CUENTA EL ACCESSKEY DEPENDIENDO DEL NAVEGADOR FFOX: ALT+SHIFT+S-->
-            <li><a href="index.html" accesskey="S">Inicio <span> Alt + S</span></a></li>
-            <li><a href="index.html" accesskey="H">Ayuda y soporte<span> Alt + H</span></a></li>
+            <li><a href="../index.html" accesskey="S">Inicio <span> Alt + S</span></a></li>
+            <li><a href="../index.html" accesskey="H">Ayuda y soporte<span> Alt + H</span></a></li>
           </ul>
         </div>
       </div>
@@ -54,7 +54,7 @@
             <div class="password-wrapper">
             <input oninput="limpiarDatos();" type="password" id="tfPassword" name="tfPassword" placeholder="Contraseña">
             <button onclick="showHidePassword();" type="button" id="togglePassword" class="toggle-password" aria-label="Mostrar contraseña">
-                <img  id="eyeIcon" width="20" height="20" src='assets/img/eye-svgrepo-com.svg'>
+                <img  id="eyeIcon" width="20" height="20" src='../assets/img/eye-svgrepo-com.svg'>
             </button>
             </div>
             <span id="errorPassword"></span>
@@ -67,7 +67,7 @@
   </section>
   <footer class="footer">
     <div class="logo_footer">
-      <img src="assets/img/logo.png" alt="Nova Bank">
+      <img src="../assets/img/logo.png" alt="Nova Bank">
       <p>Nova Bank</p>
     </div>
     <p>© Copyright 2025 Nova Bank. All Rights Reserved.</p>
