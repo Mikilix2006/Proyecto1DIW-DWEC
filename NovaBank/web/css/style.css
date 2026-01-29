@@ -467,6 +467,24 @@ tbody tr:hover {
     justify-content: flex-end;
     padding: 20px 10px;
 }
+
+/**** ELIMINAR USUSARIOS *****/
+/* El texto de advertencia gris */
+.info-eliminar-cuenta p {
+  color: #666;
+  font-size: 0.7rem;
+  line-height: 1.5;
+  margin-bottom: 20px;
+  text-align: center;  /* Centra todo el texto interior */
+}
+
+/* El mensaje de error en rojo */
+.error-msg {
+  color: red !important;
+  font-size: 0.7rem;
+  margin-top: 20px;
+}
+
 /*Botones inferiores movimientos*/
 .footer-controls {
     display: flex;
