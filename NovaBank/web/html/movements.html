@@ -14,93 +14,90 @@
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
    <script src="/NovaBank/js/model.js"></script>
    <script type='module' src="/NovaBank/js/movementsController.js"></script>
-    <script src="/NovaBank/js/facilities.js"></script>
-    
+   <script src="/NovaBank/js/facilities.js"></script>
 </head>
 <body>
-  <header class="header">
-    <div class="container">
-      <div class="logo">
-        <a href="main.html"><img src="../assets/img/logo.png" alt="Nova Bank"></a>
-        <a href="main.html"> <h1>Nova Bank</h1></a>
-      </div>
-      <div class="buttons">
-        <button id="themeToggle" class="btn-theme" onclick="changeTheme();" title="Cambiar tema">
-          <svg id="icon-sun" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m8.485-8.485h1M4.515 12.515h1M17.657 6.343l.707-.707M6.343 17.657l.707-.707M17.657 17.657l.707.707M6.343 6.343l.707.707M12 8a4 4 0 100 8 4 4 0 000-8z"/>
-          </svg>
-          <svg id="icon-moon" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
-            <path d="M21 12.79A9 9 0 1111.21 3a7 7 0 109.79 9.79z"/>
-          </svg>
-        </button>
-        <div class="menu-container">
-          <button class="menu-toggle" id="menuBtn" onclick="dropDownMenu();"><i class="fa-solid fa-bars"></i></button>
-          <ul class="dropdown-menu" id="dropdownMenu">
-                <li><a href="changePassword.html" accesskey="c">Cambiar Contraseña <span> Alt + C</span></a></li>
-                <li><a href="index.html" accesskey="H">Ayuda y soporte <span> Alt + H</span></a></li>
-                <li><a id="botonCerrarSesion" onclick="salirSession();" accesskey="S">Cerrar session <span> Alt + S</span></a></li>
-          </ul>
+  <header role="banner" class="header">
+      <nav role="navigation" aria-label="Navegación principal" class="container">
+        <div class="logo">
+                <a href="main.html"><img src="/NovaBank/assets/img/logo.png" alt="Nova Bank"></a>
+                <a href="main.html" aria-label="Ir al inicio de Nova Bank"><h1>Nova Bank</h1></a>
         </div>
-      </div>
-    </div>
+        <div class="buttons">
+                <button type="button" id="themeToggle" class="btn-theme" onclick="changeTheme();" title="Cambiar tema" aria-expanded="false" aria-haspopup="true" aria-label="Cambiar tema"> 
+                    <svg id="icon-sun" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m8.485-8.485h1M4.515 12.515h1M17.657 6.343l.707-.707M6.343 17.657l.707-.707M17.657 17.657l.707.707M6.343 6.343l.707.707M12 8a4 4 0 100 8 4 4 0 000-8z"/>
+                    </svg>
+                    <svg id="icon-moon" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M21 12.79A9 9 0 1111.21 3a7 7 0 109.79 9.79z"/>
+                    </svg>
+                </button>
+            <div role="menu" class="menu-container">
+                <button class="menu-toggle" id="menuBtn" onclick="dropDownMenu();"><i class="fa-solid fa-bars"></i></button>
+                    <ul class="dropdown-menu" id="dropdownMenu" role="menu">
+                        <li><a role="menuitem href="changePassword.html" accesskey="c">Cambiar Contraseña <span>C</span></a></li>
+                        <li><a role="menuitem href="index.html" accesskey="h">Ayuda y soporte <span>H</span></a></li>
+                        <li><a role="menuitem id="botonCerrarSesion" onclick="salirSession();" accesskey="s">Cerrar session <span>S</span></a></li>
+                    </ul> 
+            </div>
+         </div>
+    </nav>
   </header>
-  <main class="mainContent">
-    <section class="tableContainerBody">
-      <div class="tableContainer">
-        <h1>Movimientos</h1>
-        <div id="account-info-header" style="margin-bottom: 20px; padding: 10px; background-color: #f9f9f9; border-radius: 5px; border-left: 5px solid #380b4c;">
-            <p><strong>ID Cuenta:</strong> <span id="display-id">-</span></p>
-            <p><strong>Tipo:</strong> <span id="display-type">-</span></p>
-            <p id="display-credit-container" style="display: none;">
-                <strong>Línea de Crédito:</strong> <span id="display-credit">-</span>
-            </p>
-        </div>
-        <div class="table-card">
-            <table id="userMovements" aria-label="User Movements">
-            <!-- <caption>Cuentas/Movimientos</caption> -->
-                <thead>
-                    <tr>
-                      <th scope="col">Fecha y hora</th>
-                      <th scope="col">Descripción</th>
-                      <th scope="col">Cantidad</th>
-                      <th scope="col">Saldo Actual</th>
-                    </tr>
-                </thead>
-                <tbody id="contentMovements">
-                </tbody>
-            </table>
-        </div>
-        <div class="footer-controls">
-            <button class="btn-back" id="goBackAccount"><i class="fa-solid fa-arrow-right fa-flip-horizontal"></i></button>
-            
-            <div class="right-group">
-                <button class="btn-delete-outline" id="confirmDeleteMov"><i class="fa-solid fa-trash-can"></i></button>
-                <button class="btn-add-large" id="confirmAddMov"><i class="fa-solid fa-plus"></i></button>
+  <main class="mainContent" role="main">
+    <section role="region" aria-labelledby="Títúlo Movimientos" class="tableContainerBody">
+        <div class="tableContainer">
+            <h1>Movimientos</h1>
+            <div id="account-info-header" style="margin-bottom: 20px; padding: 10px; background-color: #f9f9f9; border-radius: 5px; border-left: 5px solid #380b4c;">
+                <p><strong>ID Cuenta:</strong> <span id="display-id">-</span></p>
+                <p><strong>Tipo:</strong> <span id="display-type">-</span></p>
+                <p id="display-credit-container" style="display: none;">
+                    <strong>Línea de Crédito:</strong> <span id="display-credit">-</span>
+                </p>
+            </div>
+            <div class="table-card">
+                <table id="userMovements" aria-labelledby="Tabla de Movimientos">
+                    <caption>Historial reciente de transacciones</caption>
+                        <thead>
+                            <tr>
+                                <th scope="col">Fecha y hora</th>
+                                <th scope="col">Descripción</th>
+                                <th scope="col">Cantidad</th>
+                                <th scope="col">Saldo Actual</th>
+                            </tr>
+                        </thead>
+                        <tbody id="contentMovements"></tbody>
+                </table>
+            </div>
+            <div class="footer-controls" aria-labelledby="Botones de control">
+                <button class="btn-back" id="goBackAccount"><i class="fa-solid fa-arrow-right fa-flip-horizontal"></i></button>
+                <div class="right-group">
+                    <button class="btn-delete-outline" id="confirmDeleteMov"><i class="fa-solid fa-trash-can"></i></button>
+                    <button class="btn-add-large" id="confirmAddMov"><i class="fa-solid fa-plus"></i></button>
+                </div>
             </div>
         </div>
-    </div>
     </section>
-    <section id="newMovementForm" class="form-section-crud" style="display: none;">
-        <form id="formMovement" class="formulario">
+    <section role="region" aria-labelledby="Nuevo movimiento" id="newMovementForm" class="form-section-crud" style="display: none;">
+      <form aria-labelledby="Formulario de nuevo movimiento" id="formMovement" class="formulario">
             <div class="titulo">
                 <h1>Nuevo Movimiento</h1>
             </div>
-            <div id="creditInfoDisplay"></div>
+            <div id="creditInfoDisplay" aria-label="Información de la cuenta"></div>
             <div class="form-group-crud">
-                <select id="newTypeAmount" >
+                <select id="newTypeAmount" name="tipo_de_movimiento" aria-label="Tipo de movimiento">
                     <option value="" disabled selected>Tipo de movimiento</option>
-                    <option value="Deposit">Depósito</option>
-                    <option value="Payment">Pago</option>
+                    <option value="Deposit" aria-label="Opción depósito">Depósito</option>
+                    <option value="Payment" aria-label="Opción pago">Pago</option>
                 </select>
             </div>
             <div class="form-group-crud">
-                <input type="number" id="newAmount" min="0.01" step="0.01" placeholder="0.00" name="newAmount"required/>
+                <input type="number" id="newAmount" min="0.01" step="0.01" placeholder="0.00" name="Cantidad a ingresar"required/>
                 <div id="responseMsgamount"></div>
             </div>
-            <button id="addMovement" class="btn-form-crud">Crear Movimiento</button>
+            <button type="submit" id="addMovement" class="btn-form-crud">Crear Movimiento</button>
         </form>
     </section>
-    <section id="confirmDelete" class="form-section-crud" style="display: none;">
+    <section role="dialog" aria-labelledby="Eliminar el último movimiento" id="confirmDelete" class="form-section-crud" style="display: none;">
         <div class="formulario" id="deleteConfirmationForm">
             <div class="titulo">
                 <h1> Elimar Movimiento</h1>
@@ -116,15 +113,14 @@
             </div>
         </div>
     </section>
-    <div id="h5p-container" style="width: 50%"></div>
   </main>
-  <footer class="footer">
+  <footer role="contentinfo"class="footer">
     <div class="logo_footer">
-      <img src="../assets/img/logo.png" alt="Nova Bank">
-      <p>Nova Bank</p>
+      <img src="/NovaBank/assets/img/logo.png" alt="Nova Bank">
+      <strong>Nova Bank</strong>
     </div>
-    <p>© Copyright 2025 Nova Bank. All Rights Reserved.</p>
+    <p>© Copyright 2026 Nova Bank. All Rights Reserved.</p>
+    <p><strong>Nova Bank</strong></p>
   </footer>
- 
 </body>
 </html>
