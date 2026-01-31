@@ -1,13 +1,6 @@
-/* 
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
+/*  */
 import { Customer } from "./model.js";
-
 const SERVICE_URL = "/CRUDBankServerSide/webresources/customer";
-
 let selectedUser = null;
 
 // Referencias a elementos del DOM
@@ -19,26 +12,59 @@ const crearUsuario = document.getElementById("crearUsuario");
 const cerrarModalCrearBtn = document.getElementById("cerrarModalCrear");
 const cerrarModalEditarBtn = document.getElementById("cerrarModalEditar");
 
+// === LISTENERS EN TIEMPO REAL PARA CREAR USUARIO ===
+const firstNameInput = document.getElementById("firstName");
+const middleInitialInput = document.getElementById("middleInitial");
+const lastNameInput = document.getElementById("lastName");
+const streetInput = document.getElementById("street");
+const cityInput = document.getElementById("city");
+const stateInput = document.getElementById("state");
+const zipInput = document.getElementById("zip");
+const phoneInput = document.getElementById("phone");
+const emailInput = document.getElementById("email");
+
 window.addEventListener('load', buildUsersTable);
+
+// Validaciones en tiempo real con el evento 'input'
+firstNameInput.addEventListener("input", validateFirstName);
+middleInitialInput.addEventListener("input", validateMiddleInitial);
+lastNameInput.addEventListener("input", validateLastName);
+streetInput.addEventListener("input", validateStreet);
+cityInput.addEventListener("input", validateCity);
+stateInput.addEventListener("input", validateState);
+zipInput.addEventListener("input", validateZip);
+phoneInput.addEventListener("input", validatePhone);
+emailInput.addEventListener("input", validateEmail);
 
 // === ABRIR MODAL CREAR ===
 crearUsuario.addEventListener("click", () => {
-    modalCrear.classList.remove("hidden");
+    modalCrear.style.display = 'flex';
 });
 
 // === CERRAR MODAL CREAR ===
 cerrarModalCrearBtn.addEventListener("click", () => {
-    modalCrear.classList.add("hidden");
+    modalCrear.style.display = 'none';
     formCrearUsuario.reset();
 });
 
+// === ABRIR MODAL EDITAR ===
+function abrirModalEditar(user) {
+    if (!user) return;
+
+    Object.keys(user).forEach(key => {
+        const input = formEditarUsuario.elements[key];
+        if (input) input.value = user[key];
+    });
+
+    modalEditar.style.display = 'flex';
+}
+
 // === CERRAR MODAL EDITAR ===
 cerrarModalEditarBtn.addEventListener("click", () => {
-    modalEditar.classList.add("hidden");
+    modalEditar.style.display = 'none';
     formEditarUsuario.reset();
     selectedUser = null;
 });
-
 
 // === FETCH USERS ===
 async function fetchUsers() {
@@ -113,18 +139,6 @@ function* userRowGenerator(users) {
     }
 }
 
-// === ABRIR MODAL EDITAR ===
-function abrirModalEditar(user) {
-    if (!user) return;
-
-    Object.keys(user).forEach(key => {
-        const input = formEditarUsuario.elements[key];
-        if (input) input.value = user[key];
-    });
-
-    modalEditar.classList.remove("hidden");
-}
-
 // === ELIMINAR USUARIO ===
 async function deleteSelectedUser() {
     if (!selectedUser) {
@@ -169,6 +183,8 @@ function generarPassword(firstName, phone) {
 // === CREAR USUARIO ===
 formCrearUsuario.onsubmit = async e => {
     e.preventDefault();
+
+    if (!validateCreateUserForm()) return;
 
     const d = new FormData(formCrearUsuario);
 
@@ -227,7 +243,7 @@ formEditarUsuario.onsubmit = async e => {
     );
 
     try {
-        const response = await fetch(`${SERVICE_URL}/${selectedUser.id}`, {
+        const response = await fetch(SERVICE_URL, {
             method: "PUT",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(customer)
@@ -244,3 +260,218 @@ formEditarUsuario.onsubmit = async e => {
         alert("No se pudo editar el usuario");
     }
 };
+
+/*LLAMADA A LAS FUNCIONES*/
+function validateCreateUserForm() {
+    return (
+        validateFirstName() &&
+        validateMiddleInitial() &&
+        validateLastName() &&
+        validateStreet() &&
+        validateCity() &&
+        validateState() &&
+        validateZip() &&
+        validatePhone() &&
+        validateEmail()
+    );
+}
+
+/*VALIDAR NOMBRE*/
+function validateFirstName() {
+    const input = document.getElementById("firstName");
+    const msgBox = document.getElementById("responseMsgName");
+    const onlyLettersRegExp = /^[a-zA-ZÁáÉéÍíÓóÚúÑñ\s]+$/;
+
+    msgBox.style.display = "none";
+
+    if (input.value.trim() === "") {
+        showError(msgBox, "El nombre es obligatorio");
+        return false;
+    }
+    if (input.value.length > 255) {
+        showError(msgBox, "Máximo 255 caracteres");
+        return false;
+    }
+    if (!onlyLettersRegExp.test(input.value.trim())) {
+        showError(msgBox, "El nombre solo puede contener letras");
+        return false;
+    }
+    return true;
+}
+
+/*VALIDAR INICIAL SEGUNDO NOMBRE*/
+function validateMiddleInitial() {
+    const input = document.getElementById("middleInitial");
+    const msgBox = document.getElementById("responseMsgInitial");
+    const singleLetterRegExp = /^[a-zA-ZÁáÉéÍíÓóÚúÑñ]$/;
+
+    msgBox.style.display = "none";
+
+    if (input.value.trim() !== "" && !singleLetterRegExp.test(input.value.trim())) {
+        showError(msgBox, "Debe ser una sola letra");
+        return false;
+    }
+    return true;
+}
+
+/*VALIDAR APELLIDO*/
+function validateLastName() {
+    const input = document.getElementById("lastName");
+    const msgBox = document.getElementById("responseMsgLastName");
+    const onlyLettersRegExp = /^[a-zA-ZÁáÉéÍíÓóÚúÑñ\s]+$/;
+
+    msgBox.style.display = "none";
+
+    if (input.value.trim() === "") {
+        showError(msgBox, "El apellido es obligatorio");
+        return false;
+    }
+    if (input.value.length > 255) {
+        showError(msgBox, "Máximo 255 caracteres");
+        return false;
+    }
+    if (!onlyLettersRegExp.test(input.value.trim())) {
+        showError(msgBox, "El apellido solo puede contener letras");
+        return false;
+    }
+    return true;
+}
+
+/* VALIDAR CALLE*/
+function validateStreet() {
+    const input = document.getElementById("street");
+    const msgBox = document.getElementById("responseMsgStreet");
+    const streetRegExp = /^[a-zA-ZÁáÉéÍíÓóÚúÑñ0-9\s.,/-]+$/;
+
+    msgBox.style.display = "none";
+
+    if (input.value.trim() === "") {
+        showError(msgBox, "La calle es obligatoria");
+        return false;
+    }
+    if (input.value.length > 255) {
+        showError(msgBox, "Máximo 255 caracteres");
+        return false;
+    }
+    if (!streetRegExp.test(input.value.trim())) {
+        showError(msgBox, "La calle puede contener letras y números");
+        return false;
+    }
+    return true;
+}
+
+/* VALIDAR CIUDAD */
+function validateCity() {
+    const input = document.getElementById("city");
+    const msgBox = document.getElementById("responseMsgCity");
+    const onlyLettersRegExp = /^[a-zA-ZÁáÉéÍíÓóÚúÑñ\s]+$/;
+
+    msgBox.style.display = "none";
+
+    if (input.value.trim() === "") {
+        showError(msgBox, "La ciudad es obligatoria");
+        return false;
+    }
+    if (input.value.length > 255) {
+        showError(msgBox, "Máximo 255 caracteres");
+        return false;
+    }
+    if (!onlyLettersRegExp.test(input.value.trim())) {
+        showError(msgBox, "La ciudad solo puede contener letras");
+        return false;
+    }
+    return true;
+}
+
+/* VALIDAR ESTADO */
+function validateState() {
+    const input = document.getElementById("state");
+    const msgBox = document.getElementById("responseMsgState");
+    const onlyLettersRegExp = /^[a-zA-ZÁáÉéÍíÓóÚúÑñ\s]+$/;
+
+    msgBox.style.display = "none";
+
+    if (input.value.trim() === "") {
+        showError(msgBox, "El estado es obligatorio");
+        return false;
+    }
+    if (input.value.length > 255) {
+        showError(msgBox, "Máximo 255 caracteres");
+        return false;
+    }
+    if (!onlyLettersRegExp.test(input.value.trim())) {
+        showError(msgBox, "El estado solo puede contener letras");
+        return false;
+    }
+
+    return true;
+}
+
+/*VALIDAR CODIGO POSTAL*/
+function validateZip() {
+    const input = document.getElementById("zip");
+    const msgBox = document.getElementById("responseMsgZip");
+    const numbersOnlyRegExp = /^[0-9]+$/;
+
+    msgBox.style.display = "none";
+
+    if (input.value.trim() === "") {
+        showError(msgBox, "El código postal es obligatorio");
+        return false;
+    }
+    if (!numbersOnlyRegExp.test(input.value.trim())) {
+        showError(msgBox, "Solo números");
+        return false;
+    }
+    return true;
+}
+
+/*VALIDAR TELEFONO*/
+function validatePhone() {
+    const input = document.getElementById("phone");
+    const msgBox = document.getElementById("responseMsgPhone");
+    const phoneRegExp = /^[+]{0,1}[0-9]+$/;
+
+    msgBox.style.display = "none";
+
+    if (input.value.trim() === "") {
+        showError(msgBox, "El teléfono es obligatorio");
+        return false;
+    }
+    if (input.value.trim().length < 9) {
+        showError(msgBox, "Debe tener al menos 9 dígitos");
+        return false;
+    }
+    if (!phoneRegExp.test(input.value.trim())) {
+        showError(msgBox, "Formato inválido");
+        return false;
+    }
+    return true;
+}
+
+/* VALIDAR EMAIL*/
+function validateEmail() {
+    const input = document.getElementById("email");
+    const msgBox = document.getElementById("responseMsgEmail");
+    const emailRegExp = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
+    msgBox.style.display = "none";
+
+    if (input.value.trim() === "") {
+        showError(msgBox, "El correo es obligatorio");
+        return false;
+    }
+    if (!emailRegExp.test(input.value.trim())) {
+        showError(msgBox, "Formato de correo inválido");
+        return false;
+    }
+    return true;
+}
+
+/* FUNCION ERRORES*/
+function showError(msgBox, message) {
+    msgBox.textContent = message;
+    msgBox.style.color = "#ff0000";
+    msgBox.style.marginTop = "5px";
+    msgBox.style.display = "block";
+}

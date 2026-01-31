@@ -86,98 +86,99 @@
 </main>
     
  <!--FORMULARIO PARA CREAR NUEVO USUARIO-->
-    <section class="form-section-crud hidden" id="modalCrear">
+    <section class="form-section-crud" id="modalCrear" style="display: none;">
         <form class="formulario" id="formCrearUsuario">
             <div class="titulo">
                 <h1> Nuevo Usuario</h1>
             </div>
             <div class="form-group-crud">
-                <input type="text" name="firstName" placeholder="Nombre" />
+                <input type="text" id="firstName" name="firstName"  placeholder="Nombre" />
             <div id="responseMsgName"></div>
             </div>
             <div class="form-group-crud">
-                <input type="text" name="middleInitial" placeholder="Inicial segundo nombre" />
+                <input type="text" id="middleInitial" name="middleInitial" placeholder="Inicial segundo nombre"/>
                 <div id="responseMsgInitial"></div>
             </div>
             <div class="form-group-crud">
-                <input type="text" name="lastName" placeholder="Apellido" />
-                <div id="responseMsgSurname"></div>
+                <input type="text" id="lastName" name="lastName" placeholder="Apellido" />
+                <div id="responseMsgLastName"></div>
             </div>
             <div class="form-group-crud">
-                <input type="text" name="street" placeholder="Calle" />
+                <input type="text" id="street" name="street" placeholder="Calle" />
                 <div id="responseMsgStreet"></div>
             </div>
             <div class="form-group-crud">
-                <input type="text" name="city" placeholder="Ciudad" />
+                <input type="text" id="city" name="city" placeholder="Ciudad" />
                 <div id="responseMsgCity"></div>
             </div>
             <div class="form-group-crud">
-                <input type="text" name="state" placeholder="Estado" />
+                <input type="text" id="state" name="state" placeholder="Estado" />
                 <div id="responseMsgState"></div>
             </div>
             <div class="form-group-crud">
-                <input type="number" name="zip" placeholder="Código postal" />
+                <input type="text" id="zip" name="zip" placeholder="Código postal" />
                 <div id="responseMsgZip"></div>
             </div>
             <div class="form-group-crud">
-                <input type="number" name="phone" placeholder="Teléfono" />
-                <div id="responseMsgTelf"></div>
+                <input type="text" id="phone" name="phone" placeholder="Teléfono" />
+                <div id="responseMsgPhone"></div>
             </div>
             <div class="form-group-crud">
-                <input type="email" name="email" placeholder="Correo electrónico" />
-                <div id="responseMsgMail"></div>
+                <input type="email" id="email" name="email" placeholder="Correo electrónico" />
+                <div id="responseMsgEmail"></div>
             </div>
              <div class="modal-buttons">
-                <button type="submit" class="btn-form-crud">Crear Usuario</button>
+                <button type="submit" class="btn-form-crud">Confirmar</button>
                 <button type="button" id="cerrarModalCrear" class="btn-form-crud">Cancelar </button>
              </div>
         </form>
     </section>    
+ 
 
     <!--FORMULARIO PARA EDITAR USUARIO-->
     
-    <section class="form-section-crud hidden" id="modalEditar">
+    <section class="form-section-crud" id="modalEditar" style="display: none;">
         <form class="formulario" id="formEditarUsuario">
             <div class="titulo">
                 <h1> Editar Usuario</h1>
             </div>
             <div class="form-group-crud">
-                 <input type="text" name="firstName" placeholder="Nombre" />
-            <div id="responseMsgName"></div>
+                 <input type="text" id="editFirstName" name="firstName" placeholder="Nombre" />
+            <div id="editResponseMsgName"></div>
             </div>
             <div class="form-group-crud">
-                <input type="text" name="middleInitial" placeholder="Inicial segundo nombre" />
-                <div id="responseMsgInitial"></div>
+                <input type="text" id="editmiddleInitial" name="middleInitial" placeholder="Inicial segundo nombre" />
+                <div id="editResponseMsgInitial"></div>
             </div>
             <div class="form-group-crud">
-                <input type="text" name="lastName" placeholder="Apellido" />
-                <div id="responseMsgSurname"></div>
+                <input type="text" id="editLastName" name="lastName" placeholder="Apellido" />
+                <div id="editResponseMsgLastName"></div>
             </div>
             <div class="form-group-crud">
-                <input type="text" name="street" placeholder="Calle" />
-                <div id="responseMsgStreet"></div>
+                <input type="text" id="editStreet" name="street" placeholder="Calle" />
+                <div id="editResponseMsgStreet"></div>
             </div>
             <div class="form-group-crud">
-                <input type="text" name="city" placeholder="Ciudad" />
-                <div id="responseMsgCity"></div>
+                <input type="text" id="editCity" name="city" placeholder="Ciudad" />
+                <div id="editResponseMsgCity"></div>
             </div>
             <div class="form-group-crud">
-                <input type="text" name="state" placeholder="Estado" />
-                <div id="responseMsgState"></div>
+                <input type="text" id="editState" name="state" placeholder="Estado" />
+                <div id="editResponseMsgState"></div>
             </div>
             <div class="form-group-crud">
-                <input type="number" name="zip" placeholder="Código postal" />
-                <div id="responseMsgZip"></div>
+                <input type="text" id="editZip" name="zip" placeholder="Código postal" />
+                <div id="editResponseMsgZip"></div>
             </div>
             <div class="form-group-crud">
-                <input type="number" name="phone" placeholder="Teléfono" />
-                <div id="responseMsgTelf"></div>
+                <input type="text" id="editPhone" name="phone" placeholder="Teléfono" />
+                <div id="editResponseMsgPhone"></div>
             </div>
             <div class="form-group-crud">
-                <input type="email" name="email" placeholder="Correo electrónico" />
-                <div id="responseMsgMail"></div>
+                <input type="email" id="editEmail" name="email" placeholder="Correo electrónico" />
+                <div id="editResponseMsgEmail"></div>
             </div>
-                <button type="submit" class="btn-form-crud">Guardar</button>
+                <button type="submit" class="btn-form-crud"> Confirmar</button>
                 <button type="button" id="cerrarModalEditar" class="btn-form-crud"> Cancelar </button>
         </form>
     </section>    
@@ -190,12 +191,9 @@
     <p>© Copyright 2025 Nova Bank. All Rights Reserved.</p>
 </footer>
     
- 
-
 <!-- ORDEN CORRECTO DE SCRIPTS  type="module" -->
 <script src="../js/facilities.js"></script>
 <script type="module" src="../js/customer.js"></script> 
-
 
 </body>
 </html>
