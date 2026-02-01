@@ -573,6 +573,61 @@ button:hover {
   width: 40px;
   margin-bottom: 0.5rem;
 }
+
+/*******NUEVAS COSAS DE ELIMINAR BOTONES
+
+/* Contenedor para botones en línea 
+.modal-actions-inline {
+    display: flex;
+    justify-content: center; 
+    gap: 15px;               
+    margin-top: 25px;
+}
+
+/* Estilo para los botones del modal 
+.btn-confirmar-modal, .btn-cancelar-modal {
+    flex: 1;                 
+    max-width: 150px;        
+    padding: 12px;
+    border-radius: 50px;     
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    border: none;
+    transition: all 0.3s ease;
+}
+
+/* Botón Confirmar (Color morado de tu marca) 
+.btn-confirmar-modal {
+    background-color: var(--btn-color-solido);
+    color: white;
+}
+
+.btn-confirmar-modal:hover {
+    background-color: var(--btn-color-hover);
+}
+
+/* Botón Cancelar (Gris neutro) 
+.btn-cancelar-modal {
+    background-color: #e0e0e0;
+    color: #555;
+}
+
+.btn-cancelar-modal:hover {
+    background-color: #d0d0d0;
+    color: #333;
+}
+
+/* Texto de advertencia 
+.info-eliminar-cuenta p {
+    color: #666;
+    font-size: 0.95rem;
+    text-align: center;
+    line-height: 1.5;
+    margin-top: 10px;
+} 
+*************/
+
 /* responsive*/
 @media (max-width: 768px) {
   .header .container {

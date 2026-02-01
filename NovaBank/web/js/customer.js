@@ -160,6 +160,41 @@ async function deleteSelectedUser() {
     buildUsersTable();
 }
 
+// ====USUARIO PARA ELIMINAR OTRA VERSION ======
+/*const modalEliminar = document.getElementById("modalEliminarUsuario");
+const btnCancelar = document.getElementById("btnCancelarBorrar");
+const btnConfirmar = document.getElementById("btnConfirmarBorrar");
+
+/* Esta es la función que llamas cuando tocas el icono de basura en la tabla
+async function deleteSelectedUser() {
+    if (!selectedUser) {
+        alert("Selecciona un usuario de la tabla");
+        return;
+    }
+    // Mostramos el modal personalizado
+    modalEliminar.style.display = 'flex';
+}
+
+/* Acción de Cancelar
+btnCancelar.onclick = () => {
+    modalEliminar.style.display = 'none';
+};
+
+// Acción de Confirmar (Eliminación real)
+btnConfirmar.onclick = async () => {
+    const response = await fetch(`${SERVICE_URL}/${selectedUser.id}`, { method: "DELETE" });
+
+    if (!response.ok) {
+        alert("Error al eliminar el usuario");
+        return;
+    }
+
+    modalEliminar.style.display = 'none'; // Cerramos el modal
+    selectedUser = null;
+    buildUsersTable(); // Refrescamos la tabla
+    alert("Usuario eliminado correctamente");
+};
+*/
 // === GENERAR CONTRASEÑA ===
 function generarPassword(firstName, phone) {
     const simbolos = "!#$%&";
@@ -475,3 +510,15 @@ function showError(msgBox, message) {
     msgBox.style.marginTop = "5px";
     msgBox.style.display = "block";
 }
+
+const customerName = sessionStorage.getItem("customer.firstName");
+const customerMidIn = sessionStorage.getItem("customer.middleInitial");
+const h2 = document.getElementById("sessionNombre");
+
+    if (h2) {
+        if (customerName) {
+            h2.textContent = `¡Hola, ${customerName} ${customerMidIn}!`;
+        } else {
+            h2.textContent = "¡Hola!";
+        }
+    }

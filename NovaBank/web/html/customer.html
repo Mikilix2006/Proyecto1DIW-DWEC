@@ -49,6 +49,25 @@
 </header>
 
 <main>
+    
+     <section class="welcome-section">
+      <h2 id="sessionNombre"></h2>
+      <p>Estamos felices de verte una vez más.</p>
+
+      <div class="card-balance">
+        <div class="image-placeholder">
+          <img src="../assets/img/help.jpg" alt="Ilustración ahorro mensual">
+        </div>
+        <div class="card-content">
+          <h3>Ahorro mensual</h3>
+          <p>Porcentaje generado a partir de los ingresos y gastos del último mes.</p>
+          <div class="stats">
+            <span class="percentage">0.0%</span>
+            <button class="btn-solid small">Revisar historial</button>
+          </div>
+        </div>
+      </div>
+    </section>
     <section class="tableContainerBody">
         <div class="tableContainer">
             <h1>Usuarios</h1>
@@ -83,9 +102,8 @@
             </div>
         </div>
     </section>
-</main>
     
- <!--FORMULARIO PARA CREAR NUEVO USUARIO-->
+    <!--FORMULARIO PARA CREAR NUEVO USUARIO-->
     <section class="form-section-crud" id="modalCrear" style="display: none;">
         <form class="formulario" id="formCrearUsuario">
             <div class="titulo">
@@ -182,6 +200,25 @@
                 <button type="button" id="cerrarModalEditar" class="btn-form-crud"> Cancelar </button>
         </form>
     </section>    
+    
+    <!-- MENSAJE PARA ELIMINAR  USUARIO
+    <section class="form-section-crud" id="modalEliminarUsuario" style="display: none;">
+        <div class="formulario">
+            <div class="titulo">
+                <h1>Eliminar Usuario</h1>
+            </div>
+
+            <div class="info-eliminar-cuenta">
+                <p>¿Estás seguro que deseas eliminar este usuario? Una vez eliminado no podrás recuperar ninguna información.</p>
+            </div>
+
+            <div class="modal-actions-inline">
+                <button type="button" id="btnCancelarBorrar" class="btn-cancelar-modal">Cancelar</button>
+                <button type="button" id="btnConfirmarBorrar" class="btn-confirmar-modal">Confirmar</button>
+            </div>
+        </div>
+    </section>-->
+</main>
    
 <footer class="footer">
     <div class="logo_footer">
@@ -190,6 +227,20 @@
     </div>
     <p>© Copyright 2025 Nova Bank. All Rights Reserved.</p>
 </footer>
+    
+<script>
+    const customerName = sessionStorage.getItem("customer.firstName");
+    const customerMidIn = sessionStorage.getItem("customer.middleInitial");
+    const h2 = document.getElementById("sessionNombre");
+
+    if (h2) {
+        if (customerName) {
+            h2.textContent = `¡Hola, ${customerName} ${customerMidIn}!`;
+        } else {
+            h2.textContent = "¡Hola!";
+        }
+    }
+  </script>
     
 <!-- ORDEN CORRECTO DE SCRIPTS  type="module" -->
 <script src="../js/facilities.js"></script>
