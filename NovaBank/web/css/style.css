@@ -554,8 +554,6 @@ button:hover {
 
 }
 
-
-
 /* footer*/
 .footer {
   background-color: var(--color-footer);
@@ -574,9 +572,9 @@ button:hover {
   margin-bottom: 0.5rem;
 }
 
-/*******NUEVAS COSAS DE ELIMINAR BOTONES
+/*******NUEVAS COSAS DE ELIMINAR BOTONES *************/
 
-/* Contenedor para botones en línea 
+/* Contenedor para botones en línea */
 .modal-actions-inline {
     display: flex;
     justify-content: center; 
@@ -584,7 +582,7 @@ button:hover {
     margin-top: 25px;
 }
 
-/* Estilo para los botones del modal 
+/* Estilo para los botones del modal */
 .btn-confirmar-modal, .btn-cancelar-modal {
     flex: 1;                 
     max-width: 150px;        
@@ -597,7 +595,7 @@ button:hover {
     transition: all 0.3s ease;
 }
 
-/* Botón Confirmar (Color morado de tu marca) 
+/* Botón Confirmar (Color morado de tu marca) */
 .btn-confirmar-modal {
     background-color: var(--btn-color-solido);
     color: white;
@@ -607,7 +605,7 @@ button:hover {
     background-color: var(--btn-color-hover);
 }
 
-/* Botón Cancelar (Gris neutro) 
+/* Botón Cancelar (Gris neutro) */
 .btn-cancelar-modal {
     background-color: #e0e0e0;
     color: #555;
@@ -618,7 +616,7 @@ button:hover {
     color: #333;
 }
 
-/* Texto de advertencia 
+/* Texto de advertencia */
 .info-eliminar-cuenta p {
     color: #666;
     font-size: 0.95rem;
@@ -626,8 +624,31 @@ button:hover {
     line-height: 1.5;
     margin-top: 10px;
 } 
-*************/
 
+
+/***** BOTONES DE FUNCION AGREGADAS******/
+
+.stats {
+    display: flex;
+    gap: 15px;
+    margin-top: 20px;
+    justify-content: center;
+}
+
+.caja-estadistica {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 140px;
+}
+
+.texto-resultado {
+    display: none; /* Empieza oculto */
+    margin-top: 10px;
+    font-weight: bold;
+    color: #380B4C; /* El color de tu navbar */
+    font-size: 0.9rem;
+}
 /* responsive*/
 @media (max-width: 768px) {
   .header .container {

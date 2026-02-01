@@ -48,7 +48,7 @@
     </div>
 </header>
 
-<main>
+<main class="main-container">
     
      <section class="welcome-section">
       <h2 id="sessionNombre"></h2>
@@ -59,15 +59,29 @@
           <img src="../assets/img/help.jpg" alt="Ilustración ahorro mensual">
         </div>
         <div class="card-content">
-          <h3>Ahorro mensual</h3>
-          <p>Porcentaje generado a partir de los ingresos y gastos del último mes.</p>
+          <h3>Gestión de Usuarios</h3>
+          <p>Información sobre la cantidad de usuarios registrados:</p>
           <div class="stats">
-            <span class="percentage">0.0%</span>
-            <button class="btn-solid small">Revisar historial</button>
-          </div>
+    <div class="caja-estadistica">
+        <button id="btnComunes" class="btn-solid small">Usuarios Comunes</button>
+        <p id="cuentaComunes" class="texto-resultado"></p>
+    </div>
+    
+    <div class="caja-estadistica">
+        <button id="btnAdmins" class="btn-solid small">Usuarios Administradores</button>
+        <p id="cuentaAdmins" class="texto-resultado"></p>
+    </div>
+    
+    <div class="caja-estadistica">
+        <button id="btnTotales" class="btn-solid small">Usuarios Totales</button>
+        <p id="cuentaTotales" class="texto-resultado"></p>
+    </div>
+</div>
         </div>
       </div>
     </section>
+    
+    
     <section class="tableContainerBody">
         <div class="tableContainer">
             <h1>Usuarios</h1>
@@ -201,7 +215,7 @@
         </form>
     </section>    
     
-    <!-- MENSAJE PARA ELIMINAR  USUARIO
+    <!-- MENSAJE PARA ELIMINAR  USUARIO -->
     <section class="form-section-crud" id="modalEliminarUsuario" style="display: none;">
         <div class="formulario">
             <div class="titulo">
@@ -217,7 +231,7 @@
                 <button type="button" id="btnConfirmarBorrar" class="btn-confirmar-modal">Confirmar</button>
             </div>
         </div>
-    </section>-->
+    </section>
 </main>
    
 <footer class="footer">

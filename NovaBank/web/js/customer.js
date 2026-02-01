@@ -3,6 +3,24 @@ import { Customer } from "./model.js";
 const SERVICE_URL = "/CRUDBankServerSide/webresources/customer";
 let selectedUser = null;
 
+/* =================================================
+      ATTRIBUTES TO BE USED BY THIS CONTROLLER
+   =================================================
+*/
+let usuariosLocales = []; 
+
+// Referencias a los botones
+const bComunes = document.getElementById("btnComunes");
+const bAdmins = document.getElementById("btnAdmins");
+const bTotales = document.getElementById("btnTotales");
+
+// Referencias a los textos de resultado
+const tComunes = document.getElementById("cuentaComunes");
+const tAdmins = document.getElementById("cuentaAdmins");
+const tTotales = document.getElementById("cuentaTotales");
+
+/*=================================================*/
+
 // Referencias a elementos del DOM
 const formCrearUsuario = document.getElementById("formCrearUsuario");
 const formEditarUsuario = document.getElementById("formEditarUsuario");
@@ -65,6 +83,17 @@ cerrarModalEditarBtn.addEventListener("click", () => {
     formEditarUsuario.reset();
     selectedUser = null;
 });
+/*
+   =================================================
+          LISTENERS FOR HANDLING EVENTS ON HTML
+   =================================================
+*/
+
+// Asignación directa de eventos
+bComunes.addEventListener("click", manejarComunes);
+bAdmins.addEventListener("click", manejarAdmins);
+bTotales.addEventListener("click", manejarTotales);
+
 
 // === FETCH USERS ===
 async function fetchUsers() {
@@ -80,7 +109,7 @@ async function fetchUsers() {
 }
 
 // === BUILD USERS TABLE ===
-async function buildUsersTable() {
+/*async function buildUsersTable() {
     const users = await fetchUsers();
     const tbody = document.querySelector("#usersTabletbody");
     tbody.innerHTML = "";
@@ -88,8 +117,21 @@ async function buildUsersTable() {
     for (const row of userRowGenerator(users)) {
         tbody.appendChild(row);
     }
-}
+}*/
 
+async function buildUsersTable() {
+    const users = await fetchUsers(); 
+
+    usuariosLocales = users; 
+    
+    const tbody = document.querySelector("#usersTabletbody");
+    if (!tbody) return; 
+    tbody.innerHTML = "";
+ 
+    for (const row of userRowGenerator(usuariosLocales)) {
+        tbody.appendChild(row);
+    }
+}
 // === GENERADOR DE FILAS ===
 function* userRowGenerator(users) {
     for (const user of users) {
@@ -140,7 +182,7 @@ function* userRowGenerator(users) {
 }
 
 // === ELIMINAR USUARIO ===
-async function deleteSelectedUser() {
+/*async function deleteSelectedUser() {
     if (!selectedUser) {
         alert("Selecciona un usuario de la tabla");
         return;
@@ -158,14 +200,14 @@ async function deleteSelectedUser() {
     alert("Usuario eliminado correctamente");
     selectedUser = null;
     buildUsersTable();
-}
+}*/
 
 // ====USUARIO PARA ELIMINAR OTRA VERSION ======
-/*const modalEliminar = document.getElementById("modalEliminarUsuario");
+const modalEliminar = document.getElementById("modalEliminarUsuario");
 const btnCancelar = document.getElementById("btnCancelarBorrar");
 const btnConfirmar = document.getElementById("btnConfirmarBorrar");
 
-/* Esta es la función que llamas cuando tocas el icono de basura en la tabla
+ //Esta es la función que llamas cuando tocas el icono de basura en la tabla
 async function deleteSelectedUser() {
     if (!selectedUser) {
         alert("Selecciona un usuario de la tabla");
@@ -175,7 +217,7 @@ async function deleteSelectedUser() {
     modalEliminar.style.display = 'flex';
 }
 
-/* Acción de Cancelar
+// Acción de Cancelar
 btnCancelar.onclick = () => {
     modalEliminar.style.display = 'none';
 };
@@ -194,7 +236,7 @@ btnConfirmar.onclick = async () => {
     buildUsersTable(); // Refrescamos la tabla
     alert("Usuario eliminado correctamente");
 };
-*/
+
 // === GENERAR CONTRASEÑA ===
 function generarPassword(firstName, phone) {
     const simbolos = "!#$%&";
@@ -515,10 +557,51 @@ const customerName = sessionStorage.getItem("customer.firstName");
 const customerMidIn = sessionStorage.getItem("customer.middleInitial");
 const h2 = document.getElementById("sessionNombre");
 
-    if (h2) {
-        if (customerName) {
-            h2.textContent = `¡Hola, ${customerName} ${customerMidIn}!`;
-        } else {
-            h2.textContent = "¡Hola!";
-        }
+if (h2) {
+    if (customerName) {
+        h2.textContent = `¡Hola, ${customerName} ${customerMidIn}!`;
+    } else {
+        h2.textContent = "¡Hola!";
     }
+}
+
+// === REFERENCIAS A LOS BOTONES Y LECTORES ===
+/*
+   =================================================
+       EVENT HANDLERS CALLED FROM THE LISTENERS
+   =================================================
+*/
+
+function manejarComunes() {
+    if (tComunes.style.display === "flex") {
+        tComunes.style.display = "none";
+    } else {
+        const filtrados = usuariosLocales.filter(u => 
+            !u.email.toLowerCase().endsWith("@admin.com")
+        );
+        tComunes.textContent = `Cantidad: [${filtrados.length}]`;
+        tComunes.style.display = "flex";
+    }
+}
+
+function manejarAdmins() {
+    if (tAdmins.style.display === "flex") {
+        tAdmins.style.display = "none";
+    } else {
+        const filtrados = usuariosLocales.filter(u => 
+            u.email.toLowerCase().endsWith("@admin.com")
+        );
+        tAdmins.textContent = `Cantidad: [${filtrados.length}]`;
+        tAdmins.style.display = "flex";
+    }
+}
+
+function manejarTotales() {
+    if (tTotales.style.display === "flex") {
+        tTotales.style.display = "none";
+    } else {
+        tTotales.textContent = `Total: [${usuariosLocales.length}]`;
+        tTotales.style.display = "flex";
+    }
+}
+
