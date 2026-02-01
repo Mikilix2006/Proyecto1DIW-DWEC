@@ -13,6 +13,7 @@ const goBackBtnController = document.getElementById("goBackAccount");
 const deleteMovementBtn = document.getElementById("deleteLastMovement");
 const cancelDeleteBtn = document.getElementById("cancelDeleteMovement");
 const addNewMovement = document.getElementById("addMovement");
+const showGeneralBalance = document.getElementById("btnShowSummary");
 
 /*
    =================================================
@@ -28,6 +29,8 @@ deleteMovementController.addEventListener('click', handlerFormDeleteMovement);
 addNewMovement.addEventListener('click', createNewMovement);
 deleteMovementBtn.addEventListener('click', deleteLastMovement);
 cancelDeleteBtn.addEventListener('click', cerrarDeleteForm);
+showGeneralBalance.addEventListener('click', toggleSummary);
+goBackBtnController.addEventListener('click',goBackAccounts);
 //SACAR EL ID DE LA CUENTA 
 //MOSTRAR EL CRÉDITO EN CASO TENGA
 /*
@@ -100,7 +103,6 @@ async function createNewMovement(e) {
         const accountData = JSON.parse(sessionStorage.getItem("account")) || JSON.parse(currentAccount);
         const { balance, type, creditLine } = accountData;
         //VALIDACIONES INICIALES
-
         if (amountStr === "" || isNaN(amount)) throw new Error("Por favor, ingrese un monto numérico.");
         if (amount <= 0) throw new Error("El monto debe ser mayor a cero.");
         if (amountStr.includes(".") && amountStr.split(".")[1].length > 2) {
@@ -135,12 +137,52 @@ function handlerFormDeleteMovement(){
     deleteFormContainer.style.display = 'flex';
 }
 /*CONFIRM DELETE LAST MOVEMENT*/
-function confirmDeleteLastMov(){}
+/*FETCH DELETE MOVEMENT*/
+async function deleteLastMovement() {
+    if (movements.length === 0) return; //mostrar mensaje
+    //En lastMov guardamos la posición de la última instancia del objeto y 
+    //recuperamos el ID del movimiento
+    const lastMov = movements[movements.length - 1];
+    const idMovement = lastMov.id;
+    try {
+        const response = await fetch(`${SERVICE_URL_MOV}${encodeURIComponent(idMovement)}`, {
+            method: "DELETE",
+            headers: { "Accept": "application/json" }
+        });
+        if (!response.ok) throw new Error("Error en el borrado.");
+        const accountData = JSON.parse(sessionStorage.getItem("account"));
+        if(lastMov.description === "Deposit"){
+            accountData.balance -= lastMov.amount;
+        }else{
+            accountData.balance += lastMov.amount;
+        }
+        // Revertimos el balance
+        //Llamamos a la función updateAccountBalance para poder actualizar
+        //el balance de cuentas, par. la cuenta con el balance modificado.
+        await updateAccountBalance(accountData);
+        await buildMovementsTable();
+        cerrarDeleteForm();
+    } catch (error) {
+        console.error("Error al eliminar:", error);
+    }
+}
 
 /*GO BACK ACCOUNT TABLE, CLEANING SESSION STORAGE - CLICK*/
-function goBackAccounts(){}
+function goBackAccounts(){
+    sessionStorage.removeItem("account");
+    window.location.href = "/NovaBank/html/main.html"; 
+}
 
-/**/
+/*SHOW TOTAL BALANCE*/
+function toggleSummary() {
+    const summaryDiv = document.getElementById("summaryDisplay");
+    if (summaryDiv.style.display === "none") {
+        calculateTotals();
+        summaryDiv.style.display = "block";
+    } else {
+        summaryDiv.style.display = "none";
+    }
+}
 
 /*
    =================================================
@@ -190,35 +232,7 @@ async function fetchCreateNewMovement(amount, description) {
         console.error("Error:", error);
     }
 }
-/*FETCH DELETE MOVEMENT*/
-async function deleteLastMovement() {
-    if (movements.length === 0) return; //mostrar mensaje
-    //En lastMov guardamos la posición de la última instancia del objeto y 
-    //recuperamos el ID del movimiento
-    const lastMov = movements[movements.length - 1];
-    const idMovement = lastMov.id;
-    try {
-        const response = await fetch(`${SERVICE_URL_MOV}${encodeURIComponent(idMovement)}`, {
-            method: "DELETE",
-            headers: { "Accept": "application/json" }
-        });
-        if (!response.ok) throw new Error("Error en el borrado.");
-        const accountData = JSON.parse(sessionStorage.getItem("account"));
-        if(lastMov.description === "Deposit"){
-            accountData.balance -= lastMov.amount;
-        }else{
-            accountData.balance += lastMov.amount;
-        }
-        // Revertimos el balance
-        //Llamamos a la función updateAccountBalance para poder actualizar
-        //el balance de cuentas, par. la cuenta con el balance modificado.
-        await updateAccountBalance(accountData);
-        await buildMovementsTable();
-        cerrarDeleteForm();
-    } catch (error) {
-        console.error("Error al eliminar:", error);
-    }
-}
+
 /*FETCH UPDATE ACCOUNT RESOURCE*/
 async function updateAccountBalance(accountObj) {
     const response = await fetch(`${SERVICE_URL_ACC}`, {
@@ -301,4 +315,16 @@ function accountHeader() {
     } else {
         containerCredit.style.display = "none";
     }
+}
+
+/*CALCULAR BALANCE GENERAL - FUNC AGREGADAS*/
+function calculateTotals() {
+    const totalDeposits = movements
+        .filter(m => m.description === "Deposit")
+        .reduce((sum, m) => sum + Math.abs(m.amount), 0);
+    const totalPayments = movements
+        .filter(m => m.description === "Payment")
+        .reduce((sum, m) => sum + Math.abs(m.amount), 0);
+    document.getElementById("totalDeposits").textContent = currencyFormatter.format(totalDeposits);
+    document.getElementById("totalPayments").textContent = currencyFormatter.format(totalPayments);
 }

@@ -1,16 +1,16 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <title>Movements</title>
+    <title>Movimientos</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
-        <link rel="stylesheet" href="../css/style.css">
-        <link rel="stylesheet" href="../css/facilities.css">
-        <link rel="stylesheet" href="../css/main.css">
-        <link rel="alternate stylesheet" title="ModoOscuro" id="theme-link" href="../css/oscuro.css" disabled>
+        <link rel="stylesheet" href="/NovaBank/css/style.css">
+        <link rel="stylesheet" href="/NovaBank/css/facilities.css">
+        <link rel="stylesheet" href="/NovaBank/css/main.css">
+        <link rel="alternate stylesheet" title="ModoOscuro" id="theme-link" href="/NovaBank/css/oscuro.css" disabled>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
    <script src="/NovaBank/js/model.js"></script>
    <script type='module' src="/NovaBank/js/movementsController.js"></script>
@@ -20,11 +20,11 @@
   <header role="banner" class="header">
       <nav role="navigation" aria-label="Navegación principal" class="container">
         <div class="logo">
-                <a href="main.html"><img src="/NovaBank/assets/img/logo.png" alt="Nova Bank"></a>
+                <a href="main.html"><img src="/NovaBank/assets/img/logo.png" alt="NovaBank"></a>
                 <a href="main.html" aria-label="Ir al inicio de Nova Bank"><h1>Nova Bank</h1></a>
         </div>
         <div class="buttons">
-                <button type="button" id="themeToggle" class="btn-theme" onclick="changeTheme();" title="Cambiar tema" aria-expanded="false" aria-haspopup="true" aria-label="Cambiar tema"> 
+                <button type="button" id="themeToggle" class="btn-theme" onclick="changeTheme();" title="Cambiar tema" aria-label="Cambiar a tema oscuro o claro"> 
                     <svg id="icon-sun" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m8.485-8.485h1M4.515 12.515h1M17.657 6.343l.707-.707M6.343 17.657l.707-.707M17.657 17.657l.707.707M6.343 6.343l.707.707M12 8a4 4 0 100 8 4 4 0 000-8z"/>
                     </svg>
@@ -34,28 +34,50 @@
                 </button>
             <div role="menu" class="menu-container">
                 <button class="menu-toggle" id="menuBtn" onclick="dropDownMenu();"><i class="fa-solid fa-bars"></i></button>
-                    <ul class="dropdown-menu" id="dropdownMenu" role="menu">
-                        <li><a role="menuitem href="changePassword.html" accesskey="c">Cambiar Contraseña <span>C</span></a></li>
-                        <li><a role="menuitem href="index.html" accesskey="h">Ayuda y soporte <span>H</span></a></li>
-                        <li><a role="menuitem id="botonCerrarSesion" onclick="salirSession();" accesskey="s">Cerrar session <span>S</span></a></li>
+                    <ul class="dropdown-menu" id="dropdownMenu">
+                        <li><a role="menuitem" id="botonCerrarSesion" onclick="salirSession();" accesskey="s">Cerrar session<span>S</span></a></li>
                     </ul> 
             </div>
          </div>
     </nav>
   </header>
-  <main class="mainContent" role="main">
-    <section role="region" aria-labelledby="Títúlo Movimientos" class="tableContainerBody">
-        <div class="tableContainer">
-            <h1>Movimientos</h1>
-            <div id="account-info-header" style="margin-bottom: 20px; padding: 10px; background-color: #f9f9f9; border-radius: 5px; border-left: 5px solid #380b4c;">
+  <main class="main-container" role="main">
+     <h1>Movimientos</h1>
+     <section role="region" aria-labelledby="Información y gestión de la cuenta" class="welcome-section">
+      <div class="card-balance-movements">
+        <div class="card-content-movements ">
+            <h3>Información de la cuenta</h3>
+            <div id="account-info-header">
                 <p><strong>ID Cuenta:</strong> <span id="display-id">-</span></p>
                 <p><strong>Tipo:</strong> <span id="display-type">-</span></p>
-                <p id="display-credit-container" style="display: none;">
-                    <strong>Línea de Crédito:</strong> <span id="display-credit">-</span>
-                </p>
+                <p id="display-credit-container" style="display: none;"><strong>Línea de Crédito:</strong> <span id="display-credit">-</span></p>
             </div>
+        </div>
+        <div class="card-content-movements ">
+            <h3>Resumen general</h3>
+            <p>Descubre tus ingresos y gastos generales.</p>
+            <div class="stats">
+                <button class="btn-solid small" id="btnShowSummary">Calcular</button>
+            </div>
+            <div id="summaryDisplay" class="summaryDisplay">
+                <div class="summaryCont" aria-label="Resumen de los balances">
+                    <div>
+                        <p><strong>Total Depósitos:</strong></p>
+                        <span id="totalDeposits" class="depositBal" aria-label="Depósitos totales">$0.00</span>
+                    </div>
+                    <div>
+                        <p><strong>Total Pagos:</strong></p>
+                        <span id="totalPayments" class="depositPay" aria-label="Pagos totales">$0.00</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+      </div>
+    </section>
+    <section role="region" aria-labelledby="Tabla de movimientos" class="tableContainerBody">
+        <div class="tableContainer">
             <div class="table-card">
-                <table id="userMovements" aria-labelledby="Tabla de Movimientos">
+                <table id="userMovements">
                     <caption>Historial reciente de transacciones</caption>
                         <thead>
                             <tr>
@@ -69,10 +91,10 @@
                 </table>
             </div>
             <div class="footer-controls" aria-labelledby="Botones de control">
-                <button class="btn-back" id="goBackAccount"><i class="fa-solid fa-arrow-right fa-flip-horizontal"></i></button>
+                <button class="btn-back" id="goBackAccount" aria-label="Volver a cuentas"><i class="fa-solid fa-arrow-right fa-flip-horizontal"></i></button>
                 <div class="right-group">
-                    <button class="btn-delete-outline" id="confirmDeleteMov"><i class="fa-solid fa-trash-can"></i></button>
-                    <button class="btn-add-large" id="confirmAddMov"><i class="fa-solid fa-plus"></i></button>
+                    <button class="btn-delete-outline" id="confirmDeleteMov" aria-label="Eliminar último movimiento"><i class="fa-solid fa-trash-can"></i></button>
+                    <button class="btn-add-large" id="confirmAddMov" aria-label="Añadir nuevo movimiento"><i class="fa-solid fa-plus"></i></button>
                 </div>
             </div>
         </div>
@@ -90,7 +112,7 @@
                     <option value="Payment" aria-label="Opción pago">Pago</option>
                 </select>
             </div>
-            <div class="form-group-crud">
+            <div class="form-group-crud" aria-label="Ingresa una cantidad">
                 <input type="number" id="newAmount" min="0.01" step="0.01" placeholder="0.00" name="Cantidad a ingresar"required/>
                 <div id="responseMsgamount"></div>
             </div>
@@ -103,11 +125,11 @@
                 <h1> Elimar Movimiento</h1>
             </div>
             <div class="info-eliminar-cuenta">
-                <p>¿Estás seguro de que deseas eliminar esta cuenta? una vez eliminada
+                <p aria-label="Alerta eliminado">¿Estás seguro de que deseas eliminar esta cuenta? una vez eliminada
                     no podrás recuperar ningún información.
                 </p>
-                <button id="cancelDeleteMovement" class="btn-form-crud" >Cancelar</button>
-                <button id="deleteLastMovement" class="btn-form-crud">Borrar</button>
+                <button id="cancelDeleteMovement" class="btn-form-crud" aria-label="Cancelar borrado" >Cancelar</button>
+                <button id="deleteLastMovement" class="btn-form-crud" aria-label="Confirmar borrado">Borrar</button>
                 <p class="error-msg">
                 </p>
             </div>

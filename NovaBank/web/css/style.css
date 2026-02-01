@@ -264,7 +264,6 @@ body {
   outline: none;
   transition: border 0.3s ease;
 }
-
 /*FORMULARIO PARA EL CRUD DE CUENTAS*/
 .form-group-crud select, .form-group-crud input, .form-group-crud textarea.descripcion {
   width: 100%;             /* Para que ocupe el ancho disponible */
@@ -414,7 +413,7 @@ body {
     font-size: small;
 }
 .tableContainer {
-    width: 90%;
+    width: 100%;
     max-width: 100%;
 }
 .tableContainer h1 {
