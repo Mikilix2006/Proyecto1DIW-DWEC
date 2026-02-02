@@ -13,40 +13,48 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <script type="module" src="../js/accountsController.js"></script>
 <body>
-  <header class="header">
+  <header class="header" role="banner">
     <div class="container">
       <div class="logo">
-        <a href="main.html"><img src="../assets/img/logo.png" alt="Nova Bank"></a>
-        <a href="main.html"> <h1>Nova Bank</h1></a>
+        <a href="main.html" aria-label="Ir al inicio de Nova Bank">
+            <img src="../assets/img/logo.png" alt="Nova Bank">
+        </a>
+        <a href="main.html" aria-label="Ir al inicio de Nova Bank">
+            <h1>Nova Bank</h1>
+        </a>
       </div>
       <div class="buttons">
-        <button id="themeToggle" class="btn-theme" onclick="changeTheme();" title="Cambiar tema">
-          <svg id="icon-sun" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <button id="themeToggle" class="btn-theme" onclick="changeTheme();" title="Cambiar tema" aria-label="Cambiar entre modo claro y oscuro" role="button">
+          <svg id="icon-sun" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m8.485-8.485h1M4.515 12.515h1M17.657 6.343l.707-.707M6.343 17.657l.707-.707M17.657 17.657l.707.707M6.343 6.343l.707.707M12 8a4 4 0 100 8 4 4 0 000-8z"/>
           </svg>
-          <svg id="icon-moon" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
+          <svg id="icon-moon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
             <path d="M21 12.79A9 9 0 1111.21 3a7 7 0 109.79 9.79z"/>
           </svg>
         </button>
-        <div class="menu-container">
-          <button class="menu-toggle" id="menuBtn" onclick="dropDownMenu();">&#9776;</button>
-          <ul class="dropdown-menu" id="dropdownMenu">
-                <li><a href="changePassword.html" accesskey="c">Cambiar Contraseña <span> Alt + C</span></a></li>
-                <li><a href="main.html" accesskey="H">Ayuda y soporte <span> Alt + H</span></a></li>
-                <li><a id="botonCerrarSesion" onclick="salirSession();" accesskey="S">Cerrar session <span> Alt + S</span></a></li>
+        <nav class="menu-container" role="navigation" aria-label="Menú de usuario">
+          <button class="menu-toggle" id="menuBtn" onclick="dropDownMenu();" aria-haspopup="true" aria-expanded="false" aria-controls="Dropdown menu" role="button">&#9776;</button>
+          <ul class="dropdown-menu" id="dropdownMenu" role="menu">
+                <li role="menuitem"><a href="changePassword.html" accesskey="c">Cambiar Contraseña <span> Alt + C</span></a></li>
+                <li role="menuitem"><a href="main.html" accesskey="H">Ayuda y soporte <span> Alt + H</span></a></li>
+                <li role="menuitem"><a id="botonCerrarSesion" onclick="salirSession();" accesskey="S">Cerrar session <span> Alt + S</span></a></li>
           </ul>
-        </div>
+        </nav>
       </div>
     </div>
   </header>
-    <button id="buttonVideoHelper" class="btn-form-crud">Help</button>
+    
+    <button id="buttonVideoHelper" class="btn-form-crud" role="button">Help</button>
     <div id="h5p-container"></div>
-  <main class="main-container">
-    <section class="welcome-section">
+    <iframe width="560" height="315" src="https://youtu.be/1j2KFRiMPek?si=5KBe6MCHQHyfD9-t" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe>
+    
+
+  <main class="main-container" role="main">
+    <section class="welcome-section" aria-labelledby="sessionNombre">
       <h2 id="sessionNombre"></h2>
       <p>Estamos felices de verte una vez más.</p>
 
-      <div class="card-balance">
+      <div class="card-balance" role="region" aria-label="Resumen de ahorro">
         <div class="image-placeholder">
           <img src="../assets/img/help.jpg" alt="Ilustración ahorro mensual">
         </div>
@@ -54,18 +62,18 @@
           <h3>Ahorro mensual</h3>
           <p>Porcentaje generado a partir de los ingresos y gastos del último mes.</p>
           <div class="stats">
-            <span class="percentage">0.0%</span>
-            <button class="btn-solid small">Revisar historial</button>
+            <span class="percentage" aria-live="polite">0.0%</span>
+            <button class="btn-solid small" role="button">Revisar historial</button>
           </div>
         </div>
       </div>
     </section>
 
-    <section class="tableContainerBody">
+    <section class="tableContainerBody" aria-labelledby="tituloCuentas">
       <div class="tableContainer">
         <h1>Cuentas</h1>
         <div class="table-card">
-            <table id="showCOMPLETAR" aria-label="User Accounts">
+            <table id="showCOMPLETAR" aria-label="Cuentas del usuario">
             <!--caption>Cuentas</caption-->
                 <thead>
                     <tr>
@@ -86,18 +94,20 @@
         </div>
 
         <div class="footer-actions">
-            <button id="createNewAccountButton" class="btn-add-large"><i class="fa-solid fa-plus"></i></button>
+            <button id="createNewAccountButton" class="btn-add-large" role="button" aria-label="Crear nueva cuenta">
+                <i class="fa-solid fa-plus" aria-hidden="true"></i>
+            </button>
         </div>
     </div>
     </section>
       
     <!-- Sucio -->
         
-        <div id="msgBoxAccounts">
+        <div id="msgBoxAccounts" aria-live="assertive" role="alert">
             <!-- Error messages here -->
         </div>
     
-    <section id="newAccountForm" class="form-section-crud" style="display: none">
+    <section id="newAccountForm" class="form-section-crud" style="display: none" aria-hidden="true" aria-labelledby="Nueva cuenta">
         <div class="formulario">
             <div class="titulo">
                 <h1>Nueva Cuenta</h1>
@@ -110,7 +120,7 @@
                 </select>
             </div>
             <div class="form-group-crud">
-                <input type="number" id="newBeginBalance" placeholder="Saldo inicial" disabled/>
+                <input type="number" id="newBeginBalance" placeholder="Saldo inicial" disabled aria-describedby="responseMsgNewBeginBalance"/>
                 <div id="responseMsgNewBeginBalance"></div>
             </div>
             <div class="form-group-crud">
@@ -121,14 +131,14 @@
                 <input type="number" id="newCreditLine" placeholder="Línea de crédito" disabled/>
                 <div id="responseMsgNewCreditLine"></div>
             </div>
-            <button id="confirmNewAccountButton" class="btn-form-crud">Crear Cuenta</button>
-            <button id="cancellNewAccountButton" class="btn-form-crud">Cancelar</button>
+            <button id="confirmNewAccountButton" class="btn-form-crud" role="button">Crear Cuenta</button>
+            <button id="cancellNewAccountButton" class="btn-form-crud" role="button">Cancelar</button>
         </div>
     </section>
     
     <!-- Update account Form -->
     
-    <section id="editAccountForm" class="form-section-crud" style="display: none">
+    <section id="editAccountForm" class="form-section-crud" style="display: none" aria-hidden="true" aria-labelledby="Editar cuenta">
         <div class="formulario">
             <div class="titulo">
                 <h1>Editar Cuenta</h1>
@@ -141,14 +151,14 @@
                 <textarea class="descripcion" id="tfUpdateDescription" placeholder="Descripción"></textarea>
                 <div id="responseMsgUpdateDescription"></div>
             </div>
-            <button id="confirmUpdateAccountButton" class="btn-form-crud">Confirmar cambios</button>
-            <button id="cancellUpdateAccountButton" class="btn-form-crud">Cancelar</button>
+            <button id="confirmUpdateAccountButton" class="btn-form-crud" role="button">Confirmar cambios</button>
+            <button id="cancellUpdateAccountButton" class="btn-form-crud" role="button">Cancelar</button>
         </div>
     </section>
     
     <!-- Delete account Form -->
     
-    <section id="deleteAccountForm" class="form-section-crud" style="display: none">
+    <section id="deleteAccountForm" class="form-section-crud" style="display: none" aria-hidden="true" role="alertdialog" aria-labelledby="Confirmar eliminar cuenta">
         <div class="formulario" id="form-account">
             <div class="titulo">
                 <h1> Elimar Cuenta</h1>
@@ -157,15 +167,15 @@
                 <p>¿Estás seguro de que deseas eliminar esta cuenta? una vez eliminada
                     no podrás recuperar ningún información.
                 </p>
-                <button id="confirmDeleteAccountButton" class="btn-form-crud">Eliminar Cuenta</button>
-                <button id="cancellDeleteAccountButton" class="btn-form-crud">Cancelar</button>
+                <button id="confirmDeleteAccountButton" class="btn-form-crud" aria-label="Boton confirmar eliminación de cuenta" role="button">Eliminar Cuenta</button>
+                <button id="cancellDeleteAccountButton" class="btn-form-crud" aria-label="Boton cancelar eliminación de cuenta" role="button">Cancelar</button>
                 <div class="error-msg" id="responseMsgDeleteDescription"></div>
             </div>
         </div>
     </section>
     
   </main>
-  <footer class="footer">
+  <footer class="footer" role="contentinfo">
     <div class="logo_footer">
       <img src="../assets/img/logo.png" alt="Nova Bank">
       <p>Nova Bank</p>
