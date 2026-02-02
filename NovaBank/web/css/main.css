@@ -3,6 +3,7 @@
   margin-top: 100px;
   padding: 2rem 10%;
   background-color: var(--color-fondo);
+  width: 100%;
 }
 .welcome-section h2 {
   color: var(--texto-titulo);
