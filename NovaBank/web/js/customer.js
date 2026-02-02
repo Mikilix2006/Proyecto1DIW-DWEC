@@ -41,6 +41,8 @@ const zipInput = document.getElementById("zip");
 const phoneInput = document.getElementById("phone");
 const emailInput = document.getElementById("email");
 
+
+
 window.addEventListener('load', buildUsersTable);
 
 // Validaciones en tiempo real con el evento 'input'
@@ -180,27 +182,6 @@ function* userRowGenerator(users) {
         yield tr;
     }
 }
-
-// === ELIMINAR USUARIO ===
-/*async function deleteSelectedUser() {
-    if (!selectedUser) {
-        alert("Selecciona un usuario de la tabla");
-        return;
-    }
-
-    if (!confirm(`¿Eliminar al usuario ${selectedUser.email}?`)) return;
-
-    const response = await fetch(`${SERVICE_URL}/${selectedUser.id}`, { method: "DELETE" });
-
-    if (!response.ok) {
-        alert("Error al eliminar el usuario");
-        return;
-    }
-
-    alert("Usuario eliminado correctamente");
-    selectedUser = null;
-    buildUsersTable();
-}*/
 
 // ====USUARIO PARA ELIMINAR OTRA VERSION ======
 const modalEliminar = document.getElementById("modalEliminarUsuario");
