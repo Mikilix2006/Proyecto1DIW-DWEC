@@ -145,5 +145,5 @@ function showHiVerifyPassword(){
 //CERRR SESSION
 function salirSession(){
     sessionStorage.clear();
-    window.location = "index.html";
+    window.location = "/NovaBank/index.html";
 }

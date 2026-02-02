@@ -10,8 +10,7 @@ export class Movements {
         this.description = description;
         this.timestamp = new Date().toISOString(); 
     }
-
-  
+    
   toJSON() {
         return {
             amount: this.amount,
@@ -21,7 +20,6 @@ export class Movements {
         };
     }
 }
-
 
 export class Account {
     // attributes

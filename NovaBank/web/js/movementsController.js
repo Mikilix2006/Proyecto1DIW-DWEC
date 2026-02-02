@@ -14,7 +14,8 @@ const deleteMovementBtn = document.getElementById("deleteLastMovement");
 const cancelDeleteBtn = document.getElementById("cancelDeleteMovement");
 const addNewMovement = document.getElementById("addMovement");
 const showGeneralBalance = document.getElementById("btnShowSummary");
-
+const summaryDiv = document.getElementById("summaryDisplay");
+let h5pInstance = null;
 /*
    =================================================
          LISTENERS FOR HANDLING EVENTS ON HTML
@@ -31,21 +32,13 @@ deleteMovementBtn.addEventListener('click', deleteLastMovement);
 cancelDeleteBtn.addEventListener('click', cerrarDeleteForm);
 showGeneralBalance.addEventListener('click', toggleSummary);
 goBackBtnController.addEventListener('click',goBackAccounts);
-//SACAR EL ID DE LA CUENTA 
-//MOSTRAR EL CRÉDITO EN CASO TENGA
-/*
-document.addEventListener('DOMContentLoaded', function () {
-              const el = document.getElementById('h5p-container');
-              const options = {
-                h5pJsonPath: '/NovaBank/assets/h5p-content',
-                frameJs: '/NovaBank/assets/h5p-player/frame.bundle.js', 
-                frameCss: '/NovaBank/assets/h5p-player/styles/h5p.css', 
-                librariesPath: '/NovaBank/assets/h5p-libraries' 
-              };
-              let h5p=new H5PStandalone.H5P(el, options);
-              console.log(options);
-});  
-*/
+//Interactive video
+document.addEventListener('DOMContentLoaded', () => {
+    const btn = document.getElementById('showVideoMov');
+    if (btn) {
+        btn.addEventListener('click', showVideoHelpMovment);
+    }
+});
 /*
    =================================================
        EVENT HANDLERS CALLED FROM THE LISTENERS
@@ -175,12 +168,32 @@ function goBackAccounts(){
 
 /*SHOW TOTAL BALANCE*/
 function toggleSummary() {
-    const summaryDiv = document.getElementById("summaryDisplay");
     if (summaryDiv.style.display === "none") {
         calculateTotals();
-        summaryDiv.style.display = "block";
+        summaryDiv.style.display = "flex";
     } else {
         summaryDiv.style.display = "none";
+    }
+}
+
+/*HELP INTERACTIVE VIDEO*/
+function showVideoHelpMovment() {
+    const el = document.getElementById('h5p-container');
+    if (!h5pInstance) {
+    const options = {
+        h5pJsonPath: '/NovaBank/assets/help_mov', 
+        frameJs: '/NovaBank/assets/h5p-player/frame.bundle.js',
+        frameCss: '/NovaBank/assets/h5p-player/styles/h5p.css',
+        librariesPath: '/NovaBank/assets/h5p-libraries' 
+        };
+    h5pInstance = new H5PStandalone.H5P(el, options);
+        el.style.display = "flex";
+    return;
+    }
+    if (window.getComputedStyle(el).display === "none") {
+        el.style.setProperty("display", "flex", "important");
+    } else {
+        el.style.setProperty("display", "none", "important");
     }
 }
 
@@ -190,17 +203,10 @@ function toggleSummary() {
    =================================================
  */
 const currencyFormatter = new Intl.NumberFormat(undefined, {
-        style: 'currency',
-        currency: 'EUR',
-        minimumFractionDigits: 2
+        style: 'currency', currency: 'EUR', minimumFractionDigits: 2
     });
 const dateFormatter = new Intl.DateTimeFormat(undefined, {
-        year: 'numeric',
-        month: '2-digit',
-        day: '2-digit',
-        hour: '2-digit',
-        minute: '2-digit',
-        second: '2-digit'
+        year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit'
 });
 /*FETCH CREATE RESOURCE*/
 async function fetchCreateNewMovement(amount, description) {
