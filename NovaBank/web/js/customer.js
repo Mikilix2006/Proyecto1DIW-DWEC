@@ -301,8 +301,13 @@ formCrearUsuario.onsubmit = async e => {
 formEditarUsuario.onsubmit = async e => {
     e.preventDefault();
 
-    if (!selectedUser) return;
+    // NUEVO: Validar antes de enviar
+    if (!validateEditUserForm()) {
+        console.log("Formulario de edición no válido");
+        return; // Se detiene aquí si hay errores
+    }
 
+    if (!selectedUser) return;
     const d = new FormData(formEditarUsuario);
 
     const customer = new Customer(
@@ -353,10 +358,25 @@ function validateCreateUserForm() {
     );
 }
 
+function validateEditUserForm() {
+    // Retorna TRUE solo si todas las validaciones pasan
+    return (
+        validateFirstName("editFirstName", "editResponseMsgName") &&
+        validateMiddleInitial("editmiddleInitial", "editResponseMsgInitial") &&
+        validateLastName("editLastName", "editResponseMsgLastName") &&
+        validateStreet("editStreet", "editResponseMsgStreet") &&
+        validateCity("editCity", "editResponseMsgCity") &&
+        validateState("editState", "editResponseMsgState") &&
+        validateZip("editZip", "editResponseMsgZip") &&
+        validatePhone("editPhone", "editResponseMsgPhone") &&
+        validateEmail("editEmail", "editResponseMsgEmail")
+    );
+}
+
 /*VALIDAR NOMBRE*/
-function validateFirstName() {
-    const input = document.getElementById("firstName");
-    const msgBox = document.getElementById("responseMsgName");
+function validateFirstName(idInput = "firstName", idMsg = "responseMsgName") {
+    const input = document.getElementById(idInput);
+    const msgBox = document.getElementById(idMsg);
     const onlyLettersRegExp = /^[a-zA-ZÁáÉéÍíÓóÚúÑñ\s]+$/;
 
     msgBox.style.display = "none";
@@ -377,13 +397,17 @@ function validateFirstName() {
 }
 
 /*VALIDAR INICIAL SEGUNDO NOMBRE*/
-function validateMiddleInitial() {
-    const input = document.getElementById("middleInitial");
-    const msgBox = document.getElementById("responseMsgInitial");
+function validateMiddleInitial(idInput = "middleInitial", idMsg = "responseMsgInitial") {
+    const input = document.getElementById(idInput);
+    const msgBox = document.getElementById(idMsg);
     const singleLetterRegExp = /^[a-zA-ZÁáÉéÍíÓóÚúÑñ]$/;
 
     msgBox.style.display = "none";
-
+    
+    if (input.value.trim() === "") {
+        showError(msgBox, "La inicial del segundo nombre es obligatoria");
+        return false;
+    }
     if (input.value.trim() !== "" && !singleLetterRegExp.test(input.value.trim())) {
         showError(msgBox, "Debe ser una sola letra");
         return false;
@@ -392,9 +416,9 @@ function validateMiddleInitial() {
 }
 
 /*VALIDAR APELLIDO*/
-function validateLastName() {
-    const input = document.getElementById("lastName");
-    const msgBox = document.getElementById("responseMsgLastName");
+function validateLastName(idInput = "lastName", idMsg = "responseMsgLastName") {
+    const input = document.getElementById(idInput);
+    const msgBox = document.getElementById(idMsg);
     const onlyLettersRegExp = /^[a-zA-ZÁáÉéÍíÓóÚúÑñ\s]+$/;
 
     msgBox.style.display = "none";
@@ -415,9 +439,9 @@ function validateLastName() {
 }
 
 /* VALIDAR CALLE*/
-function validateStreet() {
-    const input = document.getElementById("street");
-    const msgBox = document.getElementById("responseMsgStreet");
+function validateStreet(idInput = "street", idMsg = "responseMsgStreet") {
+    const input = document.getElementById(idInput);
+    const msgBox = document.getElementById(idMsg);
     const streetRegExp = /^[a-zA-ZÁáÉéÍíÓóÚúÑñ0-9\s.,/-]+$/;
 
     msgBox.style.display = "none";
@@ -438,9 +462,9 @@ function validateStreet() {
 }
 
 /* VALIDAR CIUDAD */
-function validateCity() {
-    const input = document.getElementById("city");
-    const msgBox = document.getElementById("responseMsgCity");
+function validateCity(idInput = "city", idMsg = "responseMsgCity") {
+    const input = document.getElementById(idInput);
+    const msgBox = document.getElementById(idMsg);
     const onlyLettersRegExp = /^[a-zA-ZÁáÉéÍíÓóÚúÑñ\s]+$/;
 
     msgBox.style.display = "none";
@@ -461,9 +485,9 @@ function validateCity() {
 }
 
 /* VALIDAR ESTADO */
-function validateState() {
-    const input = document.getElementById("state");
-    const msgBox = document.getElementById("responseMsgState");
+function validateState(idInput = "state", idMsg = "responseMsgState") {
+    const input = document.getElementById(idInput);
+    const msgBox = document.getElementById(idMsg);
     const onlyLettersRegExp = /^[a-zA-ZÁáÉéÍíÓóÚúÑñ\s]+$/;
 
     msgBox.style.display = "none";
@@ -485,9 +509,9 @@ function validateState() {
 }
 
 /*VALIDAR CODIGO POSTAL*/
-function validateZip() {
-    const input = document.getElementById("zip");
-    const msgBox = document.getElementById("responseMsgZip");
+function validateZip(idInput = "zip", idMsg = "responseMsgZip") {
+    const input = document.getElementById(idInput);
+    const msgBox = document.getElementById(idMsg);
     const numbersOnlyRegExp = /^[0-9]+$/;
 
     msgBox.style.display = "none";
@@ -504,9 +528,9 @@ function validateZip() {
 }
 
 /*VALIDAR TELEFONO*/
-function validatePhone() {
-    const input = document.getElementById("phone");
-    const msgBox = document.getElementById("responseMsgPhone");
+function validatePhone(idInput = "phone", idMsg = "responseMsgPhone") {
+    const input = document.getElementById(idInput);
+    const msgBox = document.getElementById(idMsg);
     const phoneRegExp = /^[+]{0,1}[0-9]+$/;
 
     msgBox.style.display = "none";
@@ -527,9 +551,9 @@ function validatePhone() {
 }
 
 /* VALIDAR EMAIL*/
-function validateEmail() {
-    const input = document.getElementById("email");
-    const msgBox = document.getElementById("responseMsgEmail");
+function validateEmail(idInput = "email", idMsg = "responseMsgEmail") {
+    const input = document.getElementById(idInput);
+    const msgBox = document.getElementById(idMsg);
     const emailRegExp = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
     msgBox.style.display = "none";
@@ -579,7 +603,7 @@ function manejarComunes() {
         const filtrados = usuariosLocales.filter(u => 
             !u.email.toLowerCase().endsWith("@admin.com")
         );
-        tComunes.textContent = `Cantidad: [${filtrados.length}]`;
+        tComunes.textContent = `Cantidad: ${filtrados.length}`;
         tComunes.style.display = "flex";
     }
 }
@@ -591,7 +615,7 @@ function manejarAdmins() {
         const filtrados = usuariosLocales.filter(u => 
             u.email.toLowerCase().endsWith("@admin.com")
         );
-        tAdmins.textContent = `Cantidad: [${filtrados.length}]`;
+        tAdmins.textContent = `Cantidad: ${filtrados.length}`;
         tAdmins.style.display = "flex";
     }
 }
@@ -600,7 +624,7 @@ function manejarTotales() {
     if (tTotales.style.display === "flex") {
         tTotales.style.display = "none";
     } else {
-        tTotales.textContent = `Total: [${usuariosLocales.length}]`;
+        tTotales.textContent = `Total: ${usuariosLocales.length}`;
         tTotales.style.display = "flex";
     }
 }
