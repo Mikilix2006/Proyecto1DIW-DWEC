@@ -58,9 +58,10 @@
     <script>
         const el = document.getElementById('h5p-container');
         const options = {
-            h5pJsonPath: '../assets/video/h5p.json', // Ruta a la carpeta en NetBeans
+            h5pJsonPath: '/NovaBank/assets/video/h5p.json', // Ruta a la carpeta en NetBeans
             frameJs: 'https://cdn.jsdelivr.net/npm/h5p-standalone@latest/dist/frame.bundle.js',
-            frameCss: 'https://cdn.jsdelivr.net/npm/h5p-standalone@latest/dist/styles/h5p.css'
+            frameCss: 'https://cdn.jsdelivr.net/npm/h5p-standalone@latest/dist/styles/h5p.css',
+            librariesPath: '/NovaBank/assets/video/libraries' 
         };
         new H5PStandalone.H5P(el, options);
     </script>
