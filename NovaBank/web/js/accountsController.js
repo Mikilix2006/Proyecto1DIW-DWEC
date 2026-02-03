@@ -30,7 +30,7 @@ const confirmUpdateAccountButton = document.getElementById('confirmUpdateAccount
 const cancellUpdateAccountButton = document.getElementById('cancellUpdateAccountButton');
 // help
 //const buttonVideoHelper = document.getElementById("h5p-container");
-const buttonVideoHelper = document.getElementById('showVideoMov');
+const buttonVideoHelper = document.getElementById('buttonVideoHelper');
 // === inputs ===
 // new account
 const newBeginBalance = document.getElementById("newBeginBalance");
@@ -41,6 +41,8 @@ const tfUpdateCreditLine = document.getElementById("tfUpdateCreditLine");
 const tfUpdateDescription = document.getElementById("tfUpdateDescription");
 // === combo ===
 const comboAccountType = document.getElementById("comboAccountType");
+// === video helper ===
+let h5pInstance = null;
 // === GLOBAL ARRAY ===
 // Array that contains objects AccountController
 let accountsArray = [];
@@ -110,10 +112,11 @@ function toggleNewAccountFormVisibility(event) {
 }
 /*HELP INTERACTIVE VIDEO*/
 function toggleVideoHelperVisibility(event) {
+    console.log("Enseñando video")
     const el = document.getElementById('h5p-container');
     if (!h5pInstance) {
     const options = {
-        h5pJsonPath: '/NovaBank/assets/help_mov', 
+        h5pJsonPath: '/NovaBank/assets/help_acc', 
         frameJs: '/NovaBank/assets/h5p-player/frame.bundle.js',
         frameCss: '/NovaBank/assets/h5p-player/styles/h5p.css',
         librariesPath: '/NovaBank/assets/h5p-libraries' 

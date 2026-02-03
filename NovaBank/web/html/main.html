@@ -45,33 +45,6 @@
       </div>
     </div>
   </header>
-    
-    <button id="buttonVideoHelper" class="btn-form-crud" role="button">Help</button>
-    
-    
-    
-    
-    
-    
-    
-    <div id="h5p-container"></div>
-
-    <script>
-        const el = document.getElementById('h5p-container');
-        const options = {
-            h5pJsonPath: '/NovaBank/assets/video/h5p.json', // Ruta a la carpeta en NetBeans
-            frameJs: 'https://cdn.jsdelivr.net/npm/h5p-standalone@latest/dist/frame.bundle.js',
-            frameCss: 'https://cdn.jsdelivr.net/npm/h5p-standalone@latest/dist/styles/h5p.css',
-            librariesPath: '/NovaBank/assets/video/libraries' 
-        };
-        new H5PStandalone.H5P(el, options);
-    </script>
-    
-    
-    
-    
-    
-    
 
   <main class="main-container" role="main">
     <section class="welcome-section" aria-labelledby="sessionNombre">
@@ -197,6 +170,9 @@
             </div>
         </div>
     </section>
+    
+    <button id="buttonVideoHelper" role="button">Ayuda</button>
+    <div id="h5p-container" style="display: none"></div>
     
   </main>
   <footer class="footer" role="contentinfo">
