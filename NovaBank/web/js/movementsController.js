@@ -120,8 +120,10 @@ async function createNewMovement(e) {
         cerrarFormulario(); 
 
     } catch (error) {
-        alert(error.message);
-        console.error("Error en el proceso:", error);
+        const msgBox = document.getElementById("responseMsg");
+        msgBox.className = 'error';
+        msgBox.textContent = error.message;
+        msgBox.style.display = 'block';
     }
 }
 /*SHOW THE DELETE LAST MOVEMENT LAYER - CLICK BIN TRASH  */
@@ -231,7 +233,6 @@ async function fetchCreateNewMovement(amount, description) {
         accountData.balance = newBalance;
         await updateAccountBalance(accountData);
         await buildMovementsTable();
-        alert("Movimiento creado y saldo actualizado.");//Cambiar
         cerrarFormulario();
 
     } catch (error) {
@@ -322,7 +323,6 @@ function accountHeader() {
         containerCredit.style.display = "none";
     }
 }
-
 /*CALCULAR BALANCE GENERAL - FUNC AGREGADAS*/
 function calculateTotals() {
     const totalDeposits = movements

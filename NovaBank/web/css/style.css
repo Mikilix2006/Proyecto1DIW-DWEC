@@ -383,7 +383,9 @@ body {
   color: #e63946;    
   font-size: 0.9em;
   margin-top: 4px;
-  display: block;
+  display: flex;
+  text-align: center;
+  margin-bottom: 1rem;
 }
 
 /**** ELIMINAR CUENTAS FORMULARIO *****/

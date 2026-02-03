@@ -54,10 +54,11 @@
   min-width: 250px;
   margin-left: 2rem;
 }
-.card-content h3 {
+.card-content-movements h1 {
   color: var(--texto-titulo);
-  font-size: 2rem;
+  font-size: 1.5rem;
   margin-bottom: 0.5rem;
+  text-align: left;
 }
 .card-content p {
   color: var(--texto-parrafo);

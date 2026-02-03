@@ -33,10 +33,10 @@
                         <path d="M21 12.79A9 9 0 1111.21 3a7 7 0 109.79 9.79z"/>
                     </svg>
                 </button>
-            <div role="menu" class="menu-container">
-                <button class="menu-toggle" id="menuBtn" onclick="dropDownMenu();"><i class="fa-solid fa-bars"></i></button>
+            <div class="menu-container">
+                <button class="menu-toggle" id="menuBtn" onclick="dropDownMenu();"><i class="fa-solid fa-bars" aria-label="Menú desplegable"></i></button>
                     <ul class="dropdown-menu" id="dropdownMenu">
-                        <li><a role="menuitem" id="botonCerrarSesion" onclick="salirSession();" accesskey="s">Cerrar session<span>S</span></a></li>
+                        <li><a aria-label="Cerrar sesión" id="botonCerrarSesion" onclick="salirSession();" accesskey="s">Cerrar session<span>S</span></a></li>
                     </ul> 
             </div>
          </div>
@@ -45,10 +45,10 @@
   <main class="main-container" role="main">
      
      <h1>Movimientos</h1>
-     <section role="region" aria-labelledby="Información y gestión de la cuenta" class="welcome-section">
+     <section aria-labelledby="Información y gestión de la cuenta" class="welcome-section">
       <div class="card-balance-movements">
         <div class="card-content-movements ">
-            <h3>Información de la cuenta</h3>
+            <h1>Información de la cuenta</h1>
             <div id="account-info-header">
                 <p><strong>ID Cuenta:</strong> <span id="display-id">-</span></p>
                 <p><strong>Tipo:</strong> <span id="display-type">-</span></p>
@@ -56,7 +56,7 @@
             </div>
         </div>
         <div class="card-content-movements ">
-            <h3>Resumen general</h3>
+            <h1>Resumen general</h1>
             <p>Descubre tus ingresos y gastos generales.</p>
             <div class="stats">
                 <button class="btn-solid small" id="btnShowSummary">Calcular</button>
@@ -76,11 +76,11 @@
         </div>
       </div>
     </section>
-    <section role="region" aria-labelledby="Tabla de movimientos" class="tableContainerBody">
+    <section aria-labelledby="Tabla de movimientos" class="tableContainerBody">
         <div class="tableContainer">
             <div class="table-card">
                 <table id="userMovements">
-                    <caption>Historial reciente de transacciones</caption>
+                    <!--caption>Historial reciente de transacciones</caption-->
                         <thead>
                             <tr>
                                 <th scope="col">Fecha y hora</th>
@@ -101,7 +101,7 @@
             </div>
         </div>
     </section>
-    <section role="region" aria-labelledby="Nuevo movimiento" id="newMovementForm" class="form-section-crud" style="display: none;">
+    <section aria-labelledby="Nuevo movimiento" id="newMovementForm" class="form-section-crud" style="display: none;">
       <form aria-labelledby="Formulario de nuevo movimiento" id="formMovement" class="formulario">
             <div class="titulo">
                 <h1>Nuevo Movimiento</h1>
@@ -118,10 +118,11 @@
                 <input type="number" id="newAmount" min="0.01" step="0.01" placeholder="0.00" name="Cantidad a ingresar"required/>
                 <div id="responseMsgamount"></div>
             </div>
+            <div class="error-msg" id="responseMsg"></div>
             <button type="submit" id="addMovement" class="btn-form-crud">Crear Movimiento</button>
         </form>
     </section>
-    <section role="dialog" aria-labelledby="Eliminar el último movimiento" id="confirmDelete" class="form-section-crud" style="display: none;">
+    <section aria-labelledby="Eliminar el último movimiento" id="confirmDelete" class="form-section-crud" style="display: none;">
         <div class="formulario" id="deleteConfirmationForm">
             <div class="titulo">
                 <h1> Elimar Movimiento</h1>
@@ -130,6 +131,7 @@
                 <p aria-label="Alerta eliminado">¿Estás seguro de que deseas eliminar esta cuenta? una vez eliminada
                     no podrás recuperar ningún información.
                 </p>
+                <div class="error-msg" id="responseMsg"></div>
                 <button id="cancelDeleteMovement" class="btn-form-crud" aria-label="Cancelar borrado" >Cancelar</button>
                 <button id="deleteLastMovement" class="btn-form-crud" aria-label="Confirmar borrado">Borrar</button>
                 <p class="error-msg">
@@ -138,8 +140,8 @@
         </div>
     </section>
     
-    <button id="showVideoMov">Ayuda</button>
-    <div id="h5p-container" style="display: none"></div>
+    <button id="showVideoMov" class="btn-solid">Ayuda</button>
+    <div id="h5p-container" class="form-section-crud" style="display: none"></div>
   </main>
   <footer role="contentinfo"class="footer">
     <div class="logo_footer">
