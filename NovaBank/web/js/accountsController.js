@@ -29,7 +29,8 @@ const cancellNewAccountButton = document.getElementById('cancellNewAccountButton
 const confirmUpdateAccountButton = document.getElementById('confirmUpdateAccountButton');
 const cancellUpdateAccountButton = document.getElementById('cancellUpdateAccountButton');
 // help
-const buttonVideoHelper = document.getElementById("h5p-container");
+//const buttonVideoHelper = document.getElementById("h5p-container");
+const buttonVideoHelper = document.getElementById('showVideoMov');
 // === inputs ===
 // new account
 const newBeginBalance = document.getElementById("newBeginBalance");
@@ -58,7 +59,10 @@ cancellNewAccountButton.addEventListener("click", toggleNewAccountFormVisibility
 confirmUpdateAccountButton.addEventListener("click", handleUpdateAccount);
 cancellUpdateAccountButton.addEventListener("click", toggleUpdateAccountFormVisibility);
 // help
-buttonVideoHelper.addEventListener("click", toggleVideoHelperVisibility)
+//buttonVideoHelper.addEventListener("click", toggleVideoHelperVisibility)
+if (buttonVideoHelper) {
+    buttonVideoHelper.addEventListener('click', toggleVideoHelperVisibility);
+}
 // === combo ===
 // new account
 comboAccountType.addEventListener("change", checkSelectedValue);
@@ -104,15 +108,25 @@ function toggleNewAccountFormVisibility(event) {
     }
     resetValueOfElements([newBeginBalance,newDescription,newCreditLine]);
 }
+/*HELP INTERACTIVE VIDEO*/
 function toggleVideoHelperVisibility(event) {
     const el = document.getElementById('h5p-container');
+    if (!h5pInstance) {
     const options = {
-      h5pJsonPath: '../assets/video/h5p-content', // Path to the extracted H5P content. NOTE that paths are relative to the server root: they begin with app's Context Path!!
-      frameJs: '../assets/video/h5p-player/frame.bundle.js', // Path to player's frame.bundle.js
-      frameCss: '../assets/video/h5p-player/styles/h5p.css', // Path to player's h5p.css
-      librariesPath: '../assets/video/h5p-libraries' // Path to player's h5p.css
-    };
-    let h5p=new H5PStandalone.H5P(el, options);
+        h5pJsonPath: '/NovaBank/assets/help_mov', 
+        frameJs: '/NovaBank/assets/h5p-player/frame.bundle.js',
+        frameCss: '/NovaBank/assets/h5p-player/styles/h5p.css',
+        librariesPath: '/NovaBank/assets/h5p-libraries' 
+        };
+    h5pInstance = new H5PStandalone.H5P(el, options);
+        el.style.display = "flex";
+    return;
+    }
+    if (window.getComputedStyle(el).display === "none") {
+        el.style.setProperty("display", "flex", "important");
+    } else {
+        el.style.setProperty("display", "none", "important");
+    }
 }
 async function handleDeleteAccount(event) {
     const accountID = event.target.dataset.accId;
@@ -408,15 +422,18 @@ function* accountRowGenerator(accounts) {
                                         ));
         // Edit and Delete buttons in each row in new column
         const tdButtons = document.createElement("td");
-        const buttonEdit = document.createElement("img");
-        const buttonDelete = document.createElement("img");
+        tdButtons.classList.add("actions");
+        const buttonEdit = document.createElement("button");
+        const buttonDelete = document.createElement("button");
         // IMG
-        buttonEdit.setAttribute("src", "../assets/img/edit-pencil-01-svgrepo-com.svg");
-        buttonDelete.setAttribute("src", "../assets/img/delete-2-svgrepo-com.svg");
+//        buttonEdit.setAttribute("src", "../assets/img/edit-pencil-01-svgrepo-com.svg");
+//        buttonDelete.setAttribute("src", "../assets/img/delete-2-svgrepo-com.svg");
+        buttonEdit.innerHTML = `<i class="fa-solid fa-pen-to-square"></i>`;
+        buttonDelete.innerHTML = `<i class="fa-solid fa-trash-can"></i>`;
         // Button aspect attributes
         buttonEdit.setAttribute("class", "btn-edit");
         buttonDelete.setAttribute("class", "btn-delete");
-        buttonDelete.style.marginTop = "5px";
+        
         // Button alt attributes
         buttonEdit.setAttribute("alt", "edit button");
         buttonDelete.setAttribute("alt", "delete button");
