@@ -2,6 +2,7 @@
 import { Customer } from "./model.js";
 const SERVICE_URL = "/CRUDBankServerSide/webresources/customer";
 let selectedUser = null;
+let h5pInstance = null;
 
 /* =================================================
       ATTRIBUTES TO BE USED BY THIS CONTROLLER
@@ -95,6 +96,14 @@ cerrarModalEditarBtn.addEventListener("click", () => {
 bComunes.addEventListener("click", manejarComunes);
 bAdmins.addEventListener("click", manejarAdmins);
 bTotales.addEventListener("click", manejarTotales);
+
+//Interactive video
+document.addEventListener('DOMContentLoaded', () => {
+    const btn = document.getElementById('showVideoCustomer');
+    if (btn) {
+        btn.addEventListener('click', showVideoHelpCustomer);
+    }
+});
 
 
 // === FETCH USERS ===
@@ -610,3 +619,23 @@ function manejarTotales() {
     }
 }
 
+/*INTERACTIVE VIDEO CUSTOMER*/
+function showVideoHelpCustomer() {
+    const el = document.getElementById('h5p-container');
+    if (!h5pInstance) {
+    const options = {
+        h5pJsonPath: '/NovaBank/assets/h5p-content', 
+        frameJs: '/NovaBank/assets/h5p-player/frame.bundle.js',
+        frameCss: '/NovaBank/assets/h5p-player/styles/h5p.css',
+        librariesPath: '/NovaBank/assets/h5p-libraries' 
+        };
+    h5pInstance = new H5PStandalone.H5P(el, options);
+        el.style.display = "flex";
+    return;
+    }
+    if (window.getComputedStyle(el).display === "none") {
+        el.style.setProperty("display", "flex", "important");
+    } else {
+        el.style.setProperty("display", "none", "important");
+    }
+}

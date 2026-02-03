@@ -261,17 +261,17 @@ body {
 
 /*FORMULARIO PARA EL CRUD DE CUENTAS*/
 .form-group-crud select, .form-group-crud input, .form-group-crud textarea.descripcion {
-  width: 100%;             /* Para que ocupe el ancho disponible */
-    padding: 12px 20px;      /* Espacio interno para que no choque la letra con el borde */
-    margin-bottom: 15px;     /* Espacio entre cada campo */
-    border: 1px solid #eee;  /* Un borde gris muy clarito */
-    border-radius: 50px;     /* Esto es lo que hace que sea TOTALMENTE redondeado */
+  width: 100%;           
+    padding: 12px 20px;     
+    margin-bottom: 15px;     
+    border: 1px solid #eee;  
+    border-radius: 50px;     
     background-color: #fff;
-    color: #888;             /* Color de la letra gris como en tu imagen */
+    color: #888;             
     font-family: sans-serif;
-    outline: none;           /* Quita el borde azul feo al hacer clic */
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);  /* Efecto de sombra suave */
-    appearance: none;        /* Quita estilos por defecto del sistema */
+    outline: none;           
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); 
+    appearance: none;       
     resize: none;
 }
 
@@ -327,20 +327,20 @@ body {
 }
 /* BOTONES  DEL FORMULARIO CRUD */
 .btn-form-crud {
-    background: var(--btn-color-solido); /* El color púrpura de tu variable */
+    background: var(--btn-color-solido); 
     color: white;
     border: none;
-    padding: 0.6rem 0.6rem;               /* Un poco más de padding para que sea más alto */
-    border-radius: 50px;              /* Bordes totalmente circulares */
+    padding: 0.6rem 0.6rem;              
+    border-radius: 50px;              
     font-size: 1rem;
-    font-weight: 500;                 /* Para que la letra sea clara */
+    font-weight: 500;             
     cursor: pointer;
     transition: background 0.3s ease;
     
     /* AJUSTES PARA CENTRARLO Y DARLE TAMAÑO */
-    width: 50%;                       /* Más ancho, como en la imagen */
-    display: block;                   /* Permite usar margin auto */
-    margin: 5px auto;                /* Lo centra horizontalmente y da espacio arriba/abajo */
+    width: 50%;                     
+    display: block;                 
+    margin: 5px auto;                
 }
 
 .btn-form-crud:hover {
@@ -381,7 +381,7 @@ body {
   font-size: 0.7rem;
   line-height: 1.5;
   margin-bottom: 20px;
-  text-align: center;  /* Centra todo el texto interior */
+  text-align: center;  
 }
 
 /* El mensaje de error en rojo */
@@ -401,7 +401,7 @@ body {
     font-size: small;
 }
 .tableContainer {
-    width: 90%;
+    width: 100%;
     max-width: 100%;
 }
 .tableContainer h1 {
@@ -478,7 +478,7 @@ tbody tr:hover {
   font-size: 0.7rem;
   line-height: 1.5;
   margin-bottom: 20px;
-  text-align: center;  /* Centra todo el texto interior */
+  text-align: center;  
 }
 
 /* El mensaje de error en rojo */
@@ -625,29 +625,41 @@ button:hover {
     margin-top: 10px;
 } 
 
-
 /***** BOTONES DE FUNCION AGREGADAS******/
 
 .stats {
     display: flex;
-    gap: 15px;
+    gap: 20px;
+    justify-content: flex-start; 
     margin-top: 20px;
-    justify-content: center;
 }
 
 .caja-estadistica {
     display: flex;
-    flex-direction: column;
-    align-items: center;
-    min-width: 140px;
+    flex-direction: column; 
+    align-items: center;  
+    min-width: 160px;       
+}
+
+.btn-estadistica {
+    background-color: #A660D1;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    cursor: pointer;
+    width: 100%;            
+    white-space: nowrap;   
 }
 
 .texto-resultado {
-    display: none; /* Empieza oculto */
-    margin-top: 10px;
+    display: block;        
+    margin-top: 8px;
     font-weight: bold;
-    color: #380B4C; /* El color de tu navbar */
+    color: #444;            
     font-size: 0.9rem;
+    text-align: center;
 }
 /* responsive*/
 @media (max-width: 768px) {

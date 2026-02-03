@@ -13,6 +13,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="/NovaBank/assets/h5p-player/main.bundle.js"></script>
 </head>
 
 <body>
@@ -50,37 +51,34 @@
 
 <main class="main-container">
     
-     <section class="welcome-section">
-      <h2 id="sessionNombre"></h2>
-      <p>Estamos felices de verte una vez más.</p>
+    <section class="welcome-section">
+        <h2 id="sessionNombre"></h2>
+        <p>Estamos felices de verte una vez más.</p>
 
-      <div class="card-balance">
-        <div class="image-placeholder">
-          <img src="../assets/img/help.jpg" alt="Ilustración ahorro mensual">
+        <div class="card-balance">
+            <div class="image-placeholder">
+                <img src="../assets/img/help.jpg" alt="Ilustración ahorro mensual">
+            </div>
+            <div class="card-content">
+                <h3>Gestión de Usuarios</h3>
+                <p>Información sobre la cantidad de usuarios registrados.</p>
+                <div id="contenedor-btn-agre" class="stats">
+                    <div id="btn-agre-uno" class="caja-estadistica">
+                        <button id="btnComunes" class="btn-solid small">Usuarios Comunes</button>
+                        <p id="cuentaComunes" class="texto-resultado"></p>
+                    </div>
+                    <div id="btn-agre-dos" class="caja-estadistica">
+                        <button id="btnAdmins" class="btn-solid small">Usuarios Administradores</button>
+                        <p id="cuentaAdmins" class="texto-resultado"></p>
+                    </div>
+                    <div id="btn-agre-tres" class="caja-estadistica">
+                        <button id="btnTotales" class="btn-solid small">Usuarios Totales</button>
+                        <p id="cuentaTotales" class="texto-resultado"></p>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="card-content">
-          <h3>Gestión de Usuarios</h3>
-          <p>Información sobre la cantidad de usuarios registrados:</p>
-          <div class="stats">
-    <div class="caja-estadistica">
-        <button id="btnComunes" class="btn-solid small">Usuarios Comunes</button>
-        <p id="cuentaComunes" class="texto-resultado"></p>
-    </div>
-    
-    <div class="caja-estadistica">
-        <button id="btnAdmins" class="btn-solid small">Usuarios Administradores</button>
-        <p id="cuentaAdmins" class="texto-resultado"></p>
-    </div>
-    
-    <div class="caja-estadistica">
-        <button id="btnTotales" class="btn-solid small">Usuarios Totales</button>
-        <p id="cuentaTotales" class="texto-resultado"></p>
-    </div>
-</div>
-        </div>
-      </div>
     </section>
-    
     
     <section class="tableContainerBody">
         <div class="tableContainer">
@@ -235,6 +233,9 @@
             </div>
         </div>
     </section>
+    
+    <button id="showVideoCustomer" class="btn-solid">Ayuda</button>
+    <div id="h5p-container" class="form-section-crud" style="display: none"></div>
 </main>
    
 <footer class="footer">
@@ -242,7 +243,7 @@
         <img src="../assets/img/logo.png" alt="Nova Bank">
         <p>Nova Bank</p>
     </div>
-    <p>© Copyright 2025 Nova Bank. All Rights Reserved.</p>
+    <p>© Copyright 2026 Nova Bank. All Rights Reserved.</p>
 </footer>
     
 <script>
