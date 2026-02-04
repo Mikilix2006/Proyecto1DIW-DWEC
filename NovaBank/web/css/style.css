@@ -405,7 +405,30 @@ body {
   margin-top: 20px;
 }
 
+/*video*/
+.videoContainer{
+  display: flex;
+  align-items: center;
+  margin-top: 3rem;
+  justify-content: center;
+  gap: 1rem;
+  padding: 50px; 
+  box-sizing: border-box;
+}
 
+#h5p-container .h5p-iframe-wrapper {
+    width: 90%;
+    max-width: 1000px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+#h5p-container > div {
+    max-width: 1000px;
+    width: 100%;
+    pointer-events: auto; /* El video sí recibe clics */
+}
 /****** FORMULARIO DE USUARIOS *******/
 /*Estilos de tablas base*/
 .tableContainerBody {
@@ -460,6 +483,13 @@ tbody tr:nth-child(odd) {
 tbody tr:hover {
     background-color: #e8e0eb;
     transition: background-color 0.3s ease;
+}
+#userMovements th:nth-child(3),
+#userMovements td:nth-child(3),
+#userMovements th:nth-child(4),
+#userMovements td:nth-child(4) {
+    text-align: right !important;
+    padding-right: 2rem;
 }
 .actions {
     display: flex;
@@ -561,43 +591,88 @@ button:hover {
   margin-bottom: 0.5rem;
 }
 /* responsive*/
+@media (max-width: 992px) {
+    .header .container {
+        padding: 1rem;
+    }
+    .banner h2 {
+        font-size: 2.5rem;
+    }
+}
+
 @media (max-width: 768px) {
-  .header .container {
-    flex-direction: column;
-    gap: 0.8rem;
-  }
-  .logo a{
-  color: #fff;
-  font-weight: 300;
-  text-decoration: none;
-  margin-right: 1rem;
-  }
-  .nav a{
-    display:none;
-  }
-  .banner {
-    height: 300px;
-    text-align: center;
-  }
-  .banner-content {
-    padding: 1.5rem;
-  }
-  .banner h2 {
-    font-size: 2rem;
-  }
-  .cards {
-    flex-direction: column;
-    align-items: center;
-  }
-  .card {
-    max-width: 90%;
-  }
-  
-  /* formulario*/
-  .login-content h2 {
-    font-size: 2rem;
-  }
-  .login-form {
-    padding: 2rem 1.5rem;
-  }
+    /* Banner */
+    .banner {
+        height: auto;
+        padding: 4rem 1rem;
+    }
+    .banner h2 {
+        font-size: 2.2rem;
+        line-height: 2.5rem;
+    }
+    /* Nosotros / About */
+    .about {
+        padding: 2rem 1rem;
+    }
+    /* Formularios */
+    .form-content h2 {
+        font-size: 1.8rem;
+    }
+    .formulario {
+        padding: 1.5rem 1rem;
+    }
+    /* --- TABLAS (Solución de Desbordamiento) --- */
+    .tableContainerBody {
+        padding: 20px 10px;
+    }
+    .table-card {
+        /* Permitir que la tabla se deslice lateralmente si es muy ancha */
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch; /* Suavidad en iOS */
+        border-radius: 12px;
+    }
+    table {
+        min-width: 600px; /* Evita que las columnas se colapsen demasiado */
+    }
+    th, td {
+        padding: 10px;
+        font-size: 0.75rem;
+    }
+    /* Botones de control inferiores */
+    .footer-controls {
+        flex-direction: column;
+        gap: 15px;
+    }
+    .right-group {
+        width: 100%;
+        justify-content: center;
+        gap: 10px;
+    }
+    .btn-back, .btn-delete-outline, .btn-add-large {
+        padding: 10px 20px;
+        font-size: 1rem;
+        width: 100%; /* Botones a ancho completo en móvil */
+        text-align: center;
+    }
+    .menu-container {
+        display: block; /* Asegura que el botón de menú se vea */
+    }
+    .nav {
+        display: none; /* Oculta los links directos */
+    }
+}
+
+@media (max-width: 480px) {
+    /* Ajustes extremos para pantallas muy pequeñas */
+    .logo a {
+        font-size: 0.9rem;
+    }
+    .header .container {
+        flex-direction: row; /* Mantener logo y menú en línea */
+        justify-content: space-between;
+    }
+    .btn-solid, .btn-outline {
+        padding: 0.4rem 0.6rem;
+        font-size: 0.8rem;
+    }
 }

@@ -190,13 +190,32 @@ function showVideoHelpMovment() {
         };
     h5pInstance = new H5PStandalone.H5P(el, options);
         el.style.display = "flex";
-    return;
+        document.body.style.overflow = "hidden"; // Evita scroll al abrir
+        
+        // Configuramos el listener de cierre SOLO una vez al crear la instancia
+        setupClickOutside();
+        return;  
     }
+    toggleDisplay(el);
+}
+
+function toggleDisplay(el) {
     if (window.getComputedStyle(el).display === "none") {
         el.style.setProperty("display", "flex", "important");
+        document.body.style.overflow = "hidden";
     } else {
         el.style.setProperty("display", "none", "important");
+        document.body.style.overflow = "auto";
     }
+}
+
+function setupClickOutside() {
+    const el = document.getElementById('h5p-container');
+    el.addEventListener('click', (e) => {
+        if (e.target === el) {
+            toggleDisplay(el);
+        }
+    });
 }
 
 /*

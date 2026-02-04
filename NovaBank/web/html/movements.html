@@ -12,10 +12,10 @@
         <link rel="stylesheet" href="/NovaBank/css/main.css">
         <link rel="alternate stylesheet" title="ModoOscuro" id="theme-link" href="/NovaBank/css/oscuro.css" disabled>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-   <script src="/NovaBank/assets/h5p-player/main.bundle.js"></script>
-   <script src="/NovaBank/js/model.js"></script>
-   <script type='module' src="/NovaBank/js/movementsController.js"></script>
-   <script src="/NovaBank/js/facilities.js"></script>
+    <script src="/NovaBank/assets/h5p-player/main.bundle.js"></script>
+    <script src="/NovaBank/js/model.js"></script>
+    <script type='module' src="/NovaBank/js/movementsController.js"></script>
+    <script src="/NovaBank/js/facilities.js"></script>
 </head>
 <body>
   <header role="banner" class="header">
@@ -34,9 +34,9 @@
                     </svg>
                 </button>
             <div class="menu-container">
-                <button class="menu-toggle" id="menuBtn" onclick="dropDownMenu();"><i class="fa-solid fa-bars" aria-label="Menú desplegable"></i></button>
-                    <ul class="dropdown-menu" id="dropdownMenu">
-                        <li><a aria-label="Cerrar sesión" id="botonCerrarSesion" onclick="salirSession();" accesskey="s">Cerrar session<span>S</span></a></li>
+                <button class="menu-toggle" id="menuBtn" onclick="dropDownMenu();" aria-haspopup="true" aria-expanded="false" aria-controls="dropdownMenu" aria-label="Abrir menú de usuario"><i class="fa-solid fa-bars" aria-hidden="true"></i></button>
+                    <ul class="dropdown-menu" id="dropdownMenu" role="menu">
+                        <li><a role="menuitem" aria-label="Cerrar sesión" id="botonCerrarSesion" onclick="salirSession();" accesskey="s" aria-label="Cerrar sesión, acceso rápido Alt más S">Cerrar session<span>S</span></a></li>
                     </ul> 
             </div>
          </div>
@@ -139,9 +139,11 @@
             </div>
         </div>
     </section>
-    
-    <button id="showVideoMov" class="btn-solid">Ayuda</button>
-    <div id="h5p-container" class="form-section-crud" style="display: none"></div>
+    <div class="videoContainer" role="contentinfo">
+        <p>Si necesitas ayuda con la interfaz, por favor mira el tutorial.</p>
+        <button id="showVideoMov" class="btn-solid" aria-label="Botón de ayuda para la interfaz gráfica">Ayuda</button>
+        <div id="h5p-container" class="form-section-crud" style="display: none" aria-label="Video interactivo" ></div>
+    </div> 
   </main>
   <footer role="contentinfo"class="footer">
     <div class="logo_footer">
