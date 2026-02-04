@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="es">
-    
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,22 +7,22 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="../css/style.css">
-  <link rel="stylesheet" href="../css/facilities.css">
-  <link rel="alternate stylesheet" title="ModoOscuro" id="theme-link" href="../css/oscuro.css" disabled>
+  <link rel="stylesheet" href="/NovaBank/css/style.css">
+  <link rel="stylesheet" href="/NovaBank/css/facilities.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="alternate stylesheet" title="ModoOscuro" id="theme-link" href="NovaBank/css/oscuro.css" disabled>
 </head>
-
 <body>
   <header class="header">
     <div class="container">
       <div class="logo">
         <a href="index.html" style="display:flex; flex-direction:row;">
-          <img src="../assets/img/logo.png" alt="Nova Bank">
+          <img src="/NovaBank/assets/img/logo.png" alt="Nova Bank">
           <h1>Nova Bank</h1>
         </a>
       </div>
       <nav class="nav">
-        <a href="index.html">Sobre nosotros</a>
+        <a href="/NovaBank/index.html">Sobre nosotros</a>
       </nav>
       <div class="buttons">
           <button id="themeToggle" class="btn-theme" onclick="changeTheme();" title="Cambiar tema">
@@ -38,8 +37,7 @@
         <div class="menu-container">
           <button class="menu-toggle" id="menuBtn" onclick="dropDownMenu();">&#9776;</button>
           <ul class="dropdown-menu" id="dropdownMenu">
-            <li><a href="index.html" accesskey="S">Inicio <span> Alt + S</span></a></li>
-            <li><a href="index.html" accesskey="H">Ayuda y soporte <span> Alt + H</span></a></li>
+            <li><a href="/NovaBank/index.html" accesskey="S">Inicio <span>S</span></a></li>
           </ul>
         </div>
       </div>
@@ -96,7 +94,7 @@
             <div class="item-center">
             <input type="password" id="pass" name="pass" placeholder="Contraseña"/>
             <button onclick="signUpShowHidePassword();" type="button" id="togglePassword" class="toggle-password" aria-label="Mostrar contraseña">
-              <img  id="eyeIcon" width="20" height="20" src='../assets/img/eye-svgrepo-com.svg'>
+              <img  id="eyeIcon" width="20" height="20" src='/NovaBank/assets/img/eye-svgrepo-com.svg'>
             </button>
           </div>
           <div id="responseMsgPass" style="font-size: 12px" hidden>
@@ -109,7 +107,7 @@
           <div class="item-center">
             <input type="password" id="duppedPass" name="passDupped" placeholder="Volver a introducir contraseña"/>
             <button onclick="signUpShowHideDuppedPassword();" type="button" id="toggleDuppedPassword" class="toggle-password" aria-label="Mostrar contraseña">
-              <img  id="eyeIcon-dupped" width="20" height="20" src='../assets/img/eye-svgrepo-com.svg'>
+              <img  id="eyeIcon-dupped" width="20" height="20" src='/NovaBank/assets/img/eye-svgrepo-com.svg'>
             </button>
           </div>
           <div id="responseMsgPassDupped" style="font-size: 12px" hidden>
@@ -129,13 +127,13 @@
     
   <footer class="footer">
         <div class="logo_footer">
-            <img src="../assets/img/logo.png" alt="Nova Bank">
+            <img src="/NovaBank/assets/img/logo.png" alt="Nova Bank">
             <p>Nova Bank</p>
         </div>
-    <p>© Copyright 2025 Nova Bank. All Rights Reserved.</p>
+    <p>© Copyright 2026 Nova Bank. All Rights Reserved.</p>
   </footer>
     
-  <script src="../js/facilities.js"></script>
-  <script src="../js/signUp.js"></script>
+  <script src="/NovaBank/js/facilities.js"></script>
+  <script src="/NovaBank/js/signUp.js"></script>
 </body>
 </html>

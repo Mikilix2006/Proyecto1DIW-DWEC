@@ -274,6 +274,27 @@ body {
   background: var(--btn-color-hover);
 }
 
+.card-content-movements h1 {
+  color: var(--btn-color-hover);
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
+  text-align: left;
+}
+.form-section-crud {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  padding-top: 6rem;
+  padding-bottom: 4rem;
+  position: fixed;
+  top: 0px;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(180deg, rgb(0,0,0), rgba(255, 255, 255, 0));
+  z-index: 999;
+}
 
 #register-text {
   margin-top: 1rem;
@@ -314,36 +335,80 @@ body {
   margin-bottom: 0.5rem;
 }
 /* responsive*/
+
 @media (max-width: 768px) {
-  .header .container {
-    flex-direction: column;
-    gap: 0.8rem;
-  }
-  .banner {
-    height: 300px;
-    text-align: center;
-  }
-  .banner-content {
-    padding: 1.5rem;
-  }
-  .banner h2 {
-    font-size: 2rem;
-  }
-  .nav a{
-    display:none;
-  }
-  .cards {
-    flex-direction: column;
-    align-items: center;
-  }
-  .card {
-    max-width: 90%;
-  }
-  /* formulario*/
-  .login-content h2 {
-    font-size: 2rem;
-  }
-  .login-form {
-    padding: 2rem 1.5rem;
-  }
+    /* Banner */
+    .banner {
+        height: auto;
+        padding: 4rem 1rem;
+    }
+    .banner h2 {
+        font-size: 2.2rem;
+        line-height: 2.5rem;
+    }
+    /* Nosotros / About */
+    .about {
+        padding: 2rem 1rem;
+    }
+    /* Formularios */
+    .form-content h2 {
+        font-size: 1.8rem;
+    }
+    .formulario {
+        padding: 1.5rem 1rem;
+    }
+    /* --- TABLAS (Solución de Desbordamiento) --- */
+    .tableContainerBody {
+        padding: 20px 10px;
+    }
+    .table-card {
+        /* Permitir que la tabla se deslice lateralmente si es muy ancha */
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch; /* Suavidad en iOS */
+        border-radius: 12px;
+    }
+    table {
+        min-width: 600px; /* Evita que las columnas se colapsen demasiado */
+    }
+    th, td {
+        padding: 10px;
+        font-size: 0.75rem;
+    }
+    /* Botones de control inferiores */
+    .footer-controls {
+        flex-direction: column;
+        gap: 15px;
+    }
+    .right-group {
+        width: 100%;
+        justify-content: center;
+        gap: 10px;
+    }
+    .btn-back, .btn-delete-outline, .btn-add-large {
+        padding: 10px 20px;
+        font-size: 1rem;
+        width: 100%; /* Botones a ancho completo en móvil */
+        text-align: center;
+    }
+    .menu-container {
+        display: block; /* Asegura que el botón de menú se vea */
+    }
+    .nav {
+        display: none; /* Oculta los links directos */
+    }
+}
+
+@media (max-width: 480px) {
+    /* Ajustes extremos para pantallas muy pequeñas */
+    .logo a {
+        font-size: 0.9rem;
+    }
+    .header .container {
+        flex-direction: row; /* Mantener logo y menú en línea */
+        justify-content: space-between;
+    }
+    .btn-solid, .btn-outline {
+        padding: 0.4rem 0.6rem;
+        font-size: 0.8rem;
+    }
 }
