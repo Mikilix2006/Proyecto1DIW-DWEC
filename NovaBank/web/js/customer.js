@@ -160,8 +160,10 @@ function* userRowGenerator(users) {
         tdActions.classList.add("actions");
 
         const btnEdit = document.createElement("button");
+        btnEdit.type = "button";
         btnEdit.classList.add("btn-edit");
-        btnEdit.innerHTML = `<i class="fa-solid fa-pen-to-square"></i>`;
+        btnEdit.setAttribute("aria-label", "Editar usuario"); 
+        btnEdit.innerHTML = `<i class="fa-solid fa-pen-to-square" aria-hidden="true"></i>`;
         btnEdit.addEventListener("click", e => {
             e.stopPropagation();
             selectedUser = user;
@@ -169,8 +171,10 @@ function* userRowGenerator(users) {
         });
 
         const btnDelete = document.createElement("button");
+        btnDelete.type = "button";
         btnDelete.classList.add("btn-delete");
-        btnDelete.innerHTML = `<i class="fa-solid fa-trash-can"></i>`;
+        btnDelete.setAttribute("aria-label", "Eliminar usuario");
+        btnDelete.innerHTML = `<i class="fa-solid fa-trash-can" aria-hidden="true"></i>`;
         btnDelete.addEventListener("click", e => {
             e.stopPropagation();
             selectedUser = user;
@@ -182,9 +186,14 @@ function* userRowGenerator(users) {
         tr.appendChild(tdActions);
 
         // Selección de fila
+        tr.tabIndex = 0
         tr.addEventListener("click", () => {
-            document.querySelectorAll("#usersTabletbody tr").forEach(r => r.classList.remove("selected"));
+            document.querySelectorAll("#usersTabletbody tr").forEach(r => {
+                r.classList.remove("selected")
+                r.setAttribute("aria-selected", "false");
+            });
             tr.classList.add("selected");
+            tr.setAttribute("aria-selected", "true");
             selectedUser = user;
         });
 
@@ -199,11 +208,13 @@ const btnConfirmar = document.getElementById("btnConfirmarBorrar");
 
  //Esta es la función que llamas cuando tocas el icono de basura en la tabla
 async function deleteSelectedUser() {
-    if (!selectedUser) {
-        alert("Selecciona un usuario de la tabla");
-        return;
+    const email = selectedUser.email.toLowerCase();
+
+    if (email.endsWith("@admin.com") || email.endsWith("@admim.com")) {
+        alert("Acceso denegado: Los usuarios administradores no pueden ser eliminados del sistema.");
+        selectedUser = null; 
+        return; 
     }
-    // Mostramos el modal personalizado
     modalEliminar.style.display = 'flex';
 }
 
@@ -220,11 +231,10 @@ btnConfirmar.onclick = async () => {
         alert("Error al eliminar el usuario");
         return;
     }
-
-    modalEliminar.style.display = 'none'; // Cerramos el modal
+    modalEliminar.style.display = 'none'; 
     selectedUser = null;
-    buildUsersTable(); // Refrescamos la tabla
-    alert("Usuario eliminado correctamente");
+    buildUsersTable(); 
+    
 };
 
 // === GENERAR CONTRASEÑA ===
@@ -254,7 +264,6 @@ formCrearUsuario.onsubmit = async e => {
     if (!validateCreateUserForm()) return;
 
     const d = new FormData(formCrearUsuario);
-
     const customer = new Customer(
         null,
         d.get("firstName"),
@@ -278,9 +287,11 @@ formCrearUsuario.onsubmit = async e => {
 
         if (!response.ok) throw new Error("Error al crear usuario");
 
-        modalCrear.classList.add("hidden");
+        modalCrear.style.display = 'none'; 
         formCrearUsuario.reset();
-        buildUsersTable();
+        document.querySelectorAll(".response-msg").forEach(msg => msg.style.display = 'none');
+        await buildUsersTable();
+
     } catch (err) {
         console.error(err);
         alert("No se pudo crear el usuario");
@@ -631,11 +642,28 @@ function showVideoHelpCustomer() {
         };
     h5pInstance = new H5PStandalone.H5P(el, options);
         el.style.display = "flex";
+        document.body.style.overflow = "hidden"; 
+    setupClickOutside();    
     return;
     }
+    toggleDisplay(el);
+}
+
+function toggleDisplay(el) {
     if (window.getComputedStyle(el).display === "none") {
         el.style.setProperty("display", "flex", "important");
+        document.body.style.overflow = "hidden";
     } else {
         el.style.setProperty("display", "none", "important");
+        document.body.style.overflow = "auto";
     }
+}
+
+function setupClickOutside() {
+    const el = document.getElementById('h5p-container');
+    el.addEventListener('click', (e) => {
+        if (e.target === el) {
+            toggleDisplay(el);
+        }
+    });
 }
