@@ -16,34 +16,35 @@
 </head>
 <body>
   <header class="header" role="banner">
-    <div class="container">
-      <div class="logo">
-        <a href="main.html" aria-label="Ir al inicio de Nova Bank">
-            <img src="../assets/img/logo.png" alt="Nova Bank">
-        </a>
-        <a href="main.html" aria-label="Ir al inicio de Nova Bank">
-            <h1>Nova Bank</h1>
-        </a>
-      </div>
-      <div class="buttons">
-        <button id="themeToggle" class="btn-theme" onclick="changeTheme();" title="Cambiar tema" aria-label="Cambiar entre modo claro y oscuro" role="button">
-          <svg id="icon-sun" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m8.485-8.485h1M4.515 12.515h1M17.657 6.343l.707-.707M6.343 17.657l.707-.707M17.657 17.657l.707.707M6.343 6.343l.707.707M12 8a4 4 0 100 8 4 4 0 000-8z"/>
-          </svg>
-          <svg id="icon-moon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
-            <path d="M21 12.79A9 9 0 1111.21 3a7 7 0 109.79 9.79z"/>
-          </svg>
-        </button>
-        <nav class="menu-container" role="navigation" aria-label="Menú de usuario">
-          <button class="menu-toggle" id="menuBtn" onclick="dropDownMenu();" aria-haspopup="true" aria-expanded="false" aria-controls="Dropdown menu" role="button">&#9776;</button>
-          <ul class="dropdown-menu" id="dropdownMenu" role="menu">
-                <li role="menuitem"><a href="changePassword.html" accesskey="c">Cambiar Contraseña <span> Alt + C</span></a></li>
-                <li role="menuitem"><a href="main.html" accesskey="H">Ayuda y soporte <span> Alt + H</span></a></li>
-                <li role="menuitem"><a id="botonCerrarSesion" onclick="salirSession();" accesskey="S">Cerrar session <span> Alt + S</span></a></li>
-          </ul>
-        </nav>
-      </div>
-    </div>
+    <nav role="navigation">
+        <div class="container">
+          <div class="logo">
+            <a href="main.html" aria-label="Ir al inicio de Nova Bank">
+                <img src="../assets/img/logo.png" alt="Nova Bank">
+            </a>
+            <a href="main.html" aria-label="Ir al inicio de Nova Bank">
+                <h1>Nova Bank</h1>
+            </a>
+          </div>
+          <div class="buttons">
+            <button id="themeToggle" class="btn-theme" onclick="changeTheme();" title="Cambiar tema" aria-label="Cambiar entre modo claro y oscuro" role="button">
+              <svg id="icon-sun" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m8.485-8.485h1M4.515 12.515h1M17.657 6.343l.707-.707M6.343 17.657l.707-.707M17.657 17.657l.707.707M6.343 6.343l.707.707M12 8a4 4 0 100 8 4 4 0 000-8z"/>
+              </svg>
+              <svg id="icon-moon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M21 12.79A9 9 0 1111.21 3a7 7 0 109.79 9.79z"/>
+              </svg>
+            </button>
+            <div class="menu-container" aria-label="Menú de usuario">
+              <button class="menu-toggle" id="menuBtn" onclick="dropDownMenu();" aria-haspopup="true" aria-expanded="false" aria-controls="Dropdown menu" role="button">&#9776;</button>
+              <ul class="dropdown-menu" id="dropdownMenu" role="menu">
+                    <li role="menuitem"><a href="changePassword.html" accesskey="c">Cambiar Contraseña <span> Alt + C</span></a></li>
+                    <li role="menuitem"><a href="NovaBank/index.html" id="botonCerrarSesion" onclick="salirSession();" accesskey="S">Cerrar session <span> Alt + S</span></a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+    </nav>
   </header>
 
   <main class="main-container" role="main">

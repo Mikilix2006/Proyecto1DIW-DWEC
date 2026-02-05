@@ -427,6 +427,7 @@ function* accountRowGenerator(accounts) {
                 td.style.color = "#5620ad"; // link color
                 td.setAttribute("data-acc-id", accID); // id attribute
                 td.addEventListener("click", storeAccountData); // listener
+                td.innerHTML = `<a href="">${accID}</a>`;
             }
             tr.appendChild(td);
         });
@@ -453,10 +454,12 @@ function* accountRowGenerator(accounts) {
         // Button aspect attributes
         buttonEdit.setAttribute("class", "btn-edit");
         buttonDelete.setAttribute("class", "btn-delete");
-        
         // Button alt attributes
         buttonEdit.setAttribute("alt", "edit button");
         buttonDelete.setAttribute("alt", "delete button");
+        // Button aria attributes
+        buttonEdit.setAttribute("aria-label", "Boton para editar cuenta");
+        buttonDelete.setAttribute("aria-label", "Boton para eliminar cuenta");
         // Button id classes
         buttonEdit.setAttribute("data-acc-id", accID);
         buttonDelete.setAttribute("data-acc-id", accID);
