@@ -692,13 +692,13 @@ section h1, article h1, nav h1, aside h1 {
 #h5p-container > div {
     max-width: 1000px;
     width: 100%;
-    pointer-events: auto; /* El video sí recibe clics */
+    pointer-events: auto; 
 }
 /* responsive*/
 
 @media (max-width: 1024px) {
     .footer-controls {
-        flex-direction: column; /* Se apilan verticalmente en pantallas chicas */
+        flex-direction: column; 
         text-align: center;
     }
     
@@ -708,7 +708,7 @@ section h1, article h1, nav h1, aside h1 {
     }
     
     .btn-back, .btn-delete-outline, .btn-add-large {
-        width: 100%; /* Botones fáciles de presionar */
+        width: 100%; 
     }
 }
 
