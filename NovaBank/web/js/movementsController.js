@@ -6,8 +6,6 @@
 import { Movements } from './model.js';
 const SERVICE_URL_MOV= "/CRUDBankServerSide/webresources/movement/";
 const SERVICE_URL_ACC = "/CRUDBankServerSide/webresources/account/";
-sessionStorage.setItem("account", '{"balance":400.0,"beginBalance":100.0,"beginBalanceTimestamp":"2019-01-14T19:28:28+01:00","creditLine":1000.0,"customers":[{"city":"Philadelphia","email":"awallace@gmail.com","firstName":"Ann","id":299985563,"lastName":"Wallace","middleInitial":"M.","password":"qwerty*9876","phone":16665984477,"state":"Pennsylvania","street":"Main St.","zip":10056}],"description":"Check Account with Credit Line","id":3252214522,"movements":[{"amount":100.0,"balance":300.0,"description":"Deposit","id":53,"timestamp":"2026-01-16T09:23:28+01:00"},{"amount":100.0,"balance":100.0,"description":"Deposit","id":6,"timestamp":"2019-02-02T16:56:44+01:00"},{"amount":100.0,"balance":200.0,"description":"Deposit","id":7,"timestamp":"2019-02-02T16:57:40+01:00"},{"amount":100.0,"balance":400.0,"description":"Deposit","id":75,"timestamp":"2026-01-20T12:50:38+01:00"}],"type":"CREDIT"}');
-//const currentAccount = '{"balance":300.0,"beginBalance":100.0,"beginBalanceTimestamp":"2019-01-14T19:28:28+01:00","creditLine":1000.0,"customers":[{"city":"Philadelphia","email":"awallace@gmail.com","firstName":"Ann","id":299985563,"lastName":"Wallace","middleInitial":"M.","password":"qwerty*9876","phone":16665984477,"state":"Pennsylvania","street":"Main St.","zip":10056}],"description":"Check Account with Credit Line","id":3252214522,"movements":[{"amount":100.0,"balance":300.0,"description":"Deposit","id":53,"timestamp":"2026-01-16T09:23:28+01:00"},{"amount":100.0,"balance":100.0,"description":"Deposit","id":6,"timestamp":"2019-02-02T16:56:44+01:00"},{"amount":100.0,"balance":200.0,"description":"Deposit","id":7,"timestamp":"2019-02-02T16:57:40+01:00"}],"type":"CREDIT"}';
 let movements = [];
 const addMovementBtnController = document.getElementById("confirmAddMov");
 const deleteMovementController = document.getElementById("confirmDeleteMov");
@@ -15,14 +13,16 @@ const goBackBtnController = document.getElementById("goBackAccount");
 const deleteMovementBtn = document.getElementById("deleteLastMovement");
 const cancelDeleteBtn = document.getElementById("cancelDeleteMovement");
 const addNewMovement = document.getElementById("addMovement");
-
+const showGeneralBalance = document.getElementById("btnShowSummary");
+const summaryDiv = document.getElementById("summaryDisplay");
+let h5pInstance = null;
 /*
    =================================================
          LISTENERS FOR HANDLING EVENTS ON HTML
    =================================================
  */
 //This listener load the R procedure of the app. Show all the movements of the current acount
-window.addEventListener('load', buildMovementsTable);
+window.addEventListener('DOMContentLoaded', buildMovementsTable);
 //Show CREATE and DELETE window
 addMovementBtnController.addEventListener('click', handlerFormCreateMovement);
 deleteMovementController.addEventListener('click', handlerFormDeleteMovement);
@@ -30,8 +30,15 @@ deleteMovementController.addEventListener('click', handlerFormDeleteMovement);
 addNewMovement.addEventListener('click', createNewMovement);
 deleteMovementBtn.addEventListener('click', deleteLastMovement);
 cancelDeleteBtn.addEventListener('click', cerrarDeleteForm);
-//SACAR EL ID DE LA CUENTA 
-//VALIDAR SI TIENE CRÉDITO, SI SE SACA DEL CRÉDITO
+showGeneralBalance.addEventListener('click', toggleSummary);
+goBackBtnController.addEventListener('click',goBackAccounts);
+//Interactive video
+document.addEventListener('DOMContentLoaded', () => {
+    const btn = document.getElementById('showVideoMov');
+    if (btn) {
+        btn.addEventListener('click', showVideoHelpMovment);
+    }
+});
 /*
    =================================================
        EVENT HANDLERS CALLED FROM THE LISTENERS
@@ -39,6 +46,7 @@ cancelDeleteBtn.addEventListener('click', cerrarDeleteForm);
  */
 /*BUILD MOVEMENT CONTENT TABLE - LOAD PAGE*/
 async function buildMovementsTable() {
+    accountHeader();
     movements = await fetchMovements();
     const tbody = document.querySelector("#contentMovements");
     if (!tbody) return; //mostrar mensaje
@@ -51,6 +59,23 @@ async function buildMovementsTable() {
 /*SHOW THE CREATE NEW MOVEMENT FORM LAYER - CLICK ADD MOV  */
 function handlerFormCreateMovement() {
     const formContainer = document.getElementById("newMovementForm");
+    const creditDisplay = document.getElementById("creditInfoDisplay");
+    const accountData = JSON.parse(sessionStorage.getItem("account")) || JSON.parse(currentAccount);
+    const { balance, type, creditLine } = accountData;
+
+    creditDisplay.innerHTML = "";
+    if (type === "CREDIT") {
+        const totalDisponible = balance + creditLine;
+        
+        creditDisplay.innerHTML = `
+                <p ><strong>Saldo:</strong> ${currencyFormatter.format(balance)}</p>
+                <p ><strong>Línea de Crédito:</strong> ${currencyFormatter.format(creditLine)}</p>
+                <p ><strong>Disponible total:</strong> ${currencyFormatter.format(totalDisponible)}</p>
+        `;
+    } else {
+        // Si es una cuenta de débito, solo mostrar saldo
+        creditDisplay.innerHTML = `<p><strong>Saldo actual:</strong> ${currencyFormatter.format(balance)}</p>`;
+    }
     formContainer.style.display = 'flex';
     formContainer.addEventListener('click', (e) => {
         if (e.target.id === "newMovementForm") {
@@ -58,78 +83,31 @@ function handlerFormCreateMovement() {
         }
     });
 }
-/*
- * VALIDAR SI LOS CAMPOS SON NÚMEROS
- * NO PUEDES METER MÁS DE DOS DECIMALES
- * NO PUEDES COLOCAR NEGATIVOS
- * TIENE QUE ELEGIR UNA OPCIÓN DEL SELECT
- * NO PUEDES RETIRAR DINERO SI NO TIENES LA CANTIDAD SUFICIENTE EN BALANCE 
- * SI TIENES LÍNEA DE CRÉDITO, DEBES DE 
- *
- **/
 /*CONFIRM CREATE NEW MOVEMENT*/
-/*
 async function createNewMovement(e) {
     e.preventDefault();
-
-    const inputAmount = document.getElementById("newAmount");
-    const inputType = document.getElementById("newTypeAmount");
-    const amount = parseFloat(inputAmount.value);
-    const description = inputType.value;
-
-    if (isNaN(amount) || amount <= 0) {
-        alert("Por favor, ingrese un monto válido mayor a 0.");
-        return;
-    }
-    if (!description) {
-        alert("Por favor, seleccione un tipo de movimiento.");
-        return;
-    }
-    await fetchCreateNewMovement(amount, description);
-}
-*/
-///////////
-async function createNewMovement(e) {
-    e.preventDefault();
-
     try {
-        // 1. Obtención de datos de los inputs
         const inputAmount = document.getElementById("newAmount");
         const inputType = document.getElementById("newTypeAmount");
         const amountStr = inputAmount.value.trim();
         const amount = parseFloat(amountStr);
-        const description = inputType.value; // "Deposit" o "Payment"
+        const description = inputType.value;
 
-        // 2. Obtención de datos de la cuenta (Estado actual)
         const accountData = JSON.parse(sessionStorage.getItem("account")) || JSON.parse(currentAccount);
         const { balance, type, creditLine } = accountData;
-
-        // --- VALIDACIONES INICIALES ---
-
-        // Validar que sea un número y no esté vacío
+        //VALIDACIONES INICIALES
         if (amountStr === "" || isNaN(amount)) throw new Error("Por favor, ingrese un monto numérico.");
-
-        // Validar negativos o cero
         if (amount <= 0) throw new Error("El monto debe ser mayor a cero.");
-
-        // Validar máximo dos decimales
         if (amountStr.includes(".") && amountStr.split(".")[1].length > 2) {
             throw new Error("No se permiten más de dos decimales.");
         }
-
-        // Validar selección del select
         if (!description) throw new Error("Debe seleccionar un tipo de movimiento.");
-
-        // --- LÓGICA DE BALANCE Y CRÉDITO (Solo para Payment) ---
 
         if (description === "Payment") {
             let totalDisponible = balance;
-
-            // Si la cuenta es de tipo CREDIT, sumamos la línea de crédito al disponible
             if (type === "CREDIT") {
                 totalDisponible += creditLine;
             }
-
             if (amount > totalDisponible) {
                 let mensajeError = `Fondos insuficientes. Su saldo actual es ${currencyFormatter.format(balance)}.`;
                 if (type === "CREDIT") {
@@ -138,66 +116,22 @@ async function createNewMovement(e) {
                 throw new Error(mensajeError);
             }
         }
-
-        // 3. PROCESO DE ENVÍO
-        // Si llegamos aquí, todas las validaciones pasaron
         await fetchCreateNewMovement(amount, description);
-        
-        // Limpieza y cierre
         cerrarFormulario(); 
 
     } catch (error) {
-        // El bloque catch captura cualquier Error lanzado arriba
-        alert(error.message);
-        console.error("Error en el proceso:", error);
+        const msgBox = document.getElementById("responseMsg");
+        msgBox.className = 'error';
+        msgBox.textContent = error.message;
+        msgBox.style.display = 'block';
     }
 }
-///////
 /*SHOW THE DELETE LAST MOVEMENT LAYER - CLICK BIN TRASH  */
 function handlerFormDeleteMovement(){
     const deleteFormContainer = document.getElementById("confirmDelete");
     deleteFormContainer.style.display = 'flex';
 }
 /*CONFIRM DELETE LAST MOVEMENT*/
-function confirmDeleteLastMov(){}
-
-/*GO BACK ACCOUNT TABLE, CLEANING SESSION STORAGE - CLICK*/
-
-/*
-   =================================================
-                   OTHER FUNCTIONS
-   =================================================
- */
-/*FETCH CREATE RESOURCE*/
-async function fetchCreateNewMovement(amount, description) {
-    try {
-        const accountData = JSON.parse(sessionStorage.getItem("account"));
-        //const accountData = JSON.parse(sessionStorage.getItem("account"));
-        if (!accountData) throw new Error("No se encontró información de la cuenta.");
-        const idAccount = accountData.id;
-        let newBalance;
-        if(description === "Deposit"){
-            newBalance = accountData.balance + amount;
-        }else{
-            newBalance = accountData.balance - amount;
-        }
-        const movObj = new Movements(amount, newBalance, description);
-        const resMov = await fetch(`${SERVICE_URL_MOV}${encodeURIComponent(idAccount)}`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json", "Accept": "application/json" },
-            body: JSON.stringify(movObj)
-        });
-        if (!resMov.ok) throw new Error("Error al crear movimiento");
-        accountData.balance = newBalance;
-        await updateAccountBalance(accountData);
-        await buildMovementsTable();
-        alert("Movimiento creado y saldo actualizado.");//Cambiar
-        cerrarFormulario();
-
-    } catch (error) {
-        console.error("Error:", error);
-    }
-}
 /*FETCH DELETE MOVEMENT*/
 async function deleteLastMovement() {
     if (movements.length === 0) return; //mostrar mensaje
@@ -227,6 +161,104 @@ async function deleteLastMovement() {
         console.error("Error al eliminar:", error);
     }
 }
+
+/*GO BACK ACCOUNT TABLE, CLEANING SESSION STORAGE - CLICK*/
+function goBackAccounts(){
+    sessionStorage.removeItem("account");
+    window.location.href = "/NovaBank/html/main.html"; 
+}
+
+/*SHOW TOTAL BALANCE*/
+function toggleSummary() {
+    if (summaryDiv.style.display === "none") {
+        calculateTotals();
+        summaryDiv.style.display = "flex";
+    } else {
+        summaryDiv.style.display = "none";
+    }
+}
+
+/*HELP INTERACTIVE VIDEO*/
+function showVideoHelpMovment() {
+    const el = document.getElementById('h5p-container');
+    if (!h5pInstance) {
+    const options = {
+        h5pJsonPath: '/NovaBank/assets/help_mov', 
+        frameJs: '/NovaBank/assets/h5p-player/frame.bundle.js',
+        frameCss: '/NovaBank/assets/h5p-player/styles/h5p.css',
+        librariesPath: '/NovaBank/assets/h5p-libraries' 
+        };
+    h5pInstance = new H5PStandalone.H5P(el, options);
+        el.style.display = "flex";
+        document.body.style.overflow = "hidden"; // Evita scroll al abrir
+        
+        // Configuramos el listener de cierre SOLO una vez al crear la instancia
+        setupClickOutside();
+        return;  
+    }
+    toggleDisplay(el);
+}
+
+function toggleDisplay(el) {
+    if (window.getComputedStyle(el).display === "none") {
+        el.style.setProperty("display", "flex", "important");
+        document.body.style.overflow = "hidden";
+    } else {
+        el.style.setProperty("display", "none", "important");
+        document.body.style.overflow = "auto";
+    }
+}
+
+function setupClickOutside() {
+    const el = document.getElementById('h5p-container');
+    el.addEventListener('click', (e) => {
+        if (e.target === el) {
+            toggleDisplay(el);
+        }
+    });
+}
+
+/*
+   =================================================
+                   OTHER FUNCTIONS
+   =================================================
+ */
+const currencyFormatter = new Intl.NumberFormat(undefined, {
+        style: 'currency', currency: 'EUR', minimumFractionDigits: 2
+    });
+const dateFormatter = new Intl.DateTimeFormat(undefined, {
+        year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit'
+});
+/*FETCH CREATE RESOURCE*/
+async function fetchCreateNewMovement(amount, description) {
+    try {
+        const accountData = JSON.parse(sessionStorage.getItem("account"));
+        //const accountData = JSON.parse(sessionStorage.getItem("account"));
+        if (!accountData) throw new Error("No se encontró información de la cuenta.");
+        const idAccount = accountData.id;
+        let newBalance;
+        if(description === "Deposit"){
+            newBalance = accountData.balance + amount;
+        }else{
+            newBalance = accountData.balance - amount;
+        }
+        const movObj = new Movements(amount, newBalance, description);
+        const resMov = await fetch(`${SERVICE_URL_MOV}${encodeURIComponent(idAccount)}`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json", "Accept": "application/json" },
+            body: JSON.stringify(movObj)
+        });
+        if (!resMov.ok) throw new Error("Error al crear movimiento");
+        accountData.balance = newBalance;
+        await updateAccountBalance(accountData);
+        await buildMovementsTable();
+        cerrarFormulario();
+
+    } catch (error) {
+        console.error("Error:", error);
+    }
+}
+
 /*FETCH UPDATE ACCOUNT RESOURCE*/
 async function updateAccountBalance(accountObj) {
     const response = await fetch(`${SERVICE_URL_ACC}`, {
@@ -259,20 +291,7 @@ async function fetchMovements() {
 }
 
 function* movementRowGenerator(movementsList) {
-    const currencyFormatter = new Intl.NumberFormat(undefined, {
-        style: 'currency',
-        currency: 'EUR',
-        minimumFractionDigits: 2
-    });
-    const dateFormatter = new Intl.DateTimeFormat(undefined, {
-        year: 'numeric',
-        month: '2-digit',
-        day: '2-digit',
-        hour: '2-digit',
-        minute: '2-digit',
-        second: '2-digit'
-    });
-
+    
     for (const movement of movementsList) {
         const tr = document.createElement("tr");
         ["timestamp", "description", "amount", "balance"].forEach(field => {
@@ -304,4 +323,33 @@ function cerrarFormulario() {
 
 function cerrarDeleteForm() {
     document.getElementById("confirmDelete").style.display = 'none';
+}
+/*INFORMACIÓN ADICIONAL DE LA CUENTA*/
+function accountHeader() {
+    const accountData = JSON.parse(sessionStorage.getItem("account"));
+    if (!accountData) return;
+    const spanId = document.getElementById("display-id");
+    const spanType = document.getElementById("display-type");
+    const containerCredit = document.getElementById("display-credit-container");
+    const spanCredit = document.getElementById("display-credit");
+
+    spanId.textContent = accountData.id;
+    spanType.textContent = accountData.type;
+    if (accountData.type === "CREDIT") {
+        containerCredit.style.display = "block";
+        spanCredit.textContent = currencyFormatter.format(accountData.creditLine);
+    } else {
+        containerCredit.style.display = "none";
+    }
+}
+/*CALCULAR BALANCE GENERAL - FUNC AGREGADAS*/
+function calculateTotals() {
+    const totalDeposits = movements
+        .filter(m => m.description === "Deposit")
+        .reduce((sum, m) => sum + Math.abs(m.amount), 0);
+    const totalPayments = movements
+        .filter(m => m.description === "Payment")
+        .reduce((sum, m) => sum + Math.abs(m.amount), 0);
+    document.getElementById("totalDeposits").textContent = currencyFormatter.format(totalDeposits);
+    document.getElementById("totalPayments").textContent = currencyFormatter.format(totalPayments);
 }

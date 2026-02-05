@@ -25,14 +25,31 @@ function changeTheme(){
 }
   
 //BURGER MENU DROP DOWN
-function dropDownMenu(){
-    const menuBtn = document.getElementById('menuBtn');
-    const dropdown = document.getElementById('dropdownMenu');  
-    dropdown.classList.toggle('show');
-    if (!menuBtn.contains(e.target) && !dropdown.contains(e.target)) {
-      dropdown.classList.remove('show');
-    } 
+function dropDownMenu() {
+    const menu = document.getElementById("dropdownMenu");
+    const btn = document.getElementById("menuBtn");
+    const isVisible = menu.style.display === "block";
+
+    if (isVisible) {
+        menu.style.display = "none";
+        btn.setAttribute("aria-expanded", "false");
+    } else {
+        menu.style.display = "block";
+        btn.setAttribute("aria-expanded", "true");
+        // Opcional: Poner el foco en el primer elemento del menú
+        document.getElementById("botonCerrarSesion").focus();
+    }
 }
+
+document.addEventListener('keydown', (e) => {
+    if (e.key === "Escape") {
+        const menu = document.getElementById("dropdownMenu");
+        const btn = document.getElementById("menuBtn");
+        menu.style.display = "none";
+        btn.setAttribute("aria-expanded", "false");
+        btn.focus(); // Devolvemos el foco al botón
+    }
+});
 //SHOW AND HIDE THE PASSWORD INPUT VALUE - USING SVG AS ICONS
 function showHidePassword(){
     //CAPTURE THE BUTTON AND PASSWORD FIELD
@@ -145,5 +162,5 @@ function showHiVerifyPassword(){
 //CERRR SESSION
 function salirSession(){
     sessionStorage.clear();
-    window.location = "../index.html";
+    window.location = "/NovaBank/index.html";
 }
