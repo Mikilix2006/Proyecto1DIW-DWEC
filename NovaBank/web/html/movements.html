@@ -36,7 +36,7 @@
             <div class="menu-container">
                 <button class="menu-toggle" id="menuBtn" onclick="dropDownMenu();" aria-haspopup="true" aria-expanded="false" aria-controls="dropdownMenu" aria-label="Abrir menú de usuario"><i class="fa-solid fa-bars" aria-hidden="true"></i></button>
                     <ul class="dropdown-menu" id="dropdownMenu" role="menu">
-                        <li><a role="menuitem" aria-label="Cerrar sesión" id="botonCerrarSesion" onclick="salirSession();" accesskey="s" aria-label="Cerrar sesión, acceso rápido Alt más S">Cerrar session<span>S</span></a></li>
+                        <li><a href="/NovaBank/index.html" role="menuitem" aria-label="Cerrar sesión" id="botonCerrarSesion" onclick="salirSession();" accesskey="s" aria-label="Cerrar sesión, acceso rápido Alt más S">Cerrar session<span>S</span></a></li>
                     </ul> 
             </div>
          </div>
@@ -108,10 +108,10 @@
             </div>
             <div id="creditInfoDisplay" aria-label="Información de la cuenta"></div>
             <div class="form-group-crud">
-                <select id="newTypeAmount" name="tipo_de_movimiento" aria-label="Tipo de movimiento">
+                <select tabindex="0" id="newTypeAmount" name="tipo_de_movimiento" aria-label="Tipo de movimiento">
                     <option value="" disabled selected>Tipo de movimiento</option>
-                    <option value="Deposit" aria-label="Opción depósito">Depósito</option>
-                    <option value="Payment" aria-label="Opción pago">Pago</option>
+                    <option tabindex="0" value="Deposit" aria-label="Opción depósito">Depósito</option>
+                    <option tabindex="0" value="Payment" aria-label="Opción pago">Pago</option>
                 </select>
             </div>
             <div class="form-group-crud" aria-label="Ingresa una cantidad">
