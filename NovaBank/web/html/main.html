@@ -39,7 +39,7 @@
               <button class="menu-toggle" id="menuBtn" onclick="dropDownMenu();" aria-haspopup="true" aria-expanded="false" aria-controls="Dropdown menu" role="button">&#9776;</button>
               <ul class="dropdown-menu" id="dropdownMenu" role="menu">
                     <li role="menuitem"><a href="changePassword.html" accesskey="c">Cambiar Contraseña <span> Alt + C</span></a></li>
-                    <li role="menuitem"><a href="NovaBank/index.html" id="botonCerrarSesion" onclick="salirSession();" accesskey="S">Cerrar session <span> Alt + S</span></a></li>
+                    <li role="menuitem"><a id="botonCerrarSesion" onclick="salirSession();" accesskey="S">Cerrar session <span> Alt + S</span></a></li>
               </ul>
             </div>
           </div>
@@ -128,8 +128,10 @@
                 <input type="number" id="newCreditLine" placeholder="Línea de crédito" disabled/>
                 <div id="responseMsgNewCreditLine"></div>
             </div>
-            <button id="confirmNewAccountButton" class="btn-form-crud" aria-label="Boton confirmar crear cuenta" role="button">Crear Cuenta</button>
-            <button id="cancellNewAccountButton" class="btn-form-crud" aria-label="Boton cancelar crear cuenta" role="button">Cancelar</button>
+            <div class="modal-actions-inline">
+                <button id="cancellNewAccountButton" class="btn-cancelar-modal" aria-label="Boton cancelar crear cuenta" role="button">Cancelar</button>
+                <button id="confirmNewAccountButton" class="btn-form-crud" aria-label="Boton confirmar crear cuenta" role="button">Crear Cuenta</button>
+            </div>
         </div>
     </section>
     
@@ -148,8 +150,10 @@
                 <textarea class="descripcion" id="tfUpdateDescription" placeholder="Descripción"></textarea>
                 <div id="responseMsgUpdateDescription"></div>
             </div>
-            <button id="confirmUpdateAccountButton" class="btn-form-crud" role="button">Confirmar cambios</button>
-            <button id="cancellUpdateAccountButton" class="btn-form-crud" role="button">Cancelar</button>
+            <div class="modal-actions-inline">
+                <button id="cancellUpdateAccountButton" class="btn-cancelar-modal" role="button">Cancelar</button>
+                <button id="confirmUpdateAccountButton" class="btn-form-crud" role="button">Confirmar cambios</button>
+            </div>
         </div>
     </section>
     
@@ -164,8 +168,10 @@
                 <p>¿Estás seguro de que deseas eliminar esta cuenta? una vez eliminada
                     no podrás recuperar ningún información.
                 </p>
-                <button id="confirmDeleteAccountButton" class="btn-form-crud" aria-label="Boton confirmar eliminación de cuenta" role="button">Eliminar Cuenta</button>
-                <button id="cancellDeleteAccountButton" class="btn-form-crud" aria-label="Boton cancelar eliminación de cuenta" role="button">Cancelar</button>
+                <div class="modal-actions-inline">
+                    <button id="cancellDeleteAccountButton" class="btn-cancelar-modal" aria-label="Boton cancelar eliminación de cuenta" role="button">Cancelar</button>
+                    <button id="confirmDeleteAccountButton" class="btn-form-crud" aria-label="Boton confirmar eliminación de cuenta" role="button">Eliminar Cuenta</button>
+                </div>
                 <div class="error-msg" id="responseMsgDeleteDescription"></div>
             </div>
         </div>
@@ -198,6 +204,6 @@
         }
     }
   </script>
-  <script src="../js/facilities.js"></script>+
+  <script src="../js/facilities.js"></script>
 </body>
 </html>
