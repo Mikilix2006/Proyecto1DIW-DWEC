@@ -4,6 +4,13 @@
   padding: 2rem 10%;
   background-color: var(--color-fondo);
   width: 100%;
+  flex: 1;
+}
+.main-container h1 {
+  text-align: center;
+  color: #4a4a4a;
+  font-size: 3rem;
+  margin-bottom: 30px;
 }
 .welcome-section h2 {
   color: var(--texto-titulo);
@@ -25,6 +32,15 @@
   padding: 2rem;
   flex-wrap: wrap;
 }
+.card-balance-movements {
+  display: flex;
+  justify-content: space-between;
+  background: #fff;
+  border-radius: 20px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  padding: 2rem;
+  flex-wrap: wrap;
+}
 .image-placeholder img {
   max-width: 220px;
   height: auto;
@@ -34,13 +50,24 @@
   min-width: 250px;
   margin-left: 2rem;
 }
-.card-content h3 {
+.card-content-movements {
+  flex: 1;
+  min-width: 250px;
+  margin-left: 2rem;
+}
+.card-content-movements h1 {
   color: var(--texto-titulo);
+  font-size: 1.5rem;
   margin-bottom: 0.5rem;
+  text-align: left;
 }
 .card-content p {
   color: var(--texto-parrafo);
   margin-bottom: 1.5rem;
+}
+.card-content-movements p {
+  color: var(--texto-parrafo);
+  margin-bottom: 0.5rem;
 }
 .stats {
   display: flex;
@@ -55,6 +82,23 @@
 .small {
   padding: 0.4rem 1rem;
   font-size: 0.9rem;
+}
+.summaryDisplay {
+  padding-top: 1rem;
+}
+.summaryCont{
+  display: flex; 
+  justify-content: space-around;
+}
+.depositBal{
+  color: green; 
+  font-size: 1.2rem; 
+  font-weight: bold; 
+}
+.depositPay{
+  color: red; 
+  font-size: 1.2rem; 
+  font-weight: bold;
 }
 /*GESTIONA*/
 .gestiona-section {

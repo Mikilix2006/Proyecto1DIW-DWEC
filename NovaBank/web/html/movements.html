@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <title>Movimientos</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="/NovaBank/css/style.css">
+        <link rel="stylesheet" href="/NovaBank/css/facilities.css">
+        <link rel="stylesheet" href="/NovaBank/css/main.css">
+        <link rel="alternate stylesheet" title="ModoOscuro" id="theme-link" href="/NovaBank/css/oscuro.css" disabled>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="/NovaBank/assets/h5p-player/main.bundle.js"></script>
+    <script src="/NovaBank/js/model.js"></script>
+    <script type='module' src="/NovaBank/js/movementsController.js"></script>
+    <script src="/NovaBank/js/facilities.js"></script>
+</head>
+<body>
+  <header role="banner" class="header">
+      <nav role="navigation" aria-label="Navegación principal" class="container">
+        <div class="logo">
+                <a href="main.html"><img src="/NovaBank/assets/img/logo.png" alt="NovaBank"></a>
+                <a href="main.html" aria-label="Ir al inicio de Nova Bank"><h1>Nova Bank</h1></a>
+        </div>
+        <div class="buttons">
+                <button type="button" id="themeToggle" class="btn-theme" onclick="changeTheme();" title="Cambiar tema" aria-label="Cambiar a tema oscuro o claro"> 
+                    <svg id="icon-sun" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m8.485-8.485h1M4.515 12.515h1M17.657 6.343l.707-.707M6.343 17.657l.707-.707M17.657 17.657l.707.707M6.343 6.343l.707.707M12 8a4 4 0 100 8 4 4 0 000-8z"/>
+                    </svg>
+                    <svg id="icon-moon" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M21 12.79A9 9 0 1111.21 3a7 7 0 109.79 9.79z"/>
+                    </svg>
+                </button>
+            <div class="menu-container">
+                <button class="menu-toggle" id="menuBtn" onclick="dropDownMenu();" aria-haspopup="true" aria-expanded="false" aria-controls="dropdownMenu" aria-label="Abrir menú de usuario"><i class="fa-solid fa-bars" aria-hidden="true"></i></button>
+                    <ul class="dropdown-menu" id="dropdownMenu" role="menu">
+                        <li><a href="/NovaBank/index.html" role="menuitem" aria-label="Cerrar sesión" id="botonCerrarSesion" onclick="salirSession();" accesskey="s" aria-label="Cerrar sesión, acceso rápido Alt más S">Cerrar session<span>S</span></a></li>
+                    </ul> 
+            </div>
+         </div>
+    </nav>
+  </header>
+  <main class="main-container" role="main">
+     
+     <h1>Movimientos</h1>
+     <section aria-labelledby="Información y gestión de la cuenta" class="welcome-section">
+      <div class="card-balance-movements">
+        <div class="card-content-movements ">
+            <h1>Información de la cuenta</h1>
+            <div id="account-info-header">
+                <p><strong>ID Cuenta:</strong> <span id="display-id">-</span></p>
+                <p><strong>Tipo:</strong> <span id="display-type">-</span></p>
+                <p id="display-credit-container" style="display: none;"><strong>Línea de Crédito:</strong> <span id="display-credit">-</span></p>
+            </div>
+        </div>
+        <div class="card-content-movements ">
+            <h1>Resumen general</h1>
+            <p>Descubre tus ingresos y gastos generales.</p>
+            <div class="stats">
+                <button class="btn-solid small" id="btnShowSummary">Calcular</button>
+            </div>
+            <div id="summaryDisplay" class="summaryDisplay" style="display:none;">
+                <div class="summaryCont" aria-label="Resumen de los balances">
+                    <div>
+                        <p><strong>Total Depósitos:</strong></p>
+                        <span id="totalDeposits" class="depositBal" aria-label="Depósitos totales">$0.00</span>
+                    </div>
+                    <div>
+                        <p><strong>Total Pagos:</strong></p>
+                        <span id="totalPayments" class="depositPay" aria-label="Pagos totales">$0.00</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+      </div>
+    </section>
+    <section aria-labelledby="Tabla de movimientos" class="tableContainerBody">
+        <div class="tableContainer">
+            <div class="table-card">
+                <table id="userMovements">
+                    <!--caption>Historial reciente de transacciones</caption-->
+                        <thead>
+                            <tr>
+                                <th scope="col">Fecha y hora</th>
+                                <th scope="col">Descripción</th>
+                                <th scope="col">Cantidad</th>
+                                <th scope="col">Saldo Actual</th>
+                            </tr>
+                        </thead>
+                        <tbody id="contentMovements"></tbody>
+                </table>
+            </div>
+            <div class="footer-controls" aria-labelledby="Botones de control">
+                <button class="btn-back" id="goBackAccount" aria-label="Volver a cuentas"><i class="fa-solid fa-arrow-right fa-flip-horizontal"></i></button>
+                <div class="right-group">
+                    <button class="btn-delete-outline" id="confirmDeleteMov" aria-label="Eliminar último movimiento"><i class="fa-solid fa-trash-can"></i></button>
+                    <button class="btn-add-large" id="confirmAddMov" aria-label="Añadir nuevo movimiento"><i class="fa-solid fa-plus"></i></button>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section aria-labelledby="Nuevo movimiento" id="newMovementForm" class="form-section-crud" style="display: none;">
+      <form aria-labelledby="Formulario de nuevo movimiento" id="formMovement" class="formulario">
+            <div class="titulo">
+                <h1>Nuevo Movimiento</h1>
+            </div>
+            <div id="creditInfoDisplay" aria-label="Información de la cuenta"></div>
+            <div class="form-group-crud">
+                <select tabindex="0" id="newTypeAmount" name="tipo_de_movimiento" aria-label="Tipo de movimiento">
+                    <option value="" disabled selected>Tipo de movimiento</option>
+                    <option tabindex="0" value="Deposit" aria-label="Opción depósito">Depósito</option>
+                    <option tabindex="0" value="Payment" aria-label="Opción pago">Pago</option>
+                </select>
+            </div>
+            <div class="form-group-crud" aria-label="Ingresa una cantidad">
+                <input type="number" id="newAmount" min="0.01" step="0.01" placeholder="0.00" name="Cantidad a ingresar"required/>
+                <div id="responseMsgamount"></div>
+            </div>
+            <div class="error-msg" id="responseMsg"></div>
+            <button type="submit" id="addMovement" class="btn-form-crud">Crear Movimiento</button>
+        </form>
+    </section>
+    <section aria-labelledby="Eliminar el último movimiento" id="confirmDelete" class="form-section-crud" style="display: none;">
+        <div class="formulario" id="deleteConfirmationForm">
+            <div class="titulo">
+                <h1> Elimar Movimiento</h1>
+            </div>
+            <div class="info-eliminar-cuenta">
+                <p aria-label="Alerta eliminado">¿Estás seguro de que deseas eliminar esta cuenta? una vez eliminada
+                    no podrás recuperar ningún información.
+                </p>
+                <div class="error-msg" id="responseMsg"></div>
+                <button id="cancelDeleteMovement" class="btn-form-crud" aria-label="Cancelar borrado" >Cancelar</button>
+                <button id="deleteLastMovement" class="btn-form-crud" aria-label="Confirmar borrado">Borrar</button>
+                <p class="error-msg">
+                </p>
+            </div>
+        </div>
+    </section>
+    <div class="videoContainer">
+        <p>Si necesitas ayuda con la interfaz, por favor mira el tutorial.</p>
+        <button id="showVideoMov" class="btn-solid">Ayuda</button>
+        <div id="h5p-container" class="form-section-crud" style="display: none"></div>
+    </div> 
+  </main>
+  <footer role="contentinfo"class="footer">
+    <div class="logo_footer">
+      <img src="/NovaBank/assets/img/logo.png" alt="Nova Bank">
+      <strong>Nova Bank</strong>
+    </div>
+    <p>© Copyright 2026 Nova Bank. All Rights Reserved.</p>
+    <p><strong>Nova Bank</strong></p>
+  </footer>
+</body>
+</html>

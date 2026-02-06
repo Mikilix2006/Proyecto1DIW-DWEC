@@ -3,3 +3,7 @@
 /NovaBank/dist/
 /build/
 /dist/
+/nbproject/
+/build.xml
+/glassfish-web.xml
+/nbproject/private/private.properties

@@ -20,6 +20,12 @@
 body {
   color: var(--texto-parrafo);
   background-color: var(--color-fondo);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+.mainContent{
+    flex: 1;
 }
 /*header*/
 .header {
@@ -217,7 +223,8 @@ body {
   width: 100%;
   height: 100%;
   background: linear-gradient(180deg, rgba(56, 11, 76, 0.845), rgba(255, 255, 255, 0));
-  z-index: 999;
+  z-index: 1000;
+  pointer-events: all;
 }
 .form-content {
   text-align: center;
@@ -244,6 +251,7 @@ body {
   width: 90%;
   margin: 0 auto;
   padding: 2.5rem 2rem;
+  z-index: 1001;
 }
 .form-group {
   position: relative;
@@ -258,20 +266,19 @@ body {
   outline: none;
   transition: border 0.3s ease;
 }
-
 /*FORMULARIO PARA EL CRUD DE CUENTAS*/
 .form-group-crud select, .form-group-crud input, .form-group-crud textarea.descripcion {
-  width: 100%;           
-    padding: 12px 20px;     
-    margin-bottom: 15px;     
-    border: 1px solid #eee;  
-    border-radius: 50px;     
+  width: 100%;             /* Para que ocupe el ancho disponible */
+    padding: 12px 20px;      /* Espacio interno para que no choque la letra con el borde */
+    margin-bottom: 15px;     /* Espacio entre cada campo */
+    border: 1px solid #eee;  /* Un borde gris muy clarito */
+    border-radius: 50px;     /* Esto es lo que hace que sea TOTALMENTE redondeado */
     background-color: #fff;
-    color: #888;             
+    color: #888;             /* Color de la letra gris como en tu imagen */
     font-family: sans-serif;
-    outline: none;           
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); 
-    appearance: none;       
+    outline: none;           /* Quita el borde azul feo al hacer clic */
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);  /* Efecto de sombra suave */
+    appearance: none;        /* Quita estilos por defecto del sistema */
     resize: none;
 }
 
@@ -327,20 +334,20 @@ body {
 }
 /* BOTONES  DEL FORMULARIO CRUD */
 .btn-form-crud {
-    background: var(--btn-color-solido); 
+    background: var(--btn-color-solido); /* El color púrpura de tu variable */
     color: white;
     border: none;
-    padding: 0.6rem 0.6rem;              
-    border-radius: 50px;              
+    padding: 0.6rem 0.6rem;               /* Un poco más de padding para que sea más alto */
+    border-radius: 50px;              /* Bordes totalmente circulares */
     font-size: 1rem;
-    font-weight: 500;             
+    font-weight: 500;                 /* Para que la letra sea clara */
     cursor: pointer;
     transition: background 0.3s ease;
     
     /* AJUSTES PARA CENTRARLO Y DARLE TAMAÑO */
-    width: 50%;                     
-    display: block;                 
-    margin: 5px auto;                
+    width: 50%;                       /* Más ancho, como en la imagen */
+    display: block;                   /* Permite usar margin auto */
+    margin: 5px auto;                /* Lo centra horizontalmente y da espacio arriba/abajo */
 }
 
 .btn-form-crud:hover {
@@ -360,6 +367,13 @@ body {
 #register-text a:hover {
   text-decoration: underline;
 }
+/*DIV CURRENTBALANCE MOVIMIENTO*/
+#creditInfoDisplay{
+    border-left: 4px solid #380B4C; 
+    padding-left: 10px; 
+    margin-top: 1.5rem;
+    margin-bottom: 1.5rem;
+}
 /*DIV ERROR MENSAJES*/
 .error-msg {
   color: #e63946;    
@@ -371,7 +385,195 @@ body {
   color: #e63946;    
   font-size: 0.9em;
   margin-top: 4px;
-  display: block;
+  display: flex;
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+/**** ELIMINAR CUENTAS FORMULARIO *****/
+/* El texto de advertencia gris */
+.info-eliminar-cuenta p {
+  color: #666;
+  font-size: 0.7rem;
+  line-height: 1.5;
+  margin-bottom: 20px;
+  text-align: center;  /* Centra todo el texto interior */
+}
+
+/* El mensaje de error en rojo */
+.error-msg {
+  color: red !important;
+  font-size: 0.7rem;
+  margin-top: 20px;
+}
+
+/*video*/
+.videoContainer{
+  display: flex;
+  align-items: center;
+  margin-top: 3rem;
+  justify-content: center;
+  gap: 1rem;
+  padding: 50px; 
+  box-sizing: border-box;
+}
+
+#h5p-container .h5p-iframe-wrapper {
+    width: 90%;
+    max-width: 1000px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+#h5p-container > div {
+    max-width: 1000px;
+    width: 100%;
+    pointer-events: auto; /* El video sí recibe clics */
+}
+/****** FORMULARIO DE USUARIOS *******/
+/*Estilos de tablas base*/
+.tableContainerBody {
+    display: flex;
+    justify-content: center;
+    padding-top: 50px;
+    font-size: small;
+}
+.tableContainer {
+    width: 100%;
+    max-width: 100%;
+}
+.tableContainer h1 {
+    text-align: center;
+    color: #4a4a4a;
+    font-size: 3rem;
+    margin-bottom: 30px;
+}
+.table-card {
+    background-color: var(--color-fondo);
+    border-radius: 25px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+}
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: var(--color-fondo);
+}
+thead {
+    background-color: var(--color-navbar);
+    color: white;
+}
+th {
+    padding: 15px;
+    font-weight: 400;
+    font-size: 0.8rem;
+    text-align: center;
+}
+td {
+    padding: 15px;
+    text-align: center;
+    color: #555;
+    border-bottom: 1px solid #eee;
+}
+tbody tr:nth-child(even) {
+    background-color: #f0f0f0;
+}
+tbody tr:nth-child(odd) {
+    background-color: #ffffff;
+}
+tbody tr:hover {
+    background-color: #e8e0eb;
+    transition: background-color 0.3s ease;
+}
+#userMovements th:nth-child(3),
+#userMovements td:nth-child(3),
+#userMovements th:nth-child(4),
+#userMovements td:nth-child(4) {
+    text-align: right !important;
+    padding-right: 2rem;
+}
+.actions {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+}
+.btn-edit, .btn-delete {
+    border: none;
+    border-radius: 8px;
+    width: 35px;
+    height: 35px;
+    color: white;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.btn-edit { background-color: var(--btn-color-solido); }
+.btn-delete { background-color: var(--color-navbar); }
+.footer-actions {
+    display: flex;
+    justify-content: flex-end;
+    padding: 20px 10px;
+}
+/*Botones inferiores movimientos*/
+.footer-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 10px;
+}
+
+.right-group {
+    display: flex;
+    gap: 20px;
+}
+
+/* Botón Regresar (Oscuro) */
+.btn-back {
+    background-color: var(--color-navbar);
+    color: white;
+    border: none;
+    padding: 5px 40px;
+    border-radius: 15px;
+    font-size: 1.2rem;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    transition: transform 0.2s;
+}
+/* Botón Eliminar (Blanco con borde morado) */
+.btn-delete-outline {
+    background-color: white;
+    color: var(--btn-color-solido);
+    border: 2px solid var(--btn-color-solido);
+    padding: 5px 40px;
+    border-radius: 20px;
+    font-size: 1.2rem;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    transition: transform 0.2s;
+}
+/* Botón Agregar (Morado claro) */
+.btn-add-large {
+    background-color: var(--btn-color-solido);
+    color: white;
+    border: none;
+    padding: 5px 40px;
+    border-radius: 20px;
+    font-size: 1.2rem;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    transition: transform 0.2s;
+}
+/* Efectos Hover */
+button:hover {
+    opacity: 0.9;
+    transform: translateY(-2px);
+    transition: all 0.1s;
+    background: var(--btn-color-hover);
+    border: 2px solid var(--btn-color-hover);
+    color: white;
+
 }
 
 /**** ELIMINAR CUENTAS FORMULARIO *****/
@@ -695,7 +897,6 @@ section h1, article h1, nav h1, aside h1 {
     pointer-events: auto; 
 }
 /* responsive*/
-
 @media (max-width: 1024px) {
     .footer-controls {
         flex-direction: column; 
@@ -710,8 +911,6 @@ section h1, article h1, nav h1, aside h1 {
     .btn-back, .btn-delete-outline, .btn-add-large {
         width: 100%; 
     }
-}
-
 @media (max-width: 992px) {
     .header .container {
         padding: 1rem;
@@ -781,7 +980,6 @@ section h1, article h1, nav h1, aside h1 {
     .nav {
         display: none; /* Oculta los links directos */
     }
-    
     /* ... otros estilos que ya tienes ... */
 
     .stats {
@@ -837,7 +1035,6 @@ th, td {
     font-size: 0.85rem; /* Tamaño de fuente legible en laptops */
     text-align: center;
 }
-    
 }
 
 @media (max-width: 480px) {
