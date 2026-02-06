@@ -3,6 +3,7 @@
   margin-top: 100px;
   padding: 2rem 10%;
   background-color: var(--color-fondo);
+  width: 100%;
   flex: 1;
 }
 .main-container h1 {

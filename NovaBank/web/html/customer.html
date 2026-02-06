@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">  
+    <title>Customer</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/facilities.css">
+    <link rel="stylesheet" href="../css/main.css">
+    <link rel="alternate stylesheet" title="ModoOscuro" id="theme-link" href="../css/oscuro.css" disabled>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="/NovaBank/assets/h5p-player/main.bundle.js"></script>
+</head>
+
+<body>
+
+<header role="banner" class="header">
+      <nav role="navigation" aria-label="Navegación principal" class="container">
+        <div class="logo">
+                <a href="main.html"><img src="/NovaBank/assets/img/logo.png" alt="NovaBank"></a>
+                <a href="main.html" aria-label="Ir al inicio de Nova Bank"><h1>Nova Bank</h1></a>
+        </div>
+        <div class="buttons">
+                <button type="button" id="themeToggle" class="btn-theme" onclick="changeTheme();" title="Cambiar tema" aria-label="Cambiar a tema oscuro o claro"> 
+                    <svg id="icon-sun" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m8.485-8.485h1M4.515 12.515h1M17.657 6.343l.707-.707M6.343 17.657l.707-.707M17.657 17.657l.707.707M6.343 6.343l.707.707M12 8a4 4 0 100 8 4 4 0 000-8z"/>
+                    </svg>
+                    <svg id="icon-moon" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M21 12.79A9 9 0 1111.21 3a7 7 0 109.79 9.79z"/>
+                    </svg>
+                </button>
+            <div class="menu-container">
+                <button class="menu-toggle" id="menuBtn" onclick="dropDownMenu();" aria-haspopup="true" aria-expanded="false" aria-controls="dropdownMenu" aria-label="Abrir menú de usuario"><i class="fa-solid fa-bars" aria-hidden="true"></i></button>
+                    <ul class="dropdown-menu" id="dropdownMenu" role="menu">
+                        <li><a role="menuitem" aria-label="Cerrar sesión" id="botonCerrarSesion" onclick="salirSession();" accesskey="s" aria-label="Cerrar sesión, acceso rápido Alt más S">Cerrar session<span>S</span></a></li>
+                    </ul> 
+            </div>
+         </div>
+    </nav>
+  </header>
+
+<main class="main-container" role="main">
+    
+    <section aria-labelledby="Información y gestión de usuarios" class="welcome-section">
+        <h2 id="sessionNombre"></h2>
+        <p>Estamos felices de verte una vez más.</p>
+
+        <div class="card-balance">
+            <div class="image-placeholder">
+                <img src="../assets/img/help.jpg" alt="Ilustración ahorro mensual">
+            </div>
+            <div class="card-content">
+                <h3>Gestión de Usuarios</h3>
+                <p>Información sobre la cantidad de usuarios registrados.</p>
+                <div id="contenedor-btn-agre" class="stats">
+                    <div id="btn-agre-uno" class="caja-estadistica">
+                        <button aria-label="Información de usuarios comunes" id="btnComunes" class="btn-solid small">Usuarios Comunes</button>
+                        <p id="cuentaComunes" class="texto-resultado"></p>
+                    </div>
+                    <div id="btn-agre-dos" class="caja-estadistica">
+                        <button aria-label="Información de usuarios administradores" id="btnAdmins" class="btn-solid small">Usuarios Administradores</button>
+                        <p id="cuentaAdmins" class="texto-resultado"></p>
+                    </div>
+                    <div id="btn-agre-tres" class="caja-estadistica">
+                        <button  aria-label="Información usuarios totales" id="btnTotales" class="btn-solid small">Usuarios Totales</button>
+                        <p id="cuentaTotales" class="texto-resultado"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <section aria-labelledby="Tabla de customers"class="tableContainerBody">
+        <div class="tableContainer">
+            <h1>Usuarios</h1>
+            <div class="table-card">
+                <table id="showCOMPLETAR" aria-label="Customers">
+                    <thead>
+                        <tr>
+                            <th scope="col">Identificador</th>
+                            <th scope="col">Nombre</th>
+                            <th scope="col">Inicial segundo nombre</th>
+                            <th scope="col">Apellido</th>
+                            <th scope="col">Calle</th>
+                            <th scope="col">Ciudad</th>
+                            <th scope="col">Estado</th>
+                            <th scope="col">C.P</th>
+                            <th scope="col">Teléfono</th>
+                            <th scope="col">Correo Electrónico</th>
+                            <th scope="col">Acción</th>
+                        </tr>
+                    </thead>
+                    <tbody id="usersTabletbody">
+                        <!-- contenido dinámico -->
+                    </tbody>
+                </table>
+            </div>
+            <div class="footer-actions">
+                <button aria-label="Crear nuevo usuarios" class="btn-add-large" id="crearUsuario"><i class="fa-solid fa-plus"></i></button>
+            </div>
+        </div>
+    </section>
+    
+    <!--FORMULARIO PARA CREAR NUEVO USUARIO-->
+    <section aria-labelledby="Formulario de creación de nuevos usuarios" class="form-section-crud" id="modalCrear" style="display: none;">
+        <form aria-label="Formulario crear usuario"class="formulario" id="formCrearUsuario">
+            <div class="titulo">
+                <h1> Nuevo Usuario</h1>
+            </div>
+            <div class="form-group-crud">
+                <input type="text" id="firstName" name="firstName"  placeholder="Nombre" />
+            <div id="responseMsgName"></div>
+            </div>
+            <div class="form-group-crud">
+                <input type="text" id="middleInitial" name="middleInitial" placeholder="Inicial segundo nombre"/>
+                <div id="responseMsgInitial"></div>
+            </div>
+            <div class="form-group-crud">
+                <input type="text" id="lastName" name="lastName" placeholder="Apellido" />
+                <div id="responseMsgLastName"></div>
+            </div>
+            <div class="form-group-crud">
+                <input type="text" id="street" name="street" placeholder="Calle" />
+                <div id="responseMsgStreet"></div>
+            </div>
+            <div class="form-group-crud">
+                <input type="text" id="city" name="city" placeholder="Ciudad" />
+                <div id="responseMsgCity"></div>
+            </div>
+            <div class="form-group-crud">
+                <input type="text" id="state" name="state" placeholder="Estado" />
+                <div id="responseMsgState"></div>
+            </div>
+            <div class="form-group-crud">
+                <input type="text" id="zip" name="zip" placeholder="Código postal" />
+                <div id="responseMsgZip"></div>
+            </div>
+            <div class="form-group-crud">
+                <input type="text" id="phone" name="phone" placeholder="Teléfono" />
+                <div id="responseMsgPhone"></div>
+            </div>
+            <div class="form-group-crud">
+                <input type="email" id="email" name="email" placeholder="Correo electrónico" />
+                <div id="responseMsgEmail"></div>
+            </div>
+            <div class="modal-actions-inline">
+                <button aria-label="Botón opción cancelar" type="button" id="cerrarModalCrear" class="btn-cancelar-modal">Cancelar </button>
+                <button aria-label="Botón opción confirmar"type="submit" class="btn-confirmar-modal">Confirmar</button>
+            </div>
+        </form>
+    </section>    
+ 
+
+    <!--FORMULARIO PARA EDITAR USUARIO-->
+    
+    <section aria-labelledby="Formulario de editar usuarios" class="form-section-crud" id="modalEditar" style="display: none;">
+        <form aria-label="Formulario editar usuario"class="formulario" id="formEditarUsuario">
+            <div class="titulo">
+                <h1> Editar Usuario</h1>
+            </div>
+            <div class="form-group-crud">
+                 <input type="text" id="editFirstName" name="firstName" placeholder="Nombre" />
+            <div id="editResponseMsgName"></div>
+            </div>
+            <div class="form-group-crud">
+                <input type="text" id="editmiddleInitial" name="middleInitial" placeholder="Inicial segundo nombre" />
+                <div id="editResponseMsgInitial"></div>
+            </div>
+            <div class="form-group-crud">
+                <input type="text" id="editLastName" name="lastName" placeholder="Apellido" />
+                <div id="editResponseMsgLastName"></div>
+            </div>
+            <div class="form-group-crud">
+                <input type="text" id="editStreet" name="street" placeholder="Calle" />
+                <div id="editResponseMsgStreet"></div>
+            </div>
+            <div class="form-group-crud">
+                <input type="text" id="editCity" name="city" placeholder="Ciudad" />
+                <div id="editResponseMsgCity"></div>
+            </div>
+            <div class="form-group-crud">
+                <input type="text" id="editState" name="state" placeholder="Estado" />
+                <div id="editResponseMsgState"></div>
+            </div>
+            <div class="form-group-crud">
+                <input type="text" id="editZip" name="zip" placeholder="Código postal" />
+                <div id="editResponseMsgZip"></div>
+            </div>
+            <div class="form-group-crud">
+                <input type="text" id="editPhone" name="phone" placeholder="Teléfono" />
+                <div id="editResponseMsgPhone"></div>
+            </div>
+            <div class="form-group-crud">
+                <input type="email" id="editEmail" name="email" placeholder="Correo electrónico" />
+                <div id="editResponseMsgEmail"></div>
+            </div>
+            <div class="modal-actions-inline">
+                <button aria-label="Botón opción cancelar" type="button" id="cerrarModalEditar" class="btn-cancelar-modal"> Cancelar </button>
+                <button aria-label="Botón opción confirmar"type="submit" class="btn-confirmar-modal"> Confirmar</button>
+            </div>
+               
+        </form>
+    </section>    
+    
+    <!-- MENSAJE PARA ELIMINAR  USUARIO -->
+    <section aria-labelledby="Mensaje de eliminación de usuario" class="form-section-crud" id="modalEliminarUsuario" style="display: none;">
+        <div class="formulario">
+            <div class="titulo">
+                <h1>Eliminar Usuario</h1>
+            </div>
+
+            <div class="info-eliminar-cuenta">
+                <p>¿Estás seguro que deseas eliminar este usuario? Una vez eliminado no podrás recuperar ninguna información.</p>
+            </div>
+
+            <div class="modal-actions-inline">
+                <button aria-label="Botón opción cancelar" type="button" id="btnCancelarBorrar" class="btn-cancelar-modal">Cancelar</button>
+                <button aria-label="Botón opción confirmar" type="button" id="btnConfirmarBorrar" class="btn-confirmar-modal">Confirmar</button>
+            </div>
+        </div>
+    </section>
+    <div class="videoContainer">
+        <p>Si necesitas ayuda con la interfaz, por favor mira el tutorial.</p>
+        <button aria-label="Botón de ayuda" id="showVideoCustomer" class="btn-solid">Ayuda</button>
+        <div id="h5p-container" class="form-section-crud" style="display: none"></div>
+    </div> 
+</main>
+   
+<footer class="footer">
+    <div class="logo_footer">
+        <img src="../assets/img/logo.png" alt="Nova Bank">
+        <p>Nova Bank</p>
+    </div>
+    <p>© Copyright 2026 Nova Bank. All Rights Reserved.</p>
+</footer>
+    
+<script>
+    const customerName = sessionStorage.getItem("customer.firstName");
+    const customerMidIn = sessionStorage.getItem("customer.middleInitial");
+    const h2 = document.getElementById("sessionNombre");
+
+    if (h2) {
+        if (customerName) {
+            h2.textContent = `¡Hola, ${customerName} ${customerMidIn}!`;
+        } else {
+            h2.textContent = "¡Hola!";
+        }
+    }
+  </script>
+    
+<!-- ORDEN CORRECTO DE SCRIPTS  type="module" -->
+<script src="../js/facilities.js"></script>
+<script type="module" src="../js/customer.js"></script> 
+
+</body>
+</html>

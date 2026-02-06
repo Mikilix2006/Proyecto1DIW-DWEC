@@ -73,6 +73,18 @@ function validarSignIn(event) {
             msgBox.style.display = 'block';
         }
 }
+
+// FUNCIÓN DE VALIDAR USUARIO ADMINISTRADOR
+function UsuarioAdmim() {
+    const email = sessionStorage.getItem("customer.email");
+
+    if (email.endsWith("@admin.com")) {
+        window.location.href = "customer.html";
+    } else {
+        window.location.href = "main.html";
+    }
+}
+
 //FUNCICIÓN QUE ENVIA Y ESPERA RESPUESTAS
 function sendRequestAndProcessResponse(){
     const signForm = document.getElementById("formulario");
@@ -111,8 +123,12 @@ function sendRequestAndProcessResponse(){
                     }).then(data => {
                         //GUARDA LOS DATOS 
                         storeResponseXMLData(data);
+                        //LO MANDA AL CUSTOMER
+                        UsuarioAdmim();
+                        //window.location.href = "customer.html"
                         //LO MANDA AL MAIN
-                        window.location.href = "main.html";
+                        //window.location.href = "main.html";
+                                             
                     }).catch(e => {
                             msgBox.className = 'error';
                             msgBox.textContent = e.message;
