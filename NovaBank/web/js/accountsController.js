@@ -426,8 +426,11 @@ function* accountRowGenerator(accounts) {
                 accID = account[field]; // save account id for button data
                 td.style.color = "#5620ad"; // link color
                 td.setAttribute("data-acc-id", accID); // id attribute
-                td.addEventListener("click", storeAccountData); // listener
-                td.innerHTML = `<a href="">${accID}</a>`;
+                td.setAttribute("tabindex", 0); // tab attribute for blind
+                td.setAttribute("role", "button"); // role attribute for blind
+                td.setAttribute("aria-label", `Ir a movimientos de la cuenta con id: ${accID}`); // aria-label attribute for blind
+                td.addEventListener("click", storeAccountData); // listener w/mouse
+                td.addEventListener("keydown", storeAccountData); // listener w/keyboard
             }
             tr.appendChild(td);
         });
@@ -498,7 +501,11 @@ async function hasMovements(accountID) {
     return account.movements.length !== 0;
 }
 function storeAccountData(event) {
-    const account = accountsArray.find((acc) => acc.id == event.target.dataset.accId);
-    sessionStorage.setItem("account", JSON.stringify(account));
-    window.location.href = 'movements.html';
+    if (event.key === 'Enter' || // Activacion de funcion mediante enter
+        event.key === undefined) // Activacion de funcion mediante click
+    {
+        const account = accountsArray.find((acc) => acc.id == event.target.dataset.accId);
+        sessionStorage.setItem("account", JSON.stringify(account));
+        window.location.href = 'movements.html';
+    }
 }

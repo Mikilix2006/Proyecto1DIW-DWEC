@@ -110,27 +110,27 @@
             <div class="titulo">
                 <h1>Nueva Cuenta</h1>
             </div>
-            <div class="form-group-crud">
+            <div class="form-group-crud" tabindex="0" aria-label="Selecciona tipo de cuenta">
                 <select id="comboAccountType">
-                    <option value="NotSelected" disabled selected>Tipo de cuenta</option>
-                    <option value="STANDARD">STANDARD</option>
-                    <option value="CREDIT">CREDIT</option>
+                    <option value="NotSelected" aria-label="Tipo de cuenta sin deleccionar" disabled selected>Tipo de cuenta</option>
+                    <option value="STANDARD" aria-label="Tipo de cuenta: estandar">STANDARD</option>
+                    <option value="CREDIT"  aria-label="Tipo de cuenta: credito">CREDIT</option>
                 </select>
             </div>
-            <div class="form-group-crud">
-                <input type="number" id="newBeginBalance" placeholder="Saldo inicial" disabled aria-describedby="responseMsgNewBeginBalance"/>
+            <div class="form-group-crud" aria-label="Balance inicial de la cuenta">
+                <input type="number" id="newBeginBalance" placeholder="Saldo inicial" disabled/>
                 <div id="responseMsgNewBeginBalance"></div>
             </div>
-            <div class="form-group-crud">
+            <div class="form-group-crud" aria-label="Descripcion de la cuenta">
                 <textarea class="descripcion" id="newDescription" placeholder="Descripcion" disabled></textarea>
                 <div id="responseMsgNewDescription"></div>
             </div>
-            <div class="form-group-crud">
+            <div class="form-group-crud" aria-label="Linea de credito de la cuenta">
                 <input type="number" id="newCreditLine" placeholder="Línea de crédito" disabled/>
                 <div id="responseMsgNewCreditLine"></div>
             </div>
-            <button id="confirmNewAccountButton" class="btn-form-crud" role="button">Crear Cuenta</button>
-            <button id="cancellNewAccountButton" class="btn-form-crud" role="button">Cancelar</button>
+            <button id="confirmNewAccountButton" class="btn-form-crud" aria-label="Boton confirmar crear cuenta" role="button">Crear Cuenta</button>
+            <button id="cancellNewAccountButton" class="btn-form-crud" aria-label="Boton cancelar crear cuenta" role="button">Cancelar</button>
         </div>
     </section>
     
