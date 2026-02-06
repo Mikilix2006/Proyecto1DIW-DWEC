@@ -575,6 +575,189 @@ button:hover {
     color: white;
 
 }
+
+/**** ELIMINAR CUENTAS FORMULARIO *****/
+/* El texto de advertencia gris */
+.info-eliminar-cuenta p {
+  color: #666;
+  font-size: 0.7rem;
+  line-height: 1.5;
+  margin-bottom: 20px;
+  text-align: center;  
+}
+
+/* El mensaje de error en rojo */
+.error-msg {
+  color: red !important;
+  font-size: 0.7rem;
+  margin-top: 20px;
+}
+
+
+/****** FORMULARIO DE USUARIOS *******/
+/*Estilos de tablas base*/
+.tableContainerBody {
+    display: flex;
+    justify-content: center;
+    padding-top: 50px;
+    font-size: small;
+}
+.tableContainer {
+    width: 100%;
+    max-width: 100%;
+}
+.tableContainer h1 {
+    text-align: center;
+    color: #4a4a4a;
+    font-size: 3rem;
+    margin-bottom: 30px;
+}
+.table-card {
+    background-color: var(--color-fondo);
+    border-radius: 25px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+}
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: var(--color-fondo);
+}
+thead {
+    background-color: var(--color-navbar);
+    color: white;
+}
+th {
+    padding: 15px;
+    font-weight: 400;
+    font-size: 0.8rem;
+    text-align: center;
+}
+td {
+    padding: 15px;
+    text-align: center;
+    color: #555;
+    border-bottom: 1px solid #eee;
+}
+tbody tr:nth-child(even) {
+    background-color: #f0f0f0;
+}
+tbody tr:nth-child(odd) {
+    background-color: #ffffff;
+}
+tbody tr:hover {
+    background-color: #e8e0eb;
+    transition: background-color 0.3s ease;
+}
+.actions {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+}
+.btn-edit, .btn-delete {
+    border: none;
+    border-radius: 8px;
+    width: 35px;
+    height: 35px;
+    color: white;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.btn-edit { background-color: var(--btn-color-solido); }
+.btn-delete { background-color: var(--color-navbar); }
+.footer-actions {
+    display: flex;
+    justify-content: flex-end;
+    padding: 20px 10px;
+}
+
+/**** ELIMINAR USUSARIOS *****/
+/* El texto de advertencia gris */
+.info-eliminar-cuenta p {
+  color: #666;
+  font-size: 0.7rem;
+  line-height: 1.5;
+  margin-bottom: 20px;
+  text-align: center;  
+}
+
+/* El mensaje de error en rojo */
+.error-msg {
+  color: red !important;
+  font-size: 0.7rem;
+  margin-top: 20px;
+}
+
+/*Botones inferiores movimientos*/
+.footer-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap; /* Para que en tablets los botones bajen */
+    gap: 20px;
+    padding: 20px;
+}
+
+.right-group {
+    display: flex;
+    gap: 20px;
+}
+.hidden {
+  display: none !important;
+}
+
+/* Botón Regresar (Oscuro) */
+.btn-back {
+    background-color: var(--color-navbar);
+    color: white;
+    border: none;
+    padding: 5px 40px;
+    border-radius: 15px;
+    font-size: 1.2rem;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    transition: transform 0.2s;
+}
+
+/* Botón Eliminar (Blanco con borde morado) */
+.btn-delete-outline {
+    background-color: white;
+    color: var(--btn-color-solido);
+    border: 2px solid var(--btn-color-solido);
+    padding: 5px 40px;
+    border-radius: 20px;
+    font-size: 1.2rem;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    transition: transform 0.2s;
+}
+
+/* Botón Agregar (Morado claro) */
+.btn-add-large {
+    background-color: var(--btn-color-solido);
+    color: white;
+    border: none;
+    padding: 5px 40px;
+    border-radius: 20px;
+    font-size: 1.2rem;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    transition: transform 0.2s;
+}
+
+/* Efectos Hover */
+button:hover {
+    opacity: 0.9;
+    transform: translateY(-2px);
+    transition: all 0.1s;
+    background: var(--btn-color-hover);
+    border: 2px solid var(--btn-color-hover);
+    color: white;
+
+}
+
 /* footer*/
 .footer {
   background-color: var(--color-footer);
@@ -592,7 +775,142 @@ button:hover {
   width: 40px;
   margin-bottom: 0.5rem;
 }
+
+/*******NUEVAS COSAS DE ELIMINAR BOTONES *************/
+
+/* Contenedor para botones en línea */
+.modal-actions-inline {
+    display: flex;
+    justify-content: center; 
+    gap: 15px;               
+    margin-top: 25px;
+}
+
+/* Estilo para los botones del modal */
+.btn-confirmar-modal, .btn-cancelar-modal {
+    flex: 1;                 
+    max-width: 150px;        
+    padding: 12px;
+    border-radius: 50px;     
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    border: none;
+    transition: all 0.3s ease;
+}
+
+/* Botón Confirmar (Color morado de tu marca) */
+.btn-confirmar-modal {
+    background-color: var(--btn-color-solido);
+    color: white;
+}
+
+.btn-confirmar-modal:hover {
+    background-color: var(--btn-color-hover);
+}
+
+/* Botón Cancelar (Gris neutro) */
+.btn-cancelar-modal {
+    background-color: #e0e0e0;
+    color: #555;
+}
+
+.btn-cancelar-modal:hover {
+    background-color: #d0d0d0;
+    color: #333;
+}
+
+/* Texto de advertencia */
+.info-eliminar-cuenta p {
+    color: #666;
+    font-size: 0.95rem;
+    text-align: center;
+    line-height: 1.5;
+    margin-top: 10px;
+} 
+
+/***** BOTONES DE FUNCION AGREGADAS******/
+
+.stats {
+    display: flex;
+    gap: 20px;
+    justify-content: flex-start; 
+    margin-top: 20px;
+}
+
+.caja-estadistica {
+    display: flex;
+    flex-direction: column; 
+    align-items: center;  
+    min-width: 160px;       
+}
+
+.btn-estadistica {
+    background-color: #A660D1;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    cursor: pointer;
+    width: 100%;            
+    white-space: nowrap;   
+}
+
+.texto-resultado {
+    display: block;        
+    margin-top: 8px;
+    font-weight: bold;
+    color: #444;            
+    font-size: 0.9rem;
+    text-align: center;
+}
+
+
+section h1, article h1, nav h1, aside h1 {
+    font-size: 1.5em;
+}
+
+
+/*video*/
+.videoContainer{
+  display: flex;
+  align-items: center;
+  margin-top: 3rem;
+  justify-content: center;
+  gap: 1rem;
+  padding: 50px; 
+  box-sizing: border-box;
+}
+
+#h5p-container .h5p-iframe-wrapper {
+    width: 90%;
+    max-width: 1000px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+#h5p-container > div {
+    max-width: 1000px;
+    width: 100%;
+    pointer-events: auto; 
+}
 /* responsive*/
+@media (max-width: 1024px) {
+    .footer-controls {
+        flex-direction: column; 
+        text-align: center;
+    }
+    
+    .right-group {
+        flex-direction: column;
+        width: 100%;
+    }
+    
+    .btn-back, .btn-delete-outline, .btn-add-large {
+        width: 100%; 
+    }
 @media (max-width: 992px) {
     .header .container {
         padding: 1rem;
@@ -662,6 +980,61 @@ button:hover {
     .nav {
         display: none; /* Oculta los links directos */
     }
+    /* ... otros estilos que ya tienes ... */
+
+    .stats {
+    display: flex;
+    justify-content: center; /* Centra los botones en pantallas grandes */
+    flex-wrap: wrap;         /* ¡CLAVE! Permite que los botones bajen si no caben */
+    gap: 20px;               /* Espacio constante entre cajas */
+    margin: 30px auto;
+    width: 95%;
+    max-width: 1400px;
+    }
+
+    .caja-estadistica {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        /* Esto permite que el botón crezca y encoja según la pantalla */
+        flex: 1 1 250px; 
+        max-width: 350px; /* Para que no se vuelvan gigantes en laptops */
+    }
+
+    .btn-estadistica {
+        width: 100%;
+        padding: 15px;
+        font-size: 1rem;
+        white-space: normal; /* Permite que el texto se ajuste si el botón se achica */
+}
+    .tableContainerBody {
+    width: 100%;
+    padding: 20px;
+    display: block; /* Cambiamos de flex a block para mejor control */
+}
+
+.table-card {
+    background-color: var(--color-fondo);
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    
+    /* ESTO ARREGLA TODO: */
+    overflow-x: auto; /* Si la pantalla es menor a la tabla, aparece scroll lateral */
+    -webkit-overflow-scrolling: touch; 
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    /* Forzamos un ancho mínimo para que las 11 columnas respiren */
+    min-width: 1100px; 
+}
+
+th, td {
+    padding: 12px 8px;
+    font-size: 0.85rem; /* Tamaño de fuente legible en laptops */
+    text-align: center;
+}
 }
 
 @media (max-width: 480px) {

@@ -83,46 +83,43 @@ export class Account {
 
 export class Customer {
     // attributes
-    city;
-    email;
+    id; 
     firstName;
-    id;
     lastName;
     middleInitial;
-    password;
-    phone;
-    state;
     street;
-    zip;
+    city; state; 
+    zip; phone;
+    email; 
+    password;
     // constructor
-    constructor (city, email, firstName, id, lastName, middleInitial, password, 
-                    phone, state, street, zip) {
-        this.city = city;
-        this.email = email;
-        this.firstName = firstName;
-        this.id = id;
-        this.lastName = lastName;
-        this.middleInitial = middleInitial;
-        this.password = password;
-        this.phone = phone;
-        this.state = state;
-        this.street = street;
-        this.zip = zip;
+    constructor (id, firstName, lastName, middleInitial, street, city, state, zip, phone, email, password){
+    this.id = id;
+    this.firstName = firstName;
+    this.lastName = lastName;
+    this.middleInitial = middleInitial;
+    this.street = street;
+    this.city = city;
+    this.state = state;
+    this.zip = zip;
+    this.phone = phone;
+    this.email = email;
+    this.password = password;
     }
     // Override
     toJSON() {
         return {
-            city: this.city,
-            email: this.email,
-            firstName: this.firstName,
-            id: this.id,
-            lastName: this.lastName,
-            middleInitial: this.middleInitial,
-            password: this.password,
-            phone: this.phone,
-            state: this.state,
-            street: this.street,
-            zip: this.zip
+            id:this.id,
+            firstName:this.firstName,
+            lastName:this.lastName,
+            middleInitial:this.middleInitial,
+            street:this.street,
+            city:this.city,
+            state:this.state,
+            zip:this.zip,
+            phone:this.phone,
+            email:this.email,
+            password: this.password
         };
     }
 }
