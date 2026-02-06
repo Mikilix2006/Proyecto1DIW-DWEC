@@ -36,7 +36,7 @@
             <div class="menu-container">
                 <button class="menu-toggle" id="menuBtn" onclick="dropDownMenu();" aria-haspopup="true" aria-expanded="false" aria-controls="dropdownMenu" aria-label="Abrir menú de usuario"><i class="fa-solid fa-bars" aria-hidden="true"></i></button>
                     <ul class="dropdown-menu" id="dropdownMenu" role="menu">
-                        <li><a href="/NovaBank/index.html" role="menuitem" aria-label="Cerrar sesión" id="botonCerrarSesion" onclick="salirSession();" accesskey="s" aria-label="Cerrar sesión, acceso rápido Alt más S">Cerrar session<span>S</span></a></li>
+                        <li><a role="menuitem" aria-label="Cerrar sesión" id="botonCerrarSesion" onclick="salirSession();" accesskey="s" aria-label="Cerrar sesión, acceso rápido Alt más S">Cerrar session<span>S</span></a></li>
                     </ul> 
             </div>
          </div>
@@ -132,8 +132,10 @@
                     no podrás recuperar ningún información.
                 </p>
                 <div class="error-msg" id="responseMsg"></div>
-                <button id="cancelDeleteMovement" class="btn-form-crud" aria-label="Cancelar borrado" >Cancelar</button>
-                <button id="deleteLastMovement" class="btn-form-crud" aria-label="Confirmar borrado">Borrar</button>
+                <div class="modal-actions-inline">
+                    <button id="cancelDeleteMovement" class="btn-cancelar-modal" aria-label="Cancelar borrado" >Cancelar</button>
+                    <button id="deleteLastMovement" class="btn-form-crud" aria-label="Confirmar borrado">Borrar</button>
+                </div>
                 <p class="error-msg">
                 </p>
             </div>
