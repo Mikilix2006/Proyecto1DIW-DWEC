@@ -119,16 +119,6 @@ async function fetchUsers() {
     }
 }
 
-// === BUILD USERS TABLE ===
-/*async function buildUsersTable() {
-    const users = await fetchUsers();
-    const tbody = document.querySelector("#usersTabletbody");
-    tbody.innerHTML = "";
-
-    for (const row of userRowGenerator(users)) {
-        tbody.appendChild(row);
-    }
-}*/
 
 async function buildUsersTable() {
     const users = await fetchUsers(); 
@@ -378,8 +368,10 @@ function validateEditUserForm() {
 function validateFirstName(idInput = "firstName", idMsg = "responseMsgName") {
     const input = document.getElementById(idInput);
     const msgBox = document.getElementById(idMsg);
+    
+    if (!input || !msgBox) return true;
+    
     const onlyLettersRegExp = /^[a-zA-ZÁáÉéÍíÓóÚúÑñ\s]+$/;
-
     msgBox.style.display = "none";
 
     if (input.value.trim() === "") {
@@ -401,8 +393,10 @@ function validateFirstName(idInput = "firstName", idMsg = "responseMsgName") {
 function validateMiddleInitial(idInput = "middleInitial", idMsg = "responseMsgInitial") {
     const input = document.getElementById(idInput);
     const msgBox = document.getElementById(idMsg);
+    
+    if (!input || !msgBox) return true;
+    
     const singleLetterRegExp = /^[a-zA-ZÁáÉéÍíÓóÚúÑñ]$/;
-
     msgBox.style.display = "none";
     
     if (input.value.trim() === "") {
@@ -420,8 +414,10 @@ function validateMiddleInitial(idInput = "middleInitial", idMsg = "responseMsgIn
 function validateLastName(idInput = "lastName", idMsg = "responseMsgLastName") {
     const input = document.getElementById(idInput);
     const msgBox = document.getElementById(idMsg);
+    
+    if (!input || !msgBox) return true;
+    
     const onlyLettersRegExp = /^[a-zA-ZÁáÉéÍíÓóÚúÑñ\s]+$/;
-
     msgBox.style.display = "none";
 
     if (input.value.trim() === "") {
@@ -443,8 +439,10 @@ function validateLastName(idInput = "lastName", idMsg = "responseMsgLastName") {
 function validateStreet(idInput = "street", idMsg = "responseMsgStreet") {
     const input = document.getElementById(idInput);
     const msgBox = document.getElementById(idMsg);
+    
+    if (!input || !msgBox) return true;
+    
     const streetRegExp = /^[a-zA-ZÁáÉéÍíÓóÚúÑñ0-9\s.,/-]+$/;
-
     msgBox.style.display = "none";
 
     if (input.value.trim() === "") {
@@ -466,8 +464,10 @@ function validateStreet(idInput = "street", idMsg = "responseMsgStreet") {
 function validateCity(idInput = "city", idMsg = "responseMsgCity") {
     const input = document.getElementById(idInput);
     const msgBox = document.getElementById(idMsg);
+    
+    if (!input || !msgBox) return true;
+    
     const onlyLettersRegExp = /^[a-zA-ZÁáÉéÍíÓóÚúÑñ\s]+$/;
-
     msgBox.style.display = "none";
 
     if (input.value.trim() === "") {
@@ -489,8 +489,10 @@ function validateCity(idInput = "city", idMsg = "responseMsgCity") {
 function validateState(idInput = "state", idMsg = "responseMsgState") {
     const input = document.getElementById(idInput);
     const msgBox = document.getElementById(idMsg);
+    
+    if (!input || !msgBox) return true;
+    
     const onlyLettersRegExp = /^[a-zA-ZÁáÉéÍíÓóÚúÑñ\s]+$/;
-
     msgBox.style.display = "none";
 
     if (input.value.trim() === "") {
@@ -513,8 +515,10 @@ function validateState(idInput = "state", idMsg = "responseMsgState") {
 function validateZip(idInput = "zip", idMsg = "responseMsgZip") {
     const input = document.getElementById(idInput);
     const msgBox = document.getElementById(idMsg);
+    
+    if (!input || !msgBox) return true;
+    
     const numbersOnlyRegExp = /^[0-9]+$/;
-
     msgBox.style.display = "none";
 
     if (input.value.trim() === "") {
@@ -532,8 +536,10 @@ function validateZip(idInput = "zip", idMsg = "responseMsgZip") {
 function validatePhone(idInput = "phone", idMsg = "responseMsgPhone") {
     const input = document.getElementById(idInput);
     const msgBox = document.getElementById(idMsg);
+    
+    if (!input || !msgBox) return true;
+    
     const phoneRegExp = /^[+]{0,1}[0-9]+$/;
-
     msgBox.style.display = "none";
 
     if (input.value.trim() === "") {
@@ -555,8 +561,10 @@ function validatePhone(idInput = "phone", idMsg = "responseMsgPhone") {
 function validateEmail(idInput = "email", idMsg = "responseMsgEmail") {
     const input = document.getElementById(idInput);
     const msgBox = document.getElementById(idMsg);
+    
+    if (!input || !msgBox) return true;
+    
     const emailRegExp = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-
     msgBox.style.display = "none";
 
     if (input.value.trim() === "") {
