@@ -96,6 +96,17 @@ async function createNewMovement(e) {
         const accountData = JSON.parse(sessionStorage.getItem("account")) || JSON.parse(currentAccount);
         const { balance, type, creditLine } = accountData;
         //VALIDACIONES INICIALES
+        //TODO Validar el formato de los importes mediante la siguiente RegExp
+        const esAmountRegex = /^(?:\d{1,15}|\d{1,3}(?:\.\d{3}){1,4})(?:,\d{1,2})?$/;
+        /* Explicación de esAmountRegex
+        ^
+            (?:                         # integer part options
+               \d{1,15}                 # 1 to 15 digits without thousand separator
+             | \d{1,3}(?:\.\d{3}){1,4}  # 1–3 digits, then 1–4 groups of ".ddd"
+            )
+            (?:,\d{1,2})?               # optional decimal with 1 or 2 digits
+            $
+         */        
         if (amountStr === "" || isNaN(amount)) throw new Error("Por favor, ingrese un monto numérico.");
         if (amount <= 0) throw new Error("El monto debe ser mayor a cero.");
         if (amountStr.includes(".") && amountStr.split(".")[1].length > 2) {
@@ -242,6 +253,7 @@ async function fetchCreateNewMovement(amount, description) {
         }else{
             newBalance = accountData.balance - amount;
         }
+        //TODO Usar la clase Movement en lugar de Movements
         const movObj = new Movements(amount, newBalance, description);
         const resMov = await fetch(`${SERVICE_URL_MOV}${encodeURIComponent(idAccount)}`, {
             method: "POST",
