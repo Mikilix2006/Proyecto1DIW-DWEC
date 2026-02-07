@@ -1,3 +1,6 @@
+/**
+ * @todo Utilizar una operación agregada, por ejemplo filter/map/reduce, sobre accounts para calcular la posición global del cliente (suma de saldos de todas sus cuentas).
+ */
 import { Account } from './model.js';
 
 // Call buildAccountsTable when page loaded all the elements
@@ -11,6 +14,17 @@ const DELETE_SERVICE_URL = GET_BY_ID_SERVICE_URL; // Then append the account ID
 const CREATE_SERVICE_URL = UPDATE_SERVICE_URL; // Same as updating an account
 // <=><=><=> regular expressions <=><=><=>
 const regExpOnlyNumbers = new RegExp("^[\-]?[0-9]+(\.[0-9]+)?$");
+//TODO Validar el formato de los importes mediante la siguiente RegExp
+const esAmountRegex =new RegExp("^(?:\d{1,15}|\d{1,3}(?:\.\d{3}){1,4})(?:,\d{1,2})?$");
+ /* Explicación de esAmountRegex
+        ^
+            (?:                         # integer part options
+               \d{1,15}                 # 1 to 15 digits without thousand separator
+             | \d{1,3}(?:\.\d{3}){1,4}  # 1–3 digits, then 1–4 groups of ".ddd"
+            )
+            (?:,\d{1,2})?               # optional decimal with 1 or 2 digits
+            $
+ */
 const regExpHasToContainLetters = new RegExp("[a-zA-ZñÑáÁéÉíÍóÓúÚüÜïÏ ]+");
 // <=><=><=> keep the customer id <=><=><=>
 const idCustomer = sessionStorage.getItem("customer.id");

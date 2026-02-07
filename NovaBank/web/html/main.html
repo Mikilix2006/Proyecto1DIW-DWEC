@@ -15,6 +15,9 @@
   <script type="module" src="../js/accountsController.js"></script>
 </head>
 <body>
+<!-- TODO Mover todos los estilos en línea a una CSS externa-->
+<!-- TODO Añadir elemento para mostrar la posición global del cliente (suma de saldos de todas sus cuentas).-->
+<!-- TODO Quitar todos los atributos onxxxx y añadir el correspondiente manejador en script JS externo-->
   <header class="header" role="banner">
     <nav role="navigation">
         <div class="container">
@@ -191,6 +194,7 @@
     </div>
     <p>© Copyright 2026 Nova Bank. All Rights Reserved.</p>
   </footer>
+<!--TODO mover este código a un script externo-->
   <script>
     const customerName = sessionStorage.getItem("customer.firstName");
     const customerMidIn = sessionStorage.getItem("customer.middleInitial");
