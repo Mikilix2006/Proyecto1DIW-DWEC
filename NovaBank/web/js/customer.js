@@ -1,4 +1,8 @@
-/*  */
+/**
+ * @fixme Controlar que no se puedan borrar los Customer que tengan cuentas e informar al usuario de tal situación.
+ * Para lo anterior tendrá que hacer una petición GET /CRUDBankServerSide/webresources/account/customer/{id}. 
+ * La función getAccounts() del módulo accountsController.js realiza la petición anterior. 
+ */
 import { Customer } from "./model.js";
 const SERVICE_URL = "/CRUDBankServerSide/webresources/customer";
 let selectedUser = null;
