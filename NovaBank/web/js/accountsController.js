@@ -318,7 +318,15 @@ async function getAccountByID(accountID) {
     }
 }
 async function createAccount() {
-    const newAccountID = accountsArray[0].id+1; // new ID
+    /*=========================================================*/
+    /* SOLUCION A PROBLEMA DE CREAR CUENTA DESDE 0 */
+    let newAccountID; // The new Account ID
+    if (accountsArray.length > 0) {
+        newAccountID = accountsArray[0].id+1; // new ID
+    } else {
+        newAccountID = Math.floor(Math.random() * 10000000);
+    }
+    /*=========================================================*/
     const date = new Date().toISOString(); // get system date
     var creditLine; // controll credit line value
     // creditLine input controll
