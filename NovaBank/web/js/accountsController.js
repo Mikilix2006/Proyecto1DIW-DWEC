@@ -407,15 +407,18 @@ async function updateAccount(event) {
     }
 }
 function* accountRowGenerator(accounts) {
-    for (const account of accounts) {
-        const tr = document.createElement("tr");
-        var accID;
+    for (const account of accounts) { // for each account..
+        //const tr = document.createElement("tr"); // creates an account row
+        const tr = document.createElement("div"); // creates an account row
+        var accID; // declares var for storing account ID
         // Run through every element of the account
         ["id", "type", "description", "creditLine", "beginBalanceTimestamp", "beginBalance", "balance"].forEach(field => {
-            const td = document.createElement("td");
-            if (field === "beginBalanceTimestamp") {
-                const originalDateFormat = new Date(account[field]);
-                const opciones = {
+            //const td = document.createElement("td"); // creates a cell for each element
+            const td = document.createElement("div"); // creates a cell for each element
+            td.classList.add("account-cell"); // css styles
+            if (field === "beginBalanceTimestamp") { // if it is time, change format
+                const originalDateFormat = new Date(account[field]); // database time
+                const opciones = { // format options
                     day: '2-digit', month: '2-digit', year: 'numeric', // date
                     hour: '2-digit', minute: '2-digit', // hour
                     hour12: false // 24h format
@@ -424,24 +427,26 @@ function* accountRowGenerator(accounts) {
                 td.textContent = originalDateFormat.toLocaleDateString('es-ES', opciones);
             } else if (field === "creditLine" ||
                        field === "beginBalance" ||
-                       field === "balance" ) {
+                       field === "balance" ) { // or if the element is a number..
+              // change format to x.xxx.xxx,xx€
               td.textContent = new Intl.NumberFormat("es-ES", {style: "currency", 
                                                                    currency: "EUR"}).format(account[field]);
             } else { // No different format
-                td.textContent = account[field];
+                td.textContent = account[field]; // if no new format needed
             }
-            if (field === "id") {
+            if (field === "id") { // id special cell
                 accID = account[field]; // save account id for button data
                 td.style.color = "#5620ad"; // link color
                 td.setAttribute("data-acc-id", accID); // id attribute
-                td.setAttribute("tabindex", 0); // tab attribute for blind
-                td.setAttribute("role", "button"); // role attribute for blind
-                td.setAttribute("aria-label", `Ir a movimientos de la cuenta con id: ${accID}`); // aria-label attribute for blind
+                td.setAttribute("tabindex", 0); // tab attribute for blind access
+                td.setAttribute("role", "button"); // role attribute for blind user
+                td.setAttribute("aria-label", `Ir a movimientos de la cuenta con id: ${accID}`); // aria-label attribute for blind user
                 td.addEventListener("click", storeAccountData); // listener w/mouse
                 td.addEventListener("keydown", storeAccountData); // listener w/keyboard
             }
-            tr.appendChild(td);
-        });
+            tr.classList.add("account-row"); // css styles
+            tr.appendChild(td); // add the new cell to the row
+        }); // end of for each element
         // Store at end of accountsArray Account objects
         accountsArray.push(new Account(
                                         account["id"],
@@ -453,48 +458,57 @@ function* accountRowGenerator(accounts) {
                                         account["type"]
                                         ));
         // Edit and Delete buttons in each row in new column
-        const tdButtons = document.createElement("td");
-        tdButtons.classList.add("actions");
-        const buttonEdit = document.createElement("button");
-        const buttonDelete = document.createElement("button");
+        const tdButtons = document.createElement("td"); // buttons cell
+        tdButtons.classList.add("actions"); // css property
+        const buttonEdit = document.createElement("button"); // edit button
+        const buttonDelete = document.createElement("button"); // delete button 
         // IMG
-//        buttonEdit.setAttribute("src", "../assets/img/edit-pencil-01-svgrepo-com.svg");
-//        buttonDelete.setAttribute("src", "../assets/img/delete-2-svgrepo-com.svg");
-        buttonEdit.innerHTML = `<i class="fa-solid fa-pen-to-square"></i>`;
-        buttonDelete.innerHTML = `<i class="fa-solid fa-trash-can"></i>`;
+        buttonEdit.innerHTML = `<i class="fa-solid fa-pen-to-square"></i>`; // edit icon
+        buttonDelete.innerHTML = `<i class="fa-solid fa-trash-can"></i>`; // delete icon
         // Button aspect attributes
         buttonEdit.setAttribute("class", "btn-edit");
         buttonDelete.setAttribute("class", "btn-delete");
         // Button alt attributes
         buttonEdit.setAttribute("alt", "edit button");
         buttonDelete.setAttribute("alt", "delete button");
-        // Button aria attributes
+        // Button aria attributes for blind user
         buttonEdit.setAttribute("aria-label", "Boton para editar cuenta");
         buttonDelete.setAttribute("aria-label", "Boton para eliminar cuenta");
-        // Button id classes
+        // Button id classes to identify which account is being actioned
         buttonEdit.setAttribute("data-acc-id", accID);
         buttonDelete.setAttribute("data-acc-id", accID);
-        // listeners
+        // listeners to show its form
         buttonEdit.addEventListener("click",toggleUpdateAccountFormVisibility);
         buttonDelete.addEventListener("click",toggleDeleteAccountFormVisibility);
-        // Put buttons into td
+        // Put buttons into cell
         tdButtons.appendChild(buttonEdit);
         tdButtons.appendChild(buttonDelete);
-        // Put td into tr
+        // Put cell into row
         tr.appendChild(tdButtons);
-        // Show the table row
+        // Return the finished table row
         yield tr;
     }
     // Sort accountsArray from highest to lowest
     accountsArray.sort((cuenta1, cuenta2) => cuenta2.id - cuenta1.id);
 }
 async function buildAccountsTable() {
+    /*
     const accounts = await getAccounts(); // Fetch accounts into const
     const tbody = document.querySelector("#contentAccounts");
     tbody.innerHTML = ""; // Reset table
+    
     const rowGenerator = accountRowGenerator(accounts);
     for (const row of rowGenerator)
         tbody.appendChild(row);
+    */
+     // new responsive
+    const accounts = await getAccounts();
+    const container = document.querySelector("#contentAccounts");
+    container.innerHTML = ""; // Limpia el contenedor (ahora es un div)
+    
+    const rowGenerator = accountRowGenerator(accounts);
+    for (const row of rowGenerator)
+        container.appendChild(row);
 }
 function showMsgBoxAccounts(box, message, color) {
     box.style.display = 'flex';

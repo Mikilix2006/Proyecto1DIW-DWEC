@@ -70,9 +70,11 @@
       <div class="tableContainer">
         <h1>Cuentas</h1>
         <div class="table-card">
-            <table id="showCOMPLETAR" aria-label="Cuentas del usuario">
+            
+            <!-- TABLA ANTIGUA NO RESPONSIVA -->
+            <!--table aria-label="Cuentas del usuario"-->
             <!--caption>Cuentas</caption-->
-                <thead>
+                <!--thead>
                     <tr>
                         <th scope="col">ID</th>
                         <th scope="col">Tipo</th>
@@ -84,10 +86,35 @@
                         <th scope="col">Acción</th>
                     </tr>
                 </thead>
-                <tbody id="contentAccounts">
+                <tbody id="contentAccounts"-->
                     <!-- Generative content here -->
-                </tbody>
-            </table>
+                <!--/tbody>
+            </table-->
+            <!-- ============================= -->
+            
+            <!-- TABLA NUEVA RESPONSIVA EXAMEN -->
+            <div class="accounts-container" role="table" aria-label="Cuentas del usuario"> <!-- table -->
+
+                <div class="accounts-header" role="rowgroup"> <!-- thead -->
+                    <div class="header-row" role="row"> <!-- tr -->
+                        <div scope="col" role="columnheader">ID</div> <!-- th -->
+                        <div scope="col" role="columnheader">Tipo</div> <!-- th -->
+                        <div scope="col" role="columnheader">Descripción</div> <!-- th -->
+                        <div scope="col" role="columnheader">Línea de crédito</div> <!-- th -->
+                        <div scope="col" role="columnheader">Fecha de apertura</div> <!-- th -->
+                        <div scope="col" role="columnheader">Saldo inicial</div> <!-- th -->
+                        <div scope="col" role="columnheader">Saldo actual</div> <!-- th -->
+                        <div scope="col" role="columnheader">Acción</div> <!-- th -->
+                    </div> <!-- /tr -->
+                </div> <!-- /thead -->
+
+                <div id="contentAccounts" role="rowgroup"> <!-- tbody -->
+                    <!-- Generative content here -->
+                </div> <!-- /tbody -->
+
+            </div> <!-- /table -->
+            <!-- ============================= -->
+            
         </div>
 
         <div class="footer-actions">
