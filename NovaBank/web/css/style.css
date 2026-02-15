@@ -896,6 +896,114 @@ section h1, article h1, nav h1, aside h1 {
     width: 100%;
     pointer-events: auto; 
 }
+/* MEJORA CURSOR RATON */
+/* EXAMEN */
+.account-id-cell {
+    color: var(--btn-color-hover);
+    cursor: pointer;
+}
+/* MEJORAS MIGUEL EXAMEN */
+/* TABLA RESPONSIVA */
+/* ============================================================
+   ESTILOS TABLA DE CUENTAS (CONTENEDOR DIV)
+   ============================================================ */
+.accounts-container {
+    width: 100%;
+    border-radius: 8px;
+    overflow: hidden;
+    margin-top: 20px;
+}
+
+/* Cabecera de la tabla */
+.accounts-header {
+    background-color: var(--btn-color-hover); /* Color corporativo Nova Bank */
+    color: white;
+    font-weight: 600;
+    text-align: center;
+}
+
+.header-row {
+    display: flex;
+    padding: 15px;
+}
+
+.account-cell-header {
+    flex: 1;
+    text-align: left;
+    padding: 0 10px;
+    font-size: 0.9rem;
+}
+
+/* Cuerpo y Filas */
+.account-body {
+    display: flex;
+    flex-direction: column;
+}
+
+.account-row {
+    display: flex;
+    padding: 15px;
+    border-bottom: 1px solid #eee;
+    align-items: center;
+    transition: background-color 0.3s ease;
+}
+.account-cell {
+    flex: 1;
+    font-size: 0.85rem;
+    word-break: break-word;
+}
+/* ============================================================
+   RESPONSIVIDAD (MÓVIL)
+   ============================================================ */
+
+@media (max-width: 992px) {
+    /* Ocultamos la cabecera real en móviles */
+    .accounts-header {
+        display: none;
+    }
+
+    .account-row {
+        flex-direction: column; /* Las celdas se apilan verticalmente */
+        align-items: flex-start;
+        border: 1px solid #ddd;
+        margin-bottom: 15px;
+        border-radius: 8px;
+        position: relative;
+        padding-left: 40%; /* Espacio para las etiquetas */
+    }
+
+    .account-cell {
+        width: 100%;
+        padding: 8px 10px;
+        text-align: left;
+        border-bottom: 1px dotted #eee;
+    }
+
+    /* Creamos etiquetas usando el pseudo-elemento :before */
+    .account-cell::before {
+        content: attr(data-label); /* Necesitarás un pequeño ajuste en el JS (ver abajo) */
+        position: absolute;
+        left: 15px;
+        font-weight: bold;
+        text-transform: uppercase;
+        font-size: 0.75rem;
+        color: #777;
+    }
+
+    /* Ajuste para la última celda de acciones */
+    .actions {
+        width: 100%;
+        justify-content: left;
+        padding-top: 10px;
+    }
+}
+
+/* ======================= */
+/* ======================= */
+/* ======================= */
+/* ======================= */
+/* ======================= */
+
 /* responsive*/
 @media (max-width: 1024px) {
     .footer-controls {
@@ -1055,11 +1163,3 @@ th, td {
 
 
 
-
-
-/* MEJORAS MIGUEL EXAMEN */
-/* TABLA RESPONSIVA */
-
-.accounts-container {
-    
-}

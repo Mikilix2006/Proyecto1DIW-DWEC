@@ -410,12 +410,13 @@ function* accountRowGenerator(accounts) {
     for (const account of accounts) { // for each account..
         //const tr = document.createElement("tr"); // creates an account row
         const tr = document.createElement("div"); // creates an account row
+        tr.classList.add("account-row"); // css styles
         var accID; // declares var for storing account ID
         // Run through every element of the account
         ["id", "type", "description", "creditLine", "beginBalanceTimestamp", "beginBalance", "balance"].forEach(field => {
             //const td = document.createElement("td"); // creates a cell for each element
             const td = document.createElement("div"); // creates a cell for each element
-            td.classList.add("account-cell"); // css styles
+            td.classList.add("account-cell");
             if (field === "beginBalanceTimestamp") { // if it is time, change format
                 const originalDateFormat = new Date(account[field]); // database time
                 const opciones = { // format options
@@ -436,7 +437,8 @@ function* accountRowGenerator(accounts) {
             }
             if (field === "id") { // id special cell
                 accID = account[field]; // save account id for button data
-                td.style.color = "#5620ad"; // link color
+                //td.style.color = "#5620ad"; // link color
+                td.classList.add("account-id-cell");
                 td.setAttribute("data-acc-id", accID); // id attribute
                 td.setAttribute("tabindex", 0); // tab attribute for blind access
                 td.setAttribute("role", "button"); // role attribute for blind user
@@ -444,7 +446,6 @@ function* accountRowGenerator(accounts) {
                 td.addEventListener("click", storeAccountData); // listener w/mouse
                 td.addEventListener("keydown", storeAccountData); // listener w/keyboard
             }
-            tr.classList.add("account-row"); // css styles
             tr.appendChild(td); // add the new cell to the row
         }); // end of for each element
         // Store at end of accountsArray Account objects
@@ -458,7 +459,7 @@ function* accountRowGenerator(accounts) {
                                         account["type"]
                                         ));
         // Edit and Delete buttons in each row in new column
-        const tdButtons = document.createElement("td"); // buttons cell
+        const tdButtons = document.createElement("div"); // buttons cell
         tdButtons.classList.add("actions"); // css property
         const buttonEdit = document.createElement("button"); // edit button
         const buttonDelete = document.createElement("button"); // delete button 
