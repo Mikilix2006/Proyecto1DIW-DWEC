@@ -78,8 +78,8 @@
     </section>
     <section aria-labelledby="Tabla de movimientos" class="tableContainerBody">
         <div class="tableContainer">
-            <div class="table-card">
-                <table id="userMovements">
+            <div class="table-card desktop-only">
+                <table id="userMovements" aria-label="Historial detallado de transacciones y movimientos de la cuenta bancaria">
                     <!--caption>Historial reciente de transacciones</caption-->
                         <thead>
                             <tr>
@@ -91,6 +91,8 @@
                         </thead>
                         <tbody id="contentMovements"></tbody>
                 </table>
+            </div>
+            <div id="contentMovementsCards" class="mobile-only" style="display: none;" aria-label="Historial de movimientos en formato tarjetas">
             </div>
             <div class="footer-controls" aria-labelledby="Botones de control">
                 <button class="btn-back" id="goBackAccount" aria-label="Volver a cuentas"><i class="fa-solid fa-arrow-right fa-flip-horizontal"></i></button>
@@ -115,7 +117,7 @@
                 </select>
             </div>
             <div class="form-group-crud" aria-label="Ingresa una cantidad">
-                <input type="number" id="newAmount" min="0.01" step="0.01" placeholder="0.00" name="Cantidad a ingresar"required/>
+                <input type="text" id="newAmount" placeholder="0.000,00" name="Cantidad a ingresar" required/>
                 <div id="responseMsgamount"></div>
             </div>
             <div class="error-msg" id="responseMsg"></div>
