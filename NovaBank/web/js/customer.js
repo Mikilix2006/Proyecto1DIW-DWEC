@@ -119,7 +119,6 @@ async function fetchUsers() {
     }
 }
 
-
 async function buildUsersTable() {
     const users = await fetchUsers(); 
 
@@ -196,15 +195,28 @@ const modalEliminar = document.getElementById("modalEliminarUsuario");
 const btnCancelar = document.getElementById("btnCancelarBorrar");
 const btnConfirmar = document.getElementById("btnConfirmarBorrar");
 
- //Esta es la función que llamas cuando tocas el icono de basura en la tabla
+//Esta es la función que llamas cuando tocas el icono de basura en la tabla
+/*Gestiona el flujo de eliminación con validaciones de seguridad.*/
 async function deleteSelectedUser() {
-    const email = selectedUser.email.toLowerCase();
+    // 1. Obtenemos el email de quien está usando la web ahora mismo
+    const emailLogueado = sessionStorage.getItem("customer.email"); // Datos de sesión [cite: 2]
+    const emailSeleccionado = selectedUser.email.toLowerCase();
 
-    if (email.endsWith("@admin.com") || email.endsWith("@admim.com")) {
+    // 2. FILTRO 1: Evitar el "suicidio" de cuenta (Self-delete)
+    if (emailSeleccionado === emailLogueado?.toLowerCase()) {
+        alert("No puedes eliminar tu propia cuenta de administrador mientras estás logueado.");
+        return; // Aquí se detiene y no interfiere con nada más
+    }
+
+    // 3. FILTRO 2: Evitar borrar otros administradores
+    // Usamos la lógica de tu código original 
+    if (emailSeleccionado.endsWith("@admin.com") || emailSeleccionado.endsWith("@admim.com")) {
         alert("Acceso denegado: Los usuarios administradores no pueden ser eliminados del sistema.");
         selectedUser = null; 
-        return; 
+        return; // Se detiene aquí
     }
+
+    // 4. Si pasa los filtros, mostramos el modal de confirmación
     modalEliminar.style.display = 'flex';
 }
 
@@ -213,18 +225,47 @@ btnCancelar.onclick = () => {
     modalEliminar.style.display = 'none';
 };
 
-// Acción de Confirmar (Eliminación real)
+// Acción de Confirmar definitiva
 btnConfirmar.onclick = async () => {
-    const response = await fetch(`${SERVICE_URL}/${selectedUser.id}`, { method: "DELETE" });
-
-    if (!response.ok) {
-        alert("Error al eliminar el usuario");
-        return;
-    }
-    modalEliminar.style.display = 'none'; 
-    selectedUser = null;
-    buildUsersTable(); 
+    // 1. Comprobación de integridad previa en el cliente
+    const tieneCuentas = await checkCuentasAsociadas(selectedUser.id);
     
+    // Si la función encuentra cuentas, mostramos el mensaje que pediste
+    if (tieneCuentas) {
+        alert("Error: No se puede borrar a un usuario si tiene cuentas asociadas.");
+        modalEliminar.style.display = 'none';
+        return; 
+    }
+
+    // 2. Si no encontró cuentas en la lista, intentamos el borrado real
+    try {
+        const response = await fetch(`${SERVICE_URL}/${selectedUser.id}`, { 
+            method: "DELETE" 
+        });
+
+        // Si el servidor devuelve 409 (Conflicto) es porque hay cuentas o movimientos
+        if (response.status === 409) {
+            alert("Error de conflicto (409): El servidor detectó movimientos vinculados.");
+            modalEliminar.style.display = 'none';
+            return;
+        }
+
+        if (response.ok) {
+            // Éxito: Limpiamos y actualizamos la tabla (RA6) 
+            modalEliminar.style.display = 'none'; 
+            selectedUser = null;
+            await buildUsersTable(); 
+            alert("Usuario eliminado correctamente.");
+        } else {
+            // Si el servidor falla por cualquier otra razón, también mostramos el mensaje de seguridad
+            alert("Error: El servidor denegó la petición de borrado.");
+            modalEliminar.style.display = 'none';
+        }
+
+    } catch (err) {
+        console.error("Error en la petición DELETE:", err);
+        alert("Hubo un fallo de comunicación con el servidor.");
+    }
 };
 
 // === GENERAR CONTRASEÑA ===
@@ -674,4 +715,30 @@ function setupClickOutside() {
             toggleDisplay(el);
         }
     });
+}
+
+
+/*  Verifica si el cliente tiene cuentas asociadas.*/
+
+async function checkCuentasAsociadas(id) {
+    try {
+        // AÑADIMOS HEADERS para forzar el formato JSON
+        const response = await fetch("/CRUDBankServerSide/webresources/account", {
+            method: "GET",
+            headers: {
+                "Accept": "application/json" // Esto le dice al servidor: "No me des XML, dame JSON"
+            }
+        });
+        
+        if (!response.ok) return false;
+        
+        const todasLasCuentas = await response.json();
+        
+        return todasLasCuentas.some(cuenta => 
+            cuenta.customers.some(c => Number(c.id) === Number(id))
+        );
+    } catch (err) {
+        console.error("Error técnico:", err);
+        return true; // Bloqueamos por seguridad si hay error de formato
+    }
 }
