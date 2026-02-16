@@ -896,6 +896,53 @@ section h1, article h1, nav h1, aside h1 {
     width: 100%;
     pointer-events: auto; 
 }
+
+/**************RESPONSIVIDAD TABLA DIV****************************/
+/*.mobile-cards-view {
+    display: none;
+    flex-direction: column;
+    gap: 15px;
+    padding: 10px;
+}*/
+
+/* Diseño de la tarjeta (Card) */
+/*.user-card {
+    background: #fff;
+    border-radius: 8px;
+    padding: 15px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    border: 1px solid #ddd;
+}*/
+.mobile-cards-view {
+    display: none !important; 
+}
+
+.accion-iconos {
+  display: flex;
+  flex-direction: row;      /* 👈 en fila */
+  align-items: center;      /* 👈 centrados verticalmente */
+  justify-content: center;  /* opcional */
+  gap: 10px;                /* 👈 espacio entre botones */
+}
+
+.accion-iconos button {
+  display: inline-flex;     /* centra el icono dentro */
+  align-items: center;
+  justify-content: center;
+}
+.accion-iconos button {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+}
+.accion-iconos .btn-edit:hover {
+  transform: scale(1.05);
+}
+
+.accion-iconos .btn-delete:hover {
+  transform: scale(1.05);
+}
+
 /* responsive*/
 @media (max-width: 1024px) {
     .footer-controls {
@@ -920,7 +967,7 @@ section h1, article h1, nav h1, aside h1 {
     }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 800px) {
     /* Banner */
     .banner {
         height: auto;
@@ -1049,5 +1096,37 @@ th, td {
     .btn-solid, .btn-outline {
         padding: 0.4rem 0.6rem;
         font-size: 0.8rem;
+    }
+}
+
+@media screen and (min-width: 769px) {
+    .desktop-only {
+        display: block !important; /* Muestra la tabla */
+    }
+    .mobile-cards-view {
+        display: none !important; /* Oculta las tarjetas */
+    }
+}
+
+/* 2. Cuando la pantalla es pequeña (Móvil/Tablet) */
+@media screen and (max-width: 768px) {
+    .desktop-only {
+        display: none !important; /* ¡Adiós tabla! */
+    }
+    
+    .mobile-cards-view {
+        display: flex !important; /* ¡Hola tarjetas! */
+        flex-direction: column;
+        gap: 15px;
+        padding: 10px;
+    }
+
+    /* Estilo para que tus tarjetas se vean profesionales */
+    .movement-card-item {
+        background-color: #fff;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        padding: 15px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     }
 }

@@ -77,7 +77,7 @@
     <section aria-labelledby="Tabla de customers"class="tableContainerBody">
         <div class="tableContainer">
             <h1>Usuarios</h1>
-            <div class="table-card">
+            <div class="table-card desktop-only">
                 <table id="showCOMPLETAR" aria-label="Customers">
                     <thead>
                         <tr>
@@ -99,6 +99,8 @@
                     </tbody>
                 </table>
             </div>
+            
+            <div id="usersCardsContainer" class="mobile-cards-view" style="display: none;"> </div>
             <div class="footer-actions">
                 <button aria-label="Crear nuevo usuarios" class="btn-add-large" id="crearUsuario"><i class="fa-solid fa-plus"></i></button>
             </div>
@@ -112,39 +114,39 @@
                 <h1> Nuevo Usuario</h1>
             </div>
             <div class="form-group-crud">
-                <input type="text" id="firstName" name="firstName"  placeholder="Nombre" />
+                <input type="text" id="firstName" name="firstName"  placeholder="Nombre" aria-label="Nombre del usuario" />
             <div id="responseMsgName"></div>
             </div>
             <div class="form-group-crud">
-                <input type="text" id="middleInitial" name="middleInitial" placeholder="Inicial segundo nombre"/>
+                <input type="text" id="middleInitial" name="middleInitial" placeholder="Inicial segundo nombre" aria-label="Inicial del segundo nombre" />
                 <div id="responseMsgInitial"></div>
             </div>
             <div class="form-group-crud">
-                <input type="text" id="lastName" name="lastName" placeholder="Apellido" />
+                <input type="text" id="lastName" name="lastName" placeholder="Apellido" aria-label="Apellido del usuario" />
                 <div id="responseMsgLastName"></div>
             </div>
             <div class="form-group-crud">
-                <input type="text" id="street" name="street" placeholder="Calle" />
+                <input type="text" id="street" name="street" placeholder="Calle" aria-label="Dirección de la calle" />
                 <div id="responseMsgStreet"></div>
             </div>
             <div class="form-group-crud">
-                <input type="text" id="city" name="city" placeholder="Ciudad" />
+                <input type="text" id="city" name="city" placeholder="Ciudad" aria-label="Ciudad de residencia" />
                 <div id="responseMsgCity"></div>
             </div>
             <div class="form-group-crud">
-                <input type="text" id="state" name="state" placeholder="Estado" />
+                <input type="text" id="state" name="state" placeholder="Estado" aria-label="Estado o provincia" />
                 <div id="responseMsgState"></div>
             </div>
             <div class="form-group-crud">
-                <input type="text" id="zip" name="zip" placeholder="Código postal" />
+                <input type="text" id="zip" name="zip" placeholder="Código postal" aria-label="Código postal" />
                 <div id="responseMsgZip"></div>
             </div>
             <div class="form-group-crud">
-                <input type="text" id="phone" name="phone" placeholder="Teléfono" />
+                <input type="text" id="phone" name="phone" placeholder="Teléfono" aria-label="Número de teléfono" />
                 <div id="responseMsgPhone"></div>
             </div>
             <div class="form-group-crud">
-                <input type="email" id="email" name="email" placeholder="Correo electrónico" />
+                <input type="email" id="email" name="email" placeholder="Correo electrónico" aria-label="Dirección de correo electrónico"/>
                 <div id="responseMsgEmail"></div>
             </div>
             <div class="modal-actions-inline">
@@ -163,39 +165,39 @@
                 <h1> Editar Usuario</h1>
             </div>
             <div class="form-group-crud">
-                 <input type="text" id="editFirstName" name="firstName" placeholder="Nombre" />
+                 <input type="text" id="editFirstName" name="firstName" placeholder="Nombre" aria-label="Editar nombre del usuario"/>
             <div id="editResponseMsgName"></div>
             </div>
             <div class="form-group-crud">
-                <input type="text" id="editmiddleInitial" name="middleInitial" placeholder="Inicial segundo nombre" />
+                <input type="text" id="editmiddleInitial" name="middleInitial" placeholder="Inicial segundo nombre" aria-label="Editar inicial del segundo nombre"/>
                 <div id="editResponseMsgInitial"></div>
             </div>
             <div class="form-group-crud">
-                <input type="text" id="editLastName" name="lastName" placeholder="Apellido" />
+                <input type="text" id="editLastName" name="lastName" placeholder="Apellido" aria-label="Editar apellido del usuario" />
                 <div id="editResponseMsgLastName"></div>
             </div>
             <div class="form-group-crud">
-                <input type="text" id="editStreet" name="street" placeholder="Calle" />
+                <input type="text" id="editStreet" name="street" placeholder="Calle" aria-label="Editar dirección de la calle" />
                 <div id="editResponseMsgStreet"></div>
             </div>
             <div class="form-group-crud">
-                <input type="text" id="editCity" name="city" placeholder="Ciudad" />
+                <input type="text" id="editCity" name="city" placeholder="Ciudad" aria-label="Editar ciudad de residencia" />
                 <div id="editResponseMsgCity"></div>
             </div>
             <div class="form-group-crud">
-                <input type="text" id="editState" name="state" placeholder="Estado" />
+                <input type="text" id="editState" name="state" placeholder="Estado" aria-label="Editar estado o provincia" />
                 <div id="editResponseMsgState"></div>
             </div>
             <div class="form-group-crud">
-                <input type="text" id="editZip" name="zip" placeholder="Código postal" />
+                <input type="text" id="editZip" name="zip" placeholder="Código postal" aria-label="Editar código postal" />
                 <div id="editResponseMsgZip"></div>
             </div>
             <div class="form-group-crud">
-                <input type="text" id="editPhone" name="phone" placeholder="Teléfono" />
+                <input type="text" id="editPhone" name="phone" placeholder="Teléfono" aria-label="Editar número de teléfono" />
                 <div id="editResponseMsgPhone"></div>
             </div>
             <div class="form-group-crud">
-                <input type="email" id="editEmail" name="email" placeholder="Correo electrónico" />
+                <input type="email" id="editEmail" name="email" placeholder="Correo electrónico" aria-label="Editar dirección de correo electrónico" />
                 <div id="editResponseMsgEmail"></div>
             </div>
             <div class="modal-actions-inline">
