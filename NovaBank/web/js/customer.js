@@ -121,73 +121,104 @@ async function fetchUsers() {
 
 
 async function buildUsersTable() {
-    const users = await fetchUsers(); 
+    const users = await fetchUsers();
 
     usuariosLocales = users; 
-    
-    const tbody = document.querySelector("#usersTabletbody");
-    if (!tbody) return; 
+
+    const tbody = document.getElementById("usersTabletbody");
+    const cardsContainer = document.getElementById("usersCardsContainer");
+
+    if (!tbody || !cardsContainer) return;
+
     tbody.innerHTML = "";
- 
-    for (const row of userRowGenerator(usuariosLocales)) {
+    cardsContainer.innerHTML = "";
+
+    const rowGen = customerRowGenerator(users, 'table');
+    for (const row of rowGen) {
         tbody.appendChild(row);
+    }
+
+    const cardGen = customerRowGenerator(users, 'card');
+    for (const card of cardGen) {
+        cardsContainer.appendChild(card);
     }
 }
 // === GENERADOR DE FILAS ===
-function* userRowGenerator(users) {
-    for (const user of users) {
-        const tr = document.createElement("tr");
+function* customerRowGenerator(customerList, mode) {
+    for (const customer of customerList) {
 
-        // Celdas de datos
-        ["id", "firstName", "middleInitial", "lastName", "street", "city", "state", "zip", "phone", "email"].forEach(field => {
-            const td = document.createElement("td");
-            td.textContent = user[field] ?? "";
-            tr.appendChild(td);
-        });
+        if (mode === 'table') {
+            const tr = document.createElement("tr");
+            tr.innerHTML = `
+                <td>${customer.id}</td>
+                <td>${customer.firstName}</td>
+                <td>${customer.middleInitial || ''}</td>
+                <td>${customer.lastName}</td>
+                <td>${customer.street}</td>
+                <td>${customer.city}</td>
+                <td>${customer.state}</td>
+                <td>${customer.zip}</td>
+                <td>${customer.phone}</td>
+                <td>${customer.email}</td>
+                <td>
+                    <div class="accion-iconos">
+                        <button class="btn-edit" aria-label="Editar usuario">
+                            <i class="fa-solid fa-pen-to-square"></i>
+                        </button>
+                        <button class="btn-delete" aria-label="Borrar usuario">
+                            <i class="fa-solid fa-trash"></i>
+                        </button>
+                    </div>
+                </td>
+            `;
 
-        // Celdas de acciones
-        const tdActions = document.createElement("td");
-        tdActions.classList.add("actions");
+            const btnEdit = tr.querySelector(".btn-edit");
+            const btnDelete = tr.querySelector(".btn-delete");
 
-        const btnEdit = document.createElement("button");
-        btnEdit.type = "button";
-        btnEdit.classList.add("btn-edit");
-        btnEdit.setAttribute("aria-label", "Editar usuario"); 
-        btnEdit.innerHTML = `<i class="fa-solid fa-pen-to-square" aria-hidden="true"></i>`;
-        btnEdit.addEventListener("click", e => {
-            e.stopPropagation();
-            selectedUser = user;
-            abrirModalEditar(user);
-        });
-
-        const btnDelete = document.createElement("button");
-        btnDelete.type = "button";
-        btnDelete.classList.add("btn-delete");
-        btnDelete.setAttribute("aria-label", "Eliminar usuario");
-        btnDelete.innerHTML = `<i class="fa-solid fa-trash-can" aria-hidden="true"></i>`;
-        btnDelete.addEventListener("click", e => {
-            e.stopPropagation();
-            selectedUser = user;
-            deleteSelectedUser();
-        });
-
-        tdActions.appendChild(btnEdit);
-        tdActions.appendChild(btnDelete);
-        tr.appendChild(tdActions);
-
-        // Selección de fila
-        tr.tabIndex = 0
-        tr.addEventListener("click", () => {
-            document.querySelectorAll("#usersTabletbody tr").forEach(r => {
-                r.classList.remove("selected")
-                r.setAttribute("aria-selected", "false");
+            btnEdit.addEventListener("click", e => {
+                e.stopPropagation();
+                selectedUser = customer;
+                abrirModalEditar(customer);   
             });
-            tr.classList.add("selected");
-            tr.setAttribute("aria-selected", "true");
-            selectedUser = user;
-        });
 
-        yield tr;
+            btnDelete.addEventListener("click", e => {
+                e.stopPropagation();
+                selectedUser = customer;
+                deleteSelectedUser();      
+            });
+
+            yield tr;
+        }
+
+        else {
+            const card = document.createElement("div");
+            card.className = "movement-card-item"; 
+            card.innerHTML = `
+                <div class="card-row"><strong>Nombre:</strong> <span>${customer.firstName} ${customer.lastName}</span></div>
+                <div class="card-row"><strong>Email:</strong> <span>${customer.email}</span></div>
+                <div class="card-row"><strong>Teléfono:</strong> <span>${customer.phone}</span></div>
+                <div class="card-row"><strong>Ciudad:</strong> <span>${customer.city}</span></div>
+                <div class="modal-actions-inline" style="margin-top:10px; gap:10px;">
+                    <button class="btn-confirmar-modal">Editar</button>
+                    <button class="btn-cancelar-modal" style="background:#8549ba">Borrar</button>
+                </div>
+            `;
+
+            const btnEdit = card.querySelector(".btn-confirmar-modal");
+            const btnDelete = card.querySelector(".btn-cancelar-modal");
+
+            btnEdit.addEventListener("click", () => {
+                selectedUser = customer;
+                abrirModalEditar(customer);
+            });
+
+            btnDelete.addEventListener("click", () => {
+                selectedUser = customer;
+                deleteSelectedUser();
+            });
+
+            yield card;
+        }
     }
 }
 
