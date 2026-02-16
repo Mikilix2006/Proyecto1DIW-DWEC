@@ -44,7 +44,36 @@ const emailInput = document.getElementById("email");
 
 
 
-window.addEventListener('load', buildUsersTable);
+/*window.addEventListener('load', buildUsersTable);*/
+
+/*** PASAR EL SCRIPT DE HTML A JS ***/
+
+// 1. Modifica el listener para que haga ambas cosas al cargar
+window.addEventListener('load', () => {
+    mostrarSaludo();      // Nueva función
+    buildUsersTable();    // Tu función actual
+});
+
+// 2. Crea la función del saludo (puedes ponerla al final del archivo)
+/**
+ * Recupera el nombre del usuario de la sesión y actualiza el encabezado.
+ */
+function mostrarSaludo() {
+    const customerName = sessionStorage.getItem("customer.firstName");
+    const customerMidIn = sessionStorage.getItem("customer.middleInitial");
+    const h2 = document.getElementById("sessionNombre");
+
+    if (h2) {
+        if (customerName) {
+            // RA2: Uso de Template Literals para mejorar la legibilidad
+            h2.textContent = `¡Hola, ${customerName} ${customerMidIn}!`;
+        } else {
+            h2.textContent = "¡Hola!";
+        }
+    }
+}
+
+/****** SE ACABA LA FUNCIÓN *******/
 
 // Validaciones en tiempo real con el evento 'input'
 firstNameInput.addEventListener("input", validateFirstName);
@@ -226,7 +255,7 @@ const btnCancelar = document.getElementById("btnCancelarBorrar");
 const btnConfirmar = document.getElementById("btnConfirmarBorrar");
 
 //Esta es la función que llamas cuando tocas el icono de basura en la tabla
-/*Gestiona el flujo de eliminación con validaciones de seguridad.*/
+/*Gestiona el flujo de eliminación con validaciones de seguridad. DELETE*/
 async function deleteSelectedUser() {
     // 1. Obtenemos el email de quien está usando la web ahora mismo
     const emailLogueado = sessionStorage.getItem("customer.email"); // Datos de sesión [cite: 2]
@@ -255,7 +284,7 @@ btnCancelar.onclick = () => {
     modalEliminar.style.display = 'none';
 };
 
-// Acción de Confirmar definitiva
+// Acción de Confirmar definitiva (VA CON EL DELETE)
 btnConfirmar.onclick = async () => {
     // 1. Comprobación de integridad previa en el cliente
     const tieneCuentas = await checkCuentasAsociadas(selectedUser.id);
@@ -748,7 +777,7 @@ function setupClickOutside() {
 }
 
 
-/*  Verifica si el cliente tiene cuentas asociadas.*/
+/*  Verifica si el cliente tiene cuentas asociadas. PASO DELETE*/
 
 async function checkCuentasAsociadas(id) {
     try {
@@ -772,3 +801,102 @@ async function checkCuentasAsociadas(id) {
         return true; // Bloqueamos por seguridad si hay error de formato
     }
 }
+
+
+/******************** MODIFICACIONES EXTRAS ***************************************/
+/*formCrearUsuario.onsubmit = async e => {
+    e.preventDefault();
+    if (!validateCreateUserForm()) return;
+
+    const d = new FormData(formCrearUsuario);
+    const emailValue = d.get("email"); // Obtenemos el email para el mensaje
+
+    const customer = new Customer(
+        null,
+        d.get("firstName"),
+        d.get("lastName"),
+        d.get("middleInitial"),
+        d.get("street"),
+        d.get("city"),
+        d.get("state"),
+        d.get("zip"),
+        d.get("phone"),
+        emailValue,
+        generarPassword(d.get("firstName"), d.get("phone"))
+    );
+
+    try {
+        const response = await fetch(SERVICE_URL, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(customer)
+        });
+
+        // DETECTAR CORREO DUPLICADO (Error 409)
+        if (response.status === 409) {
+            const msgBox = document.getElementById("responseMsgEmail");
+            showError(msgBox, `El correo ${emailValue} ya existe. Por favor, usa uno diferente.`);
+            alert("Error: El correo electrónico ya está registrado.");
+            return;
+        }
+
+        if (!response.ok) throw new Error("Error al crear usuario");
+
+        modalCrear.style.display = 'none'; 
+        formCrearUsuario.reset();
+        await buildUsersTable();
+
+    } catch (err) {
+        console.error(err);
+        alert("No se pudo crear el usuario");
+    }
+};*/
+
+/*formEditarUsuario.onsubmit = async e => {
+    e.preventDefault();
+    if (!validateEditUserForm()) return;
+
+    if (!selectedUser) return;
+    const d = new FormData(formEditarUsuario);
+    const emailValue = d.get("email");
+
+    const customer = new Customer(
+        selectedUser.id,
+        d.get("firstName"),
+        d.get("lastName"),
+        d.get("middleInitial"),
+        d.get("street"),
+        d.get("city"),
+        d.get("state"),
+        d.get("zip"),
+        d.get("phone"),
+        emailValue,
+        selectedUser.password
+    );
+
+    try {
+        const response = await fetch(SERVICE_URL, {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(customer)
+        });
+
+        // DETECTAR CORREO DUPLICADO AL EDITAR (Error 409)
+        if (response.status === 409) {
+            const msgBox = document.getElementById("editResponseMsgEmail");
+            showError(msgBox, "Este correo ya pertenece a otro usuario.");
+            alert("Error: No se puede modificar. El correo ya existe en el sistema.");
+            return;
+        }
+
+        if (!response.ok) throw new Error("Error al editar usuario");
+
+        modalEditar.style.display = 'none'; // Usando el ID correcto de tu modal
+        formEditarUsuario.reset();
+        selectedUser = null;
+        await buildUsersTable();
+    } catch (err) {
+        console.error(err);
+        alert("No se pudo editar el usuario");
+    }
+};*/
