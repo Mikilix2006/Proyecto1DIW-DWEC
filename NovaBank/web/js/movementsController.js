@@ -3,7 +3,7 @@
       ATTRIBUTES TO BE USED BY THIS CONTROLLER
    =================================================
  */
-import { Movements } from './model.js';
+import { Movement } from './model.js';
 const SERVICE_URL_MOV= "/CRUDBankServerSide/webresources/movement/";
 const SERVICE_URL_ACC = "/CRUDBankServerSide/webresources/account/";
 let movements = [];
@@ -49,11 +49,20 @@ async function buildMovementsTable() {
     accountHeader();
     movements = await fetchMovements();
     const tbody = document.querySelector("#contentMovements");
-    if (!tbody) return; //mostrar mensaje
+    const cardsContainer = document.querySelector("#contentMovementsCards");
+    if (!tbody || !cardsContainer) return; //mostrar mensaje
+    
     tbody.innerHTML = "";
-    const rowGenerator = movementRowGenerator(movements);
+    cardsContainer.innerHTML = "";
+    
+    const rowGenerator = movementRowGenerator(movements, 'table');
     for (const row of rowGenerator) {
         tbody.appendChild(row);
+    }
+    
+    const cardsGenerator = movementRowGenerator(movements, 'card');
+    for (const card of cardsGenerator) {
+        cardsContainer.appendChild(card);
     }
 }
 /*SHOW THE CREATE NEW MOVEMENT FORM LAYER - CLICK ADD MOV  */
@@ -223,10 +232,10 @@ function setupClickOutside() {
                    OTHER FUNCTIONS
    =================================================
  */
-const currencyFormatter = new Intl.NumberFormat(undefined, {
+const currencyFormatter = new Intl.NumberFormat('es-ES', {
         style: 'currency', currency: 'EUR', minimumFractionDigits: 2
     });
-const dateFormatter = new Intl.DateTimeFormat(undefined, {
+const dateFormatter = new Intl.DateTimeFormat('es-ES', {
         year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit'
 });
 /*FETCH CREATE RESOURCE*/
@@ -242,7 +251,7 @@ async function fetchCreateNewMovement(amount, description) {
         }else{
             newBalance = accountData.balance - amount;
         }
-        const movObj = new Movements(amount, newBalance, description);
+        const movObj = new Movement(amount, newBalance, description);
         const resMov = await fetch(`${SERVICE_URL_MOV}${encodeURIComponent(idAccount)}`, {
             method: "POST",
             headers: { "Content-Type": "application/json", "Accept": "application/json" },
@@ -290,30 +299,51 @@ async function fetchMovements() {
     }
 }
 
-function* movementRowGenerator(movementsList) {
-    
+function* movementRowGenerator(movementsList,mode) {
     for (const movement of movementsList) {
-        const tr = document.createElement("tr");
-        ["timestamp", "description", "amount", "balance"].forEach(field => {
-            const td = document.createElement("td");
-            let value = movement[field];
-            if (field === "timestamp" && value) {
-                value = dateFormatter.format(new Date(value));
-            } 
-            else if ((field === "amount" || field === "balance") && value !== undefined) {
-                if (field === "amount" && parseFloat(value) < 0) {
-                    td.style.color = "red";
-                    td.style.fontWeight = "bold";
-                }
-                value = currencyFormatter.format(value);
-            }
-            td.textContent = value ?? "N/A";
-            tr.appendChild(td);
-        });
+        if (mode === 'table') {
+            const tr = document.createElement("tr");
+            ["timestamp", "description", "amount", "balance"].forEach(field => {
+                const td = document.createElement("td");
+                td.textContent = formatFieldValue(movement, field, td);
+                tr.appendChild(td);
+            });
         yield tr;
+        }else {
+            const card = document.createElement("div");
+            card.className = "movement-card-item";
+            const fields = [
+                { id: "timestamp", label: "Fecha" },
+                { id: "description", label: "Concepto" },
+                { id: "amount", label: "Importe" },
+                { id: "balance", label: "Saldo" }
+            ];
+        fields.forEach(f => {
+            const divRow = document.createElement("div");
+                divRow.className = "card-row";
+                divRow.innerHTML = `<strong>${f.label}:</strong> <span></span>`;
+                const span = divRow.querySelector("span");
+                span.textContent = formatFieldValue(movement, f.id, span);
+                card.appendChild(divRow);
+        });
+        yield card;
+        }
     }
 }
-/**/
+
+function formatFieldValue(movement, field, element) {
+    let value = movement[field];
+    if (field === "timestamp" && value) { return dateFormatter.format(new Date(value));} 
+    if ((field === "amount" || field === "balance") && value !== undefined) {
+        if (field === "amount" && parseFloat(value) < 0) {
+            element.style.color = "red";
+            element.style.fontWeight = "bold";
+        }
+        return currencyFormatter.format(value);
+    }
+    return value ?? "N/A";
+}
+
 function cerrarFormulario() {
     const formContainer = document.getElementById("newMovementForm");
     formContainer.style.display = 'none';

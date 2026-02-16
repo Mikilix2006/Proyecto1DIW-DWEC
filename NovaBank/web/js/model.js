@@ -3,8 +3,14 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-export class Movements {
-  constructor(amount, balance, description) {
+//REVISAR MOVEMENTS - CAmbairlo a singular 
+export class Movement {
+    id;
+    timestamp;
+    amount;
+    balance;
+    description;
+  constructor(id, timestamp, amount, balance, description) {
         this.amount = parseFloat(amount);
         this.balance = parseFloat(balance);
         this.description = description;
