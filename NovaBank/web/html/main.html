@@ -15,9 +15,6 @@
   <script type="module" src="../js/accountsController.js"></script>
 </head>
 <body>
-<!-- TODO Mover todos los estilos en línea a una CSS externa-->
-<!-- TODO Añadir elemento para mostrar la posición global del cliente (suma de saldos de todas sus cuentas).-->
-<!-- TODO Quitar todos los atributos onxxxx y añadir el correspondiente manejador en script JS externo-->
   <header class="header" role="banner">
     <nav role="navigation">
         <div class="container">
@@ -30,7 +27,7 @@
             </a>
           </div>
           <div class="buttons">
-            <button id="themeToggle" class="btn-theme" onclick="changeTheme();" title="Cambiar tema" aria-label="Cambiar entre modo claro y oscuro" role="button">
+            <button id="themeToggle" class="btn-theme" title="Cambiar tema" aria-label="Cambiar entre modo claro y oscuro" role="button">
               <svg id="icon-sun" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m8.485-8.485h1M4.515 12.515h1M17.657 6.343l.707-.707M6.343 17.657l.707-.707M17.657 17.657l.707.707M6.343 6.343l.707.707M12 8a4 4 0 100 8 4 4 0 000-8z"/>
               </svg>
@@ -39,10 +36,10 @@
               </svg>
             </button>
             <div class="menu-container" aria-label="Menú de usuario">
-              <button class="menu-toggle" id="menuBtn" onclick="dropDownMenu();" aria-haspopup="true" aria-expanded="false" aria-controls="Dropdown menu" role="button">&#9776;</button>
+              <button class="menu-toggle" id="menuBtn" aria-haspopup="true" aria-expanded="false" aria-controls="Dropdown menu" role="button">&#9776;</button>
               <ul class="dropdown-menu" id="dropdownMenu" role="menu">
                     <li role="menuitem"><a href="changePassword.html" accesskey="c">Cambiar Contraseña <span> Alt + C</span></a></li>
-                    <li role="menuitem"><a id="botonCerrarSesion" onclick="salirSession();" accesskey="S">Cerrar session <span> Alt + S</span></a></li>
+                    <li role="menuitem"><a id="botonCerrarSesion" accesskey="S">Cerrar session <span> Alt + S</span></a></li>
               </ul>
             </div>
           </div>
@@ -65,6 +62,9 @@
           <div class="stats">
             <span class="percentage" aria-live="polite">0.0%</span>
             <button class="btn-solid small" role="button">Revisar historial</button>
+          </div>
+          <div class="stats">
+              <div id="totalBalance" class="global-position">Pulse aquí para ver su posición global</div>
           </div>
         </div>
       </div>
@@ -107,7 +107,7 @@
             <!-- Error messages here -->
         </div>
     
-    <section id="newAccountForm" class="form-section-crud" style="display: none" aria-hidden="true" aria-labelledby="Nueva cuenta">
+    <section id="newAccountForm" class="form-section-crud" aria-hidden="true" aria-labelledby="Nueva cuenta">
         <div class="formulario">
             <div class="titulo">
                 <h1>Nueva Cuenta</h1>
@@ -120,7 +120,7 @@
                 </select>
             </div>
             <div class="form-group-crud" aria-label="Balance inicial de la cuenta">
-                <input type="number" id="newBeginBalance" placeholder="Saldo inicial" disabled/>
+                <input type="text" inputmode="decimal" id="newBeginBalance" placeholder="Saldo inicial" disabled/>
                 <div id="responseMsgNewBeginBalance"></div>
             </div>
             <div class="form-group-crud" aria-label="Descripcion de la cuenta">
@@ -128,7 +128,7 @@
                 <div id="responseMsgNewDescription"></div>
             </div>
             <div class="form-group-crud" aria-label="Linea de credito de la cuenta">
-                <input type="number" id="newCreditLine" placeholder="Línea de crédito" disabled/>
+                <input type="text" inputmode="decimal" id="newCreditLine" placeholder="Línea de crédito" disabled/>
                 <div id="responseMsgNewCreditLine"></div>
             </div>
             <div class="modal-actions-inline">
@@ -140,7 +140,7 @@
     
     <!-- Update account Form -->
     
-    <section id="editAccountForm" class="form-section-crud" style="display: none" aria-hidden="true" aria-labelledby="Editar cuenta">
+    <section id="editAccountForm" class="form-section-crud" aria-hidden="true" aria-labelledby="Editar cuenta">
         <div class="formulario">
             <div class="titulo">
                 <h1>Editar Cuenta</h1>
@@ -162,7 +162,7 @@
     
     <!-- Delete account Form -->
     
-    <section id="deleteAccountForm" class="form-section-crud" style="display: none" aria-hidden="true" role="alertdialog" aria-labelledby="Confirmar eliminar cuenta">
+    <section id="deleteAccountForm" class="form-section-crud" aria-hidden="true" role="alertdialog" aria-labelledby="Confirmar eliminar cuenta">
         <div class="formulario" id="form-account">
             <div class="titulo">
                 <h1> Elimar Cuenta</h1>
@@ -183,7 +183,7 @@
     <div class="videoContainer">
         <p>Si necesitas ayuda con la interfaz, por favor mira el tutorial.</p>
         <button id="buttonVideoHelper" class="btn-solid" role="button">Ayuda</button>
-        <div id="h5p-container" class="form-section-crud" style="display: none"></div>
+        <div id="h5p-container" class="form-section-crud"></div>
     </div> 
     
   </main>
@@ -194,20 +194,6 @@
     </div>
     <p>© Copyright 2026 Nova Bank. All Rights Reserved.</p>
   </footer>
-<!--TODO mover este código a un script externo-->
-  <script>
-    const customerName = sessionStorage.getItem("customer.firstName");
-    const customerMidIn = sessionStorage.getItem("customer.middleInitial");
-    const h2 = document.getElementById("sessionNombre");
-
-    if (h2) {
-        if (customerName) {
-            h2.textContent = `¡Hola, ${customerName} ${customerMidIn}!`;
-        } else {
-            h2.textContent = "¡Hola!";
-        }
-    }
-  </script>
   <script src="../js/facilities.js"></script>
 </body>
 </html>

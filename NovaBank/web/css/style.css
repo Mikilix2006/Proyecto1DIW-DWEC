@@ -896,6 +896,10 @@ section h1, article h1, nav h1, aside h1 {
     width: 100%;
     pointer-events: auto; 
 }
+.global-position {
+    color: var(--color-navbar);
+    cursor: pointer;
+}
 /* responsive*/
 @media (max-width: 1024px) {
     .footer-controls {

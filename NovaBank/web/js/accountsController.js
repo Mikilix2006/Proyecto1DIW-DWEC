@@ -1,6 +1,3 @@
-/**
- * @todo Utilizar una operación agregada, por ejemplo filter/map/reduce, sobre accounts para calcular la posición global del cliente (suma de saldos de todas sus cuentas).
- */
 import { Account } from './model.js';
 
 // Call buildAccountsTable when page loaded all the elements
@@ -15,7 +12,8 @@ const CREATE_SERVICE_URL = UPDATE_SERVICE_URL; // Same as updating an account
 // <=><=><=> regular expressions <=><=><=>
 const regExpOnlyNumbers = new RegExp("^[\-]?[0-9]+(\.[0-9]+)?$");
 //TODO Validar el formato de los importes mediante la siguiente RegExp
-const esAmountRegex =new RegExp("^(?:\d{1,15}|\d{1,3}(?:\.\d{3}){1,4})(?:,\d{1,2})?$");
+//const esAmountRegex =new RegExp("^(?:\d{1,15}|\d{1,3}(?:\.\d{3}){1,4})(?:,\d{1,2})?$");
+const esAmountRegex = /^(?:\d{1,15}|\d{1,3}(?:\.\d{3}){1,4})(?:,\d{1,2})?$/;
  /* Explicación de esAmountRegex
         ^
             (?:                         # integer part options
@@ -31,6 +29,7 @@ const idCustomer = sessionStorage.getItem("customer.id");
 // <=><=><=> Elements from main.html <=><=><=>
 // === message boxes ===
 const msgBoxAccounts = document.getElementById('msgBoxAccounts');
+const tfTotalBalance = document.getElementById('totalBalance');
 // === buttons ===
 // delete account
 const confirmDeleteAccountButton = document.getElementById('confirmDeleteAccountButton');
@@ -90,7 +89,8 @@ newDescription.addEventListener("input", checkNewAccountDescription);
 // update account
 tfUpdateCreditLine.addEventListener("input", checkUpdateAccountCreditLine);
 tfUpdateDescription.addEventListener("input", checkUpdateAccountDescription);
-// === video ===
+// === messages ===
+tfTotalBalance.addEventListener("click", showBalanceSum);
 
 function toggleDeleteAccountFormVisibility(event) {
     document.getElementById("responseMsgDeleteDescription").style.display = 'none';
@@ -294,16 +294,25 @@ function checkDescription(input) {
         throw new Error("La descripción debe contener letras");
 }
 function checkCreditLine(input) {
-    if (input.value < 0)
+    /*if (input.value < 0)
         throw new Error("Linea de crédito inferior a 0");
     if (regExpOnlyNumbers.exec(input.value.trim())===null)
-        throw new Error("Solo se admiten números en la línea de crédito");
+        throw new Error("Solo se admiten números en la línea de crédito");*/
+    if (input.value.trim().match(esAmountRegex) === null) {
+        throw new Error("Formato válido: x.xxx,xx");
+    }
 }
 function checkInputNumbers(input, errorMessages) {
-    if (errorMessages.length >= 1 && regExpOnlyNumbers.exec(input.value.trim())===null)
+    /*if (errorMessages.length >= 1 && regExpOnlyNumbers.exec(input.value.trim())===null)
         throw new Error(errorMessages[0]);
     if (errorMessages.length >= 2 && input.value < 0)
-        throw new Error(errorMessages[1]);
+        throw new Error(errorMessages[1]);*/
+    /*if (esAmountRegex.exec(input.value.trim())===null) {
+        throw new Error("Formato válido: x.xxx,xx");
+    }*/
+    if (input.value.trim().match(esAmountRegex) === null) {
+        throw new Error("Formato válido: x.xxx,xx");
+    }
 }
 async function getAccounts() {
     try {
@@ -335,15 +344,17 @@ async function createAccount() {
     const newAccountID = accountsArray[0].id+1; // new ID
     const date = new Date().toISOString(); // get system date
     var creditLine; // controll credit line value
+    var beginBalance; // controll begin balance value
     // creditLine input controll
     if (newCreditLine.value.trim() === "") creditLine = 0;
-    else creditLine = newCreditLine.value.trim();
+    else creditLine = newCreditLine.value.trim().replace(/\./g, "").replace(",", "."); // format input value
+    beginBalance = newBeginBalance.value.trim().replace(/\./g, "").replace(",", "."); // format input value
     const newAccount = new Account( // create Accounts
                                     newAccountID,
                                     newDescription.value.trim(),
-                                    newBeginBalance.value.trim(),
+                                    beginBalance,
                                     creditLine,
-                                    newBeginBalance.value.trim(),
+                                    beginBalance,
                                     date,
                                     comboAccountType.value);
     try {
@@ -379,7 +390,7 @@ async function deleteAccount(accountID) {
         toggleDeleteAccountFormVisibility();
         location.reload();
     } catch (error) {   
-        showMsgBoxAccounts(error.message, "#ff0000");
+        showMsgBoxAccounts(msgBoxAccounts, error.message, "#ff0000");
     }
 }
 async function updateAccount(event) {
@@ -431,6 +442,7 @@ function* accountRowGenerator(accounts) {
             } else if (field === "creditLine" ||
                        field === "beginBalance" ||
                        field === "balance" ) {
+              //const numeroFormateado = account[field].replace(/\./g, "").replace(",", ".");
               td.textContent = new Intl.NumberFormat("es-ES", {style: "currency", 
                                                                    currency: "EUR"}).format(account[field]);
             } else { // No different format
@@ -501,6 +513,12 @@ async function buildAccountsTable() {
     const rowGenerator = accountRowGenerator(accounts);
     for (const row of rowGenerator)
         tbody.appendChild(row);
+    // then hide forms
+    document.getElementById("newAccountForm").style.display = 'none';
+    document.getElementById("editAccountForm").style.display = 'none';
+    document.getElementById("deleteAccountForm").style.display = 'none';
+    //hide video
+    document.getElementById("h5p-container").style.display = 'none';
 }
 function showMsgBoxAccounts(box, message, color) {
     box.style.display = 'flex';
@@ -522,4 +540,28 @@ function storeAccountData(event) {
         sessionStorage.setItem("account", JSON.stringify(account));
         window.location.href = 'movements.html';
     }
+}
+
+/* EXAMEN */
+const customerName = sessionStorage.getItem("customer.firstName");
+const customerMidIn = sessionStorage.getItem("customer.middleInitial");
+const h2 = document.getElementById("sessionNombre");
+
+if (h2) {
+    if (customerName) {
+        h2.textContent = `¡Hola, ${customerName} ${customerMidIn}!`;
+    } else {
+        h2.textContent = "¡Hola!";
+    }
+}
+
+function showBalanceSum() {
+    const totalBalance = accountsArray.reduce(
+            (tot, acc) => tot + acc.balance, 0);
+    console.log(totalBalance);
+    const formatTotalBalance = new Intl.NumberFormat("es-ES", {style: "currency", 
+                                                                   currency: "EUR"}).format(totalBalance);
+    tfTotalBalance.innerHTML = "";
+    tfTotalBalance.innerHTML = `<h3>Saldo total: ${formatTotalBalance}</h3>`;
+    
 }
