@@ -1,3 +1,7 @@
+//Variables de las anteriores onclick
+const changeThemeButton = document.getElementById('themeToggle');
+const DropMenuBttn = document.getElementById('menuBtn');
+const SalirSessionBttn = document.getElementById('botonCerrarSesion');
 //CHECK IF THERES SESSION STORAGE THEME
 const themeLink = document.getElementById('theme-link');
 const darkMode = sessionStorage.getItem('darkMode') === 'true';
@@ -8,6 +12,10 @@ if (darkMode) {
   themeLink.disabled = true; // SWITCH STYLE.CSS
   document.body.classList.remove('dark-mode');
 }
+changeThemeButton.addEventListener('click', changeTheme);
+DropMenuBttn.addEventListener('click', dropDownMenu);
+SalirSessionBttn.addEventListener('click', salirSession);
+
 function changeTheme(){
   const isDark = !themeLink.disabled;
   if (isDark) {
@@ -157,8 +165,6 @@ function showHiVerifyPassword(){
         tooglePasswordImg.src='assets/img/eye-svgrepo-com.svg';
     }
 }
-
-
 //CERRR SESSION
 function salirSession(){
     sessionStorage.clear();

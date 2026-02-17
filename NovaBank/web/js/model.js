@@ -2,7 +2,7 @@
  * @todo Cambiar el nombre de la clase a Movement
  * @type {type}
  */
-export class Movements {
+export class Movement {
   constructor(amount, balance, description) {
         this.amount = parseFloat(amount);
         this.balance = parseFloat(balance);
