@@ -73,24 +73,36 @@
       <div class="tableContainer">
         <h1>Cuentas</h1>
         <div class="table-card">
-            <table id="showCOMPLETAR" aria-label="Cuentas del usuario">
-            <!--caption>Cuentas</caption-->
-                <thead>
-                    <tr>
-                        <th scope="col">ID</th>
-                        <th scope="col">Tipo</th>
-                        <th scope="col">Descripción</th>
-                        <th scope="col">Línea de crédito</th>
-                        <th scope="col">Fecha de apertura</th>
-                        <th scope="col">Saldo inicial</th>
-                        <th scope="col">Saldo actual</th>
-                        <th scope="col">Acción</th>
-                    </tr>
-                </thead>
-                <tbody id="contentAccounts">
+            <div class="accounts-container" role="table" aria-label="Cuentas del usuario"> <!-- table -->
+
+                <div class="accounts-header" role="rowgroup"> <!-- thead -->
+                    <div class="header-row" role="row"> <!-- tr -->
+                        <div scope="col" role="columnheader" class="account-cell-header">ID</div> <!-- th -->
+                        <div scope="col" role="columnheader" class="account-cell-header">Tipo</div> <!-- th -->
+                        <div scope="col" role="columnheader" class="account-cell-header">Descripción</div> <!-- th -->
+                        <div scope="col" role="columnheader" class="account-cell-header">Línea de crédito</div> <!-- th -->
+                        <div scope="col" role="columnheader" class="account-cell-header">Fecha de apertura</div> <!-- th -->
+                        <div scope="col" role="columnheader" class="account-cell-header">Saldo inicial</div> <!-- th -->
+                        <div scope="col" role="columnheader" class="account-cell-header">Saldo actual</div> <!-- th -->
+                        <div scope="col" role="columnheader" class="account-cell-header">Acción</div> <!-- th -->
+                    </div> <!-- /tr -->
+                </div> <!-- /thead -->
+
+                <div class="account-body" id="contentAccounts" role="rowgroup"> <!-- tbody -->
                     <!-- Generative content here -->
-                </tbody>
-            </table>
+                    <!--div class="account-row">
+                        <div class="account-cell"></div>
+                        <div class="account-cell"></div>
+                        <div class="account-cell"></div>
+                        <div class="account-cell"></div>
+                        <div class="account-cell"></div>
+                        <div class="account-cell"></div>
+                        <div class="account-cell"></div>
+                        <div class="account-cell"></div>
+                    </div-->
+                </div> <!-- /tbody -->
+
+            </div> <!-- /table -->
         </div>
 
         <div class="footer-actions">
