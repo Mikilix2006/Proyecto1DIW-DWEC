@@ -25,7 +25,7 @@
                 <a href="main.html"><img src="/NovaBank/assets/img/logo.png" alt="NovaBank"></a>
                 <a href="main.html" aria-label="Ir al inicio de Nova Bank"><h1>Nova Bank</h1></a>
         </div>
-        <div class="buttons">
+        <div class="buttons"> <!--saco los onclick de aquí , pero no me funciona-->
                 <button type="button" id="themeToggle" class="btn-theme" onclick="changeTheme();" title="Cambiar tema" aria-label="Cambiar a tema oscuro o claro"> 
                     <svg id="icon-sun" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m8.485-8.485h1M4.515 12.515h1M17.657 6.343l.707-.707M6.343 17.657l.707-.707M17.657 17.657l.707.707M6.343 6.343l.707.707M12 8a4 4 0 100 8 4 4 0 000-8z"/>
@@ -107,7 +107,7 @@
     </section>
     
     <!--FORMULARIO PARA CREAR NUEVO USUARIO-->
-    <section aria-labelledby="Formulario de creación de nuevos usuarios" class="form-section-crud" id="modalCrear" style="display: none;">
+    <section aria-labelledby="Formulario de creación de nuevos usuarios" class="form-section-crud" id="modalCrear">
         <form aria-label="Formulario crear usuario"class="formulario" id="formCrearUsuario">
             <div class="titulo">
                 <h1> Nuevo Usuario</h1>
@@ -158,7 +158,7 @@
 
     <!--FORMULARIO PARA EDITAR USUARIO-->
     
-    <section aria-labelledby="Formulario de editar usuarios" class="form-section-crud" id="modalEditar" style="display: none;">
+    <section aria-labelledby="Formulario de editar usuarios" class="form-section-crud" id="modalEditar">
         <form aria-label="Formulario editar usuario"class="formulario" id="formEditarUsuario">
             <div class="titulo">
                 <h1> Editar Usuario</h1>
@@ -208,7 +208,7 @@
     </section>    
     
     <!-- MENSAJE PARA ELIMINAR  USUARIO -->
-    <section aria-labelledby="Mensaje de eliminación de usuario" class="form-section-crud" id="modalEliminarUsuario" style="display: none;">
+    <section aria-labelledby="Mensaje de eliminación de usuario" class="form-section-crud" id="modalEliminarUsuario">
         <div class="formulario">
             <div class="titulo">
                 <h1>Eliminar Usuario</h1>
@@ -227,7 +227,7 @@
     <div class="videoContainer">
         <p>Si necesitas ayuda con la interfaz, por favor mira el tutorial.</p>
         <button aria-label="Botón de ayuda" id="showVideoCustomer" class="btn-solid">Ayuda</button>
-        <div id="h5p-container" class="form-section-crud" style="display: none"></div>
+        <div id="h5p-container" class="form-section-crud" ></div>
     </div> 
 </main>
    
@@ -239,19 +239,6 @@
     <p>© Copyright 2026 Nova Bank. All Rights Reserved.</p>
 </footer>
 <!--TODO Mover este código JS al correspondiente script JS externo-->
-<script>
-    const customerName = sessionStorage.getItem("customer.firstName");
-    const customerMidIn = sessionStorage.getItem("customer.middleInitial");
-    const h2 = document.getElementById("sessionNombre");
-
-    if (h2) {
-        if (customerName) {
-            h2.textContent = `¡Hola, ${customerName} ${customerMidIn}!`;
-        } else {
-            h2.textContent = "¡Hola!";
-        }
-    }
-  </script>
     
 <!-- ORDEN CORRECTO DE SCRIPTS  type="module" -->
 <script src="../js/facilities.js"></script>

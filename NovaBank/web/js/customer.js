@@ -47,8 +47,25 @@ const phoneInput = document.getElementById("phone");
 const emailInput = document.getElementById("email");
 
 
+window.addEventListener('load', () => {
+    mostrarSaludo();     
+    buildUsersTable();    
+});
 
-window.addEventListener('load', buildUsersTable);
+function mostrarSaludo() {
+    const customerName = sessionStorage.getItem("customer.firstName");
+    const customerMidIn = sessionStorage.getItem("customer.middleInitial");
+    const h2 = document.getElementById("sessionNombre");
+
+    if (h2) {
+        if (customerName) {
+            // RA2: Uso de Template Literals para mejorar la legibilidad
+            h2.textContent = `¡Hola, ${customerName} ${customerMidIn}!`;
+        } else {
+            h2.textContent = "¡Hola!";
+        }
+    }
+}
 
 // Validaciones en tiempo real con el evento 'input'
 firstNameInput.addEventListener("input", validateFirstName);
@@ -219,16 +236,39 @@ btnCancelar.onclick = () => {
 
 // Acción de Confirmar (Eliminación real)
 btnConfirmar.onclick = async () => {
-    const response = await fetch(`${SERVICE_URL}/${selectedUser.id}`, { method: "DELETE" });
-
-    if (!response.ok) {
-        alert("Error al eliminar el usuario");
-        return;
-    }
-    modalEliminar.style.display = 'none'; 
-    selectedUser = null;
-    buildUsersTable(); 
+    const tieneCuentas = await checkCuentasAsociadas(selectedUser.id);
     
+    if (tieneCuentas) {
+        alert("Error: No se puede borrar a un usuario si tiene cuentas asociadas.");
+        modalEliminar.style.display = 'none';
+        return; 
+    }
+
+    try {
+        const response = await fetch(`${SERVICE_URL}/${selectedUser.id}`, { 
+            method: "DELETE" 
+        });
+
+        if (response.status === 409) {
+            alert("Error de conflicto (409): El servidor detectó movimientos vinculados.");
+            modalEliminar.style.display = 'none';
+            return;
+        }
+
+        if (response.ok) {
+            modalEliminar.style.display = 'none'; 
+            selectedUser = null;
+            await buildUsersTable(); 
+            alert("Usuario eliminado correctamente.");
+        } else {
+            alert("Error: El servidor denegó la petición de borrado.");
+            modalEliminar.style.display = 'none';
+        }
+
+    } catch (err) {
+        console.error("Error en la petición DELETE:", err);
+        alert("Hubo un fallo de comunicación con el servidor.");
+    }
 };
 
 // === GENERAR CONTRASEÑA ===
@@ -679,3 +719,27 @@ function setupClickOutside() {
         }
     });
 }
+
+async function checkCuentasAsociadas(id) {
+    try {
+        
+        const response = await fetch("/CRUDBankServerSide/webresources/account", {
+            method: "GET",
+            headers: {
+                "Accept": "application/json" 
+            }
+        });
+        
+        if (!response.ok) return false;
+        
+        const todasLasCuentas = await response.json();
+        
+        return todasLasCuentas.some(cuenta => 
+            cuenta.customers.some(c => Number(c.id) === Number(id))
+        );
+    } catch (err) {
+        console.error("Error técnico:", err);
+        return true; 
+    }
+}
+
