@@ -897,7 +897,35 @@ section h1, article h1, nav h1, aside h1 {
     pointer-events: auto; 
 }
 
+.mobile-cards-view {
+    display: none !important; 
+}
 
+.accion-iconos {
+  display: flex;
+  flex-direction: row;      
+  align-items: center;      
+  justify-content: center;  
+  gap: 10px;              
+}
+
+.accion-iconos button {
+  display: inline-flex;     
+  align-items: center;
+  justify-content: center;
+}
+.accion-iconos button {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+}
+.accion-iconos .btn-edit:hover {
+  transform: scale(1.05);
+}
+
+.accion-iconos .btn-delete:hover {
+  transform: scale(1.05);
+}
 
 /* responsive*/
 @media (max-width: 1024px) {
@@ -923,7 +951,7 @@ section h1, article h1, nav h1, aside h1 {
     }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 800px) {
     /* Banner */
     .banner {
         height: auto;
@@ -999,21 +1027,21 @@ section h1, article h1, nav h1, aside h1 {
         display: flex;
         flex-direction: column;
         align-items: center;
-        /* Esto permite que el botón crezca y encoja según la pantalla */
+       
         flex: 1 1 250px; 
-        max-width: 350px; /* Para que no se vuelvan gigantes en laptops */
+        max-width: 350px; 
     }
 
     .btn-estadistica {
         width: 100%;
         padding: 15px;
         font-size: 1rem;
-        white-space: normal; /* Permite que el texto se ajuste si el botón se achica */
+        white-space: normal; 
 }
     .tableContainerBody {
     width: 100%;
     padding: 20px;
-    display: block; /* Cambiamos de flex a block para mejor control */
+    display: block; 
 }
 
 .table-card {
@@ -1021,32 +1049,30 @@ section h1, article h1, nav h1, aside h1 {
     border-radius: 15px;
     box-shadow: 0 10px 30px rgba(0,0,0,0.1);
     
-    /* ESTO ARREGLA TODO: */
-    overflow-x: auto; /* Si la pantalla es menor a la tabla, aparece scroll lateral */
+    overflow-x: auto;
     -webkit-overflow-scrolling: touch; 
 }
 
 table {
     width: 100%;
     border-collapse: collapse;
-    /* Forzamos un ancho mínimo para que las 11 columnas respiren */
     min-width: 1100px; 
 }
 
 th, td {
     padding: 12px 8px;
-    font-size: 0.85rem; /* Tamaño de fuente legible en laptops */
+    font-size: 0.85rem; 
     text-align: center;
 }
 }
 
 @media (max-width: 480px) {
-    /* Ajustes extremos para pantallas muy pequeñas */
+   
     .logo a {
         font-size: 0.9rem;
     }
     .header .container {
-        flex-direction: row; /* Mantener logo y menú en línea */
+        flex-direction: row; 
         justify-content: space-between;
     }
     .btn-solid, .btn-outline {
@@ -1055,4 +1081,32 @@ th, td {
     }
 }
 
+@media screen and (min-width: 969px) {
+    .desktop-only {
+        display: block !important; 
+    }
+    .mobile-cards-view {
+        display: none !important; 
+    }
+}
 
+@media screen and (max-width: 968px) {
+    .desktop-only {
+        display: none !important; 
+    }
+    
+    .mobile-cards-view {
+        display: flex !important; 
+        flex-direction: column;
+        gap: 15px;
+        padding: 10px;
+    }
+
+    .movement-card-item {
+        background-color: #fff;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        padding: 15px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+}
