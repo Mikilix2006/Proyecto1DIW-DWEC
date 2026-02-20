@@ -219,13 +219,21 @@ const btnConfirmar = document.getElementById("btnConfirmarBorrar");
 
  //Esta es la función que llamas cuando tocas el icono de basura en la tabla
 async function deleteSelectedUser() {
-    const email = selectedUser.email.toLowerCase();
+  
+    const emailLogueado = sessionStorage.getItem("customer.email"); 
+    const emailSeleccionado = selectedUser.email.toLowerCase();
 
-    if (email.endsWith("@admin.com") || email.endsWith("@admim.com")) {
+    if (emailSeleccionado === emailLogueado?.toLowerCase()) {
+        alert("No puedes eliminar tu propia cuenta de administrador mientras estás logueado.");
+        return; 
+    }
+
+    if (emailSeleccionado.endsWith("@admin.com") || emailSeleccionado.endsWith("@admim.com")) {
         alert("Acceso denegado: Los usuarios administradores no pueden ser eliminados del sistema.");
         selectedUser = null; 
         return; 
     }
+
     modalEliminar.style.display = 'flex';
 }
 
