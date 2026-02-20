@@ -225,6 +225,8 @@ body {
   background: linear-gradient(180deg, rgba(56, 11, 76, 0.845), rgba(255, 255, 255, 0));
   z-index: 1000;
   pointer-events: all;
+  display:none;
+  
 }
 .form-content {
   text-align: center;
@@ -866,11 +868,9 @@ button:hover {
     text-align: center;
 }
 
-
 section h1, article h1, nav h1, aside h1 {
     font-size: 1.5em;
 }
-
 
 /*video*/
 .videoContainer{

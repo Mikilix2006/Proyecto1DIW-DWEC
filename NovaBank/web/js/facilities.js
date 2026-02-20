@@ -1,3 +1,10 @@
+
+const newChangeButton = document.getElementById('themeToggle');
+const newDropMenu = document.getElementById('menuBtn');
+const newCerrarSesion = document.getElementById('botonCerrarSesion');
+
+
+
 //CHECK IF THERES SESSION STORAGE THEME
 const themeLink = document.getElementById('theme-link');
 const darkMode = sessionStorage.getItem('darkMode') === 'true';
@@ -8,6 +15,11 @@ if (darkMode) {
   themeLink.disabled = true; // SWITCH STYLE.CSS
   document.body.classList.remove('dark-mode');
 }
+
+newChangeButton.addEventListener('click', changeTheme);
+newDropMenu.addEventListener('click', dropDownMenu);
+newCerrarSesion.addEventListener('click', salirSession);
+
 function changeTheme(){
   const isDark = !themeLink.disabled;
   if (isDark) {
@@ -23,7 +35,6 @@ function changeTheme(){
   }
     
 }
-  
 //BURGER MENU DROP DOWN
 function dropDownMenu() {
     const menu = document.getElementById("dropdownMenu");
