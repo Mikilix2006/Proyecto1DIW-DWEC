@@ -575,7 +575,22 @@ button:hover {
     color: white;
 
 }
-
+/*Display none style inline*/
+#display-credit-container{
+    display: none;
+}
+#summaryDisplay{
+    display: none;
+}
+#contentMovementsCards{
+    display: none;
+}
+#newMovementForm{
+    display: none;
+}
+#confirmDelete{
+    display: none;
+}
 /**** ELIMINAR CUENTAS FORMULARIO *****/
 /* El texto de advertencia gris */
 .info-eliminar-cuenta p {
@@ -881,6 +896,9 @@ section h1, article h1, nav h1, aside h1 {
   gap: 1rem;
   padding: 50px; 
   box-sizing: border-box;
+}
+#h5p-container{
+    display: none;
 }
 
 #h5p-container .h5p-iframe-wrapper {

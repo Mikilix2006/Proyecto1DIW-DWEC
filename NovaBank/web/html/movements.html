@@ -57,7 +57,7 @@
             <div id="account-info-header">
                 <p><strong>ID Cuenta:</strong> <span id="display-id">-</span></p>
                 <p><strong>Tipo:</strong> <span id="display-type">-</span></p>
-                <p id="display-credit-container" style="display: none;"><strong>Línea de Crédito:</strong> <span id="display-credit">-</span></p>
+                <p id="display-credit-container"><strong>Línea de Crédito:</strong> <span id="display-credit">-</span></p>
             </div>
         </div>
         <div class="card-content-movements ">
@@ -66,7 +66,7 @@
             <div class="stats">
                 <button class="btn-solid small" id="btnShowSummary">Calcular</button>
             </div>
-            <div id="summaryDisplay" class="summaryDisplay" style="display:none;">
+            <div id="summaryDisplay" class="summaryDisplay">
                 <div class="summaryCont" aria-label="Resumen de los balances">
                     <div>
                         <p><strong>Total Depósitos:</strong></p>
@@ -97,7 +97,7 @@
                         <tbody id="contentMovements"></tbody>
                 </table>
             </div>
-            <div id="contentMovementsCards" class="mobile-only" style="display: none;" aria-label="Historial de movimientos en formato tarjetas"></div>
+            <div id="contentMovementsCards" class="mobile-only" aria-label="Historial de movimientos en formato tarjetas"></div>
             <div class="footer-controls" aria-labelledby="Botones de control">
                 <button class="btn-back" id="goBackAccount" aria-label="Volver a cuentas"><i class="fa-solid fa-arrow-right fa-flip-horizontal"></i></button>
                 <div class="right-group">
@@ -107,7 +107,7 @@
             </div>
         </div>
     </section>
-    <section aria-labelledby="Nuevo movimiento" id="newMovementForm" class="form-section-crud" style="display: none;">
+    <section aria-labelledby="Nuevo movimiento" id="newMovementForm" class="form-section-crud">
       <form aria-labelledby="Formulario de nuevo movimiento" id="formMovement" class="formulario">
             <div class="titulo">
                 <h1>Nuevo Movimiento</h1>
@@ -128,7 +128,7 @@
             <button type="submit" id="addMovement" class="btn-form-crud">Crear Movimiento</button>
         </form>
     </section>
-    <section aria-labelledby="Eliminar el último movimiento" id="confirmDelete" class="form-section-crud" style="display: none;">
+    <section aria-labelledby="Eliminar el último movimiento" id="confirmDelete" class="form-section-crud">
         <div class="formulario" id="deleteConfirmationForm">
             <div class="titulo">
                 <h1> Elimar Movimiento</h1>
@@ -150,7 +150,7 @@
     <div class="videoContainer">
         <p>Si necesitas ayuda con la interfaz, por favor mira el tutorial.</p>
         <button id="showVideoMov" class="btn-solid">Ayuda</button>
-        <div id="h5p-container" class="form-section-crud" style="display: none"></div>
+        <div id="h5p-container" class="form-section-crud"></div>
     </div> 
   </main>
   <footer role="contentinfo"class="footer">
