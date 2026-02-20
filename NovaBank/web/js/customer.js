@@ -224,7 +224,7 @@ async function deleteSelectedUser() {
     const emailSeleccionado = selectedUser.email.toLowerCase();
 
     if (emailSeleccionado === emailLogueado?.toLowerCase()) {
-        alert("No puedes eliminar tu propia cuenta de administrador mientras estás logueado.");
+        alert("No puedes eliminar tu propia cuenta de administrador.");
         return; 
     }
 

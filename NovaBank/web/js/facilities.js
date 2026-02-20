@@ -1,11 +1,8 @@
 
-/*const newChangeButton = document.getElementById('themeToggle');
+const newChangeButton = document.getElementById('themeToggle');
 const newDropMenu = document.getElementById('menuBtn');
 const newCerrarSesion = document.getElementById('botonCerrarSesion');
 
-newChangeButton.addEventListener('click', changeTheme);
-newDropMenu.addEventListener('click', dropDownMenu);
-newCerrarSesion.addEventListener('click', salirSession);*/
 
 
 //CHECK IF THERES SESSION STORAGE THEME
@@ -18,6 +15,11 @@ if (darkMode) {
   themeLink.disabled = true; // SWITCH STYLE.CSS
   document.body.classList.remove('dark-mode');
 }
+
+newChangeButton.addEventListener('click', changeTheme);
+newDropMenu.addEventListener('click', dropDownMenu);
+newCerrarSesion.addEventListener('click', salirSession);
+
 function changeTheme(){
   const isDark = !themeLink.disabled;
   if (isDark) {

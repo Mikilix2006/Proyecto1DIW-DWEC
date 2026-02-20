@@ -26,7 +26,7 @@
                 <a href="main.html" aria-label="Ir al inicio de Nova Bank"><h1>Nova Bank</h1></a>
         </div>
         <div class="buttons"> <!--saco los onclick de aquí , pero no me funciona-->
-                <button type="button" id="themeToggle" class="btn-theme" onclick="changeTheme();" title="Cambiar tema" aria-label="Cambiar a tema oscuro o claro"> 
+                <button type="button" id="themeToggle" class="btn-theme" title="Cambiar tema" aria-label="Cambiar a tema oscuro o claro"> 
                     <svg id="icon-sun" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m8.485-8.485h1M4.515 12.515h1M17.657 6.343l.707-.707M6.343 17.657l.707-.707M17.657 17.657l.707.707M6.343 6.343l.707.707M12 8a4 4 0 100 8 4 4 0 000-8z"/>
                     </svg>
@@ -35,9 +35,9 @@
                     </svg>
                 </button>
             <div class="menu-container">
-                <button class="menu-toggle" id="menuBtn" onclick="dropDownMenu();" aria-haspopup="true" aria-expanded="false" aria-controls="dropdownMenu" aria-label="Abrir menú de usuario"><i class="fa-solid fa-bars" aria-hidden="true"></i></button>
+                <button class="menu-toggle" id="menuBtn" aria-haspopup="true" aria-expanded="false" aria-controls="dropdownMenu" aria-label="Abrir menú de usuario"><i class="fa-solid fa-bars" aria-hidden="true"></i></button>
                     <ul class="dropdown-menu" id="dropdownMenu" role="menu">
-                        <li><a role="menuitem" aria-label="Cerrar sesión" id="botonCerrarSesion" onclick="salirSession();" accesskey="s" aria-label="Cerrar sesión, acceso rápido Alt más S">Cerrar session<span>S</span></a></li>
+                        <li><a role="menuitem" aria-label="Cerrar sesión" id="botonCerrarSesion" accesskey="s" aria-label="Cerrar sesión, acceso rápido Alt más S">Cerrar session<span>S</span></a></li>
                     </ul> 
             </div>
          </div>
