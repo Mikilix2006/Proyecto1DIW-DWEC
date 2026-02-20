@@ -575,7 +575,22 @@ button:hover {
     color: white;
 
 }
-
+/*Display none style inline*/
+#display-credit-container{
+    display: none;
+}
+#summaryDisplay{
+    display: none;
+}
+#contentMovementsCards{
+    display: none;
+}
+#newMovementForm{
+    display: none;
+}
+#confirmDelete{
+    display: none;
+}
 /**** ELIMINAR CUENTAS FORMULARIO *****/
 /* El texto de advertencia gris */
 .info-eliminar-cuenta p {
@@ -882,6 +897,9 @@ section h1, article h1, nav h1, aside h1 {
   padding: 50px; 
   box-sizing: border-box;
 }
+#h5p-container{
+    display: none;
+}
 
 #h5p-container .h5p-iframe-wrapper {
     width: 90%;
@@ -1035,6 +1053,29 @@ th, td {
     font-size: 0.85rem; /* Tamaño de fuente legible en laptops */
     text-align: center;
 }
+.desktop-only {
+        display: none !important;
+    }
+    .mobile-only {
+        display: flex !important;
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .movement-card-item {
+        background-color: var(--color-fondo);
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        padding: 15px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    .card-row {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 8px;
+        border-bottom: 1px inset #eee;
+    }
 }
 
 @media (max-width: 480px) {
@@ -1049,5 +1090,14 @@ th, td {
     .btn-solid, .btn-outline {
         padding: 0.4rem 0.6rem;
         font-size: 0.8rem;
+    }
+}
+
+@media (min-width: 769px) {
+    .desktop-only {
+        display: block !important;
+    }
+    .mobile-only {
+        display: none !important;
     }
 }

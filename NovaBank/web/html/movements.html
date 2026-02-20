@@ -1,4 +1,9 @@
 <!DOCTYPE html>
+<!--
+@todo Mover todos los estilos en línea a un CSS externo.
+@todo Quitar todos los atributos onclick y asociar handler en el script JS correspondiente.
+-->
+
 <html lang="es">
 <head>
     <title>Movimientos</title>
@@ -15,7 +20,7 @@
     <script src="/NovaBank/assets/h5p-player/main.bundle.js"></script>
     <script src="/NovaBank/js/model.js"></script>
     <script type='module' src="/NovaBank/js/movementsController.js"></script>
-    <script src="/NovaBank/js/facilities.js"></script>
+    
 </head>
 <body>
   <header role="banner" class="header">
@@ -25,7 +30,7 @@
                 <a href="main.html" aria-label="Ir al inicio de Nova Bank"><h1>Nova Bank</h1></a>
         </div>
         <div class="buttons">
-                <button type="button" id="themeToggle" class="btn-theme" onclick="changeTheme();" title="Cambiar tema" aria-label="Cambiar a tema oscuro o claro"> 
+                <button type="button" id="themeToggle" class="btn-theme" title="Cambiar tema" aria-label="Cambiar a tema oscuro o claro"> 
                     <svg id="icon-sun" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m8.485-8.485h1M4.515 12.515h1M17.657 6.343l.707-.707M6.343 17.657l.707-.707M17.657 17.657l.707.707M6.343 6.343l.707.707M12 8a4 4 0 100 8 4 4 0 000-8z"/>
                     </svg>
@@ -34,9 +39,9 @@
                     </svg>
                 </button>
             <div class="menu-container">
-                <button class="menu-toggle" id="menuBtn" onclick="dropDownMenu();" aria-haspopup="true" aria-expanded="false" aria-controls="dropdownMenu" aria-label="Abrir menú de usuario"><i class="fa-solid fa-bars" aria-hidden="true"></i></button>
+                <button class="menu-toggle" id="menuBtn" aria-haspopup="true" aria-expanded="false" aria-controls="dropdownMenu" aria-label="Abrir menú de usuario"><i class="fa-solid fa-bars" aria-hidden="true"></i></button>
                     <ul class="dropdown-menu" id="dropdownMenu" role="menu">
-                        <li><a role="menuitem" aria-label="Cerrar sesión" id="botonCerrarSesion" onclick="salirSession();" accesskey="s" aria-label="Cerrar sesión, acceso rápido Alt más S">Cerrar session<span>S</span></a></li>
+                        <li><a role="menuitem" aria-label="Cerrar sesión" id="botonCerrarSesion" accesskey="s" aria-label="Cerrar sesión, acceso rápido Alt más S">Cerrar session<span>S</span></a></li>
                     </ul> 
             </div>
          </div>
@@ -52,7 +57,7 @@
             <div id="account-info-header">
                 <p><strong>ID Cuenta:</strong> <span id="display-id">-</span></p>
                 <p><strong>Tipo:</strong> <span id="display-type">-</span></p>
-                <p id="display-credit-container" style="display: none;"><strong>Línea de Crédito:</strong> <span id="display-credit">-</span></p>
+                <p id="display-credit-container"><strong>Línea de Crédito:</strong> <span id="display-credit">-</span></p>
             </div>
         </div>
         <div class="card-content-movements ">
@@ -61,7 +66,7 @@
             <div class="stats">
                 <button class="btn-solid small" id="btnShowSummary">Calcular</button>
             </div>
-            <div id="summaryDisplay" class="summaryDisplay" style="display:none;">
+            <div id="summaryDisplay" class="summaryDisplay">
                 <div class="summaryCont" aria-label="Resumen de los balances">
                     <div>
                         <p><strong>Total Depósitos:</strong></p>
@@ -78,7 +83,7 @@
     </section>
     <section aria-labelledby="Tabla de movimientos" class="tableContainerBody">
         <div class="tableContainer">
-            <div class="table-card">
+            <div class="table-card desktop-only"> 
                 <table id="userMovements">
                     <!--caption>Historial reciente de transacciones</caption-->
                         <thead>
@@ -92,6 +97,7 @@
                         <tbody id="contentMovements"></tbody>
                 </table>
             </div>
+            <div id="contentMovementsCards" class="mobile-only" aria-label="Historial de movimientos en formato tarjetas"></div>
             <div class="footer-controls" aria-labelledby="Botones de control">
                 <button class="btn-back" id="goBackAccount" aria-label="Volver a cuentas"><i class="fa-solid fa-arrow-right fa-flip-horizontal"></i></button>
                 <div class="right-group">
@@ -101,7 +107,7 @@
             </div>
         </div>
     </section>
-    <section aria-labelledby="Nuevo movimiento" id="newMovementForm" class="form-section-crud" style="display: none;">
+    <section aria-labelledby="Nuevo movimiento" id="newMovementForm" class="form-section-crud">
       <form aria-labelledby="Formulario de nuevo movimiento" id="formMovement" class="formulario">
             <div class="titulo">
                 <h1>Nuevo Movimiento</h1>
@@ -115,14 +121,14 @@
                 </select>
             </div>
             <div class="form-group-crud" aria-label="Ingresa una cantidad">
-                <input type="number" id="newAmount" min="0.01" step="0.01" placeholder="0.00" name="Cantidad a ingresar"required/>
+                <input type="text" id="newAmount" placeholder="0.000,00" name="Cantidad a ingresar" required/>
                 <div id="responseMsgamount"></div>
             </div>
             <div class="error-msg" id="responseMsg"></div>
             <button type="submit" id="addMovement" class="btn-form-crud">Crear Movimiento</button>
         </form>
     </section>
-    <section aria-labelledby="Eliminar el último movimiento" id="confirmDelete" class="form-section-crud" style="display: none;">
+    <section aria-labelledby="Eliminar el último movimiento" id="confirmDelete" class="form-section-crud">
         <div class="formulario" id="deleteConfirmationForm">
             <div class="titulo">
                 <h1> Elimar Movimiento</h1>
@@ -144,7 +150,7 @@
     <div class="videoContainer">
         <p>Si necesitas ayuda con la interfaz, por favor mira el tutorial.</p>
         <button id="showVideoMov" class="btn-solid">Ayuda</button>
-        <div id="h5p-container" class="form-section-crud" style="display: none"></div>
+        <div id="h5p-container" class="form-section-crud"></div>
     </div> 
   </main>
   <footer role="contentinfo"class="footer">
@@ -155,5 +161,6 @@
     <p>© Copyright 2026 Nova Bank. All Rights Reserved.</p>
     <p><strong>Nova Bank</strong></p>
   </footer>
+  <script src="/NovaBank/js/facilities.js"></script>
 </body>
 </html>

@@ -1,9 +1,8 @@
-/* 
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+/**
+ * @todo Cambiar el nombre de la clase a Movement
+ * @type {type}
  */
-export class Movements {
+export class Movement {
   constructor(amount, balance, description) {
         this.amount = parseFloat(amount);
         this.balance = parseFloat(balance);

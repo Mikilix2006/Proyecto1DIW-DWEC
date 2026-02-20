@@ -3,7 +3,7 @@
       ATTRIBUTES TO BE USED BY THIS CONTROLLER
    =================================================
  */
-import { Movements } from './model.js';
+import { Movement } from './model.js';
 const SERVICE_URL_MOV= "/CRUDBankServerSide/webresources/movement/";
 const SERVICE_URL_ACC = "/CRUDBankServerSide/webresources/account/";
 let movements = [];
@@ -48,12 +48,22 @@ document.addEventListener('DOMContentLoaded', () => {
 async function buildMovementsTable() {
     accountHeader();
     movements = await fetchMovements();
+    
     const tbody = document.querySelector("#contentMovements");
-    if (!tbody) return; //mostrar mensaje
+    const cardsContainer = document.querySelector("#contentMovementsCards");
+    
+    if (!tbody || !cardsContainer) return; //mostrar mensaje
+    
     tbody.innerHTML = "";
-    const rowGenerator = movementRowGenerator(movements);
+    cardsContainer.innerHTML = "";
+    const rowGenerator = movementRowGenerator(movements,'table');
     for (const row of rowGenerator) {
         tbody.appendChild(row);
+    }
+    
+    const cardsGenerator = movementRowGenerator(movements, 'card');
+    for (const card of cardsGenerator) {
+        cardsContainer.appendChild(card);
     }
 }
 /*SHOW THE CREATE NEW MOVEMENT FORM LAYER - CLICK ADD MOV  */
@@ -86,41 +96,50 @@ function handlerFormCreateMovement() {
 /*CONFIRM CREATE NEW MOVEMENT*/
 async function createNewMovement(e) {
     e.preventDefault();
+    const msgBox = document.getElementById("responseMsg");
+    msgBox.style.display = 'none';
     try {
         const inputAmount = document.getElementById("newAmount");
         const inputType = document.getElementById("newTypeAmount");
-        const amountStr = inputAmount.value.trim();
-        const amount = parseFloat(amountStr);
+        const rawAmount = inputAmount.value.trim();
         const description = inputType.value;
 
-        const accountData = JSON.parse(sessionStorage.getItem("account")) || JSON.parse(currentAccount);
-        const { balance, type, creditLine } = accountData;
-        //VALIDACIONES INICIALES
-        if (amountStr === "" || isNaN(amount)) throw new Error("Por favor, ingrese un monto numérico.");
-        if (amount <= 0) throw new Error("El monto debe ser mayor a cero.");
-        if (amountStr.includes(".") && amountStr.split(".")[1].length > 2) {
-            throw new Error("No se permiten más de dos decimales.");
+        //TODO Validar el formato de los importes mediante la siguiente RegExp
+        const esAmountRegex = /^(?:\d{1,15}|\d{1,3}(?:\.\d{3}){1,4})(?:,\d{1,2})?$/;
+        if (!esAmountRegex.test(rawAmount)) {
+            throw new Error("Formato de monto inválido. Use el formato 1.234,56 o 1234 (Hasta 15 números)");
         }
+
+        /* Explicación de esAmountRegex
+        ^
+            (?:                         # integer part options
+               \d{1,15}                 # 1 to 15 digits without thousand separator
+             | \d{1,3}(?:\.\d{3}){1,4}  # 1–3 digits, then 1–4 groups of ".ddd"
+            )
+            (?:,\d{1,2})?               # optional decimal with 1 or 2 digits
+            $
+         */        
+        const normalizedAmount = parseFloat(rawAmount.replace(/\./g, "").replace(",", "."));
+
+        if (isNaN(normalizedAmount) || normalizedAmount <= 0) {
+            throw new Error("El monto debe ser un valor numérico positivo.");
+        }
+        if (normalizedAmount.length > 15) {
+            throw new Error("El monto puede contener como máximo 15 dígitos.");
+        }
+        
         if (!description) throw new Error("Debe seleccionar un tipo de movimiento.");
 
-        if (description === "Payment") {
-            let totalDisponible = balance;
-            if (type === "CREDIT") {
-                totalDisponible += creditLine;
-            }
-            if (amount > totalDisponible) {
-                let mensajeError = `Fondos insuficientes. Su saldo actual es ${currencyFormatter.format(balance)}.`;
-                if (type === "CREDIT") {
-                    mensajeError += ` Sumando su crédito, el máximo permitido es ${currencyFormatter.format(totalDisponible)}.`;
-                }
-                throw new Error(mensajeError);
-            }
+        const accountData = JSON.parse(sessionStorage.getItem("account"));
+        if (description === "Payment" && normalizedAmount > (accountData.balance + (accountData.type === "CREDIT" ? accountData.creditLine : 0))) {
+            throw new Error("Fondos insuficientes para realizar este pago.");
         }
-        await fetchCreateNewMovement(amount, description);
-        cerrarFormulario(); 
 
+        await fetchCreateNewMovement(normalizedAmount, description);
+        cerrarFormulario(); 
+        await buildMovementsTable(); // Actualiza tabla y tarjetas
+        
     } catch (error) {
-        const msgBox = document.getElementById("responseMsg");
         msgBox.className = 'error';
         msgBox.textContent = error.message;
         msgBox.style.display = 'block';
@@ -131,34 +150,46 @@ function handlerFormDeleteMovement(){
     const deleteFormContainer = document.getElementById("confirmDelete");
     deleteFormContainer.style.display = 'flex';
 }
+
+
+async function handleResponseError(response) {
+    let message = "Error inesperado en el servidor.";
+    try {
+        // Intentamos leer el JSON de error que suele enviar el servidor (ej: {message: "..."})
+        const errorData = await response.json();
+        message = errorData.message || `Error ${response.status}: ${response.statusText}`;
+    } catch (e) {
+        // Si no es JSON, usamos el statusText estándar
+        message = `Error ${response.status}: ${response.statusText}`;
+    }
+    throw new Error(message);
+}
 /*CONFIRM DELETE LAST MOVEMENT*/
 /*FETCH DELETE MOVEMENT*/
 async function deleteLastMovement() {
-    if (movements.length === 0) return; //mostrar mensaje
-    //En lastMov guardamos la posición de la última instancia del objeto y 
-    //recuperamos el ID del movimiento
+    if (movements.length === 0) return;
     const lastMov = movements[movements.length - 1];
-    const idMovement = lastMov.id;
+    
     try {
-        const response = await fetch(`${SERVICE_URL_MOV}${encodeURIComponent(idMovement)}`, {
+        const response = await fetch(`${SERVICE_URL_MOV}${encodeURIComponent(lastMov.id)}`, {
             method: "DELETE",
             headers: { "Accept": "application/json" }
         });
-        if (!response.ok) throw new Error("Error en el borrado.");
-        const accountData = JSON.parse(sessionStorage.getItem("account"));
-        if(lastMov.description === "Deposit"){
-            accountData.balance -= lastMov.amount;
-        }else{
-            accountData.balance += lastMov.amount;
+
+        if (!response.ok) {
+            await handleResponseError(response); // Problema 1
         }
-        // Revertimos el balance
-        //Llamamos a la función updateAccountBalance para poder actualizar
-        //el balance de cuentas, par. la cuenta con el balance modificado.
+
+        const accountData = JSON.parse(sessionStorage.getItem("account"));
+        accountData.balance = (lastMov.description === "Deposit") ? accountData.balance - lastMov.amount : accountData.balance + lastMov.amount;
+
         await updateAccountBalance(accountData);
         await buildMovementsTable();
         cerrarDeleteForm();
     } catch (error) {
-        console.error("Error al eliminar:", error);
+        // Mostrar error en el formulario de borrado si falla
+        const msgBox = document.querySelector("#confirmDelete .error-msg");
+        msgBox.textContent = error.message;
     }
 }
 
@@ -223,42 +254,34 @@ function setupClickOutside() {
                    OTHER FUNCTIONS
    =================================================
  */
-const currencyFormatter = new Intl.NumberFormat(undefined, {
+const currencyFormatter = new Intl.NumberFormat('es-ES', {
         style: 'currency', currency: 'EUR', minimumFractionDigits: 2
     });
-const dateFormatter = new Intl.DateTimeFormat(undefined, {
+const dateFormatter = new Intl.DateTimeFormat('es-ES', {
         year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit'
 });
+
 /*FETCH CREATE RESOURCE*/
 async function fetchCreateNewMovement(amount, description) {
-    try {
-        const accountData = JSON.parse(sessionStorage.getItem("account"));
-        //const accountData = JSON.parse(sessionStorage.getItem("account"));
-        if (!accountData) throw new Error("No se encontró información de la cuenta.");
-        const idAccount = accountData.id;
-        let newBalance;
-        if(description === "Deposit"){
-            newBalance = accountData.balance + amount;
-        }else{
-            newBalance = accountData.balance - amount;
-        }
-        const movObj = new Movements(amount, newBalance, description);
-        const resMov = await fetch(`${SERVICE_URL_MOV}${encodeURIComponent(idAccount)}`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json", "Accept": "application/json" },
-            body: JSON.stringify(movObj)
-        });
-        if (!resMov.ok) throw new Error("Error al crear movimiento");
-        accountData.balance = newBalance;
-        await updateAccountBalance(accountData);
-        await buildMovementsTable();
-        cerrarFormulario();
+    const accountData = JSON.parse(sessionStorage.getItem("account"));
+    const idAccount = accountData.id;
+    let newBalance = (description === "Deposit") ? accountData.balance + amount : accountData.balance - amount;
+        //TODO Usar la clase Movement en lugar de Movements
+        const movObj = new Movement(amount, newBalance, description);
+        const response = await fetch(`${SERVICE_URL_MOV}${encodeURIComponent(idAccount)}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "Accept": "application/json" },
+        body: JSON.stringify(movObj)
+    });
 
-    } catch (error) {
-        console.error("Error:", error);
+    if (!response.ok) {
+        await handleResponseError(response); // Problema 1: Error específico del servidor
     }
-}
 
+    // Actualizar localmente solo si el servidor respondió OK
+    accountData.balance = newBalance;
+    await updateAccountBalance(accountData);
+}
 /*FETCH UPDATE ACCOUNT RESOURCE*/
 async function updateAccountBalance(accountObj) {
     const response = await fetch(`${SERVICE_URL_ACC}`, {
@@ -290,30 +313,56 @@ async function fetchMovements() {
     }
 }
 
-function* movementRowGenerator(movementsList) {
-    
+function* movementRowGenerator(movementsList,mode) {
     for (const movement of movementsList) {
-        const tr = document.createElement("tr");
-        ["timestamp", "description", "amount", "balance"].forEach(field => {
-            const td = document.createElement("td");
-            let value = movement[field];
-            if (field === "timestamp" && value) {
-                value = dateFormatter.format(new Date(value));
-            } 
-            else if ((field === "amount" || field === "balance") && value !== undefined) {
-                if (field === "amount" && parseFloat(value) < 0) {
-                    td.style.color = "red";
-                    td.style.fontWeight = "bold";
-                }
-                value = currencyFormatter.format(value);
-            }
-            td.textContent = value ?? "N/A";
-            tr.appendChild(td);
-        });
-        yield tr;
+        if (mode === 'table') {
+            // Lógica original para crear <tr> y <td>
+            const tr = document.createElement("tr");
+            ["timestamp", "description", "amount", "balance"].forEach(field => {
+                const td = document.createElement("td");
+                td.textContent = formatFieldValue(movement, field, td);
+                tr.appendChild(td);
+            });
+            yield tr;
+        } else {
+            // Lógica para crear estructura de DIVs (Cards)
+            const card = document.createElement("div");
+            card.className = "movement-card-item";
+            
+            const fields = [
+                { id: "timestamp", label: "Fecha" },
+                { id: "description", label: "Concepto" },
+                { id: "amount", label: "Importe" },
+                { id: "balance", label: "Saldo" }
+            ];
+
+            fields.forEach(f => {
+                const divRow = document.createElement("div");
+                divRow.className = "card-row";
+                divRow.innerHTML = `<strong>${f.label}:</strong> <span></span>`;
+                const span = divRow.querySelector("span");
+                span.textContent = formatFieldValue(movement, f.id, span);
+                card.appendChild(divRow);
+            });
+            yield card;
+        }
     }
 }
-/**/
+
+function formatFieldValue(movement, field, element) {
+    let value = movement[field];
+    if (field === "timestamp" && value) {
+        return dateFormatter.format(new Date(value));
+    } 
+    if ((field === "amount" || field === "balance") && value !== undefined) {
+        if (field === "amount" && parseFloat(value) < 0) {
+            element.style.color = "red";
+            element.style.fontWeight = "bold";
+        }
+        return currencyFormatter.format(value);
+    }
+    return value ?? "N/A";
+}
 function cerrarFormulario() {
     const formContainer = document.getElementById("newMovementForm");
     formContainer.style.display = 'none';
