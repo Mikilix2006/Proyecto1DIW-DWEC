@@ -11,12 +11,25 @@ const DELETE_SERVICE_URL = GET_BY_ID_SERVICE_URL; // Then append the account ID
 const CREATE_SERVICE_URL = UPDATE_SERVICE_URL; // Same as updating an account
 // <=><=><=> regular expressions <=><=><=>
 const regExpOnlyNumbers = new RegExp("^[\-]?[0-9]+(\.[0-9]+)?$");
+//TODO Validar el formato de los importes mediante la siguiente RegExp
+//const esAmountRegex =new RegExp("^(?:\d{1,15}|\d{1,3}(?:\.\d{3}){1,4})(?:,\d{1,2})?$");
+const esAmountRegex = /^(?:\d{1,15}|\d{1,3}(?:\.\d{3}){1,4})(?:,\d{1,2})?$/;
+ /* Explicación de esAmountRegex
+        ^
+            (?:                         # integer part options
+               \d{1,15}                 # 1 to 15 digits without thousand separator
+             | \d{1,3}(?:\.\d{3}){1,4}  # 1–3 digits, then 1–4 groups of ".ddd"
+            )
+            (?:,\d{1,2})?               # optional decimal with 1 or 2 digits
+            $
+ */
 const regExpHasToContainLetters = new RegExp("[a-zA-ZñÑáÁéÉíÍóÓúÚüÜïÏ ]+");
 // <=><=><=> keep the customer id <=><=><=>
 const idCustomer = sessionStorage.getItem("customer.id");
 // <=><=><=> Elements from main.html <=><=><=>
 // === message boxes ===
 const msgBoxAccounts = document.getElementById('msgBoxAccounts');
+const tfTotalBalance = document.getElementById('totalBalance');
 // === buttons ===
 // delete account
 const confirmDeleteAccountButton = document.getElementById('confirmDeleteAccountButton');
@@ -76,7 +89,8 @@ newDescription.addEventListener("input", checkNewAccountDescription);
 // update account
 tfUpdateCreditLine.addEventListener("input", checkUpdateAccountCreditLine);
 tfUpdateDescription.addEventListener("input", checkUpdateAccountDescription);
-// === video ===
+// === messages ===
+tfTotalBalance.addEventListener("click", showBalanceSum);
 
 function toggleDeleteAccountFormVisibility(event) {
     document.getElementById("responseMsgDeleteDescription").style.display = 'none';
@@ -280,16 +294,25 @@ function checkDescription(input) {
         throw new Error("La descripción debe contener letras");
 }
 function checkCreditLine(input) {
-    if (input.value < 0)
+    /*if (input.value < 0)
         throw new Error("Linea de crédito inferior a 0");
     if (regExpOnlyNumbers.exec(input.value.trim())===null)
-        throw new Error("Solo se admiten números en la línea de crédito");
+        throw new Error("Solo se admiten números en la línea de crédito");*/
+    if (input.value.trim().match(esAmountRegex) === null) {
+        throw new Error("Formato válido: x.xxx,xx");
+    }
 }
 function checkInputNumbers(input, errorMessages) {
-    if (errorMessages.length >= 1 && regExpOnlyNumbers.exec(input.value.trim())===null)
+    /*if (errorMessages.length >= 1 && regExpOnlyNumbers.exec(input.value.trim())===null)
         throw new Error(errorMessages[0]);
     if (errorMessages.length >= 2 && input.value < 0)
-        throw new Error(errorMessages[1]);
+        throw new Error(errorMessages[1]);*/
+    /*if (esAmountRegex.exec(input.value.trim())===null) {
+        throw new Error("Formato válido: x.xxx,xx");
+    }*/
+    if (input.value.trim().match(esAmountRegex) === null) {
+        throw new Error("Formato válido: x.xxx,xx");
+    }
 }
 async function getAccounts() {
     try {
@@ -321,15 +344,17 @@ async function createAccount() {
     const newAccountID = accountsArray[0].id+1; // new ID
     const date = new Date().toISOString(); // get system date
     var creditLine; // controll credit line value
+    var beginBalance; // controll begin balance value
     // creditLine input controll
     if (newCreditLine.value.trim() === "") creditLine = 0;
-    else creditLine = newCreditLine.value.trim();
+    else creditLine = newCreditLine.value.trim().replace(/\./g, "").replace(",", "."); // format input value
+    beginBalance = newBeginBalance.value.trim().replace(/\./g, "").replace(",", "."); // format input value
     const newAccount = new Account( // create Accounts
                                     newAccountID,
                                     newDescription.value.trim(),
-                                    newBeginBalance.value.trim(),
+                                    beginBalance,
                                     creditLine,
-                                    newBeginBalance.value.trim(),
+                                    beginBalance,
                                     date,
                                     comboAccountType.value);
     try {
@@ -365,7 +390,7 @@ async function deleteAccount(accountID) {
         toggleDeleteAccountFormVisibility();
         location.reload();
     } catch (error) {   
-        showMsgBoxAccounts(error.message, "#ff0000");
+        showMsgBoxAccounts(msgBoxAccounts, error.message, "#ff0000");
     }
 }
 async function updateAccount(event) {
@@ -399,15 +424,19 @@ async function updateAccount(event) {
     }
 }
 function* accountRowGenerator(accounts) {
-    for (const account of accounts) {
-        const tr = document.createElement("tr");
-        var accID;
+    for (const account of accounts) { // for each account..
+        //const tr = document.createElement("tr"); // creates an account row
+        const tr = document.createElement("div"); // creates an account row
+        tr.classList.add("account-row"); // css styles
+        var accID; // declares var for storing account ID
         // Run through every element of the account
         ["id", "type", "description", "creditLine", "beginBalanceTimestamp", "beginBalance", "balance"].forEach(field => {
-            const td = document.createElement("td");
-            if (field === "beginBalanceTimestamp") {
-                const originalDateFormat = new Date(account[field]);
-                const opciones = {
+            //const td = document.createElement("td"); // creates a cell for each element
+            const td = document.createElement("div"); // creates a cell for each element
+            td.classList.add("account-cell");
+            if (field === "beginBalanceTimestamp") { // if it is time, change format
+                const originalDateFormat = new Date(account[field]); // database time
+                const opciones = { // format options
                     day: '2-digit', month: '2-digit', year: 'numeric', // date
                     hour: '2-digit', minute: '2-digit', // hour
                     hour12: false // 24h format
@@ -416,24 +445,26 @@ function* accountRowGenerator(accounts) {
                 td.textContent = originalDateFormat.toLocaleDateString('es-ES', opciones);
             } else if (field === "creditLine" ||
                        field === "beginBalance" ||
-                       field === "balance" ) {
+                       field === "balance" ) { // or if the element is a number..
+              // change format to x.xxx.xxx,xx€
               td.textContent = new Intl.NumberFormat("es-ES", {style: "currency", 
                                                                    currency: "EUR"}).format(account[field]);
             } else { // No different format
-                td.textContent = account[field];
+                td.textContent = account[field]; // if no new format needed
             }
-            if (field === "id") {
+            if (field === "id") { // id special cell
                 accID = account[field]; // save account id for button data
-                td.style.color = "#5620ad"; // link color
+                //td.style.color = "#5620ad"; // link color
+                td.classList.add("account-id-cell");
                 td.setAttribute("data-acc-id", accID); // id attribute
-                td.setAttribute("tabindex", 0); // tab attribute for blind
-                td.setAttribute("role", "button"); // role attribute for blind
-                td.setAttribute("aria-label", `Ir a movimientos de la cuenta con id: ${accID}`); // aria-label attribute for blind
+                td.setAttribute("tabindex", 0); // tab attribute for blind access
+                td.setAttribute("role", "button"); // role attribute for blind user
+                td.setAttribute("aria-label", `Ir a movimientos de la cuenta con id: ${accID}`); // aria-label attribute for blind user
                 td.addEventListener("click", storeAccountData); // listener w/mouse
                 td.addEventListener("keydown", storeAccountData); // listener w/keyboard
             }
-            tr.appendChild(td);
-        });
+            tr.appendChild(td); // add the new cell to the row
+        }); // end of for each element
         // Store at end of accountsArray Account objects
         accountsArray.push(new Account(
                                         account["id"],
@@ -445,41 +476,40 @@ function* accountRowGenerator(accounts) {
                                         account["type"]
                                         ));
         // Edit and Delete buttons in each row in new column
-        const tdButtons = document.createElement("td");
-        tdButtons.classList.add("actions");
-        const buttonEdit = document.createElement("button");
-        const buttonDelete = document.createElement("button");
+        const tdButtons = document.createElement("div"); // buttons cell
+        tdButtons.classList.add("actions"); // css property
+        const buttonEdit = document.createElement("button"); // edit button
+        const buttonDelete = document.createElement("button"); // delete button 
         // IMG
-//        buttonEdit.setAttribute("src", "../assets/img/edit-pencil-01-svgrepo-com.svg");
-//        buttonDelete.setAttribute("src", "../assets/img/delete-2-svgrepo-com.svg");
-        buttonEdit.innerHTML = `<i class="fa-solid fa-pen-to-square"></i>`;
-        buttonDelete.innerHTML = `<i class="fa-solid fa-trash-can"></i>`;
+        buttonEdit.innerHTML = `<i class="fa-solid fa-pen-to-square"></i>`; // edit icon
+        buttonDelete.innerHTML = `<i class="fa-solid fa-trash-can"></i>`; // delete icon
         // Button aspect attributes
         buttonEdit.setAttribute("class", "btn-edit");
         buttonDelete.setAttribute("class", "btn-delete");
         // Button alt attributes
         buttonEdit.setAttribute("alt", "edit button");
         buttonDelete.setAttribute("alt", "delete button");
-        // Button aria attributes
+        // Button aria attributes for blind user
         buttonEdit.setAttribute("aria-label", "Boton para editar cuenta");
         buttonDelete.setAttribute("aria-label", "Boton para eliminar cuenta");
-        // Button id classes
+        // Button id classes to identify which account is being actioned
         buttonEdit.setAttribute("data-acc-id", accID);
         buttonDelete.setAttribute("data-acc-id", accID);
-        // listeners
+        // listeners to show its form
         buttonEdit.addEventListener("click",toggleUpdateAccountFormVisibility);
         buttonDelete.addEventListener("click",toggleDeleteAccountFormVisibility);
-        // Put buttons into td
+        // Put buttons into cell
         tdButtons.appendChild(buttonEdit);
         tdButtons.appendChild(buttonDelete);
-        // Put td into tr
+        // Put cell into row
         tr.appendChild(tdButtons);
-        // Show the table row
+        // Return the finished table row
         yield tr;
     }
     // Sort accountsArray from highest to lowest
     accountsArray.sort((cuenta1, cuenta2) => cuenta2.id - cuenta1.id);
 }
+
 async function buildAccountsTable() {
     const accounts = await getAccounts(); // Fetch accounts into const
     const tbody = document.querySelector("#contentAccounts");
@@ -487,6 +517,12 @@ async function buildAccountsTable() {
     const rowGenerator = accountRowGenerator(accounts);
     for (const row of rowGenerator)
         tbody.appendChild(row);
+    // then hide forms
+    document.getElementById("newAccountForm").style.display = 'none';
+    document.getElementById("editAccountForm").style.display = 'none';
+    document.getElementById("deleteAccountForm").style.display = 'none';
+    //hide video
+    document.getElementById("h5p-container").style.display = 'none';
 }
 function showMsgBoxAccounts(box, message, color) {
     box.style.display = 'flex';
@@ -508,4 +544,28 @@ function storeAccountData(event) {
         sessionStorage.setItem("account", JSON.stringify(account));
         window.location.href = 'movements.html';
     }
+}
+
+/* EXAMEN */
+const customerName = sessionStorage.getItem("customer.firstName");
+const customerMidIn = sessionStorage.getItem("customer.middleInitial");
+const h2 = document.getElementById("sessionNombre");
+
+if (h2) {
+    if (customerName) {
+        h2.textContent = `¡Hola, ${customerName} ${customerMidIn}!`;
+    } else {
+        h2.textContent = "¡Hola!";
+    }
+}
+
+function showBalanceSum() {
+    const totalBalance = accountsArray.reduce(
+            (tot, acc) => tot + acc.balance, 0);
+    console.log(totalBalance);
+    const formatTotalBalance = new Intl.NumberFormat("es-ES", {style: "currency", 
+                                                                   currency: "EUR"}).format(totalBalance);
+    tfTotalBalance.innerHTML = "";
+    tfTotalBalance.innerHTML = `<h3>Saldo total: ${formatTotalBalance}</h3>`;
+    
 }

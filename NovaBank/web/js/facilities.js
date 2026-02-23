@@ -2,9 +2,22 @@
 const changeThemeButton = document.getElementById('themeToggle');
 const DropMenuBttn = document.getElementById('menuBtn');
 const SalirSessionBttn = document.getElementById('botonCerrarSesion');
+var themeToggler, menuToggler, themeLink, darkMode, exitSession;
+
+document.addEventListener("DOMContentLoaded", recopilacionElementos);
+
+function recopilacionElementos(event) {
+    themeToggler = document.getElementById("themeToggle");
+    menuToggler = document.getElementById("menuBtn");
+    themeLink = document.getElementById('theme-link');
+    darkMode = sessionStorage.getItem('darkMode') === 'true';
+    exitSession = document.getElementById('botonCerrarSesion');
+    
+    themeToggler.addEventListener("click", changeTheme);
+    menuToggler.addEventListener("click", dropDownMenu);
+    exitSession.addEventListener("click", salirSession);
+}
 //CHECK IF THERES SESSION STORAGE THEME
-const themeLink = document.getElementById('theme-link');
-const darkMode = sessionStorage.getItem('darkMode') === 'true';
 if (darkMode) {
   themeLink.disabled = false; // SWITCH OSCURO.CSS
   document.body.classList.add('dark-mode');
