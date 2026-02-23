@@ -1,9 +1,9 @@
+import { Movement } from './model.js';
 /*
    =================================================
       ATTRIBUTES TO BE USED BY THIS CONTROLLER
    =================================================
  */
-import { Movement } from './model.js';
 const SERVICE_URL_MOV= "/CRUDBankServerSide/webresources/movement/";
 const SERVICE_URL_ACC = "/CRUDBankServerSide/webresources/account/";
 let movements = [];

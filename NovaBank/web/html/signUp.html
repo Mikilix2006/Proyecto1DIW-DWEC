@@ -10,24 +10,23 @@
   <link rel="stylesheet" href="/NovaBank/css/style.css">
   <link rel="stylesheet" href="/NovaBank/css/facilities.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <link rel="alternate stylesheet" title="ModoOscuro" id="theme-link" href="NovaBank/css/oscuro.css" disabled>
+  <link rel="alternate stylesheet" title="ModoOscuro" id="theme-link" href="/NovaBank/css/oscuro.css" disabled>
 </head>
 <body>
   <header class="header">
     <div class="container">
       <div class="logo">
-        <a href="../index.html" style="display:flex; flex-direction:row;">
-          <img src="../assets/img/logo.png" alt="Nova Bank">
-
+        <a href="/NovaBank/index.html#aboutUs" style="display:flex; flex-direction:row;">
+          <img src="/NovaBank/assets/img/logo.png" alt="Nova Bank">
           <h1>Nova Bank</h1>
         </a>
       </div>
       <nav class="nav">
-        <a href="../index.html">Sobre nosotros</a>
+        <a href="/NovaBank/index.html">Sobre nosotros</a>
 
       </nav>
       <div class="buttons">
-          <button id="themeToggle" class="btn-theme" onclick="changeTheme();" title="Cambiar tema">
+          <button id="themeToggle" class="btn-theme" title="Cambiar tema">
           <svg id="icon-sun" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m8.485-8.485h1M4.515 12.515h1M17.657 6.343l.707-.707M6.343 17.657l.707-.707M17.657 17.657l.707.707M6.343 6.343l.707.707M12 8a4 4 0 100 8 4 4 0 000-8z"/>
           </svg>
@@ -35,12 +34,11 @@
             <path d="M21 12.79A9 9 0 1111.21 3a7 7 0 109.79 9.79z"/>
           </svg>
         </button>
-          <a href="signIn.html"><button class="btn-solid">Iniciar Sesión</button></a>
+          <a href="/NovaBank/html/signIn.html"><button class="btn-solid">Iniciar Sesión</button></a>
         <div class="menu-container">
-          <button class="menu-toggle" id="menuBtn" onclick="dropDownMenu();">&#9776;</button>
+          <button class="menu-toggle" id="menuBtn">&#9776;</button>
           <ul class="dropdown-menu" id="dropdownMenu">
-            <li><a href="../index.html" accesskey="S">Inicio <span> Alt + S</span></a></li>
-            <li><a href="../index.html" accesskey="H">Ayuda y soporte <span> Alt + H</span></a></li>
+            <li><a href="/NovaBank/index.html" accesskey="S">Inicio <span> Alt + S</span></a></li>
           </ul>
         </div>
       </div>
@@ -55,7 +53,7 @@
                 <br>
           Todos los campos son obligatorios.
       </p>
-      <form class="formulario" id="signUpForm" action="http://localhost:8080/CRUDBankServerSide/webresources/customer">
+      <form class="formulario" id="signUpForm" action="/CRUDBankServerSide/webresources/customer">
         
         <div class="form-group ">
             <input type="text" id="name" name="name" placeholder="Nombre" onblur="handleNameValidations()"/>
@@ -120,14 +118,11 @@
           <button type="submit" class="btn-aceptar" id="btSignUp" onclick="handleSignUpOnClick(event)">Registrarse</button>
           <div id="responseMsgSignUp" style="font-size: 12px" hidden></div>
         <p id="register-text">
-            ¿Ya tienes una cuenta? <a href="signIn.html">Iniciar sesión</a>
+            ¿Ya tienes una cuenta? <a href="/NovaBank/signIn.html">Iniciar sesión</a>
         </p>
-        
       </form>
-      
     </div>
   </section>
-    
   <footer class="footer">
         <div class="logo_footer">
             <img src="/NovaBank/assets/img/logo.png" alt="Nova Bank">
@@ -135,7 +130,6 @@
         </div>
     <p>© Copyright 2026 Nova Bank. All Rights Reserved.</p>
   </footer>
-    
   <script src="/NovaBank/js/facilities.js"></script>
   <script src="/NovaBank/js/signUp.js"></script>
 </body>

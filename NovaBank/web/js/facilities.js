@@ -1,64 +1,56 @@
-//Variables de las anteriores onclick
-const changeThemeButton = document.getElementById('themeToggle');
-const DropMenuBttn = document.getElementById('menuBtn');
-const SalirSessionBttn = document.getElementById('botonCerrarSesion');
-var themeToggler, menuToggler, themeLink, darkMode, exitSession;
+function applyTheme() {
+    const themeLink = document.getElementById('theme-link');
+    const isDarkMode = localStorage.getItem('darkMode') === 'true';
 
-document.addEventListener("DOMContentLoaded", recopilacionElementos);
-
-function recopilacionElementos(event) {
-    themeToggler = document.getElementById("themeToggle");
-    menuToggler = document.getElementById("menuBtn");
-    themeLink = document.getElementById('theme-link');
-    darkMode = sessionStorage.getItem('darkMode') === 'true';
-    exitSession = document.getElementById('botonCerrarSesion');
-    
-    themeToggler.addEventListener("click", changeTheme);
-    menuToggler.addEventListener("click", dropDownMenu);
-    exitSession.addEventListener("click", salirSession);
+    if (isDarkMode) {
+        themeLink.disabled = false;
+        document.body.classList.add('dark-mode');
+    } else {
+        themeLink.disabled = true;
+        document.body.classList.remove('dark-mode');
+    }
 }
-//CHECK IF THERES SESSION STORAGE THEME
-if (darkMode) {
-  themeLink.disabled = false; // SWITCH OSCURO.CSS
-  document.body.classList.add('dark-mode');
-} else {
-  themeLink.disabled = true; // SWITCH STYLE.CSS
-  document.body.classList.remove('dark-mode');
-}
-changeThemeButton.addEventListener('click', changeTheme);
-DropMenuBttn.addEventListener('click', dropDownMenu);
-SalirSessionBttn.addEventListener('click', salirSession);
 
-function changeTheme(){
-  const isDark = !themeLink.disabled;
-  if (isDark) {
-    //CHANGE TO BRIGHT
-    themeLink.disabled = true;
-    document.body.classList.remove('dark-mode');
-    sessionStorage.setItem('darkMode', false);
-  } else {
-    //CHANGE TO DARK
-    themeLink.disabled = false;
-    document.body.classList.add('dark-mode');
-    sessionStorage.setItem('darkMode', true);
-  }
-    
+document.addEventListener("DOMContentLoaded", () => {
+    applyTheme(); // Aplicamos el tema guardado inmediatamente
+
+    const changeThemeButton = document.getElementById('themeToggle');
+    const dropMenuBttn = document.getElementById('menuBtn');
+    const salirSessionBttn = document.getElementById('botonCerrarSesion');
+
+    if (changeThemeButton) changeThemeButton.addEventListener('click', changeTheme);
+    if (dropMenuBttn) dropMenuBttn.addEventListener('click', dropDownMenu);
+    if (salirSessionBttn) salirSessionBttn.addEventListener('click', salirSession);
+});
+
+function changeTheme() {
+    const themeLink = document.getElementById('theme-link');
+    const turningDark = themeLink.disabled; // Si está desactivado, vamos a activarlo
+
+    if (turningDark) {
+        themeLink.disabled = false;
+        document.body.classList.add('dark-mode');
+        localStorage.setItem('darkMode', 'true');
+    } else {
+        themeLink.disabled = true;
+        document.body.classList.remove('dark-mode');
+        localStorage.setItem('darkMode', 'false');
+    }
 }
   
 //BURGER MENU DROP DOWN
 function dropDownMenu() {
     const menu = document.getElementById("dropdownMenu");
     const btn = document.getElementById("menuBtn");
-    const isVisible = menu.style.display === "block";
+    if (!menu || !btn) return; // Seguridad
 
-    if (isVisible) {
-        menu.style.display = "none";
-        btn.setAttribute("aria-expanded", "false");
-    } else {
-        menu.style.display = "block";
-        btn.setAttribute("aria-expanded", "true");
-        // Opcional: Poner el foco en el primer elemento del menú
-        document.getElementById("botonCerrarSesion").focus();
+    const isVisible = menu.style.display === "block";
+    menu.style.display = isVisible ? "none" : "block";
+    btn.setAttribute("aria-expanded", !isVisible);
+    
+    if (!isVisible) {
+        const exitBtn = document.getElementById("botonCerrarSesion");
+        if (exitBtn) exitBtn.focus();
     }
 }
 
@@ -81,11 +73,11 @@ function showHidePassword(){
     //JUST CHANGE THE PASSWORD INPUT'S ATRIBUTE TYPE
     if (passworInput.type === 'password') {
         passworInput.type = 'text';
-        tooglePasswordImg.src='assets/img/eye-closed-svgrepo-com.svg';
+        tooglePasswordImg.src='/NovaBank/assets/img/eye-closed-svgrepo-com.svg';
         //tooglePassword.innerText = 'Ocultar';
     } else {
         passworInput.type = 'password';
-        tooglePasswordImg.src='assets/img/eye-svgrepo-com.svg';
+        tooglePasswordImg.src='/NovaBank/assets/img/eye-svgrepo-com.svg';
     }
 }
 // SHOW AND HIDE THE SIGNUP PASSWORD
@@ -98,11 +90,11 @@ function signUpShowHidePassword(){
     //JUST CHANGE THE PASSWORD INPUT'S ATRIBUTE TYPE
     if (passwordInput.type === 'password') {
         passwordInput.type = 'text';
-        tooglePasswordImg.src='assets/img/eye-closed-svgrepo-com.svg';
+        tooglePasswordImg.src='/NovaBank/assets/img/eye-closed-svgrepo-com.svg';
         //tooglePassword.innerText = 'Ocultar';
     } else {
         passwordInput.type = 'password';
-        tooglePasswordImg.src='assets/img/eye-svgrepo-com.svg';
+        tooglePasswordImg.src='/NovaBank/assets/img/eye-svgrepo-com.svg';
     }
 }
 
@@ -116,11 +108,11 @@ function signUpShowHideDuppedPassword(){
     //JUST CHANGE THE PASSWORD INPUT'S ATRIBUTE TYPE
     if (passwordInput.type === 'password') {
         passwordInput.type = 'text';
-        tooglePasswordImg.src='assets/img/eye-closed-svgrepo-com.svg';
+        tooglePasswordImg.src='/NovaBank/assets/img/eye-closed-svgrepo-com.svg';
         //tooglePassword.innerText = 'Ocultar';
     } else {
         passwordInput.type = 'password';
-        tooglePasswordImg.src='assets/img/eye-svgrepo-com.svg';
+        tooglePasswordImg.src='/NovaBank/assets/img/eye-svgrepo-com.svg';
     }
 }
 
@@ -135,11 +127,11 @@ function showHiCurrentPassword(){
     //JUST CHANGE THE PASSWORD INPUT'S ATRIBUTE TYPE
     if (passworInput.type === 'password') {
         passworInput.type = 'text';
-        tooglePasswordImg.src='assets/img/eye-closed-svgrepo-com.svg';
+        tooglePasswordImg.src='/NovaBank/assets/img/eye-closed-svgrepo-com.svg';
         //tooglePassword.innerText = 'Ocultar';
     } else {
         passworInput.type = 'password';
-        tooglePasswordImg.src='assets/img/eye-svgrepo-com.svg';
+        tooglePasswordImg.src='/NovaBank/assets/img/eye-svgrepo-com.svg';
     }
 }
 
@@ -153,11 +145,11 @@ function showHiNewPassword(){
     //JUST CHANGE THE PASSWORD INPUT'S ATRIBUTE TYPE
     if (passworInput.type === 'password') {
         passworInput.type = 'text';
-        tooglePasswordImg.src='assets/img/eye-closed-svgrepo-com.svg';
+        tooglePasswordImg.src='/NovaBank/assets/img/eye-closed-svgrepo-com.svg';
         //tooglePassword.innerText = 'Ocultar';
     } else {
         passworInput.type = 'password';
-        tooglePasswordImg.src='assets/img/eye-svgrepo-com.svg';
+        tooglePasswordImg.src='/NovaBank/assets/img/eye-svgrepo-com.svg';
     }
 }
 
@@ -171,11 +163,11 @@ function showHiVerifyPassword(){
     //JUST CHANGE THE PASSWORD INPUT'S ATRIBUTE TYPE
     if (passworInput.type === 'password') {
         passworInput.type = 'text';
-        tooglePasswordImg.src='assets/img/eye-closed-svgrepo-com.svg';
+        tooglePasswordImg.src='/NovaBank/assets/img/eye-closed-svgrepo-com.svg';
         //tooglePassword.innerText = 'Ocultar';
     } else {
         passworInput.type = 'password';
-        tooglePasswordImg.src='assets/img/eye-svgrepo-com.svg';
+        tooglePasswordImg.src='/NovaBank/assets/img/eye-svgrepo-com.svg';
     }
 }
 //CERRR SESSION

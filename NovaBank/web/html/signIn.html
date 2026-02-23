@@ -11,8 +11,6 @@
   <link rel="stylesheet" href="/NovaBank/css/facilities.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link rel="alternate stylesheet" title="ModoOscuro" id="theme-link" href="/NovaBank/css/oscuro.css" disabled>
-  <script src="/NovaBank/js/facilities.js"></script>
-  <script src="/NovaBank/js/signInDev.js"></script>
 </head>
 <body>
   <header class="header">
@@ -34,14 +32,12 @@
             <path d="M21 12.79A9 9 0 1111.21 3a7 7 0 109.79 9.79z"/>
           </svg>
         </button>
-        <a href="signUp.html"><button class="btn-solid">Registrarse</button></a>
+        <a href="/NovaBank/html/signUp.html"><button class="btn-solid">Registrarse</button></a>
         <div class="menu-container">
             <button class="menu-toggle" id="menuBtn">&#9776;</button>
           <ul class="dropdown-menu" id="dropdownMenu">
               <!--TENER EN CUENTA EL ACCESSKEY DEPENDIENDO DEL NAVEGADOR FFOX: ALT+SHIFT+S-->
-
             <li><a href="/NovaBank/index.html" accesskey="S">Inicio <span>S</span></a></li>
-
           </ul>
         </div>
       </div>
@@ -65,7 +61,7 @@
             <span id="errorPassword"></span>
         </div>
         <button type="button" class="btn-aceptar" onclick="validarSignIn(event);">Ingresar</button>
-        <p id="register-text">¿Aún no tienes una cuenta? <a href="signUp.html">Regístrate</a></p>
+        <p id="register-text">¿Aún no tienes una cuenta? <a href="/NovaBank/html/signUp.html">Regístrate</a></p>
         <div class="error-msg" id="responseMsg"></div>
       </form>
     </div>
@@ -77,5 +73,7 @@
     </div>
     <p>© Copyright 2026 Nova Bank. All Rights Reserved.</p>
   </footer>
+  <script src="/NovaBank/js/facilities.js"></script>
+  <script src="/NovaBank/js/signInDev.js"></script>
 </body>
 </html>

@@ -387,7 +387,7 @@ async function deleteAccount(accountID) {
         
         buildAccountsTable(); // Reloads the table
         showMsgBoxAccounts(msgBoxAccounts, "Se ha borrado la cuenta exitosamente", "#5620ad");
-        toggleDeleteAccountFormVisibility();
+        //toggleDeleteAccountFormVisibility();
         location.reload();
     } catch (error) {   
         showMsgBoxAccounts(msgBoxAccounts, error.message, "#ff0000");

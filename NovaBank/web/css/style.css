@@ -463,6 +463,8 @@ table {
 thead {
     background-color: var(--color-navbar);
     color: white;
+    font-weight: 600;
+    text-align: center;
 }
 th {
     padding: 15px;
@@ -933,7 +935,6 @@ section h1, article h1, nav h1, aside h1 {
     width: 100%;
     border-radius: 8px;
     overflow: hidden;
-    margin-top: 20px;
 }
 
 /* Cabecera de la tabla */
